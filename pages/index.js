@@ -1,33 +1,45 @@
-import styled from "styled-components";
-import Footer from "../components/Footer";
+// This is a basic example of what a pages file could look like.
+import { useState } from "react";
 
 export default function Home() {
+  const [extractedText, setExtractedText] = useState(null);
+  const [error, setError] = useState(null);
+  const [backendURL, setBackendURL] = useState("http://127.0.0.1:5000"); // Switch this to your backendURL
 
-  // javascript here
-  const name = "Will";
+  const handleExtract = async () => {
+    try {
+      // Access the backend
+      const response = await fetch(`${backendURL}/extract`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  return ( // return html here
-    <Section>
+      if (response.ok) {
+        const data = await response.json();
+        setExtractedText(data);
+      } else {
+        setError("Error extracting text");
+      }
+    } catch (err) {
+      setError("An error occurred");
+    }
+  };
 
-        <div>Hi, {name}</div>
-        
-        <Footer />
+  return (
+    <div>
+      <h1>Extract Text from PowerPoint</h1>
+      <button onClick={handleExtract}>Extract Text</button>
 
-    </Section>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {extractedText && (
+        <div>
+          <h2>Extracted Text</h2>
+          <pre>{JSON.stringify(extractedText, null, 2)}</pre>
+        </div>
+      )}
+    </div>
   );
 }
-
-// define html and it's css here
-
-const Section = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10vw;
-    text-align: center;
-    height: 100vh;
-    background-color: #f1f1f1;
-    color: red;
-    font-size: 2rem;
-`;
