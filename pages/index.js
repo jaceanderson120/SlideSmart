@@ -23,7 +23,7 @@ export default function Home() {
         setError("Error extracting text");
       }
     } catch (err) {
-      setError("An error occurred");
+      setError("An error occurred.");
     }
   };
 
