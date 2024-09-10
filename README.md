@@ -38,7 +38,7 @@ The backend code is currently located in /backend/utility.py. To run this code, 
 
 4. You can now locally host the backend code by running `python backend/utility.py` from the root directory of this project
 
-5. When you are done, run the command `deactivate` to deactivate the virtual environment.
+5. When you are done, run the command `deactivate` to deactivate the virtual environment. Repeat steps 2-5 the next time you want to run the development server.
 
 ## Learn More
 
