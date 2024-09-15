@@ -36,7 +36,7 @@ export default function Home() {
     <Section>
       
       <Slogan>The <span style={{color: '#F03A47', fontWeight: 'bold'}}>Smart</span> Way to</Slogan> 
-      <Slogan><span style={{color: '#F03A47', fontWeight: 'bold'}}>Study</span> Slides</Slogan>
+      <Slogan>Study <span style={{color: '#F03A47', fontWeight: 'bold'}}>Slides</span></Slogan>
 
       <p style={{fontSize: '18px', transform: 'translateY(-120px)'}}>A software tool that creates comprehensive/interactive Study Guides equipped </p>
       <p style={{fontSize: '18px', transform: 'translateY(-120px)'}}>with plenty of useful resources to help you succeed in the classroom</p>
