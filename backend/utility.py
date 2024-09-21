@@ -1,6 +1,6 @@
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import io
 import base64
@@ -48,7 +48,15 @@ def extract_text_and_images_from_ppt(ppt):
 
 @app.route('/extract', methods=['POST'])
 def upload_file():
-    file_path = "01-overview.pptx" # Currently this is a PowerPoint in my local root directory, change this to accept PowerPoints from the frontend
+
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    if not file.filename.endswith('.pptx'):
+        return jsonify({'error': 'File type not allowed'}), 400
+
+    file_path = io.BytesIO(file.read()) # Currently this is a PowerPoint in my local root directory, change this to accept PowerPoints from the frontend
     ppt = Presentation(file_path)
     extracted_data = extract_text_and_images_from_ppt(ppt)
     return jsonify(extracted_data)
