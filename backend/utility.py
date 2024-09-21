@@ -39,10 +39,11 @@ def extract_text_and_images_from_ppt(ppt):
 
         # Combine text and images into a single dictionary for each slide
         slide_key = f'slide{slide_number}'
-        slides_data[slide_key] = {
-            "text": text_array,
-            "images": [] # Appending an empty image array for now
-        }
+        # slides_data[slide_key] = {
+        #     "text": text_array,
+        #     "images": [] # Appending an empty image array for now
+        # }
+        slides_data[slide_key] = text_array
 
     return analyze_powerpoint(slides_data)
 
