@@ -108,12 +108,12 @@ const NavbarSlideSmart = styled.div`
 `;
 
 const NavbarSection = styled.div`
-    display: flex;
-    align-items: center;
-    margin: auto;
-    padding 20px;
-    background-color: #f6f4f3;
-    padding: 20px;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  padding 20px;
+  background-color: #f6f4f3;
+  padding: 20px;
 
 `;
 
