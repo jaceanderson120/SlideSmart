@@ -1,4 +1,7 @@
 import { useRouter } from "next/router";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import styled from "styled-components";
 
 const Study = () => {
   const router = useRouter();
@@ -7,11 +10,23 @@ const Study = () => {
   const data = extractedData ? JSON.parse(extractedData) : null;
 
   return (
-    <div>
-      <h1>Example Page</h1>
-      {JSON.stringify(data, null, 2)}
-    </div>
+    <>
+      <Navbar />
+      <Section>{JSON.stringify(data, null, 2)}</Section>
+      <Footer />
+    </>
   );
 };
 
 export default Study;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+  height: 100vh;
+  background-color: #f6f4f3;
+  color: #000000;
+`;
