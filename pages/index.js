@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
+import LoadingOverlay from "../components/Overlay";
 
 export default function Home() {
-  // javascript here
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   // Declare fileInputRef at the top level of the component
   const fileInputRef = useRef(null);
@@ -28,11 +29,13 @@ export default function Home() {
 
       // Send the file to the backend
       try {
+        setIsLoading(true);
         const response = await fetch("http://127.0.0.1:5000/extract", {
           method: "POST",
           body: formData,
         });
         const data = await response.json();
+        setIsLoading(false);
         router.push({
           pathname: "/study",
           query: { extractedData: JSON.stringify(data) },
@@ -47,7 +50,7 @@ export default function Home() {
     // return html here
     <div>
       <Navbar />
-
+      {isLoading ? <LoadingOverlay /> : <></>}
       <Section>
         <Slogan>
           The{" "}
@@ -78,7 +81,6 @@ export default function Home() {
           onChange={handleFileChange}
         />
       </Section>
-
       <Footer />
     </div>
   );
@@ -121,4 +123,4 @@ const UploadButton = styled.button`
   &:hover {
     color: black;
   }
-`
+`;
