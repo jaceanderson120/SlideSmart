@@ -12,6 +12,13 @@ def analyze_powerpoint(slides_data):
     
     client = OpenAI()
 
+    user_message = (
+        "I am providing you with a python dictionary where the keys are slide numbers and the values are the "
+        "text and images (in base64) from the slides. Here is the data: "
+        f"{slides_data}. Understand the text and the images and tell me what topics the PowerPoint is about. "
+        "Return me a list of topics as well as what slides fall under each topic. Summarize each topic in the PowerPoint and provide an example practice question for each topic."
+    )
+
     # Prepare the request content, inserting the slides_data as context
     completion = client.chat.completions.create(
         model="gpt-4o",
@@ -19,7 +26,7 @@ def analyze_powerpoint(slides_data):
             {"role": "system", "content": "You are a professional at understanding PowerPoints."},
             {
                 "role": "user",
-                "content": f"I am providing you with a python dictionary where the keys are slide numbers and the values are the text and images (in base64) from the slides. Here is the data: {slides_data}. Understand the text and the images and tell me what topics the PowerPoint is about. Return me a list of topics as well as what slides fall under each topic."
+                "content": user_message
             }
         ]
     )
