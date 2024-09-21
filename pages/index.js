@@ -93,4 +93,9 @@ const UploadButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transform: translateY(-80px);
+  transition: color 0.3s;
+
+  &:hover {
+    color: black;
+  }
 `
