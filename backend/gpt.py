@@ -1,13 +1,13 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+import ast
 
 # Load environment variables from .env file
 load_dotenv('@/.env')
 
 # Get the OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
-import ast
 
 def analyze_powerpoint(slides_data):
     """Analyzes a PowerPoint's slides_data dictionary using OpenAI's GPT model.
