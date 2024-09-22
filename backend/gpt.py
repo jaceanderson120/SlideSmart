@@ -7,6 +7,7 @@ load_dotenv('@/.env')
 
 # Get the OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
+import ast
 
 def analyze_powerpoint(slides_data):
     """Analyzes a PowerPoint's slides_data dictionary using OpenAI's GPT model.
@@ -21,17 +22,21 @@ def analyze_powerpoint(slides_data):
     client = OpenAI(api_key=openai_api_key)
 
     user_message = (
-        "I am providing you with a python dictionary where the keys are slide numbers and the values are the "
-        "text and images (in base64) from the slides. Here is the data: "
-        f"{slides_data}. Understand the text and the images and tell me what topics the PowerPoint is about. "
-        "Return me a list of topics as well as what slides fall under each topic. Summarize each topic in the PowerPoint and provide an example practice question for each topic."
+        "I am providing you with a python dictionary where the keys are slide numbers and the values are "
+        f"arrays of text from the slide. Here is the data: {slides_data}"
+        "Understand the text and tell me what topics the PowerPoint is about. "
+        "Summarize each topic in the PowerPoint and provide an example practice question for each topic. "
+        "When you summarize a topic, summarize it as if you are teaching it to me in a few sentences or a paragraph. "
+        "Return the data that you gather as a python dictionary where each key is the name of a topic "
+        "and each value is an array that contains a summary of the topic, slide numbers that deal with that topic, "
+        "and one practice problem. Return nothing besides a python dictionary please."
     )
 
     # Prepare the request content, inserting the slides_data as context
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a professional at understanding PowerPoints."},
+            {"role": "system", "content": "You are a professional at interpreting PowerPoints created by professors. Your goal is to make the PowerPoint extremely easy for a student to understand."},
             {
                 "role": "user",
                 "content": user_message
@@ -39,5 +44,9 @@ def analyze_powerpoint(slides_data):
         ]
     )
 
+    response = completion.choices[0].message.content
+    clean_response = response.replace("```python", "").replace("```", "").strip()
+    extracted_dict = ast.literal_eval(clean_response)
+
     # Return the response message
-    return completion.choices[0].message.content
+    return extracted_dict

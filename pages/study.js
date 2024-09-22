@@ -12,7 +12,23 @@ const Study = () => {
   return (
     <>
       <Navbar />
-      <Section>{JSON.stringify(data, null, 2)}</Section>
+      <MainContent>
+        {data &&
+          Object.keys(data).map((key) => (
+            <TopicContainer key={key}>
+              <h2>{key}</h2>
+              <p>
+                <strong>Summary:</strong> {data[key][0]}
+              </p>
+              <p>
+                <strong>Practice Problem:</strong> {data[key][2]}
+              </p>
+              <p>
+                <strong>Slide Numbers:</strong> {data[key][1].join(", ")}
+              </p>
+            </TopicContainer>
+          ))}
+      </MainContent>
       <Footer />
     </>
   );
@@ -20,13 +36,21 @@ const Study = () => {
 
 export default Study;
 
-const Section = styled.div`
+const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10vw;
-  height: 100vh;
+  padding: 5vw;
   background-color: #f6f4f3;
-  color: #000000;
+  color: #000;
+`;
+
+const TopicContainer = styled.div`
+  margin-bottom: 2rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
 `;
