@@ -18,13 +18,13 @@ const Study = () => {
             <TopicContainer key={key}>
               <h2>{key}</h2>
               <p>
-                <strong>Summary:</strong> {data[key][0]}
+                <strong>Summary:</strong> {data[key]["summary"]}
               </p>
               <p>
-                <strong>Practice Problem:</strong> {data[key][2]}
+                <strong>Question:</strong> {data[key]["question"]}
               </p>
               <p>
-                <strong>Slide Numbers:</strong> {data[key][1].join(", ")}
+                <strong>Answer:</strong> {data[key]["answer"]}
               </p>
             </TopicContainer>
           ))}

@@ -1,39 +1,88 @@
 // This is an example of what gpt-4o would return when a user wants to extract data from a PowerPoint
-export const gptData = [
-  {
-    topicName: "Python",
+export const gptData = {
+  "Introduction to Applied Statistics in Science": {
     summary:
-      "Python is a versatile, high-level programming language known for its readability and simplicity. It's widely used in web development, data analysis, artificial intelligence, scientific computing, and automation. Its extensive libraries and frameworks, such as Django and Pandas, make it a favorite among developers.",
-    problem: "What is Python?",
-    youtubeLinks: [
-      "https://www.youtube.com/watch?v=x7X9w_GIm1s",
-      "https://www.youtube.com/watch?v=fWjsdhR3z3c",
-    ],
-    resources: ["https://docs.python.org/3/"],
-    slides: [1, 2, 3, 4],
+      "The presentation introduces the course MATH/STAT 319, focusing on applied statistics in science. The initial slide indicates the course covers hypotheses and test procedures, taught by Mauricio Nascimento.",
+    question:
+      "What are the two key components covered in the course MATH/STAT 319 according to the initial slide?",
+    answer: "The course covers hypotheses and test procedures.",
   },
-  {
-    topicName: "JavaScript",
+  "Problem Context and Example": {
     summary:
-      "JavaScript is a dynamic, high-level language primarily used for creating interactive web applications. It runs in the browser and allows developers to enhance user interfaces and manage asynchronous events. With the advent of Node.js, it can also be used for server-side programming, making it a full-stack development language.",
-    problem: "What is JavaScript?",
-    youtubeLinks: [
-      "https://www.youtube.com/watch?v=lkIFF4maKMU",
-      "https://www.youtube.com/watch?v=W6NZfCO5SIk",
-    ],
-    resources: ["https://developer.mozilla.org/en-US/docs/Web/JavaScript"],
-    slides: [5, 6, 7],
+      "A practical problem is presented where 10% of computer circuit boards produced by a manufacturer are defective. An engineer proposes a change in production to reduce the defective rate. A sample of 200 circuits is taken with the new process to determine if the change is effective.",
+    question:
+      "In an example problem, what is the initial defect rate of computer circuit boards before any changes to the production process?",
+    answer: "The initial defect rate is 10%.",
   },
-  {
-    topicName: "C",
+  "Introduction to Hypothesis Testing": {
     summary:
-      "C is a general-purpose, procedural programming language that was developed in the early 1970s. It is known for its efficiency and performance, making it a popular choice for system programming, embedded systems, and operating system development. C provides low-level access to memory through the use of pointers, allowing for fine control over system resources.",
-    problem: "What is C?",
-    youtubeLinks: [
-      "https://www.youtube.com/watch?v=U3aXWizDbQ4",
-      "https://www.youtube.com/watch?v=KJgsSFOSQv0",
-    ],
-    resources: ["https://devdocs.io/c/"],
-    slides: [8, 9, 10, 11, 12],
+      "Hypothesis testing is a fundamental concept wherein decisions are made based on sample data. It involves formulating a null hypothesis (H0) that represents no change or effect and an alternative hypothesis (Ha) that represents the change or effect we want to prove.",
+    question:
+      "What do the null hypothesis (H0) and alternative hypothesis (Ha) represent in hypothesis testing?",
+    answer:
+      "The null hypothesis (H0) represents no change or effect, while the alternative hypothesis (Ha) represents the change or effect that one wants to prove.",
   },
-];
+  "Formulating Hypotheses in the Example": {
+    summary:
+      "For the given problem, hypotheses are formulated. H0 states there is no difference in the proportion of defective boards before and after the change (p = 0.1). Ha states there is a decrease in the proportion of defective boards after the change (p < 0.1).",
+    question:
+      "For the given problem concerning defective circuit boards, what do the null (H0) and alternative (Ha) hypotheses state?",
+    answer:
+      "H0 states that there is no difference in the proportion of defective boards before and after the change (p = 0.1). Ha states that there is a decrease in the proportion of defective boards after the change (p < 0.1).",
+  },
+  "Test Procedures": {
+    summary:
+      "With hypotheses defined, a test procedure is required to select between them. This involves calculating a test statistic from the sample data and determining a rejection region. If the test statistic falls within the rejection region, H0 is rejected.",
+    question:
+      "What determines whether the null hypothesis (H0) is rejected in a test procedure?",
+    answer:
+      "A test statistic is calculated from the sample data and compared to a rejection region. If the test statistic falls within the rejection region, the null hypothesis (H0) is rejected.",
+  },
+  "Errors in Hypothesis Testing": {
+    summary:
+      "Even after concluding the test, the risk of errors exists. A Type I error occurs when H0 is incorrectly rejected, while a Type II error occurs when H0 is incorrectly not rejected. We can't be absolutely sure of correctness because the test depends on sample data.",
+    question: "What are Type I and Type II errors in hypothesis testing?",
+    answer:
+      "A Type I error occurs when the null hypothesis (H0) is incorrectly rejected, while a Type II error occurs when H0 is incorrectly not rejected.",
+  },
+  "Quantifying Error Probabilities": {
+    summary:
+      "The probability of each type of error can be calculated. Type I error probability is denoted by alpha (α), and Type II error probability is denoted by beta (β). Adjusting the rejection region affects these probabilities inversely.",
+    question:
+      "How are the probabilities of Type I and Type II errors denoted, and how are they affected by the rejection region?",
+    answer:
+      "The probability of a Type I error is denoted by alpha (α), and the probability of a Type II error is denoted by beta (β). Adjusting the rejection region affects these probabilities inversely.",
+  },
+  "Connection Between Error Probabilities": {
+    summary:
+      "There is a trade-off between Type I and Type II errors. Decreasing the size of the rejection region to achieve a smaller α results in a larger β for any given alternative hypothesis parameter value.",
+    question:
+      "What is the trade-off between Type I and Type II errors in hypothesis testing?",
+    answer:
+      "Decreasing the size of the rejection region to achieve a smaller alpha (α) results in a larger beta (β) for any given alternative hypothesis parameter value.",
+  },
+  "Selecting the Rejection Region in Practice": {
+    summary:
+      "Practitioners often define the hypotheses to limit more serious errors (Type I) and tolerate the largest value of α. This defines the rejection region based on a predetermined significance level, commonly referred to as a level α test.",
+    question:
+      "How do practitioners define the rejection region in hypothesis testing?",
+    answer:
+      "Practitioners often define the hypotheses to limit more serious errors (Type I) and tolerate the largest value of alpha (α). This defines the rejection region based on a predetermined significance level, commonly referred to as a level α test.",
+  },
+  "Practical Example of Hypothesis Testing": {
+    summary:
+      "In a practical example, the rejection region is determined based on a specific significance level (α = 0.05656). The presentation guides through how this affects the decisions when inspecting sample data to change a manufacturing process.",
+    question:
+      "In a practical example, what is the significance level (α) used to determine the rejection region?",
+    answer:
+      "The significance level (α) used to determine the rejection region is 0.05656.",
+  },
+  "The Conclusion": {
+    summary:
+      "After studying error probabilities and selecting appropriate rejection regions, the presentation concludes on how to apply these principles to decide whether to implement the proposed changes in manufacturing processes based on hypothesis tests.",
+    question:
+      "What is the ultimate goal when applying the principles of hypothesis testing to a manufacturing process?",
+    answer:
+      "The goal is to decide whether to implement the proposed changes in manufacturing processes based on the results of hypothesis tests.",
+  },
+};
