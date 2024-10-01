@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import json
+from youtube import get_youtube_video
 
 # Load environment variables from .env file
 load_dotenv('@/.env')
@@ -69,7 +70,8 @@ def analyze_powerpoint(slides_data):
         topic: {
             "summary": response_1[topic],
             "question": response_2.get(topic, {}).get("question", ""),
-            "answer": response_2.get(topic, {}).get("answer", "")
+            "answer": response_2.get(topic, {}).get("answer", ""),
+            "youtubeLink": get_youtube_video(topic)
         }
         for topic in response_1
     }

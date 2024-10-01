@@ -26,6 +26,16 @@ const Study = () => {
               <p>
                 <strong>Answer:</strong> {data[key]["answer"]}
               </p>
+              <p>
+                <strong>YouTube Video: </strong>
+                <a
+                  href={data[key]["youtubeLink"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn more
+                </a>
+              </p>
             </TopicContainer>
           ))}
       </MainContent>
