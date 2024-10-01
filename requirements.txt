@@ -3,3 +3,6 @@ flask-cors==4.0.0
 python-pptx==1.0.2
 openai
 python-dotenv
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2

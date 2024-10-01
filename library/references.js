@@ -6,6 +6,7 @@ export const gptData = {
     question:
       "What are the two key components covered in the course MATH/STAT 319 according to the initial slide?",
     answer: "The course covers hypotheses and test procedures.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Problem Context and Example": {
     summary:
@@ -13,6 +14,7 @@ export const gptData = {
     question:
       "In an example problem, what is the initial defect rate of computer circuit boards before any changes to the production process?",
     answer: "The initial defect rate is 10%.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Introduction to Hypothesis Testing": {
     summary:
@@ -21,6 +23,7 @@ export const gptData = {
       "What do the null hypothesis (H0) and alternative hypothesis (Ha) represent in hypothesis testing?",
     answer:
       "The null hypothesis (H0) represents no change or effect, while the alternative hypothesis (Ha) represents the change or effect that one wants to prove.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Formulating Hypotheses in the Example": {
     summary:
@@ -29,6 +32,7 @@ export const gptData = {
       "For the given problem concerning defective circuit boards, what do the null (H0) and alternative (Ha) hypotheses state?",
     answer:
       "H0 states that there is no difference in the proportion of defective boards before and after the change (p = 0.1). Ha states that there is a decrease in the proportion of defective boards after the change (p < 0.1).",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Test Procedures": {
     summary:
@@ -37,6 +41,7 @@ export const gptData = {
       "What determines whether the null hypothesis (H0) is rejected in a test procedure?",
     answer:
       "A test statistic is calculated from the sample data and compared to a rejection region. If the test statistic falls within the rejection region, the null hypothesis (H0) is rejected.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Errors in Hypothesis Testing": {
     summary:
@@ -44,6 +49,7 @@ export const gptData = {
     question: "What are Type I and Type II errors in hypothesis testing?",
     answer:
       "A Type I error occurs when the null hypothesis (H0) is incorrectly rejected, while a Type II error occurs when H0 is incorrectly not rejected.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
   "Quantifying Error Probabilities": {
     summary:
@@ -52,37 +58,6 @@ export const gptData = {
       "How are the probabilities of Type I and Type II errors denoted, and how are they affected by the rejection region?",
     answer:
       "The probability of a Type I error is denoted by alpha (α), and the probability of a Type II error is denoted by beta (β). Adjusting the rejection region affects these probabilities inversely.",
-  },
-  "Connection Between Error Probabilities": {
-    summary:
-      "There is a trade-off between Type I and Type II errors. Decreasing the size of the rejection region to achieve a smaller α results in a larger β for any given alternative hypothesis parameter value.",
-    question:
-      "What is the trade-off between Type I and Type II errors in hypothesis testing?",
-    answer:
-      "Decreasing the size of the rejection region to achieve a smaller alpha (α) results in a larger beta (β) for any given alternative hypothesis parameter value.",
-  },
-  "Selecting the Rejection Region in Practice": {
-    summary:
-      "Practitioners often define the hypotheses to limit more serious errors (Type I) and tolerate the largest value of α. This defines the rejection region based on a predetermined significance level, commonly referred to as a level α test.",
-    question:
-      "How do practitioners define the rejection region in hypothesis testing?",
-    answer:
-      "Practitioners often define the hypotheses to limit more serious errors (Type I) and tolerate the largest value of alpha (α). This defines the rejection region based on a predetermined significance level, commonly referred to as a level α test.",
-  },
-  "Practical Example of Hypothesis Testing": {
-    summary:
-      "In a practical example, the rejection region is determined based on a specific significance level (α = 0.05656). The presentation guides through how this affects the decisions when inspecting sample data to change a manufacturing process.",
-    question:
-      "In a practical example, what is the significance level (α) used to determine the rejection region?",
-    answer:
-      "The significance level (α) used to determine the rejection region is 0.05656.",
-  },
-  "The Conclusion": {
-    summary:
-      "After studying error probabilities and selecting appropriate rejection regions, the presentation concludes on how to apply these principles to decide whether to implement the proposed changes in manufacturing processes based on hypothesis tests.",
-    question:
-      "What is the ultimate goal when applying the principles of hypothesis testing to a manufacturing process?",
-    answer:
-      "The goal is to decide whether to implement the proposed changes in manufacturing processes based on the results of hypothesis tests.",
+    youtubeLink: "https://www.youtube.com/watch?v=LO6Qd9hYd8M",
   },
 };
