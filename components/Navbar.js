@@ -111,10 +111,9 @@ const NavbarSection = styled.div`
   display: flex;
   align-items: center;
   margin: auto;
-  padding 20px;
+  padding-top: 20px;
+  padding-left: 20px;
   background-color: #f6f4f3;
-  padding: 20px;
-
 `;
 
 export default Navbar;
