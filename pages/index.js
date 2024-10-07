@@ -86,8 +86,6 @@ export default function Home() {
   );
 }
 
-// define html and it's css here
-
 const Section = styled.div`
   display: flex;
   flex-direction: column;

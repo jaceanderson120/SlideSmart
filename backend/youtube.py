@@ -22,12 +22,9 @@ def get_youtube_video(topic):
     
     response = request.execute()
 
-    video_links = []
+    video_ids = []
     for item in response.get('items', []):
         video_id = item['id']['videoId']
-        video_link = f"https://www.youtube.com/watch?v={video_id}"
-        video_links.append(video_link)
+        video_ids.append(video_id)
 
-    print(video_links)
-
-    return video_links
+    return video_ids

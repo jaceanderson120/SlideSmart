@@ -71,7 +71,7 @@ def analyze_powerpoint(slides_data):
             "summary": response_1[topic],
             "question": response_2.get(topic, {}).get("question", ""),
             "answer": response_2.get(topic, {}).get("answer", ""),
-            "youtubeLink": get_youtube_video(topic)
+            "youtubeId": get_youtube_video(topic)
         }
         for topic in response_1
     }
