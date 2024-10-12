@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/images/logo.png";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/backend/firebase/firebase";
 
@@ -22,10 +24,10 @@ function Navbar() {
 
   return (
     <NavbarSection>
+      <Image src={logo} alt="SlideSmart Logo" width={64} height={64} />
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-
       <NavbarAboutLinks>
         <Link href="/">Saved Projects</Link>
         <Link href="/">How it Works</Link>
@@ -148,7 +150,7 @@ const NavbarSlideSmart = styled.div`
   a {
     text-decoration: none;
     font-size: 40px;
-    color: #000000;
+    color: #f03a47;
     font-weight: bold;
   }
 `;
