@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/backend/firebase/firebase";
 
 function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = () => {
+    signOut(auth);
+  };
+
   return (
     <NavbarSection>
       <NavbarSlideSmart>
@@ -17,12 +34,24 @@ function Navbar() {
       </NavbarAboutLinks>
 
       <NavbarLoginLinks>
-        <NavbarLoginStyle>
-          <Link href="/">Login</Link>
-        </NavbarLoginStyle>
-        <NavbarRegisterStyle>
-          <Link href="/">Register</Link>
-        </NavbarRegisterStyle>
+        {isLoggedIn ? (
+          <>
+            <NavbarLogoutStyle>
+              <Link href="/login" onClick={handleLogout}>
+                Logout
+              </Link>
+            </NavbarLogoutStyle>
+          </>
+        ) : (
+          <>
+            <NavbarLoginStyle>
+              <Link href="/login">Login</Link>
+            </NavbarLoginStyle>
+            <NavbarRegisterStyle>
+              <Link href="/signup">Register</Link>
+            </NavbarRegisterStyle>
+          </>
+        )}
       </NavbarLoginLinks>
     </NavbarSection>
   );
@@ -85,9 +114,27 @@ const NavbarRegisterStyle = styled.div`
   }
 `;
 
+const NavbarLogoutStyle = styled.div`
+  margin-right: 16px;
+  padding: 6px;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  a:hover {
+    color: #f03a47;
+  }
+`;
+
 const NavbarLoginLinks = styled.div`
   float: right;
   margin-left: auto;
+  margin-right: 16px;
   padding: 6px;
   display: flex;
   font-size: 25px;
@@ -96,8 +143,7 @@ const NavbarLoginLinks = styled.div`
 `;
 
 const NavbarSlideSmart = styled.div`
-  float: left;
-  padding: 12px;
+  margin-left: 16px;
 
   a {
     text-decoration: none;
