@@ -16,12 +16,14 @@ const Study = () => {
       <Section>
         <TopicContainer>
           <TopicTitle>Topics</TopicTitle>
+        <TopicScrollableContainer>
           {data &&
             Object.keys(data).map((key) => (
               <TopicName href={`#${key}`} key={key}>
                 {key}
               </TopicName>
             ))}
+        </TopicScrollableContainer>
         </TopicContainer>
         <InfoContainer>
           {data &&
@@ -76,7 +78,7 @@ const TopicName = styled.a`
   font-size: 30px;
   text-decoration: none;
   color: inherit;
-  transition: color 0.3s;
+  transition: background-color 0.3s;
   border-radius: 16px;
 
   &:hover {
@@ -105,9 +107,25 @@ const TopicContainer = styled.div`
   background-color: #f03a4733;
   border-radius: 10px;
   position: relative;
-  padding-top: 8px;
   justify-content: center;
+  
+  // scrollable with hidden scroll bar
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+`;
+
+const TopicScrollableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  justify-content: center;
+  
+  // scrollable with hidden scroll bar
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const InfoContainer = styled.div`
@@ -121,11 +139,15 @@ const InfoContainer = styled.div`
   border-radius: 10px;
   padding: 16px;
   position: relative;
+
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const TopicHeader = styled.p`
-  padding: 16px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   font-size: 30px;
   font-weight: bold;
   text-decoration: underline;
