@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Footer = () => {
-  return <FooterSection>I am a footer</FooterSection>;
+  return <FooterSection>Footer</FooterSection>;
 };
 
 const FooterSection = styled.div`
