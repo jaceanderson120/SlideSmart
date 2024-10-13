@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { auth } from "@/backend/firebase/firebase";
+import { auth } from "@/library/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
