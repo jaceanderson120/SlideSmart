@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LoadingOverlay from "../components/Overlay";
-import { auth } from "@/backend/firebase/firebase";
+import { auth } from "@/library/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 

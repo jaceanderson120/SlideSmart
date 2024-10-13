@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "@/backend/firebase/firebase";
+import { auth } from "@/library/firebase/firebase";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
