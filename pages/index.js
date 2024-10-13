@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import LoadingOverlay from "../components/Overlay";
 import { auth } from "@/backend/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
