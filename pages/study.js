@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
@@ -9,6 +10,39 @@ const Study = () => {
   const { extractedData } = router.query;
 
   const data = extractedData ? JSON.parse(extractedData) : gptData;
+  const [activeTopic, setActiveTopic] = useState(null); 
+
+  const topicRefs = useRef({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveTopic(entry.target.id); 
+          }
+        });
+      },
+      {
+        threshold: 0.5, 
+      }
+    );
+
+    Object.keys(topicRefs.current).forEach((key) => {
+      if (topicRefs.current[key]) {
+        observer.observe(topicRefs.current[key]);
+      }
+    });
+
+    return () => {
+      Object.keys(topicRefs.current).forEach((key) => {
+        if (topicRefs.current[key]) {
+          observer.unobserve(topicRefs.current[key]);
+        }
+      });
+    };
+  }, [data]);
+
 
   return (
     <>
@@ -19,7 +53,11 @@ const Study = () => {
         <TopicScrollableContainer>
           {data &&
             Object.keys(data).map((key) => (
-              <TopicName href={`#${key}`} key={key}>
+              <TopicName 
+                href={`#${key}`} 
+                key={key}
+                className={activeTopic === key ? "active" : ""}
+              >
                 {key}
               </TopicName>
             ))}
@@ -28,7 +66,11 @@ const Study = () => {
         <InfoContainer>
           {data &&
             Object.keys(data).map((key) => (
-              <>
+              <div
+                key={key}
+                id={key}
+                ref={(el) => (topicRefs.current[key] = el)}
+              >
                 <TopicHeader id={key}>{key}</TopicHeader>
                 <TopicSummary>
                   <strong style={{ fontWeight: "bold" }}>Definition:</strong>
@@ -52,7 +94,7 @@ const Study = () => {
                   <strong style={{ fontWeight: "bold" }}>Answer:</strong>
                   <p style={{ marginBottom: "32px" }}>{data[key]["answer"]}</p>
                 </TopicQuestion>
-              </>
+              </div>
             ))}
         </InfoContainer>
       </Section>
@@ -84,6 +126,12 @@ const TopicName = styled.a`
   &:hover {
     background-color: #f03a4770;
   }
+
+  &.active {
+    background-color: #f03a4770; /* Highlight active topic */
+    font-weight: bold;
+    transition: font-weight 0.3s ease, color 0.3s ease;
+  }
 `;
 
 const Section = styled.div`
@@ -92,7 +140,7 @@ const Section = styled.div`
   align-items: flex-start;
   padding: 32px;
   text-align: center;
-  height: 100vh;
+  height: 90vh;
   background-color: #f6f4f3;
   color: #000000;
   font-size: 2rem;
@@ -103,7 +151,7 @@ const TopicContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  height: 90vh;
+  height: 80vh;
   background-color: #f03a4733;
   border-radius: 10px;
   position: relative;
@@ -134,7 +182,7 @@ const InfoContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex: 2.5;
-  height: 90vh;
+  height: 80vh;
   background-color: #3a6df00f;
   border-radius: 10px;
   padding: 16px;
@@ -146,6 +194,11 @@ const InfoContainer = styled.div`
 `;
 
 const TopicHeader = styled.p`
+  display: flex;  
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  margin-left: 16px;
   margin-top: 30px;
   margin-bottom: 30px;
   font-size: 30px;
