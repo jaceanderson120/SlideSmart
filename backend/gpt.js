@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { OpenAI } from "openai"; // Adjust based on your version
 import dotenv from "dotenv";
 import { getYoutubeVideo } from "./youtube.js";
 
@@ -10,11 +10,9 @@ const openai = new OpenAI({
   apiKey: openaiApiKey,
 });
 
-// Function to analyze PowerPoint slides data
 export async function analyzePowerpoint(slidesData) {
   const userMessage1 = `
-        I am providing you with a JavaScript object where the keys are slide numbers and the values are
-        arrays of text from the slide. Here is the object: ${JSON.stringify(
+        I am providing you with a string of text which was extracted from a PowerPoint. Here is the string: ${JSON.stringify(
           slidesData
         )}
         Understand the text and tell me what topics the PowerPoint is about.
@@ -24,7 +22,7 @@ export async function analyzePowerpoint(slidesData) {
     `;
 
   try {
-    const completion1 = await openai.createChatCompletion({
+    const completion1 = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
@@ -36,7 +34,7 @@ export async function analyzePowerpoint(slidesData) {
       ],
     });
 
-    const response1 = JSON.parse(completion1.data.choices[0].message.content);
+    const response1 = JSON.parse(completion1.choices[0].message.content);
 
     const userMessage2 = `
             I am providing you with JSON in the following format: { 'topicName1': 'summary', 'topicName2': 'summary' ... }.
@@ -45,7 +43,7 @@ export async function analyzePowerpoint(slidesData) {
             Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
         `;
 
-    const completion2 = await openai.createChatCompletion({
+    const completion2 = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
@@ -57,7 +55,7 @@ export async function analyzePowerpoint(slidesData) {
       ],
     });
 
-    const response2 = JSON.parse(completion2.data.choices[0].message.content);
+    const response2 = JSON.parse(completion2.choices[0].message.content);
 
     const combinedResponse = {};
     for (const topic of Object.keys(response1)) {
