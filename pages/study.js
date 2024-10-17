@@ -10,7 +10,7 @@ const Study = () => {
   const { extractedData } = router.query;
 
   const data = extractedData ? JSON.parse(extractedData) : gptData;
-  const [activeTopic, setActiveTopic] = useState(null); 
+  const [activeTopic, setActiveTopic] = useState(null);
 
   const topicRefs = useRef({});
 
@@ -19,12 +19,12 @@ const Study = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveTopic(entry.target.id); 
+            setActiveTopic(entry.target.id);
           }
         });
       },
       {
-        threshold: 0.5, 
+        threshold: 0.5,
       }
     );
 
@@ -43,25 +43,24 @@ const Study = () => {
     };
   }, [data]);
 
-
   return (
     <>
       <Navbar />
       <Section>
         <TopicContainer>
           <TopicTitle>Topics</TopicTitle>
-        <TopicScrollableContainer>
-          {data &&
-            Object.keys(data).map((key) => (
-              <TopicName 
-                href={`#${key}`} 
-                key={key}
-                className={activeTopic === key ? "active" : ""}
-              >
-                {key}
-              </TopicName>
-            ))}
-        </TopicScrollableContainer>
+          <TopicScrollableContainer>
+            {data &&
+              Object.keys(data).map((key) => (
+                <TopicName
+                  href={`#${key}`}
+                  key={key}
+                  className={activeTopic === key ? "active" : ""}
+                >
+                  {key}
+                </TopicName>
+              ))}
+          </TopicScrollableContainer>
         </TopicContainer>
         <InfoContainer>
           {data &&
@@ -156,7 +155,7 @@ const TopicContainer = styled.div`
   border-radius: 10px;
   position: relative;
   justify-content: center;
-  
+
   // scrollable with hidden scroll bar
   overflow: auto;
   scrollbar-width: none;
@@ -169,7 +168,7 @@ const TopicScrollableContainer = styled.div`
   flex: 1;
   position: relative;
   justify-content: center;
-  
+
   // scrollable with hidden scroll bar
   overflow: auto;
   scrollbar-width: none;
@@ -194,7 +193,7 @@ const InfoContainer = styled.div`
 `;
 
 const TopicHeader = styled.p`
-  display: flex;  
+  display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;

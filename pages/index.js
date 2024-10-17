@@ -44,7 +44,7 @@ export default function Home() {
       // Send the file to the backend
       try {
         setIsLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/extract", {
+        const response = await fetch("/api/extract", {
           method: "POST",
           body: formData,
         });
