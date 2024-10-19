@@ -1,6 +1,5 @@
 import formidable from "formidable";
 import fs from "fs";
-import { analyzePowerpoint } from "../../backend/gpt.js";
 import pdf from "pdf-parse";
 
 // NEEDED: DISABLE THE DEFAULT NEXT.JS BODY PARSING BEHAVIOR
@@ -45,19 +44,16 @@ export default async function handler(req, res) {
       // Extract text from the PDF file
       const extractedData = await extractTextFromPDF(uploadedFile.filepath);
 
-      // Analyze the extracted text
-      const analyzedData = await analyzePowerpoint(extractedData);
-
-      // Send the analyzed data as the response
-      res.json(analyzedData);
+      // Send the extracted data as the response
+      res.json(extractedData);
     } catch (error) {
       console.error("Error processing the file:", error);
       res.status(500).json({ error: error.message });
     } finally {
-      // Clean up: Remove the temporary file
+      // Remove the temporary file
       if (uploadedFile) {
         try {
-          await fs.unlink(uploadedFile.filepath);
+          await fs.promises.unlink(uploadedFile.filepath);
         } catch (unlinkErr) {
           console.error("Error deleting the temporary file:", unlinkErr);
         }

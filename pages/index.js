@@ -6,12 +6,10 @@ import { useRouter } from "next/router";
 import LoadingOverlay from "../components/Overlay";
 import { auth } from "@/library/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { initializeApp } from "firebase/app";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  // Declare fileInputRef at the top level of the component
   const fileInputRef = useRef(null);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,7 +41,8 @@ export default function Home() {
 
       try {
         setIsLoading(true); // Show loading spinner
-        const response = await fetch("/api/extract", {
+        // Start with extracting data from the form
+        const response = await fetch("/api/extract-from-pdf", {
           method: "POST",
           body: formData,
         });
@@ -54,13 +53,80 @@ export default function Home() {
           throw new Error(`Error: ${response.status} ${errorText}`);
         }
 
-        const data = await response.json();
+        // Get the extracted data as a string
+        const extractedData = await response.json();
+
+        // Send extracted data to GPT to retrieve topics + summaries object from data
+        const topicsAndSummariesResponse = await fetch("/api/get-topics-gpt", {
+          method: "POST",
+          body: extractedData,
+        });
+
+        // Check if topicsAndSummariesResponse is OK
+        if (!topicsAndSummariesResponse.ok) {
+          throw new Error("Failed to fetch topics and summaries");
+        }
+
+        // Get the topics and summaries as JSON
+        const topicsAndSummaries = await topicsAndSummariesResponse.json();
+        const topics = Object.keys(topicsAndSummaries); // Extracting topics
+
+        // Prepare an array of fetch promises for YouTube videos
+        const youtubePromises = topics.map((topic) =>
+          fetch("/api/get-youtube-video", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ topic }), // Sending the topic as JSON
+          }).then((res) => {
+            if (!res.ok) {
+              throw new Error("Failed to fetch video");
+            }
+            return res.json(); // Return the video ID
+          })
+        );
+
+        // Prepare the fetch for create-content
+        const createContentPromise = fetch("/api/create-content-gpt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(topicsAndSummaries),
+        });
+
+        // Wait for both the YouTube video and create content fetches to complete
+        const [youtubeResponses, createdContentResponse] = await Promise.all([
+          Promise.all(youtubePromises), // Resolve all YouTube video fetches
+          createContentPromise, // Resolve create content fetch
+        ]);
+
+        // Check if createdContentResponse is OK
+        if (!createdContentResponse.ok) {
+          throw new Error("Failed to create content");
+        }
+
+        // Get the created content as JSON
+        const createdContent = await createdContentResponse.json();
+
+        // Combine the responses into one object
+        const combinedResponse = {};
+        topics.forEach((topic, index) => {
+          combinedResponse[topic] = {
+            summary: topicsAndSummaries[topic],
+            question: createdContent[topic]?.question || "",
+            answer: createdContent[topic]?.answer || "",
+            youtubeId: youtubeResponses[index],
+          };
+        });
+
         setIsLoading(false);
 
         // Redirect to the study page with extracted data
         router.push({
           pathname: "/study",
-          query: { extractedData: JSON.stringify(data) },
+          query: { extractedData: JSON.stringify(combinedResponse) },
         });
       } catch (error) {
         setIsLoading(false);
