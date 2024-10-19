@@ -23,7 +23,7 @@ export async function analyzePowerpoint(slidesData) {
 
   try {
     const completion1 = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -32,10 +32,16 @@ export async function analyzePowerpoint(slidesData) {
         },
         { role: "user", content: userMessage1 },
       ],
+      response_format: { type: "json_object" },
     });
 
     const response1 = JSON.parse(completion1.choices[0].message.content);
+    const topics = Object.keys(response1); // Extracting topics right after getting the summary
 
+    // Start fetching YouTube IDs concurrently
+    const youtubePromises = topics.map((topic) => getYoutubeVideo(topic));
+
+    // Creating the user message for practice problems
     const userMessage2 = `
             I am providing you with JSON in the following format: { 'topicName1': 'summary', 'topicName2': 'summary' ... }.
             Here is the JSON object: ${JSON.stringify(response1)}.
@@ -43,8 +49,9 @@ export async function analyzePowerpoint(slidesData) {
             Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
         `;
 
-    const completion2 = await openai.chat.completions.create({
-      model: "gpt-4",
+    // Start the OpenAI completion for practice problems without waiting for YouTube API
+    const completion2Promise = openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -53,14 +60,16 @@ export async function analyzePowerpoint(slidesData) {
         },
         { role: "user", content: userMessage2 },
       ],
+      response_format: { type: "json_object" },
     });
 
-    const response2 = JSON.parse(completion2.choices[0].message.content);
+    // Wait for the completion of practice problems while concurrently waiting for YouTube API
+    const [completion2, youtubeIds] = await Promise.all([
+      completion2Promise,
+      Promise.all(youtubePromises),
+    ]);
 
-    // Fetch YouTube IDs for all topics in parallel
-    const topics = Object.keys(response1);
-    const youtubePromises = topics.map((topic) => getYoutubeVideo(topic));
-    const youtubeIds = await Promise.all(youtubePromises);
+    const response2 = JSON.parse(completion2.choices[0].message.content);
 
     // Combine responses
     const combinedResponse = {};
