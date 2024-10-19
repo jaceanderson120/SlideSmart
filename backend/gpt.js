@@ -57,15 +57,21 @@ export async function analyzePowerpoint(slidesData) {
 
     const response2 = JSON.parse(completion2.choices[0].message.content);
 
+    // Fetch YouTube IDs for all topics in parallel
+    const topics = Object.keys(response1);
+    const youtubePromises = topics.map((topic) => getYoutubeVideo(topic));
+    const youtubeIds = await Promise.all(youtubePromises);
+
+    // Combine responses
     const combinedResponse = {};
-    for (const topic of Object.keys(response1)) {
+    topics.forEach((topic, index) => {
       combinedResponse[topic] = {
         summary: response1[topic],
         question: response2[topic]?.question || "",
         answer: response2[topic]?.answer || "",
-        youtubeId: await getYoutubeVideo(topic),
+        youtubeId: youtubeIds[index], // Get the YouTube ID corresponding to the topic
       };
-    }
+    });
 
     return combinedResponse;
   } catch (error) {

@@ -41,20 +41,29 @@ export default function Home() {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Send the file to the backend
       try {
-        setIsLoading(true);
+        setIsLoading(true); // Show loading spinner
         const response = await fetch("/api/extract", {
           method: "POST",
           body: formData,
         });
+
+        // Check if the response is OK
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error: ${response.status} ${errorText}`);
+        }
+
         const data = await response.json();
         setIsLoading(false);
+
+        // Redirect to the study page with extracted data
         router.push({
           pathname: "/study",
           query: { extractedData: JSON.stringify(data) },
         });
       } catch (error) {
+        setIsLoading(false);
         console.error("Error uploading file:", error);
       }
     }
