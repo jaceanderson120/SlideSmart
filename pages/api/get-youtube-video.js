@@ -21,7 +21,7 @@ export default async function getYoutubeVideo(req, res) {
   });
 
   try {
-    const response = youtube.search.list({
+    const response = await youtube.search.list({
       part: "snippet",
       q: topic,
       type: "video",
