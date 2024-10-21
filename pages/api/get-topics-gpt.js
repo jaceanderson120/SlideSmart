@@ -1,13 +1,14 @@
-import { OpenAI } from "openai";
+import { AzureOpenAI } from "openai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const openaiApiKey = process.env.OPENAI_API_KEY;
+const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const apiKey = process.env.AZURE_OPENAI_API_KEY;
+const apiVersion = "2024-08-01-preview";
+const deployment = "gpt-4o";
 
-const openai = new OpenAI({
-  apiKey: openaiApiKey,
-});
+const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 
 export default async function getTopics(req, res) {
   if (req.method !== "POST") {
@@ -35,8 +36,8 @@ export default async function getTopics(req, res) {
 `;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-2024-08-06",
+    const completion = await openai.completions.create({
+      model: deployment,
       messages: [
         {
           role: "system",

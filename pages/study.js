@@ -105,7 +105,7 @@ const Study = () => {
                           Explanation:
                         </strong>
                       </ImageAndTitle>
-                      {data[key]["summary"]}
+                      {data[key]["summary"][0]}
                     </TopicSummary>
                     <TopicVideo>
                       <ImageAndTitle>
