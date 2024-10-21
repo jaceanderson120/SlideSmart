@@ -19,21 +19,23 @@ export const GlobalStyles = createGlobalStyle`
   padding: 0;
   line-height: 1;
 }
-`
+`;
 
 export default function App({ Component, pageProps }) {
   return (
     <>
-
       <Head>
-        <title>SlideSmart | Turn your slides usefull</title>
-        <meta name="description" content="Slidesmart - Turn your classroom slides into an actually usefull resource." />
+        <title>SlideSmart</title>
+        <meta
+          name="description"
+          content="Slidesmart - The Smart Way to Study Slides."
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        
-        <GlobalStyles />
 
-        <Component {...pageProps} />
-    </>  
+      <GlobalStyles />
+
+      <Component {...pageProps} />
+    </>
   );
 }

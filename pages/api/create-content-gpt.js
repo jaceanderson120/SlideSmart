@@ -18,7 +18,7 @@ export default async function createContent(req, res) {
 
   // Creating the user message for practice problems
   const userMessage2 = `
-            I am providing you with JSON in the following format: { 'topicName1': 'summary', 'topicName2': 'summary' ... }.
+            I am providing you with JSON in the following format: { 'topicName1': 'explanation', 'topicName2': 'explanation' ... }.
             Here is the JSON object: ${JSON.stringify(topicsAndSummmaries)}.
             For each topic, please create a practice problem question.
             Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
@@ -27,12 +27,12 @@ export default async function createContent(req, res) {
   // Start the OpenAI completion for practice problems without waiting for YouTube API
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-2024-08-06",
       messages: [
         {
           role: "system",
           content:
-            "You are a professional at generating practice problems given a topic and topic summary. You respond to prompts with JSON.",
+            "You are a professional at generating practice problems given a topic and topic explanation. You respond to prompts with JSON.",
         },
         { role: "user", content: userMessage2 },
       ],

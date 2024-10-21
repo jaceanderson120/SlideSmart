@@ -71,14 +71,17 @@ export default function Home() {
         const topicsAndSummaries = await topicsAndSummariesResponse.json();
         const topics = Object.keys(topicsAndSummaries); // Extracting topics
 
+        // Get the YouTube search queries for each topic
+        const queries = topics.map((topic) => topicsAndSummaries[topic][1]);
+
         // Prepare an array of fetch promises for YouTube videos
-        const youtubePromises = topics.map((topic) =>
+        const youtubePromises = queries.map((query) =>
           fetch("/api/get-youtube-video", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ topic }), // Sending the topic as JSON
+            body: JSON.stringify({ query }), // Sending the topic as JSON
           }).then((res) => {
             if (!res.ok) {
               throw new Error("Failed to fetch video");
@@ -179,7 +182,7 @@ export default function Home() {
           onChange={handleFileChange}
         />
       </Section>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
