@@ -28,12 +28,12 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      <NavbarAboutLinks>
+      {/* <NavbarAboutLinks>
         <Link href="/">Saved Projects</Link>
         <Link href="/">How it Works</Link>
         <Link href="/">Support</Link>
         <Link href="/">Why SlideSmart</Link>
-      </NavbarAboutLinks>
+      </NavbarAboutLinks> */}
 
       <NavbarLoginLinks>
         {isLoggedIn ? (

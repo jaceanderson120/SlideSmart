@@ -46,7 +46,7 @@ const Signup = () => {
           <Button type="submit">Sign Up</Button>
         </Form>
       </Section>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

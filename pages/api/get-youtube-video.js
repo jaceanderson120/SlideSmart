@@ -8,11 +8,11 @@ export default async function getYoutubeVideo(req, res) {
   const apiVersion = "v3";
   const DEVELOPER_KEY = process.env.YOUTUBE_API_KEY;
 
-  // Get the topic from the request body or query parameters
-  const { topic } = req.body;
+  // Get the query from the request body or query parameters
+  const { query } = req.body;
 
-  if (!topic) {
-    return res.status(400).json({ error: "Topic is required" });
+  if (!query) {
+    return res.status(400).json({ error: "Query is required" });
   }
 
   const youtube = google.youtube({
@@ -23,7 +23,7 @@ export default async function getYoutubeVideo(req, res) {
   try {
     const response = await youtube.search.list({
       part: "snippet",
-      q: topic,
+      q: query,
       type: "video",
       maxResults: 1,
     });
