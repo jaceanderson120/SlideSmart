@@ -15,7 +15,6 @@ const Study = () => {
   const { extractedData } = router.query;
 
   const data = extractedData ? JSON.parse(extractedData) : gptData;
-  console.log(extractedData);
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
