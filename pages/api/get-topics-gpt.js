@@ -27,6 +27,7 @@ export default async function getTopics(req, res) {
     4. **Ordering of Topics**: Maintain the same order of topics as they appear in the PowerPoint. Precede each topic name with its corresponding number to indicate its position.
     5. **Relevant Content**: Avoid including non-informational items such as homework, exam dates, slide outlines, or lecture summaries in your explanations.
     6. **YouTube Search Query**: Based on the topic and explanation you create, also create a relevant YouTube search query that a student can use to find additional resources on the topic.
+    7. **Keep in Mind**: The explanations should be detailed enough so that if a student wants to generate practice problems based on the explanation, they can do so.
     Finally, return the data in JSON format as follows: 
     { 
         'topicName1': ['explanation', 'YouTube search query'], 

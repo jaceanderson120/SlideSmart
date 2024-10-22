@@ -21,7 +21,7 @@ export default async function createContent(req, res) {
   const userMessage2 = `
             I am providing you with JSON in the following format: { 'topicName1': 'explanation', 'topicName2': 'explanation' ... }.
             Here is the JSON object: ${JSON.stringify(topicsAndSummmaries)}.
-            For each topic, please create a practice problem question.
+            For each topic, please create a practice problem example. Please make sure that the practice problem answer can be found in and related back to the topic explanation.
             Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
         `;
 
