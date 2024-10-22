@@ -1,63 +1,100 @@
 // This is an example of what gpt-4o would return when a user wants to extract data from a PowerPoint
 export const gptData = {
-  "Introduction to Applied Statistics in Science": {
-    summary:
-      "The presentation introduces the course MATH/STAT 319, focusing on applied statistics in science. The initial slide indicates the course covers hypotheses and test procedures, taught by Mauricio Nascimento.",
+  "1. Relational Model and Schema": {
+    summary: [
+      "The relational model is a way of structuring data using relations, which are represented as tables. In a relational database, each table is called a relation and consists of rows (tuples) and columns (attributes). A schema is a blueprint that defines the structure of the data, including the tables, their fields, and relationships between them. It's crucial for organizing and storing data efficiently.",
+      "Relational Model and Schema in Databases",
+    ],
     question:
-      "What are the two key components covered in the course MATH/STAT 319 according to the initial slide?",
-    answer: "The course covers hypotheses and test procedures.",
-    youtubeId: "LO6Qd9hYd8M",
-  },
-  "Problem Context and Example": {
-    summary:
-      "A practical problem is presented where 10% of computer circuit boards produced by a manufacturer are defective. An engineer proposes a change in production to reduce the defective rate. A sample of 200 circuits is taken with the new process to determine if the change is effective.",
-    question:
-      "In an example problem, what is the initial defect rate of computer circuit boards before any changes to the production process?",
-    answer: "The initial defect rate is 10%.",
-    youtubeId: "LO6Qd9hYd8M",
-  },
-  "Introduction to Hypothesis Testing": {
-    summary:
-      "Hypothesis testing is a fundamental concept wherein decisions are made based on sample data. It involves formulating a null hypothesis (H0) that represents no change or effect and an alternative hypothesis (Ha) that represents the change or effect we want to prove.",
-    question:
-      "What do the null hypothesis (H0) and alternative hypothesis (Ha) represent in hypothesis testing?",
+      "Given the following schema for a university database, determine the primary key for the 'Students' and 'Enrollments' tables.\n\nSchema:\nStudents (StudentID, FirstName, LastName, Major)\nCourses (CourseID, CourseName, Credits)\nEnrollments (StudentID, CourseID, Grade)\n\nWhat are the primary keys for the 'Students' and 'Enrollments' tables?",
     answer:
-      "The null hypothesis (H0) represents no change or effect, while the alternative hypothesis (Ha) represents the change or effect that one wants to prove.",
-    youtubeId: "LO6Qd9hYd8M",
+      "For the 'Students' table, the primary key is 'StudentID'. For the 'Enrollments' table, the primary key is the composite key (StudentID, CourseID).",
+    youtubeId: ["Q45sr5p_NmQ"],
   },
-  "Formulating Hypotheses in the Example": {
-    summary:
-      "For the given problem, hypotheses are formulated. H0 states there is no difference in the proportion of defective boards before and after the change (p = 0.1). Ha states there is a decrease in the proportion of defective boards after the change (p < 0.1).",
+  "2. SQL Basics: DDL & DML": {
+    summary: [
+      "SQL (Structured Query Language) is a standard language used to communicate with and manipulate databases. It includes DDL (Data Definition Language) for defining and modifying database structures (e.g., CREATE, ALTER, DROP tables) and DML (Data Manipulation Language) for managing data within the schema (e.g., INSERT, UPDATE, DELETE). Understanding DDL and DML commands is fundamental for working with databases.",
+      "SQL DDL and DML commands tutorial",
+    ],
     question:
-      "For the given problem concerning defective circuit boards, what do the null (H0) and alternative (Ha) hypotheses state?",
+      "Write an SQL query using DDL to create a new table named 'Books' with the columns 'BookID' (primary key), 'Title', 'Author', and 'PublishedYear'. Then, write a DML query to insert a new row into the 'Books' table with the values (1, '1984', 'George Orwell', 1949).",
     answer:
-      "H0 states that there is no difference in the proportion of defective boards before and after the change (p = 0.1). Ha states that there is a decrease in the proportion of defective boards after the change (p < 0.1).",
-    youtubeId: "LO6Qd9hYd8M",
+      "DDL query: \nCREATE TABLE Books (\n  BookID INT PRIMARY KEY,\n  Title VARCHAR(100),\n  Author VARCHAR(100),\n  PublishedYear INT\n);\n\nDML query: \nINSERT INTO Books (BookID, Title, Author, PublishedYear) \nVALUES (1, '1984', 'George Orwell', 1949);",
+    youtubeId: ["dVxd5z97878"],
   },
-  "Test Procedures": {
-    summary:
-      "With hypotheses defined, a test procedure is required to select between them. This involves calculating a test statistic from the sample data and determining a rejection region. If the test statistic falls within the rejection region, H0 is rejected.",
+  "3. Formal Query Languages": {
+    summary: [
+      "Formal query languages in relational databases include relational algebra and relational calculus. Relational algebra is a procedural language that uses operators to manipulate relations, while relational calculus is declarative and describes what results to obtain rather than how to obtain them. Both are foundational for understanding how SQL works behind the scenes.",
+      "Relational Algebra and Relational Calculus introduction",
+    ],
     question:
-      "What determines whether the null hypothesis (H0) is rejected in a test procedure?",
-    answer:
-      "A test statistic is calculated from the sample data and compared to a rejection region. If the test statistic falls within the rejection region, the null hypothesis (H0) is rejected.",
-    youtubeId: "LO6Qd9hYd8M",
+      "Using relational algebra, how would you represent the following SQL query: SELECT * FROM Students WHERE Major = 'Computer Science'?",
+    answer: "σ_Major = 'Computer Science' (Students)",
+    youtubeId: ["76v3gRns28U"],
   },
-  "Errors in Hypothesis Testing": {
-    summary:
-      "Even after concluding the test, the risk of errors exists. A Type I error occurs when H0 is incorrectly rejected, while a Type II error occurs when H0 is incorrectly not rejected. We can't be absolutely sure of correctness because the test depends on sample data.",
-    question: "What are Type I and Type II errors in hypothesis testing?",
-    answer:
-      "A Type I error occurs when the null hypothesis (H0) is incorrectly rejected, while a Type II error occurs when H0 is incorrectly not rejected.",
-    youtubeId: "LO6Qd9hYd8M",
-  },
-  "Quantifying Error Probabilities": {
-    summary:
-      "The probability of each type of error can be calculated. Type I error probability is denoted by alpha (α), and Type II error probability is denoted by beta (β). Adjusting the rejection region affects these probabilities inversely.",
+  "4. Introduction to SQL": {
+    summary: [
+      "SQL, pronounced either 'S.Q.L.' or 'sequel', is supported by all major commercial database systems and has been standardized with many new features over time. It is a declarative language, meaning you specify what you want to do without needing to describe how to do it. This introduction covers basic features and how SQL has persisted despite the advent of other data management solutions like NoSQL.",
+      "SQL Introduction and Basics",
+    ],
     question:
-      "How are the probabilities of Type I and Type II errors denoted, and how are they affected by the rejection region?",
+      "What is the difference between the SQL commands 'SELECT * FROM Students;' and 'SELECT FirstName, LastName FROM Students WHERE Major = 'Physics';'?",
     answer:
-      "The probability of a Type I error is denoted by alpha (α), and the probability of a Type II error is denoted by beta (β). Adjusting the rejection region affects these probabilities inversely.",
-    youtubeId: "LO6Qd9hYd8M",
+      "'SELECT * FROM Students;' will retrieve all columns and rows from the 'Students' table. 'SELECT FirstName, LastName FROM Students WHERE Major = 'Physics';' will retrieve only the FirstName and LastName columns for students whose Major is 'Physics'.",
+    youtubeId: ["h0nxCDiD-zg"],
+  },
+  "5. SQL Query Basics": {
+    summary: [
+      "Basic SQL queries involve selecting data from one or more tables using the SELECT, FROM, and WHERE clauses. You need to determine the tables, rows, and columns you're interested in. SQL commands are not case-sensitive, and strings are enclosed in single quotes. Understanding SELECT statements with conditions, such as WHERE clauses and how to handle NULL values, is essential.",
+      "Basic SQL Queries tutorial",
+    ],
+    question:
+      "Write an SQL query to select the first and last names of students from the 'Students' table who are majoring in 'Mathematics'.",
+    answer:
+      "SELECT FirstName, LastName FROM Students WHERE Major = 'Mathematics';",
+    youtubeId: ["kbKty5ZVKMY"],
+  },
+  "6. SQL Set Operations": {
+    summary: [
+      "SQL supports set operations like UNION, INTERSECT, and EXCEPT (MINUS in some systems) to combine results from multiple queries. These operations require union-compatible tables and can handle duplicates using the ALL keyword. Learning set operations expands your ability to manipulate and query data efficiently across different tables.",
+      "SQL Set Operations UNION INTERSECT EXCEPT tutorial",
+    ],
+    question:
+      "Given the following two queries:\nQuery1: SELECT StudentID FROM Enrollments WHERE Grade >= 90;\nQuery2: SELECT StudentID FROM Enrollments WHERE Grade < 60;\n\nWrite an SQL query using a set operation to find StudentIDs who have grades either greater than or equal to 90 or less than 60.",
+    answer:
+      "SELECT StudentID FROM Enrollments WHERE Grade >= 90\nUNION\nSELECT StudentID FROM Enrollments WHERE Grade < 60;",
+    youtubeId: ["krnAfIHqGzI"],
+  },
+  "7. Handling NULLs in SQL": {
+    summary: [
+      "In SQL, NULL represents missing or unknown data. NULLs can affect arithmetic operations and comparisons, resulting in null or unknown outcomes. Special operators like IS NULL and IS NOT NULL are used to test for NULL values. Understanding how NULLs work is critical to avoiding unexpected results in queries.",
+      "NULL values in SQL tutorial",
+    ],
+    question:
+      "Write an SQL query to select all records from the 'Students' table where the 'Major' field is NULL.",
+    answer: "SELECT * FROM Students WHERE Major IS NULL;",
+    youtubeId: ["8X6ih2jyfUg"],
+  },
+  "8. SQL Pattern Matching and Ordering": {
+    summary: [
+      "SQL provides pattern matching using the LIKE operator with the % (zero or more characters) and _ (single character) symbols. The ORDER BY clause is used to sort query results by one or more columns in ascending (default) or descending order. These features are useful for filtering and organizing data in meaningful ways.",
+      "SQL LIKE and ORDER BY tutorial",
+    ],
+    question:
+      "Write an SQL query to find all students whose last name starts with 'S' and then order the results by 'FirstName' in descending order.",
+    answer:
+      "SELECT * FROM Students WHERE LastName LIKE 'S%' ORDER BY FirstName DESC;",
+    youtubeId: ["4Ut4Oxxz8xI"],
+  },
+  "9. Multi-Table Queries": {
+    summary: [
+      "Queries involving multiple tables use joins to combine records based on related columns. The Cartesian product (cross join) can be filtered using conditions in the WHERE clause to create meaningful associations between tables. This is key for advanced data retrieval involving relational databases.",
+      "SQL Multi-Table Joins tutorial",
+    ],
+    question:
+      "Write an SQL query to retrieve the 'FirstName' and 'LastName' of students who have enrolled in a course with the 'CourseName' 'Algorithms'. Assume the tables are 'Students' and 'Courses' and 'Enrollments', where 'Enrollments' links 'StudentID' and 'CourseID'.",
+    answer:
+      "SELECT Students.FirstName, Students.LastName \nFROM Students \nJOIN Enrollments ON Students.StudentID = Enrollments.StudentID \nJOIN Courses ON Enrollments.CourseID = Courses.CourseID \nWHERE Courses.CourseName = 'Algorithms';",
+    youtubeId: ["G3lJAxg1cy8"],
   },
 };

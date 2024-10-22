@@ -17,6 +17,7 @@ const Study = () => {
   const data = extractedData ? JSON.parse(extractedData) : gptData;
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
+  const [collapsedAnswers, setCollapsedAnswers] = useState({});
 
   const topicRefs = useRef({});
 
@@ -25,6 +26,14 @@ const Study = () => {
     setCollapsedTopics((prev) => ({
       ...prev,
       [topic]: !prev[topic],
+    }));
+  };
+
+  // Function to toggle if a practice problem answer is collapsed or not
+  const toggleAnswer = (answer) => {
+    setCollapsedAnswers((prev) => ({
+      ...prev,
+      [answer]: !prev[answer],
     }));
   };
 
@@ -136,22 +145,27 @@ const Study = () => {
                           height={64}
                         />
                         <strong style={{ fontWeight: "bold" }}>
-                          Question:
+                          Practice Problem:
                         </strong>
                       </ImageAndTitle>
                       {data[key]["question"]}
                     </TopicQuestion>
-                    <TopicAnswer>
-                      <ImageAndTitle>
-                        <Image
-                          src={check}
-                          alt="Check Mark Logo"
-                          width={64}
-                          height={64}
-                        />
-                        <strong style={{ fontWeight: "bold" }}>Answer:</strong>
-                      </ImageAndTitle>
-                      {data[key]["answer"]}
+                    <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
+                      <TopicAnswerContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={check}
+                            alt="Check Mark Logo"
+                            width={64}
+                            height={64}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Answer:
+                          </strong>
+                        </ImageAndTitle>
+                        <span>{!collapsedAnswers[key] ? "SHOW" : "HIDE"}</span>
+                      </TopicAnswerContainer>
+                      {collapsedAnswers[key] && data[key]["answer"]}
                     </TopicAnswer>
                   </>
                 )}
@@ -296,11 +310,16 @@ const TopicQuestion = styled.div`
   gap: 16px;
 `;
 
+const TopicAnswerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const TopicAnswer = styled.div`
   display: flex;
   font-size: 25px;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: space-between;
   text-align: left;
   padding: 16px;
   flex-direction: column;
