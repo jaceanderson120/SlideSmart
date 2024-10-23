@@ -182,7 +182,7 @@ export default function Home() {
           onChange={handleFileChange}
         />
       </Section>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
