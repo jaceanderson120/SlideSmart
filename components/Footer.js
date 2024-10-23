@@ -1,8 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 const Footer = () => {
-  return <FooterSection>Footer</FooterSection>;
+  return (
+    <FooterSection>
+      <StyledLink href="/tos" target="_blank">
+        Terms of Service
+      </StyledLink>{" "}
+      and{" "}
+      <StyledLink href="/tos" target="_blank">
+        Privacy Policy
+      </StyledLink>
+    </FooterSection>
+  );
 };
 
 const FooterSection = styled.div`
@@ -11,6 +22,15 @@ const FooterSection = styled.div`
   color: white;
   text-align: center;
   padding: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default Footer;

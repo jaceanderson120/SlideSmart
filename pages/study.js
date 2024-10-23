@@ -173,7 +173,7 @@ const Study = () => {
             ))}
         </InfoContainer>
       </Section>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

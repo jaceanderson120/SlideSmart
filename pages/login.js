@@ -48,7 +48,7 @@ export default function Login() {
           </Form>
         </Content>
       </Section>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
