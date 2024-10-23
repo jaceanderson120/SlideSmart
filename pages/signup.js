@@ -10,10 +10,16 @@ import styled from "styled-components";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false); // State for agreement checkbox
   const router = useRouter();
 
   const signup = (e) => {
-    e.preventDefault(); // prevent page reload (automatic behavior from form submission)
+    e.preventDefault(); // Prevent page reload
+
+    if (!agreed) {
+      alert("You must agree to the Terms of Service and Privacy Policy.");
+      return; // Prevent signup if not agreed
+    }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -43,6 +49,22 @@ const Signup = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <Label>
+            <Checkbox
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+            />
+            I agree to the{" "}
+            <a href="/tos" target="_blank">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/tos" target="_blank">
+              Privacy Policy
+            </a>
+            .
+          </Label>
           <Button type="submit">Sign Up</Button>
         </Form>
       </Section>
@@ -90,6 +112,14 @@ const Input = styled.input`
   }
 `;
 
+const Label = styled.label`
+  margin: 10px 0;
+  font-size: 16px;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+`;
+
 const Button = styled.button`
   margin-top: 10px;
   padding: 10px 20px;
@@ -104,6 +134,10 @@ const Button = styled.button`
   &:hover {
     color: black;
   }
+`;
+
+const Checkbox = styled.input`
+  margin-right: 5px;
 `;
 
 export default Signup;
