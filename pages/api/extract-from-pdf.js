@@ -1,6 +1,6 @@
 import formidable from "formidable";
 import fs from "fs";
-import pdf from "pdf-parse";
+import officeParser from "officeparser";
 
 // NEEDED: DISABLE THE DEFAULT NEXT.JS BODY PARSING BEHAVIOR
 export const config = {
@@ -36,11 +36,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      // Check if the uploaded file is a .pdf file
-      if (!uploadedFile.originalFilename.endsWith(".pdf")) {
-        return res.status(400).json({ error: "File type not allowed" });
-      }
-
       // Extract text from the PDF file
       const extractedData = await extractTextFromPDF(uploadedFile.filepath);
 
@@ -64,10 +59,13 @@ export default async function handler(req, res) {
   }
 }
 
-// This function extracts all of the text from a PDF
-// For now SlideSmart only accepts PDFs, but in the future we can use a library to convert Office Docs -> PDF
+// This function extracts all of the text from a PDF file or Office document
 async function extractTextFromPDF(pdfFilePath) {
-  const dataBuffer = await fs.promises.readFile(pdfFilePath); // Read the PDF file asynchronously
-  const data = await pdf(dataBuffer); // Parse the PDF and extract text
-  return data.text; // Return the extracted text
+  try {
+    const fileBuffers = fs.readFileSync(pdfFilePath);
+    const data = await officeParser.parseOfficeAsync(fileBuffers);
+    return data;
+  } catch (err) {
+    console.error("Error extracting text:", err);
+  }
 }
