@@ -69,10 +69,13 @@ export default function Home() {
 
         // Get the topics and summaries as JSON
         const topicsAndSummaries = await topicsAndSummariesResponse.json();
-        const topics = Object.keys(topicsAndSummaries); // Extracting topics
+        const topics = Object.keys(topicsAndSummaries["topics"]); // Extracting topics
+        const googleSearchQuery = topicsAndSummaries["googleSearchQuery"]; // Extracting Google search query
 
         // Get the YouTube search queries for each topic
-        const queries = topics.map((topic) => topicsAndSummaries[topic][1]);
+        const queries = topics.map(
+          (topic) => topicsAndSummaries["topics"][topic][1]
+        );
 
         // Prepare an array of fetch promises for YouTube videos
         const youtubePromises = queries.map((query) =>
@@ -96,14 +99,27 @@ export default function Home() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(topicsAndSummaries),
+          body: JSON.stringify(topicsAndSummaries["topics"]),
+        });
+
+        // Prepare the fetch for the Google search query
+        const googleSearchQueryPromise = fetch("/api/search-google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: googleSearchQuery }),
         });
 
         // Wait for both the YouTube video and create content fetches to complete
-        const [youtubeResponses, createdContentResponse] = await Promise.all([
-          Promise.all(youtubePromises), // Resolve all YouTube video fetches
-          createContentPromise, // Resolve create content fetch
-        ]);
+        const [youtubeResponses, createdContentResponse, googleSearchResponse] =
+          await Promise.all([
+            Promise.all(youtubePromises), // Resolve all YouTube video fetches
+            createContentPromise, // Resolve create content fetch
+            googleSearchQueryPromise, // Resolve Google search query fetch
+          ]);
+
+        const googleSearchResults = await googleSearchResponse.json();
 
         // Check if createdContentResponse is OK
         if (!createdContentResponse.ok) {
@@ -117,7 +133,7 @@ export default function Home() {
         const combinedResponse = {};
         topics.forEach((topic, index) => {
           combinedResponse[topic] = {
-            summary: topicsAndSummaries[topic],
+            summary: topicsAndSummaries["topics"][topic][0],
             question: createdContent[topic]?.question || "",
             answer: createdContent[topic]?.answer || "",
             youtubeId: youtubeResponses[index],
@@ -129,7 +145,10 @@ export default function Home() {
         // Redirect to the study page with extracted data
         router.push({
           pathname: "/study",
-          query: { extractedData: JSON.stringify(combinedResponse) },
+          query: {
+            extractedData: JSON.stringify(combinedResponse),
+            googleSearchResults: JSON.stringify(googleSearchResults),
+          },
         });
       } catch (error) {
         setIsLoading(false);

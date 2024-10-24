@@ -98,3 +98,28 @@ export const gptData = {
     youtubeId: ["G3lJAxg1cy8"],
   },
 };
+
+// This is an example of what pages/api/search-google would return
+
+export const googleSearchExample = [
+  {
+    link: "https://stackoverflow.com/questions/8892465/what-does-object-object-mean-javascript",
+    title:
+      "jquery - What does [object Object] mean? (JavaScript) - Stack Overflow",
+    snippet:
+      "Jan 17, 2012 ... 8 Answers 8 · JSON.stringify(JSONobject) · console.log(JSONobject) · or iterate over the object. Basic example. var ...",
+  },
+  {
+    link: "https://www.reddit.com/r/typescript/comments/15xe47m/json_object_always_shows_as_object_object_in_my/",
+    title:
+      'JSON Object Always Shows As "[Object object]" In My Console? : r ...',
+    snippet:
+      "Aug 21, 2023 ... Can you show some code? Usually the [object Object] output means you convert an object to string. Are you running this code in firefox? You ...",
+  },
+  {
+    link: "https://stackoverflow.com/questions/4750225/what-does-object-object-mean",
+    title: "javascript - What does [object Object] mean? - Stack Overflow",
+    snippet:
+      'Jan 20, 2011 ... The default conversion from an object to string is "[object Object] ... As you are dealing with jQuery objects, you might want to do ... alert( ...',
+  },
+];

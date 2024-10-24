@@ -4,17 +4,22 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
 import { gptData } from "@/library/references";
+import { googleSearchExample } from "@/library/references";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
+import Link from "next/link";
 
 const Study = () => {
   const router = useRouter();
-  const { extractedData } = router.query;
+  const { extractedData, googleSearchResults } = router.query;
 
   const data = extractedData ? JSON.parse(extractedData) : gptData;
+  const googleSearch = googleSearchResults
+    ? JSON.parse(googleSearchResults)
+    : googleSearchExample;
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
@@ -114,7 +119,7 @@ const Study = () => {
                           Explanation:
                         </strong>
                       </ImageAndTitle>
-                      {data[key]["summary"][0]}
+                      {data[key]["summary"]}
                     </TopicSummary>
                     <TopicVideo>
                       <ImageAndTitle>
@@ -171,6 +176,24 @@ const Study = () => {
                 )}
               </InfoSubContainer>
             ))}
+          <InfoSubContainer>
+            <TopicHeaderContainer>
+              <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
+            </TopicHeaderContainer>
+            <>
+              <TopicSummary>
+                {googleSearch.map((search) => {
+                  return (
+                    <>
+                      <Link href={search.link} target="_blank">
+                        {search.title}
+                      </Link>
+                    </>
+                  );
+                })}
+              </TopicSummary>
+            </>
+          </InfoSubContainer>
         </InfoContainer>
       </Section>
       <Footer />
