@@ -37,10 +37,11 @@ const TOS = () => {
         <SectionTitle>3. Use of the Service</SectionTitle>
         <Text>
           You agree to use the Service only for lawful purposes and in
-          accordance with these Terms. You must not place any limitations on
-          YouTube functionality, including video playback and the use of
-          embedded players, which must maintain a minimum viewport of 200px by
-          200px.
+          accordance with these Terms. The Service will comply with YouTube's
+          embedding rules, ensuring that embedded players retain their intended
+          functionality, including maintaining a minimum viewport of 200px by
+          200px, and that no restrictions are placed on video playback or other
+          core YouTube functionalities.
         </Text>
 
         <SectionTitle>4. Changes to the Terms</SectionTitle>
@@ -54,20 +55,20 @@ const TOS = () => {
         <Text>
           All content, trademarks, and data on this site, including but not
           limited to software, databases, design, text, and graphics, are the
-          property of [Your Company] or its content suppliers.
+          property of SlideSmart or its content suppliers.
         </Text>
 
         <SectionTitle>6. Limitation of Liability</SectionTitle>
         <Text>
-          To the fullest extent permitted by law, [Your Company] and its
-          affiliates will not be liable for any damages arising from the use of
-          the Service.
+          To the fullest extent permitted by law, SlideSmart and its affiliates
+          will not be liable for any damages arising from the use of the
+          Service.
         </Text>
 
         <SectionTitle>7. Contact Information</SectionTitle>
         <Text>
-          If you have any questions about these Terms, please contact us at
-          [Insert Contact Information].
+          If you have any questions about these Terms, please contact us by
+          email at brayden@thepettigrews.org.
         </Text>
       </Container>
 
