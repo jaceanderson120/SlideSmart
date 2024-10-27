@@ -3,20 +3,13 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { auth } from "@/library/firebase/firebase";
+import { useStateContext } from "@/context/StateContext";
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+  
+  const {isLoggedIn} = useStateContext();
 
   const handleLogout = () => {
     signOut(auth);
