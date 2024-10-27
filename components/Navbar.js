@@ -159,8 +159,8 @@ const NavbarSection = styled.div`
   display: flex;
   align-items: center;
   margin: auto;
-  padding-top: 20px;
-  padding-left: 20px;
+  padding: 16px;
+  border-bottom: 1px solid gray;
   background-color: #f6f4f3;
 `;
 
