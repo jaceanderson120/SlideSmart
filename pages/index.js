@@ -5,13 +5,24 @@ import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LoadingOverlay from "../components/Overlay";
 import { useStateContext } from "@/context/StateContext";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const fileInputRef = useRef(null);
 
-  const {isLoggedIn} = useStateContext();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   // Function to handle the button click and open the file selector
   const handleUploadClick = () => {
@@ -37,20 +48,26 @@ export default function Home() {
           body: formData,
         });
 
+        setLoadingPercentage(getRandomInRange(5, 15));
         // Check if the response is OK
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Error: ${response.status} ${errorText}`);
         }
+        setLoadingPercentage(getRandomInRange(16, 37));
 
         // Get the extracted data as a string
         const extractedData = await response.json();
+
+        setLoadingPercentage(getRandomInRange(38, 49));
 
         // Send extracted data to GPT to retrieve topics + summaries object from data
         const topicsAndSummariesResponse = await fetch("/api/get-topics-gpt", {
           method: "POST",
           body: extractedData,
         });
+
+        setLoadingPercentage(getRandomInRange(50, 63));
 
         // Check if topicsAndSummariesResponse is OK
         if (!topicsAndSummariesResponse.ok) {
@@ -111,6 +128,8 @@ export default function Home() {
 
         const googleSearchResults = await googleSearchResponse.json();
 
+        setLoadingPercentage(getRandomInRange(64, 84));
+
         // Check if createdContentResponse is OK
         if (!createdContentResponse.ok) {
           throw new Error("Failed to create content");
@@ -130,6 +149,7 @@ export default function Home() {
           };
         });
 
+        setLoadingPercentage(getRandomInRange(85, 100));
         setIsLoading(false);
 
         // Redirect to the study page with extracted data
@@ -150,7 +170,15 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      {isLoading ? <LoadingOverlay /> : <></>}
+      {isLoading ? (
+        <Overlay>
+          <ProgressWrapper>
+            <CircularProgressbar value={loadingPercentage} />
+          </ProgressWrapper>
+        </Overlay>
+      ) : (
+        <></>
+      )}
       <Section>
         <Slogan>
           The{" "}
@@ -180,7 +208,7 @@ export default function Home() {
             }
           }}
         >
-          Upload File
+          {isLoggedIn ? "Upload File" : "Login to Upload File"}
         </UploadButton>
 
         {/* Hidden file input */}
@@ -231,4 +259,22 @@ const UploadButton = styled.button`
   &:hover {
     color: black;
   }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+const ProgressWrapper = styled.div`
+  width: 100px;
+  height: 100px;
 `;
