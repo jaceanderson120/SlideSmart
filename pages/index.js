@@ -39,10 +39,6 @@ export default function Home() {
     }
   };
 
-  const updateLoadingPercentage = (percent) => {
-    setLoadingPercentage(percent);
-  };
-
   // Function to handle the file selection
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -59,18 +55,18 @@ export default function Home() {
           body: formData,
         });
 
-        updateLoadingPercentage(getRandomInRange(5, 15));
+        setLoadingPercentage(getRandomInRange(5, 15));
         // Check if the response is OK
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Error: ${response.status} ${errorText}`);
         }
-        updateLoadingPercentage(getRandomInRange(16, 37));
+        setLoadingPercentage(getRandomInRange(16, 37));
 
         // Get the extracted data as a string
         const extractedData = await response.json();
 
-        updateLoadingPercentage(getRandomInRange(38, 49));
+        setLoadingPercentage(getRandomInRange(38, 49));
 
         // Send extracted data to GPT to retrieve topics + summaries object from data
         const topicsAndSummariesResponse = await fetch("/api/get-topics-gpt", {
@@ -78,7 +74,7 @@ export default function Home() {
           body: extractedData,
         });
 
-        updateLoadingPercentage(getRandomInRange(50, 63));
+        setLoadingPercentage(getRandomInRange(50, 63));
 
         // Check if topicsAndSummariesResponse is OK
         if (!topicsAndSummariesResponse.ok) {
@@ -139,7 +135,7 @@ export default function Home() {
 
         const googleSearchResults = await googleSearchResponse.json();
 
-        updateLoadingPercentage(getRandomInRange(64, 84));
+        setLoadingPercentage(getRandomInRange(64, 84));
 
         // Check if createdContentResponse is OK
         if (!createdContentResponse.ok) {
@@ -160,7 +156,7 @@ export default function Home() {
           };
         });
 
-        updateLoadingPercentage(getRandomInRange(85, 100));
+        setLoadingPercentage(getRandomInRange(85, 100));
         setIsLoading(false);
 
         // Redirect to the study page with extracted data
