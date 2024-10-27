@@ -23,8 +23,13 @@ const Study = () => {
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
+  const [topicContainerCollapsed, setTopicContainerCollapsed] = useState(false);
 
   const topicRefs = useRef({});
+
+  const toggleTopicContainerCollapse = () => {
+    setTopicContainerCollapsed(!topicContainerCollapsed);
+  };
 
   // Function to toggle if a container is collapsed or not
   const toggleCollapse = (topic) => {
@@ -76,19 +81,23 @@ const Study = () => {
       <Navbar />
       <Section>
         <TopicContainer>
-          <TopicTitle>Topics</TopicTitle>
-          <TopicScrollableContainer>
-            {data &&
-              Object.keys(data).map((key) => (
-                <TopicName
-                  href={`#${key}`}
-                  key={key}
-                  className={activeTopic === key ? "active" : ""}
-                >
-                  {key}
-                </TopicName>
-              ))}
-          </TopicScrollableContainer>
+          <TopicTitle onClick={toggleTopicContainerCollapse}>
+            Topics {topicContainerCollapsed ? "▼" : "▲"}
+          </TopicTitle>
+          {!topicContainerCollapsed && (
+            <TopicScrollableContainer>
+              {data &&
+                Object.keys(data).map((key) => (
+                  <TopicName
+                    href={`#${key}`}
+                    key={key}
+                    className={activeTopic === key ? "active" : ""}
+                  >
+                    {key}
+                  </TopicName>
+                ))}
+            </TopicScrollableContainer>
+          )}
         </TopicContainer>
         <InfoContainer>
           {data &&
