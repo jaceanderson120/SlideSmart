@@ -4,8 +4,7 @@ import Navbar from "../components/Navbar";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LoadingOverlay from "../components/Overlay";
-import { auth } from "@/library/firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -14,22 +13,7 @@ export default function Home() {
   const router = useRouter();
   const fileInputRef = useRef(null);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const [loadingPercentage, setLoadingPercentage] = useState(0);
-
-  const getRandomInRange = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+  const {isLoggedIn} = useStateContext();
 
   // Function to handle the button click and open the file selector
   const handleUploadClick = () => {
