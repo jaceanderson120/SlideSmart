@@ -13,7 +13,7 @@ const NewPage = () => {
 
     const handleClick = () => {
 
-        router.push('/signup')
+        router.push('/login')
 
     };
   

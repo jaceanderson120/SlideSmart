@@ -13,16 +13,7 @@ export default function Home() {
   const router = useRouter();
   const fileInputRef = useRef(null);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+  const {isLoggedIn} = useStateContext();
 
   // Function to handle the button click and open the file selector
   const handleUploadClick = () => {
