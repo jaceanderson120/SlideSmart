@@ -16,7 +16,8 @@ const Footer = () => {
     <Resources>
 
       <ResourceItem>Resources</ResourceItem>
-      <ResourceItem><Link href="/tos">SlideSmart</Link></ResourceItem>
+      <ResourceItem><Link href="/tos">Terms of Service</Link></ResourceItem>
+      <ResourceItem><Link href="/tos">Privacy Policy</Link></ResourceItem>
     
     </Resources>
 
