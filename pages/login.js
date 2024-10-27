@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { auth } from "@/library/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -45,6 +46,9 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button type="submit">Log In</Button>
+            <Register>
+              Don't have an account? <Link href="/signup">Register here</Link>
+            </Register>
           </Form>
         </Content>
       </Section>
@@ -111,4 +115,9 @@ const Button = styled.button`
   &:hover {
     color: black;
   }
+`;
+
+const Register = styled.div`
+  padding: 20px;
+  font-size: 16px;
 `;
