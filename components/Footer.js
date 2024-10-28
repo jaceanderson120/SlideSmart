@@ -6,62 +6,71 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-  <FooterSection>
-   
-    <SlideSmart>
-      <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-      SlideSmart
-    </SlideSmart>
-    
-    <Resources>
+    <FooterSection>
+      <HorizontalSection>
+        <SlideSmart>
+          <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
+          <Link href="/">SlideSmart</Link>
+        </SlideSmart>
 
-      <ResourceItem>Resources</ResourceItem>
-      <ResourceItem><Link href="/tos">Terms of Service</Link></ResourceItem>
-      <ResourceItem><Link href="/tos">Privacy Policy</Link></ResourceItem>
-    
-    </Resources>
-
-    <Line />
-
-    <SlideSmartCopyRight>
-      Copyright @ 2024 SlideSmart. All Rights Reserved
-    </SlideSmartCopyRight>
-  </FooterSection>
-
+        <Resources>
+          <ResourceItem>Resources</ResourceItem>
+          <ResourceItem>
+            <Link href="/tos">Terms of Service</Link>
+          </ResourceItem>
+          <ResourceItem>
+            <Link href="/tos">Privacy Policy</Link>
+          </ResourceItem>
+        </Resources>
+      </HorizontalSection>
+      <Line />
+      <SlideSmartCopyRight>
+        Copyright @ 2024 SlideSmart. All Rights Reserved
+      </SlideSmartCopyRight>
+    </FooterSection>
   );
 };
 
 const FooterSection = styled.div`
-  height: 576px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-top: 1px solid #333;
   background-color: white;
   color: white;
   text-align: center;
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
+  padding: 16px;
   position: relative;
 `;
 
-const SlideSmart = styled.div`
-  padding: 30px;
-  text-decoration: none;
-  font-size: 30px;
-  color: #f03a47;
-  font-weight: bold;
-  align-items: center;
+const HorizontalSection = styled.div`
   display: flex;
-  position: absolute;
-`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px;
+`;
+
+const SlideSmart = styled.div`
+  display: flex;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    font-size: 30px;
+    color: #f03a47;
+    font-weight: bold;
+    margin-left: 16px;
+  }
+`;
 
 const Resources = styled.div`
-  padding: 45px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  position: absolute;
-  right: 10px;
-  color: #333; 
+  color: #333;
 `;
 
 const ResourceItem = styled.div`
@@ -69,34 +78,29 @@ const ResourceItem = styled.div`
   font-size: 20px;
   font-weight: bold;
 
-a {
+  a {
     text-decoration: none;
     font-size: 20px;
     color: black;
   }
 
-a:hover {
+  a:hover {
     text-decoration: underline;
-}
-`
+  }
+`;
 
 const SlideSmartCopyRight = styled.div`
   font-size: 15px;
-  color: #8B8B8B;
-  position: absolute;
-  bottom: 10px;
-  padding: 40px;
-`
+  color: #8b8b8b;
+  padding: 16px;
+  text-align: center;
+`;
 
 const Line = styled.div`
   width: 80%;
   height: 0.5px;
-  background-color: #9E9E9E;
+  background-color: #9e9e9e;
   display: flex;
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-`
+`;
 
 export default Footer;
