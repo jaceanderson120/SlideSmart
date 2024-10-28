@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
-import LoadingOverlay from "../components/Overlay";
 import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -12,14 +11,26 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const fileInputRef = useRef(null);
+  const [loadingPercentage, setLoadingPercentage] = useState(0);
+  const { isLoggedIn } = useStateContext();
 
-  const {isLoggedIn} = useStateContext();
+  const getRandomInRange = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   // Function to handle the button click and open the file selector
   const handleUploadClick = () => {
     // Programmatically click the hidden file input
     if (fileInputRef.current) {
       fileInputRef.current.click();
+    }
+  };
+
+  const handleClick = () => {
+    if (isLoggedIn) {
+      handleUploadClick();
+    } else {
+      router.push("/login");
     }
   };
 
@@ -159,7 +170,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <>
       <Navbar />
       {isLoading ? (
         <Overlay>
@@ -170,38 +181,24 @@ export default function Home() {
       ) : (
         <></>
       )}
-      <Section>
-        <Slogan>
-          The{" "}
-          <span style={{ color: "#F03A47", fontWeight: "bold" }}>Smart</span>{" "}
-          Way to
-        </Slogan>
-        <Slogan>
-          Study{" "}
-          <span style={{ color: "#F03A47", fontWeight: "bold" }}>Slides</span>
-        </Slogan>
-
-        <p style={{ fontSize: "18px", transform: "translateY(-120px)" }}>
+      <GradientSection>
+        <GradientSectionSlogan>
+          The AI Application Made
+          <SloganBreakLine />
+          to Make
+          <span style={{ color: "#F03A47", fontWeight: "bold" }}>
+            {" "}
+            Slides
+          </span>{" "}
+          Make Sense
+        </GradientSectionSlogan>
+        <p style={{ fontSize: "18px", marginTop: "20px", fontWeight: "500" }}>
           A software tool that creates comprehensive/interactive Study Guides
           equipped{" "}
         </p>
-        <p style={{ fontSize: "18px", transform: "translateY(-120px)" }}>
-          with plenty of useful resources to help you succeed in the classroom
-        </p>
-
-        {/* Button that triggers the file input click */}
-        <UploadButton
-          onClick={() => {
-            if (isLoggedIn) {
-              handleUploadClick();
-            } else {
-              alert("Please log in to use this feature.");
-            }
-          }}
-        >
-          {isLoggedIn ? "Upload File" : "Login to Upload File"}
-        </UploadButton>
-
+        <MakeBetterButton onClick={handleClick}>
+          {isLoggedIn ? "Make it Better" : "Get Started"}
+        </MakeBetterButton>
         {/* Hidden file input */}
         <input
           type="file"
@@ -209,9 +206,31 @@ export default function Home() {
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
+      </GradientSection>
+      <Section>
+        <HowItWorksSection>
+          <HowItWorksSlogan>It's Simple</HowItWorksSlogan>
+          <p style={{ fontSize: "18px", marginTop: "10px", fontWeight: "500" }}>
+            How to enhance your slides in less than 1 minute:
+          </p>
+          <HowItWorksBoxSection>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox></HowItWorksBox>
+              <Caption>Login or Register an Account</Caption>
+            </HowItWorksBoxDivider>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox></HowItWorksBox>
+              <Caption>Upload Your Slides</Caption>
+            </HowItWorksBoxDivider>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox></HowItWorksBox>
+              <Caption>Watch the Magic Happen!</Caption>
+            </HowItWorksBoxDivider>
+          </HowItWorksBoxSection>
+        </HowItWorksSection>
       </Section>
       <Footer />
-    </div>
+    </>
   );
 }
 
@@ -228,15 +247,80 @@ const Section = styled.div`
   font-size: 2rem;
 `;
 
-const Slogan = styled.h1`
-  font-size: 80px;
-  color: #000000;
-  font-weight: bold;
-  transform: translateY(-150px);
+const GradientSection = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, #ff6c7633, #fff0f0cc, #ff6c7633);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 96px;
+  text-align: center;
+  font-size: 2rem;
 `;
 
-const UploadButton = styled.button`
-  padding: 25px 40px;
+const HowItWorksSection = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  font-size: 2rem;
+  background-color: #f6f4f3;
+`;
+
+const HowItWorksSlogan = styled.h1`
+  font-size: 48px;
+  color: #000000;
+  font-weight: bold;
+`;
+
+const HowItWorksBoxSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 48px;
+`;
+
+const HowItWorksBox = styled.div`
+  width: 360px;
+  height: 256px;
+  background-color: #f5f9ff;
+  border: 1px dashed #000000;
+  border-radius: 20px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+`;
+
+const HowItWorksBoxDivider = styled.div`
+  display: flex;
+  margin-left: 50px;
+  margin-right: 50px;
+  align-items: flex-start;
+  flex-direction: column;
+`;
+
+const Caption = styled.p`
+  font-size: 25px;
+  margin-top: 16px;
+  font-weight: bold;
+  text-align: left;
+`;
+
+const GradientSectionSlogan = styled.h1`
+  font-size: 60px;
+  color: #000000;
+  font-weight: bold;
+  margin-top: 100px;
+`;
+
+const SloganBreakLine = styled.div`
+  margin: 10px;
+`;
+
+const MakeBetterButton = styled.button`
+  padding: 25px 30px;
   font-size: 35px;
   font-weight: bold;
   color: white;
@@ -244,8 +328,8 @@ const UploadButton = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transform: translateY(-80px);
   transition: color 0.3s;
+  margin-top: 40px;
 
   &:hover {
     color: black;
