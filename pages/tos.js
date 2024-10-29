@@ -119,9 +119,9 @@ const TOS = () => {
           <ListItem>Display and interact with YouTube video content</ListItem>
         </List>
         <Text>
-          We store video IDs temporarily for as long as necessary to provide the
-          service. Video IDs are not retained beyond their intended use and are
-          deleted once they are no longer needed.
+          We store video IDs temporarily for up to 30 calendar days, as
+          necessary to provide the service. After 30 days, video IDs are either
+          refreshed or deleted in accordance with data retention policies.
         </Text>
 
         <SectionTitle>4. Data Storage and Security</SectionTitle>
