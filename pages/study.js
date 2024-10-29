@@ -3,14 +3,24 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
-import { gptData } from "@/library/references";
-import { googleSearchExample } from "@/library/references";
+import {
+  gptData,
+  googleSearchExample,
+  firebaseUrlExample,
+} from "@/library/references";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
 import Link from "next/link";
+
+function getViewerUrl(url) {
+  const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
+    url
+  )}`;
+  return viewerUrl;
+}
 
 const Study = () => {
   const router = useRouter();
@@ -19,50 +29,39 @@ const Study = () => {
   const googleSearch = googleSearchResults
     ? JSON.parse(googleSearchResults)
     : googleSearchExample;
+  const firebaseUrl = firebaseFileUrl ? firebaseFileUrl : firebaseUrlExample;
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
-  const [topicContainerCollapsed, setTopicContainerCollapsed] = useState(false);
+  const [isTopicsShown, setIsTopicsShown] = useState(true);
+  const [isFileShown, setIsFileShown] = useState(false);
   const topicRefs = useRef({});
 
-  const baseFileUrl = firebaseFileUrl.split("?")[0];
-  const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
-  console.log(fileExtension);
-  let content;
+  // Split off the query string from the Firebase file URL
+  const baseFileUrl = firebaseUrl.split("?")[0];
 
-  if (fileExtension === "pdf") {
-    // If the file is a PDF, embed it using an iframe
-    content = (
-      <iframe
-        src={firebaseFileUrl}
-        width="600"
-        height="500"
-        style={{ border: "none" }}
-        title="PDF Document"
-      />
-    );
-  } else if (fileExtension === "pptx") {
-    // If the file is a PPTX, create the embed URL for Office Online
-    const embedUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-      firebaseFileUrl
-    )}`;
-    content = (
-      <iframe
-        src={embedUrl}
-        width="600"
-        height="500"
-        style={{ border: "none" }}
-        title="PPTX Presentation"
-      />
-    );
-  } else {
-    // Handle unsupported file types
-    content = <p>Unsupported file type. Please upload a PDF or PPTX file.</p>;
+  // Get the file extension from the base URL
+  const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
+
+  // Set the viewer URL to the Firebase file URL by default, but if it's a PowerPoint file, use the Google Drive viewer
+  let viewerUrl = firebaseUrl;
+  if (fileExtension === "pptx") {
+    viewerUrl = getViewerUrl(firebaseUrl);
   }
 
-  const toggleTopicContainerCollapse = () => {
-    setTopicContainerCollapsed(!topicContainerCollapsed);
-  };
+  // Set the content to be an iframe with the viewer URL
+  const content = (
+    <iframe
+      src={viewerUrl}
+      style={{
+        border: "none",
+        width: "100%",
+        height: "80vh",
+        transform: "scale(0.95)",
+        transformOrigin: "0 0",
+      }}
+    />
+  );
 
   // Function to toggle if a container is collapsed or not
   const toggleCollapse = (topic) => {
@@ -113,131 +112,141 @@ const Study = () => {
     <>
       <Navbar />
       <Section>
-        <TopicContainer>
-          <TopicTitle onClick={toggleTopicContainerCollapse}>
-            Topics {topicContainerCollapsed ? "▼" : "▲"}
-          </TopicTitle>
-          {!topicContainerCollapsed && (
-            <TopicScrollableContainer>
-              {data &&
-                Object.keys(data).map((key) => (
-                  <TopicName
-                    href={`#${key}`}
-                    key={key}
-                    className={activeTopic === key ? "active" : ""}
-                  >
-                    {key}
-                  </TopicName>
-                ))}
-            </TopicScrollableContainer>
+        <ToggleButtonsSection>
+          <ToggleButton onClick={() => setIsTopicsShown(!isTopicsShown)}>
+            {isTopicsShown ? "Hide Topics" : "Show Topics"}
+          </ToggleButton>
+          <ToggleButton onClick={() => setIsFileShown(!isFileShown)}>
+            {isFileShown ? "Hide File" : "Show File"}
+          </ToggleButton>
+        </ToggleButtonsSection>
+        <OutputSection>
+          {isTopicsShown && (
+            <TopicContainer>
+              <TopicTitle>Topics</TopicTitle>
+              <TopicScrollableContainer>
+                {data &&
+                  Object.keys(data).map((key) => (
+                    <TopicName
+                      href={`#${key}`}
+                      key={key}
+                      className={activeTopic === key ? "active" : ""}
+                    >
+                      {key}
+                    </TopicName>
+                  ))}
+              </TopicScrollableContainer>
+            </TopicContainer>
           )}
-        </TopicContainer>
-        <InfoContainer>
-          {data &&
-            Object.keys(data).map((key) => (
-              <InfoSubContainer
-                key={key}
-                id={key}
-                ref={(el) => (topicRefs.current[key] = el)}
-              >
-                <TopicHeaderContainer
+          <InfoContainer>
+            {data &&
+              Object.keys(data).map((key) => (
+                <InfoSubContainer
+                  key={key}
                   id={key}
-                  onClick={() => toggleCollapse(key)}
+                  ref={(el) => (topicRefs.current[key] = el)}
                 >
-                  <TopicHeaderTitle>{key}</TopicHeaderTitle>
-                  <span>{collapsedTopics[key] ? "▼" : "▲"}</span>
-                </TopicHeaderContainer>
-                {!collapsedTopics[key] && (
-                  <>
-                    <TopicSummary>
-                      <ImageAndTitle>
-                        <Image
-                          src={pencil}
-                          alt="Pencil Logo"
-                          width={64}
-                          height={64}
-                        />
-                        <strong style={{ fontWeight: "bold" }}>
-                          Explanation:
-                        </strong>
-                      </ImageAndTitle>
-                      {data[key]["summary"]}
-                    </TopicSummary>
-                    <TopicVideo>
-                      <ImageAndTitle>
-                        <Image
-                          src={youtube}
-                          alt="YouTube Logo"
-                          width={64}
-                          height={64}
-                        />
-                        <strong style={{ fontWeight: "bold" }}>Video:</strong>
-                      </ImageAndTitle>
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={`https://www.youtube.com/embed/${data[key]["youtubeId"]}`}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                    </TopicVideo>
-                    <TopicQuestion>
-                      <ImageAndTitle>
-                        <Image
-                          src={question}
-                          alt="Question Logo"
-                          width={64}
-                          height={64}
-                        />
-                        <strong style={{ fontWeight: "bold" }}>
-                          Practice Problem:
-                        </strong>
-                      </ImageAndTitle>
-                      {data[key]["question"]}
-                    </TopicQuestion>
-                    <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
-                      <TopicAnswerContainer>
+                  <TopicHeaderContainer
+                    id={key}
+                    onClick={() => toggleCollapse(key)}
+                  >
+                    <TopicHeaderTitle>{key}</TopicHeaderTitle>
+                    <span>{collapsedTopics[key] ? "▼" : "▲"}</span>
+                  </TopicHeaderContainer>
+                  {!collapsedTopics[key] && (
+                    <>
+                      <TopicSummary>
                         <ImageAndTitle>
                           <Image
-                            src={check}
-                            alt="Check Mark Logo"
+                            src={pencil}
+                            alt="Pencil Logo"
                             width={64}
                             height={64}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Answer:
+                            Explanation:
                           </strong>
                         </ImageAndTitle>
-                        <span>{!collapsedAnswers[key] ? "SHOW" : "HIDE"}</span>
-                      </TopicAnswerContainer>
-                      {collapsedAnswers[key] && data[key]["answer"]}
-                    </TopicAnswer>
-                  </>
-                )}
-              </InfoSubContainer>
-            ))}
-          <InfoSubContainer>
-            <TopicHeaderContainer>
-              <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
-            </TopicHeaderContainer>
-            <>
-              <TopicSummary>
-                {googleSearch.map((search) => {
-                  return (
-                    <>
-                      <Link href={search.link} target="_blank">
-                        {search.title}
-                      </Link>
+                        {data[key]["summary"]}
+                      </TopicSummary>
+                      <TopicVideo>
+                        <ImageAndTitle>
+                          <Image
+                            src={youtube}
+                            alt="YouTube Logo"
+                            width={64}
+                            height={64}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>Video:</strong>
+                        </ImageAndTitle>
+                        <iframe
+                          width="560"
+                          height="315"
+                          src={`https://www.youtube.com/embed/${data[key]["youtubeId"]}`}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </TopicVideo>
+                      <TopicQuestion>
+                        <ImageAndTitle>
+                          <Image
+                            src={question}
+                            alt="Question Logo"
+                            width={64}
+                            height={64}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Practice Problem:
+                          </strong>
+                        </ImageAndTitle>
+                        {data[key]["question"]}
+                      </TopicQuestion>
+                      <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
+                        <TopicAnswerContainer>
+                          <ImageAndTitle>
+                            <Image
+                              src={check}
+                              alt="Check Mark Logo"
+                              width={64}
+                              height={64}
+                            />
+                            <strong style={{ fontWeight: "bold" }}>
+                              Answer:
+                            </strong>
+                          </ImageAndTitle>
+                          <span>
+                            {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
+                          </span>
+                        </TopicAnswerContainer>
+                        {collapsedAnswers[key] && data[key]["answer"]}
+                      </TopicAnswer>
                     </>
-                  );
-                })}
-              </TopicSummary>
-              {content}
-            </>
-          </InfoSubContainer>
-        </InfoContainer>
+                  )}
+                </InfoSubContainer>
+              ))}
+            <InfoSubContainer>
+              <TopicHeaderContainer>
+                <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
+              </TopicHeaderContainer>
+              <>
+                <TopicSummary>
+                  {googleSearch.map((search) => {
+                    return (
+                      <>
+                        <Link href={search.link} target="_blank">
+                          {search.title}
+                        </Link>
+                      </>
+                    );
+                  })}
+                </TopicSummary>
+              </>
+            </InfoSubContainer>
+          </InfoContainer>
+          {isFileShown && <FileContainer>{content}</FileContainer>}
+        </OutputSection>
       </Section>
       <Footer />
     </>
@@ -249,21 +258,54 @@ export default Study;
 // Styles
 const Section = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 32px;
+  padding: 24px;
   text-align: center;
-  height: 90vh;
-  background-color: #f6f4f3;
+  height: 100vh;
   color: #000000;
+  background-color: #f6f4f3;
   font-size: 2rem;
-  gap: 32px;
+  gap: 24px;
+`;
+
+const ToggleButtonsSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const ToggleButton = styled.button`
+  padding: 16px;
+  font-size: 21px;
+  font-weight: bold;
+  color: black;
+  background-color: #f6f4f3;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.3s;
+  max-width: 200px;
+
+  &:hover {
+    color: #f03a47;
+  }
+`;
+
+const OutputSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  gap: 24px;
 `;
 
 const TopicContainer = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
-  flex: 1;
+  flex: 0.75;
   height: 80vh;
   background-color: #f03a4733;
   border-radius: 10px;
@@ -277,7 +319,7 @@ const TopicTitle = styled.div`
   border-bottom: 2px solid #f03a47;
   color: #f03a47;
   padding-bottom: 16px;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
   margin: 32px;
 `;
@@ -286,7 +328,7 @@ const TopicScrollableContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: calc(100% - 56px);
+  height: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
 
@@ -307,6 +349,15 @@ const InfoContainer = styled.div`
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+`;
+
+const FileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1.75;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
 `;
 
 const InfoSubContainer = styled.div`
@@ -338,7 +389,7 @@ const TopicHeaderTitle = styled.div`
 
 const TopicSummary = styled.div`
   display: flex;
-  font-size: 25px;
+  font-size: 21px;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -349,7 +400,7 @@ const TopicSummary = styled.div`
 
 const TopicVideo = styled.div`
   display: flex;
-  font-size: 25px;
+  font-size: 21px;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -367,7 +418,7 @@ const ImageAndTitle = styled.div`
 
 const TopicQuestion = styled.div`
   display: flex;
-  font-size: 25px;
+  font-size: 21px;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -384,7 +435,7 @@ const TopicAnswerContainer = styled.div`
 
 const TopicAnswer = styled.div`
   display: flex;
-  font-size: 25px;
+  font-size: 21px;
   justify-content: space-between;
   text-align: left;
   padding: 16px;
@@ -396,7 +447,7 @@ const TopicName = styled.a`
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;
-  font-size: 30px;
+  font-size: 21px;
   text-decoration: none;
   color: inherit;
   transition: background-color 0.3s;

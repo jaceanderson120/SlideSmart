@@ -40,16 +40,6 @@ export default function Home() {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Upload the file to Firebase Storage
-      const storageRef = ref(storage, `uploads/${file.name}`);
-      let firebaseFileUrl = "";
-      try {
-        await uploadBytes(storageRef, file);
-        firebaseFileUrl = await getDownloadURL(storageRef);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-
       // Create FormData object to send the file
       const formData = new FormData();
       formData.append("file", file);
@@ -164,9 +154,20 @@ export default function Home() {
         });
 
         setLoadingPercentage(getRandomInRange(85, 100));
+
+        // If everything was successful up to this point, then upload the file to Firebase Storage
+        const storageRef = ref(storage, `uploads/${file.name}`);
+        let firebaseFileUrl = "";
+        try {
+          await uploadBytes(storageRef, file);
+          firebaseFileUrl = await getDownloadURL(storageRef);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+
         setIsLoading(false);
 
-        // Redirect to the study page with extracted data
+        // Redirect to the study page with extracted data, google search results, and firebase file URL
         router.push({
           pathname: "/study",
           query: {
