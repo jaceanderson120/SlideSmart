@@ -123,3 +123,6 @@ export const googleSearchExample = [
       'Jan 20, 2011 ... The default conversion from an object to string is "[object Object] ... As you are dealing with jQuery objects, you might want to do ... alert( ...',
   },
 ];
+
+export const firebaseUrlExample =
+  "https://firebasestorage.googleapis.com/v0/b/slidesmart-89016.appspot.com/o/uploads%2F04-SQL-basics.pptx?alt=media&token=3dee5d82-20d8-4371-8a1f-a628464e1bb3";

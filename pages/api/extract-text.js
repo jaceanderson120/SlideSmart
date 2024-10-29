@@ -36,6 +36,18 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
+      // Check if the file extension is either .pdf or .pptx
+      if (
+        !(
+          uploadedFile.originalFilename.endsWith(".pdf") ||
+          uploadedFile.originalFilename.endsWith(".pptx")
+        )
+      ) {
+        return res.status(400).json({
+          error: "Invalid file type. Only PDF and PPTX files are allowed.",
+        });
+      }
+
       // Extract text from the PDF file
       const extractedData = await extractTextFromPDF(uploadedFile.filepath);
 
