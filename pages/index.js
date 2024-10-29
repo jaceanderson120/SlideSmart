@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../library/firebase/firebase";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,16 @@ export default function Home() {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Upload the file to Firebase Storage
+      const storageRef = ref(storage, `uploads/${file.name}`);
+      let firebaseFileUrl = "";
+      try {
+        await uploadBytes(storageRef, file);
+        firebaseFileUrl = await getDownloadURL(storageRef);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+
       // Create FormData object to send the file
       const formData = new FormData();
       formData.append("file", file);
@@ -45,7 +57,7 @@ export default function Home() {
       try {
         setIsLoading(true); // Show loading spinner
         // Start with extracting data from the form
-        const response = await fetch("/api/extract-from-pdf", {
+        const response = await fetch("/api/extract-text", {
           method: "POST",
           body: formData,
         });
@@ -160,6 +172,7 @@ export default function Home() {
           query: {
             extractedData: JSON.stringify(combinedResponse),
             googleSearchResults: JSON.stringify(googleSearchResults),
+            firebaseFileUrl: firebaseFileUrl,
           },
         });
       } catch (error) {

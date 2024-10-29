@@ -14,8 +14,7 @@ import Link from "next/link";
 
 const Study = () => {
   const router = useRouter();
-  const { extractedData, googleSearchResults } = router.query;
-
+  const { extractedData, googleSearchResults, firebaseFileUrl } = router.query;
   const data = extractedData ? JSON.parse(extractedData) : gptData;
   const googleSearch = googleSearchResults
     ? JSON.parse(googleSearchResults)
@@ -24,8 +23,42 @@ const Study = () => {
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
   const [topicContainerCollapsed, setTopicContainerCollapsed] = useState(false);
-
   const topicRefs = useRef({});
+
+  const baseFileUrl = firebaseFileUrl.split("?")[0];
+  const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
+  console.log(fileExtension);
+  let content;
+
+  if (fileExtension === "pdf") {
+    // If the file is a PDF, embed it using an iframe
+    content = (
+      <iframe
+        src={firebaseFileUrl}
+        width="600"
+        height="500"
+        style={{ border: "none" }}
+        title="PDF Document"
+      />
+    );
+  } else if (fileExtension === "pptx") {
+    // If the file is a PPTX, create the embed URL for Office Online
+    const embedUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+      firebaseFileUrl
+    )}`;
+    content = (
+      <iframe
+        src={embedUrl}
+        width="600"
+        height="500"
+        style={{ border: "none" }}
+        title="PPTX Presentation"
+      />
+    );
+  } else {
+    // Handle unsupported file types
+    content = <p>Unsupported file type. Please upload a PDF or PPTX file.</p>;
+  }
 
   const toggleTopicContainerCollapse = () => {
     setTopicContainerCollapsed(!topicContainerCollapsed);
@@ -201,6 +234,7 @@ const Study = () => {
                   );
                 })}
               </TopicSummary>
+              {content}
             </>
           </InfoSubContainer>
         </InfoContainer>
