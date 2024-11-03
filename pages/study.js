@@ -189,6 +189,10 @@ const Study = () => {
                           allowFullScreen
                         ></iframe>
                       </TopicVideo>
+                      <TopicExample>
+                        <strong style={{ fontWeight: "bold" }}>Example:</strong>
+                        {data[key]["example"]}
+                      </TopicExample>
                       <TopicQuestion>
                         <ImageAndTitle>
                           <Image
@@ -437,6 +441,17 @@ const TopicAnswer = styled.div`
   display: flex;
   font-size: 21px;
   justify-content: space-between;
+  text-align: left;
+  padding: 16px;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const TopicExample = styled.div`
+  display: flex;
+  font-size: 21px;
+  justify-content: flex-start;
+  align-items: flex-start;
   text-align: left;
   padding: 16px;
   flex-direction: column;
