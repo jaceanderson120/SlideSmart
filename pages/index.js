@@ -223,22 +223,26 @@ export default function Home() {
       </GradientSection>
       <Section>
         <HowItWorksSection>
-          <HowItWorksSlogan>It's Simple</HowItWorksSlogan>
+          <HowItWorksSlogan>It's simple</HowItWorksSlogan>
           <p style={{ fontSize: "18px", marginTop: "10px", fontWeight: "500" }}>
-            How to enhance your slides in less than 1 minute:
+            How to enhance your slides in less than 1 minute
           </p>
           <HowItWorksBoxSection>
             <HowItWorksBoxDivider>
-              <HowItWorksBox></HowItWorksBox>
+              <HowItWorksBox><LoginIcon>Login</LoginIcon><RegisterIcon>Register</RegisterIcon></HowItWorksBox>
               <Caption>Login or Register an Account</Caption>
+              <Captionv2>Click Login or Register in the top right of the page and enter your account details</Captionv2>
             </HowItWorksBoxDivider>
             <HowItWorksBoxDivider>
-              <HowItWorksBox></HowItWorksBox>
+              <HowItWorksBox><img src = "https://i.imgur.com/9tCP71d.png" alt ="Upload File" style = {{width: "100%", height: "auto"}}></img></HowItWorksBox>
               <Caption>Upload Your Slides</Caption>
+              <Captionv2>Upload your .ppt or .pdf file by using the Upload File button</Captionv2>
             </HowItWorksBoxDivider>
             <HowItWorksBoxDivider>
-              <HowItWorksBox></HowItWorksBox>
+              <HowItWorksBox><img src = "https://i.imgur.com/6l1zlVv.png" style = {{width: "100%", height: "auto", borderRadius: "5px"
+              }}></img></HowItWorksBox>
               <Caption>Watch the Magic Happen!</Caption>
+              <Captionv2>We generate a Study Guide for you divided by topic best suited to help you succeed</Captionv2>
             </HowItWorksBoxDivider>
           </HowItWorksBoxSection>
         </HowItWorksSection>
@@ -261,6 +265,23 @@ const Section = styled.div`
   font-size: 2rem;
 `;
 
+const RegisterIcon = styled.div`
+  color: white;
+  transition: color 0.3s;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 8px;
+  background-color: #f03a47;
+  padding: 6px;
+  border: 2px solid #f03a47;
+  padding: 8px;
+`
+
+const LoginIcon = styled.div`
+  font-size: 25px;
+  font-weight: bold;
+  margin-right: 20px;
+`
 const GradientSection = styled.div`
   width: 100vw;
   height: 100vh;
@@ -305,6 +326,13 @@ const HowItWorksBox = styled.div`
   border-radius: 20px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  align-items: center;
+  justify-content: center;
+  
 `;
 
 const HowItWorksBoxDivider = styled.div`
@@ -321,6 +349,12 @@ const Caption = styled.p`
   font-weight: bold;
   text-align: left;
 `;
+
+const Captionv2 = styled.p`
+  font-size: 20px;
+  text-align: left;
+  margin-top: 10px;
+`
 
 const GradientSectionSlogan = styled.h1`
   font-size: 60px;
