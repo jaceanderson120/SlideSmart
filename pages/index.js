@@ -113,6 +113,15 @@ export default function Home() {
           body: JSON.stringify(topicsAndSummaries["topics"]),
         });
 
+        // Prepare the fetch for getting examples
+        const createExamplesPromise = fetch("/api/create-examples-gpt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(topicsAndSummaries["topics"]),
+        });
+
         // Prepare the fetch for the Google search query
         const googleSearchQueryPromise = fetch("/api/search-google", {
           method: "POST",
@@ -123,12 +132,17 @@ export default function Home() {
         });
 
         // Wait for both the YouTube video and create content fetches to complete
-        const [youtubeResponses, createdContentResponse, googleSearchResponse] =
-          await Promise.all([
-            Promise.all(youtubePromises), // Resolve all YouTube video fetches
-            createContentPromise, // Resolve create content fetch
-            googleSearchQueryPromise, // Resolve Google search query fetch
-          ]);
+        const [
+          youtubeResponses,
+          createdContentResponse,
+          createdExampleResponse,
+          googleSearchResponse,
+        ] = await Promise.all([
+          Promise.all(youtubePromises), // Resolve all YouTube video fetches
+          createContentPromise, // Resolve create content fetch
+          createExamplesPromise, // Resolve examples promise
+          googleSearchQueryPromise, // Resolve Google search query fetch
+        ]);
 
         const googleSearchResults = await googleSearchResponse.json();
 
@@ -139,8 +153,15 @@ export default function Home() {
           throw new Error("Failed to create content");
         }
 
+        // Check if created examples is ok
+        if (!createdExampleResponse.ok) {
+          throw new Error("Failed to create examples");
+        }
+
         // Get the created content as JSON
         const createdContent = await createdContentResponse.json();
+
+        const createdExampleContent = await createdExampleResponse.json();
 
         // Combine the responses into one object
         const combinedResponse = {};
@@ -149,6 +170,7 @@ export default function Home() {
             summary: topicsAndSummaries["topics"][topic][0],
             question: createdContent[topic]?.question || "",
             answer: createdContent[topic]?.answer || "",
+            example: createdExampleContent[topic]?.example || "",
             youtubeId: youtubeResponses[index],
           };
         });
