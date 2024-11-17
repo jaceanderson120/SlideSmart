@@ -230,7 +230,8 @@ export default function Home() {
         </GradientSectionSlogan>
         <p style={{ fontSize: "18px", marginTop: "20px", fontWeight: "500" }}>
           A software tool that creates comprehensive/interactive Study Guides
-          equipped{" "}
+          equipped<br></br> with plenty of useful resources to help you succeed
+          in the classroom
         </p>
         <MakeBetterButton onClick={handleClick}>
           {isLoggedIn ? "Make it Better" : "Get Started"}
@@ -251,20 +252,41 @@ export default function Home() {
           </p>
           <HowItWorksBoxSection>
             <HowItWorksBoxDivider>
-              <HowItWorksBox><LoginIcon>Login</LoginIcon><RegisterIcon>Register</RegisterIcon></HowItWorksBox>
+              <HowItWorksBox>
+                <LoginIcon>Login</LoginIcon>
+                <RegisterIcon>Register</RegisterIcon>
+              </HowItWorksBox>
               <Caption>Login or Register an Account</Caption>
-              <Captionv2>Click Login or Register in the top right of the page and enter your account details</Captionv2>
+              <Captionv2>
+                Click Login or Register in the top right of the page and enter
+                your account details
+              </Captionv2>
             </HowItWorksBoxDivider>
             <HowItWorksBoxDivider>
-              <HowItWorksBox><img src = "https://i.imgur.com/9tCP71d.png" alt ="Upload File" style = {{width: "100%", height: "auto"}}></img></HowItWorksBox>
+              <HowItWorksBox>
+                <img
+                  src="https://i.imgur.com/9tCP71d.png"
+                  alt="Upload File"
+                  style={{ width: "100%", height: "auto" }}
+                ></img>
+              </HowItWorksBox>
               <Caption>Upload Your Slides</Caption>
-              <Captionv2>Upload your .ppt or .pdf file by using the Upload File button</Captionv2>
+              <Captionv2>
+                Upload your .ppt or .pdf file by using the Upload File button
+              </Captionv2>
             </HowItWorksBoxDivider>
             <HowItWorksBoxDivider>
-              <HowItWorksBox><img src = "https://i.imgur.com/6l1zlVv.png" style = {{width: "100%", height: "auto", borderRadius: "5px"
-              }}></img></HowItWorksBox>
+              <HowItWorksBox>
+                <img
+                  src="https://i.imgur.com/6l1zlVv.png"
+                  style={{ width: "100%", height: "auto", borderRadius: "5px" }}
+                ></img>
+              </HowItWorksBox>
               <Caption>Watch the Magic Happen!</Caption>
-              <Captionv2>We generate a Study Guide for you divided by topic best suited to help you succeed</Captionv2>
+              <Captionv2>
+                We generate a Study Guide for you divided by topic best suited
+                to help you succeed
+              </Captionv2>
             </HowItWorksBoxDivider>
           </HowItWorksBoxSection>
         </HowItWorksSection>
@@ -297,13 +319,13 @@ const RegisterIcon = styled.div`
   padding: 6px;
   border: 2px solid #f03a47;
   padding: 8px;
-`
+`;
 
 const LoginIcon = styled.div`
   font-size: 25px;
   font-weight: bold;
   margin-right: 20px;
-`
+`;
 const GradientSection = styled.div`
   width: 100vw;
   height: 100vh;
@@ -354,7 +376,6 @@ const HowItWorksBox = styled.div`
   padding-bottom: 15px;
   align-items: center;
   justify-content: center;
-  
 `;
 
 const HowItWorksBoxDivider = styled.div`
@@ -376,7 +397,7 @@ const Captionv2 = styled.p`
   font-size: 20px;
   text-align: left;
   margin-top: 10px;
-`
+`;
 
 const GradientSectionSlogan = styled.h1`
   font-size: 60px;
