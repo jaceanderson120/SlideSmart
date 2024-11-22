@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import Head from "next/head";
+import { StateContext } from "@/context/StateContext";
 import "@fontsource/public-sans/100.css";
 import "@fontsource/public-sans/200.css";
 import "@fontsource/public-sans/300.css";
@@ -34,8 +35,10 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <GlobalStyles />
-
-      <Component {...pageProps} />
+      <StateContext>
+        <Component {...pageProps} />
+      </StateContext>
+      
     </>
   );
 }
