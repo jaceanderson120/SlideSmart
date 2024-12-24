@@ -8,8 +8,7 @@ import { auth } from "@/library/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 
 function Navbar() {
-  
-  const {isLoggedIn} = useStateContext();
+  const { isLoggedIn } = useStateContext();
 
   const handleLogout = () => {
     signOut(auth);
@@ -21,12 +20,12 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      {/* <NavbarAboutLinks>
-        <Link href="/">Saved Projects</Link>
-        <Link href="/">How it Works</Link>
+      <NavbarAboutLinks>
+        <Link href="/myStudyGuides">My Study Guides</Link>
+        {/* <Link href="/">How it Works</Link>
         <Link href="/">Support</Link>
-        <Link href="/">Why SlideSmart</Link>
-      </NavbarAboutLinks> */}
+        <Link href="/">Why SlideSmart</Link> */}
+      </NavbarAboutLinks>
 
       <NavbarLoginLinks>
         {isLoggedIn ? (

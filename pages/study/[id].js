@@ -3,11 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
-import {
-  gptData,
-  googleSearchExample,
-  firebaseUrlExample,
-} from "@/library/references";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/library/firebase/firebase";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import pencil from "@/images/pencil.png";
@@ -24,12 +21,8 @@ function getViewerUrl(url) {
 
 const Study = () => {
   const router = useRouter();
-  const { extractedData, googleSearchResults, firebaseFileUrl } = router.query;
-  const data = extractedData ? JSON.parse(extractedData) : gptData;
-  const googleSearch = googleSearchResults
-    ? JSON.parse(googleSearchResults)
-    : googleSearchExample;
-  const firebaseUrl = firebaseFileUrl ? firebaseFileUrl : firebaseUrlExample;
+  const { id } = router.query;
+  const [studyGuide, setStudyGuide] = useState(null);
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
@@ -37,16 +30,69 @@ const Study = () => {
   const [isFileShown, setIsFileShown] = useState(false);
   const topicRefs = useRef({});
 
+  useEffect(() => {
+    const fetchStudyGuide = async () => {
+      if (id) {
+        const studyGuideDocRef = doc(db, "studyGuides", id);
+        const studyGuideDoc = await getDoc(studyGuideDocRef);
+        if (studyGuideDoc.exists()) {
+          const data = studyGuideDoc.data();
+          setStudyGuide({
+            id: studyGuideDoc.id,
+            ...data,
+            extractedData: JSON.parse(data.extractedData),
+            googleSearchResults: JSON.parse(data.googleSearchResults),
+          });
+        }
+      }
+    };
+
+    fetchStudyGuide();
+  }, [id]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveTopic(entry.target.id);
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    Object.keys(topicRefs.current).forEach((key) => {
+      if (topicRefs.current[key]) {
+        observer.observe(topicRefs.current[key]);
+      }
+    });
+
+    return () => {
+      Object.keys(topicRefs.current).forEach((key) => {
+        if (topicRefs.current[key]) {
+          observer.unobserve(topicRefs.current[key]);
+        }
+      });
+    };
+  }, [studyGuide]);
+
+  if (!studyGuide) {
+    return <p>Loading...</p>;
+  }
+
   // Split off the query string from the Firebase file URL
-  const baseFileUrl = firebaseUrl.split("?")[0];
+  const baseFileUrl = studyGuide.firebaseFileUrl.split("?")[0];
 
   // Get the file extension from the base URL
   const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
 
   // Set the viewer URL to the Firebase file URL by default, but if it's a PowerPoint file, use the Google Drive viewer
-  let viewerUrl = firebaseUrl;
+  let viewerUrl = studyGuide.firebaseFileUrl;
   if (fileExtension === "pptx") {
-    viewerUrl = getViewerUrl(firebaseUrl);
+    viewerUrl = getViewerUrl(studyGuide.firebaseFileUrl);
   }
 
   // Set the content to be an iframe with the viewer URL
@@ -79,35 +125,6 @@ const Study = () => {
     }));
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveTopic(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 0.5,
-      }
-    );
-
-    Object.keys(topicRefs.current).forEach((key) => {
-      if (topicRefs.current[key]) {
-        observer.observe(topicRefs.current[key]);
-      }
-    });
-
-    return () => {
-      Object.keys(topicRefs.current).forEach((key) => {
-        if (topicRefs.current[key]) {
-          observer.unobserve(topicRefs.current[key]);
-        }
-      });
-    };
-  }, [data]);
-
   return (
     <>
       <Navbar />
@@ -125,8 +142,8 @@ const Study = () => {
             <TopicContainer>
               <TopicTitle>Topics</TopicTitle>
               <TopicScrollableContainer>
-                {data &&
-                  Object.keys(data).map((key) => (
+                {studyGuide.extractedData &&
+                  Object.keys(studyGuide.extractedData).map((key) => (
                     <TopicName
                       href={`#${key}`}
                       key={key}
@@ -139,8 +156,8 @@ const Study = () => {
             </TopicContainer>
           )}
           <InfoContainer>
-            {data &&
-              Object.keys(data).map((key) => (
+            {studyGuide.extractedData &&
+              Object.keys(studyGuide.extractedData).map((key) => (
                 <InfoSubContainer
                   key={key}
                   id={key}
@@ -167,7 +184,7 @@ const Study = () => {
                             Explanation:
                           </strong>
                         </ImageAndTitle>
-                        {data[key]["summary"]}
+                        {studyGuide.extractedData[key]["summary"]}
                       </TopicSummary>
                       <TopicVideo>
                         <ImageAndTitle>
@@ -182,7 +199,7 @@ const Study = () => {
                         <iframe
                           width="560"
                           height="315"
-                          src={`https://www.youtube.com/embed/${data[key]["youtubeId"]}`}
+                          src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
                           title="YouTube video player"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -191,7 +208,7 @@ const Study = () => {
                       </TopicVideo>
                       <TopicExample>
                         <strong style={{ fontWeight: "bold" }}>Example:</strong>
-                        {data[key]["example"]}
+                        {studyGuide.extractedData[key]["example"]}
                       </TopicExample>
                       <TopicQuestion>
                         <ImageAndTitle>
@@ -205,7 +222,7 @@ const Study = () => {
                             Practice Problem:
                           </strong>
                         </ImageAndTitle>
-                        {data[key]["question"]}
+                        {studyGuide.extractedData[key]["question"]}
                       </TopicQuestion>
                       <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
                         <TopicAnswerContainer>
@@ -224,7 +241,8 @@ const Study = () => {
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
                           </span>
                         </TopicAnswerContainer>
-                        {collapsedAnswers[key] && data[key]["answer"]}
+                        {collapsedAnswers[key] &&
+                          studyGuide.extractedData[key]["answer"]}
                       </TopicAnswer>
                     </>
                   )}
@@ -236,13 +254,13 @@ const Study = () => {
               </TopicHeaderContainer>
               <>
                 <TopicSummary>
-                  {googleSearch.map((search) => {
+                  {studyGuide.googleSearchResults.map((search) => {
                     return (
-                      <>
+                      <div key={search.title}>
                         <Link href={search.link} target="_blank">
                           {search.title}
                         </Link>
-                      </>
+                      </div>
                     );
                   })}
                 </TopicSummary>

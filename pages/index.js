@@ -7,7 +7,14 @@ import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../library/firebase/firebase";
+import { storage, auth, db } from "../library/firebase/firebase";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  runTransaction,
+  setDoc,
+} from "firebase/firestore";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -187,17 +194,60 @@ export default function Home() {
           console.error("Error uploading file:", error);
         }
 
+        // Upload extractedData, googleSearchResults, and firebaseFileUrl to Firestore
+        // Use a Firestore transaction to ensure atomicity
+        let studyGuideId;
+        try {
+          await runTransaction(db, async (transaction) => {
+            // Add a new document for the study guide to the "studyGuides" collection
+            const studyGuideRef = doc(collection(db, "studyGuides"));
+            transaction.set(studyGuideRef, {
+              extractedData: JSON.stringify(combinedResponse),
+              googleSearchResults: JSON.stringify(googleSearchResults),
+              firebaseFileUrl: firebaseFileUrl,
+              createdAt: new Date(),
+            });
+
+            // Get the ID of the new document from the document reference
+            studyGuideId = studyGuideRef.id;
+
+            // Update userStudyGuides collection with the new study guide ID
+            const userDocRef = doc(db, "userStudyGuides", auth.currentUser.uid);
+            transaction.set(
+              userDocRef,
+              {
+                studyGuides: arrayUnion(studyGuideId),
+              },
+              { merge: true }
+            );
+          });
+          console.log(
+            "Data successfully written to Firestore and user-to-study-guide mapping updated"
+          );
+        } catch (error) {
+          console.error("Error performing transaction:", error);
+        }
+
+        // Update userStudyGuides collection with the new study guide ID
+        try {
+          const userDocRef = doc(db, "userStudyGuides", auth.currentUser.uid);
+
+          // Ensure the user document exists, if not, create it
+          await setDoc(
+            userDocRef,
+            {
+              studyGuides: arrayUnion(studyGuideId),
+            },
+            { merge: true }
+          );
+        } catch (error) {
+          console.error("Error updating userStudyGuides collection:", error);
+        }
+
         setIsLoading(false);
 
-        // Redirect to the study page with extracted data, google search results, and firebase file URL
-        router.push({
-          pathname: "/study",
-          query: {
-            extractedData: JSON.stringify(combinedResponse),
-            googleSearchResults: JSON.stringify(googleSearchResults),
-            firebaseFileUrl: firebaseFileUrl,
-          },
-        });
+        // Redirect to the study page with the study guide ID
+        router.push(`/study/${studyGuideId}`);
       } catch (error) {
         setIsLoading(false);
         console.error("Error uploading file:", error);
