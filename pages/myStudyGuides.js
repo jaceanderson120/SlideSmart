@@ -27,7 +27,7 @@ const MyStudyGuides = () => {
           const data = studyGuideDoc.data();
           return {
             id: studyGuideDoc.id,
-            extractedData: JSON.parse(data.extractedData),
+            fileName: data.fileName,
           };
         });
 
@@ -53,13 +53,12 @@ const MyStudyGuides = () => {
         {studyGuides.length > 0 ? (
           <ul>
             {studyGuides.map((guide) => {
-              const firstKey = Object.keys(guide.extractedData)[0];
               return (
                 <StudyGuideLink
                   key={guide.id}
                   onClick={() => handleGuideClick(guide)}
                 >
-                  <h2>{firstKey}</h2>
+                  <h2>{guide.fileName}</h2>
                 </StudyGuideLink>
               );
             })}

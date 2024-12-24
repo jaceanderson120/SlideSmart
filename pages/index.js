@@ -202,6 +202,7 @@ export default function Home() {
             // Add a new document for the study guide to the "studyGuides" collection
             const studyGuideRef = doc(collection(db, "studyGuides"));
             transaction.set(studyGuideRef, {
+              fileName: file.name,
               extractedData: JSON.stringify(combinedResponse),
               googleSearchResults: JSON.stringify(googleSearchResults),
               firebaseFileUrl: firebaseFileUrl,
