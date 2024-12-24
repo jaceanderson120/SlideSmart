@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/library/firebase/firebase";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
@@ -28,8 +28,11 @@ const Study = () => {
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
   const [isTopicsShown, setIsTopicsShown] = useState(true);
   const [isFileShown, setIsFileShown] = useState(false);
+  const [fileName, setFileName] = useState("");
   const topicRefs = useRef({});
+  const titleInputRef = useRef(null);
 
+  // Fetch the study guide data from Firestore on page load
   useEffect(() => {
     const fetchStudyGuide = async () => {
       if (id) {
@@ -43,12 +46,33 @@ const Study = () => {
             extractedData: JSON.parse(data.extractedData),
             googleSearchResults: JSON.parse(data.googleSearchResults),
           });
+          setFileName(data.fileName);
         }
       }
     };
 
     fetchStudyGuide();
   }, [id]);
+
+  // Update the file name that is displayed at the top of the study guide
+  const handleFileNameChange = (e) => {
+    setFileName(e.target.value);
+  };
+
+  // Save the file name to Firestore when the input field is blurred
+  const handleFileNameSave = async () => {
+    if (studyGuide) {
+      const studyGuideDocRef = doc(db, "studyGuides", studyGuide.id);
+      await updateDoc(studyGuideDocRef, { fileName });
+    }
+  };
+
+  // Handle pressing Enter key to blur the input field
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      titleInputRef.current.blur();
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -133,6 +157,14 @@ const Study = () => {
           <ToggleButton onClick={() => setIsTopicsShown(!isTopicsShown)}>
             {isTopicsShown ? "Hide Topics" : "Show Topics"}
           </ToggleButton>
+          <Title
+            type="text"
+            value={fileName}
+            onChange={handleFileNameChange}
+            onBlur={handleFileNameSave}
+            onKeyDown={handleKeyDown}
+            ref={titleInputRef}
+          />
           <ToggleButton onClick={() => setIsFileShown(!isFileShown)}>
             {isFileShown ? "Hide File" : "Show File"}
           </ToggleButton>
@@ -290,6 +322,17 @@ const Section = styled.div`
   background-color: #f6f4f3;
   font-size: 2rem;
   gap: 24px;
+`;
+
+const Title = styled.input`
+  border: none;
+  background-color: #f6f4f3;
+  font-size: 40px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-grow: 1;
+  text-align: center;
 `;
 
 const ToggleButtonsSection = styled.div`
