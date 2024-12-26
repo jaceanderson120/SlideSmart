@@ -3,14 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import styled from "styled-components";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/library/firebase/firebase";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
 import Link from "next/link";
+import { fetchStudyGuide, updateStudyGuideFileName } from "@/firebase/database";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -34,24 +33,15 @@ const Study = () => {
 
   // Fetch the study guide data from Firestore on page load
   useEffect(() => {
-    const fetchStudyGuide = async () => {
+    const fetchData = async () => {
       if (id) {
-        const studyGuideDocRef = doc(db, "studyGuides", id);
-        const studyGuideDoc = await getDoc(studyGuideDocRef);
-        if (studyGuideDoc.exists()) {
-          const data = studyGuideDoc.data();
-          setStudyGuide({
-            id: studyGuideDoc.id,
-            ...data,
-            extractedData: JSON.parse(data.extractedData),
-            googleSearchResults: JSON.parse(data.googleSearchResults),
-          });
-          setFileName(data.fileName);
-        }
+        const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
+        setStudyGuide(fetchedStudyGuide);
+        setFileName(fileName);
       }
     };
 
-    fetchStudyGuide();
+    fetchData();
   }, [id]);
 
   // Update the file name that is displayed at the top of the study guide
@@ -62,8 +52,7 @@ const Study = () => {
   // Save the file name to Firestore when the input field is blurred
   const handleFileNameSave = async () => {
     if (studyGuide) {
-      const studyGuideDocRef = doc(db, "studyGuides", studyGuide.id);
-      await updateDoc(studyGuideDocRef, { fileName });
+      updateStudyGuideFileName(studyGuide.id, fileName);
     }
   };
 

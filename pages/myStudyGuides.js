@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { auth, db } from "../library/firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "../library/firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
+import { getUserStudyGuides } from "@/firebase/database";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -12,29 +12,8 @@ const MyStudyGuides = () => {
   // Get all user's study guides
   const getStudyGuides = async () => {
     const user = auth.currentUser;
-
-    if (user) {
-      // Fetch the user's study guide IDs from the userStudyGuides collection
-      const userDocRef = doc(db, "userStudyGuides", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        const { studyGuides: studyGuideIds } = userDoc.data();
-
-        // Fetch the study guide documents from the studyGuides collection
-        const studyGuidesPromises = studyGuideIds.map(async (id) => {
-          const studyGuideDocRef = doc(db, "studyGuides", id);
-          const studyGuideDoc = await getDoc(studyGuideDocRef);
-          const data = studyGuideDoc.data();
-          return {
-            id: studyGuideDoc.id,
-            fileName: data.fileName,
-          };
-        });
-
-        const guides = await Promise.all(studyGuidesPromises);
-        setStudyGuides(guides);
-      }
-    }
+    const guides = await getUserStudyGuides(user);
+    setStudyGuides(guides);
   };
 
   useEffect(() => {
@@ -50,7 +29,7 @@ const MyStudyGuides = () => {
       <Navbar />
       <Section>
         <h1>My Study Guides</h1>
-        {studyGuides.length > 0 ? (
+        {studyGuides?.length > 0 ? (
           <ul>
             {studyGuides.map((guide) => {
               return (
