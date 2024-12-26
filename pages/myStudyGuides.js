@@ -4,20 +4,23 @@ import { auth } from "../library/firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
 import { getUserStudyGuides } from "@/firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
   const router = useRouter();
 
-  // Get all user's study guides
-  const getStudyGuides = async () => {
-    const user = auth.currentUser;
-    const guides = await getUserStudyGuides(user);
-    setStudyGuides(guides);
-  };
-
+  // Fetch the study guides when the component mounts
   useEffect(() => {
-    getStudyGuides();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const guides = await getUserStudyGuides(user);
+        setStudyGuides(guides);
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const handleGuideClick = (guide) => {
