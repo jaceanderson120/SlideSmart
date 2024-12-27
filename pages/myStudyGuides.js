@@ -51,6 +51,12 @@ const MyStudyGuides = () => {
     router.push(`/study/${id}`);
   };
 
+  // Function to handle the create new button click
+  const handleCreateNew = () => {
+    // redirect to landing page
+    router.push("/");
+  };
+
   // Handle the delete button click
   const handleDelete = (guide) => {
     deleteStudyGuide(guide.id, guide.firebaseFileUrl, auth.currentUser.uid);
@@ -67,7 +73,7 @@ const MyStudyGuides = () => {
         <TopContainer>
           <PageTitle>My Study Guides</PageTitle>
           <ButtonContainer>
-            <CreateButton onClick={() => {}}>Create New</CreateButton>
+            <CreateButton onClick={handleCreateNew}>Create New</CreateButton>
           </ButtonContainer>
         </TopContainer>
         <TableContainer>
