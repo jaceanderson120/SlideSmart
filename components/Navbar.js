@@ -150,7 +150,7 @@ const NavbarSlideSmart = styled.div`
 const NavbarSection = styled.div`
   display: flex;
   align-items: center;
-  margin: auto;
+  width: 100%;
   padding: 16px;
   border-bottom: 1px solid gray;
   background-color: #f6f4f3;

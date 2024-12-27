@@ -1,12 +1,15 @@
-import { auth, db } from "@/library/firebase/firebase";
+import { auth, db, storage } from "@/library/firebase/firebase";
 import {
+  arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   runTransaction,
   updateDoc,
 } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 
 // Uploads a study guide to Firestore
 // Input: studyGuide object with the following properties:
@@ -69,6 +72,12 @@ const getUserStudyGuides = async (user) => {
         return {
           id: studyGuideDoc.id,
           fileName: data.fileName,
+          createdAt: data.createdAt.toDate().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }),
+          firebaseFileUrl: data.firebaseFileUrl,
         };
       });
 
@@ -105,9 +114,28 @@ const updateStudyGuideFileName = async (id, fileName) => {
   await updateDoc(studyGuideDocRef, { fileName });
 };
 
+// Delete a study guide from Firestore
+// Input: study guide ID
+// Output: None
+const deleteStudyGuide = async (id, storageUrl, userId) => {
+  // Delete the study guide document from the studyGuides collection
+  await deleteDoc(doc(db, "studyGuides", id));
+
+  // Delete the study guide ID from the userStudyGuides collection
+  const userDocRef = doc(db, "userStudyGuides", userId);
+  await updateDoc(userDocRef, {
+    studyGuides: arrayRemove(id),
+  });
+
+  // Delete the study guide file from Firebase Storage
+  const storageRef = ref(storage, storageUrl);
+  await deleteObject(storageRef);
+};
+
 export {
   uploadStudyGuideToFirebase,
   getUserStudyGuides,
   fetchStudyGuide,
   updateStudyGuideFileName,
+  deleteStudyGuide,
 };
