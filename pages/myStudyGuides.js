@@ -31,12 +31,15 @@ const MyStudyGuides = () => {
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
         setStudyGuides(guides);
+      } else {
+        // Redirect to login page if no user is authenticated
+        router.push("/login");
       }
     });
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   // Toggle the options menu for a study guide
   const toggleMenu = (id) => {
