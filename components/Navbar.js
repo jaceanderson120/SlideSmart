@@ -4,12 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
-import { auth } from "@/library/firebase/firebase";
+import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 
 function Navbar() {
-  
-  const {isLoggedIn} = useStateContext();
+  const { isLoggedIn } = useStateContext();
 
   const handleLogout = () => {
     signOut(auth);
@@ -21,12 +20,12 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      {/* <NavbarAboutLinks>
-        <Link href="/">Saved Projects</Link>
-        <Link href="/">How it Works</Link>
+      <NavbarAboutLinks>
+        <Link href="/myStudyGuides">My Study Guides</Link>
+        {/* <Link href="/">How it Works</Link>
         <Link href="/">Support</Link>
-        <Link href="/">Why SlideSmart</Link>
-      </NavbarAboutLinks> */}
+        <Link href="/">Why SlideSmart</Link> */}
+      </NavbarAboutLinks>
 
       <NavbarLoginLinks>
         {isLoggedIn ? (
@@ -151,7 +150,7 @@ const NavbarSlideSmart = styled.div`
 const NavbarSection = styled.div`
   display: flex;
   align-items: center;
-  margin: auto;
+  width: 100%;
   padding: 16px;
   border-bottom: 1px solid gray;
   background-color: #f6f4f3;
