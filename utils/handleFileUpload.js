@@ -1,6 +1,7 @@
 import { uploadStudyGuideToFirebase } from "@/firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase/firebase";
+import { v4 as uuidv4 } from "uuid";
 
 const handleFileUpload = async (event) => {
   const file = event.target.files[0];
@@ -132,7 +133,10 @@ const handleFileUpload = async (event) => {
       });
 
       // If everything was successful up to this point, then upload the file to Firebase Storage
-      const storageRef = ref(storage, `uploads/${file.name}`);
+      const uniqueId = uuidv4();
+      const uniqueFileName = `${uniqueId}_${file.name}`;
+
+      const storageRef = ref(storage, `uploads/${uniqueFileName}`);
       let firebaseFileUrl = "";
       try {
         await uploadBytes(storageRef, file);
