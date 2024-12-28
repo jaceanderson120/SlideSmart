@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { auth } from "../library/firebase/firebase";
+import { auth } from "../firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
 import { getUserStudyGuides, deleteStudyGuide } from "@/firebase/database";

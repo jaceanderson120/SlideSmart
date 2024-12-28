@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from "@/library/firebase/firebase";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { auth } from "@/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 const Context = createContext();
 
 export const StateContext = ({ children }) => {
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -17,15 +16,15 @@ export const StateContext = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-    return(
-        <Context.Provider
-        value={{
-            isLoggedIn
-        }}
-        >
-            {children}
-        </Context.Provider>
-    )
-}
+  return (
+    <Context.Provider
+      value={{
+        isLoggedIn,
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
+};
 
 export const useStateContext = () => useContext(Context);

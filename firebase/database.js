@@ -1,4 +1,4 @@
-import { auth, db, storage } from "@/library/firebase/firebase";
+import { auth, db, storage } from "@/firebase/firebase";
 import {
   arrayRemove,
   arrayUnion,

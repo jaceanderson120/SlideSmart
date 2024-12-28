@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
-import { auth } from "@/library/firebase/firebase";
+import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 
 function Navbar() {

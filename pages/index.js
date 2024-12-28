@@ -7,7 +7,7 @@ import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../library/firebase/firebase";
+import { storage } from "../firebase/firebase";
 import { uploadStudyGuideToFirebase } from "@/firebase/database";
 
 export default function Home() {
