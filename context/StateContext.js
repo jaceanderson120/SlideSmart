@@ -6,10 +6,12 @@ const Context = createContext();
 
 export const StateContext = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
+      setCurrentUser(user); // Set the current user
     });
 
     // Cleanup subscription on unmount
@@ -20,6 +22,7 @@ export const StateContext = ({ children }) => {
     <Context.Provider
       value={{
         isLoggedIn,
+        currentUser,
       }}
     >
       {children}

@@ -4,7 +4,6 @@ import { auth } from "../firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
 import { getUserStudyGuides, deleteStudyGuide } from "@/firebase/database";
-import { onAuthStateChanged } from "firebase/auth";
 import { faUserCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -25,28 +24,25 @@ const MyStudyGuides = () => {
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { isLoggedIn } = useStateContext();
+  const { isLoggedIn, currentUser } = useStateContext();
 
   // Fetch the study guides when the component mounts
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const guides = await getUserStudyGuides(user);
-
-        // Sort the study guides by created date
-        guides.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-        setStudyGuides(guides);
-      } else {
-        // Redirect to login page if no user is authenticated
-        router.push("/login");
+    const fetchStudyGuides = async () => {
+      const guides = await getUserStudyGuides(currentUser);
+      if (!guides) {
+        return;
       }
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [router]);
+      // Sort the study guides by created date
+      guides.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      setStudyGuides(guides);
+    };
+    if (currentUser) {
+      fetchStudyGuides();
+    }
+  }, [currentUser, router]);
 
   // Handle the view button click
   const handleView = (id) => {
@@ -117,9 +113,11 @@ const MyStudyGuides = () => {
       <Section>
         <TopContainer>
           <PageTitle>My Study Guides</PageTitle>
-          <ButtonContainer>
-            <CreateButton onClick={handleClick}>Create New</CreateButton>
-          </ButtonContainer>
+          {isLoggedIn && (
+            <ButtonContainer>
+              <CreateButton onClick={handleClick}>Create New</CreateButton>
+            </ButtonContainer>
+          )}
           {/* Hidden file input */}
           <input
             type="file"
@@ -150,7 +148,7 @@ const MyStudyGuides = () => {
                           icon={faUserCircle}
                           size="lg"
                           data-tooltip-id="contributers-tooltip"
-                          data-tooltip-content={auth.currentUser.email}
+                          data-tooltip-content={auth.currentUser?.email}
                           data-tooltip-place="left"
                         />
                         <Tooltip
@@ -172,7 +170,10 @@ const MyStudyGuides = () => {
                 })}
               </ul>
             ) : (
-              <p>No study guides found.</p>
+              <NoStudyGuides>
+                No study guides found.{" "}
+                {!isLoggedIn && "Log in to view your study guides."}
+              </NoStudyGuides>
             )}
           </StudyGuideListContainer>
         </TableContainer>
@@ -338,4 +339,9 @@ const Overlay = styled.div`
 const ProgressWrapper = styled.div`
   width: 100px;
   height: 100px;
+`;
+
+const NoStudyGuides = styled.p`
+  font-size: 1rem;
+  margin: 16px;
 `;
