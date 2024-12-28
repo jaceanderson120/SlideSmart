@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
 import { getUserStudyGuides, deleteStudyGuide } from "@/firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
-import { faUserCircle, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -14,11 +14,18 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { Tooltip } from "react-tooltip";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { handleFileUpload } from "@/utils/handleFileUpload";
+import { useStateContext } from "@/context/StateContext";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
-  const [menuVisible, setMenuVisible] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingPercentage, setLoadingPercentage] = useState(0);
   const router = useRouter();
+  const fileInputRef = useRef(null);
+  const { isLoggedIn } = useStateContext();
 
   // Fetch the study guides when the component mounts
   useEffect(() => {
@@ -41,20 +48,49 @@ const MyStudyGuides = () => {
     return () => unsubscribe();
   }, [router]);
 
-  // Toggle the options menu for a study guide
-  const toggleMenu = (id) => {
-    setMenuVisible(menuVisible === id ? null : id);
-  };
-
   // Handle the view button click
   const handleView = (id) => {
     router.push(`/study/${id}`);
   };
 
+  // Function to handle the button click and open the file selector
+  const handleUploadClick = () => {
+    // Programmatically click the hidden file input
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Function to handle when the create new button is clicked
+  const handleClick = () => {
+    // Check if the user is logged in
+    if (isLoggedIn) {
+      handleUploadClick();
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const getRandomInRange = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   // Function to handle the create new button click
-  const handleCreateNew = () => {
-    // redirect to landing page
-    router.push("/");
+  const handleCreateNew = async (event) => {
+    setIsLoading(true);
+    // Simulate loading progress
+    const interval = setInterval(() => {
+      setLoadingPercentage((prev) => {
+        const newPercentage = prev + getRandomInRange(3, 5);
+        return newPercentage > 100 ? 100 : newPercentage;
+      });
+    }, 1000);
+    const studyGuideId = await handleFileUpload(event);
+    clearInterval(interval);
+    setIsLoading(false);
+    if (studyGuideId) {
+      router.push(`/study/${studyGuideId}`);
+    }
   };
 
   // Handle the delete button click
@@ -69,12 +105,28 @@ const MyStudyGuides = () => {
   return (
     <Container>
       <Navbar />
+      {isLoading ? (
+        <Overlay>
+          <ProgressWrapper>
+            <CircularProgressbar value={loadingPercentage} />
+          </ProgressWrapper>
+        </Overlay>
+      ) : (
+        <></>
+      )}
       <Section>
         <TopContainer>
           <PageTitle>My Study Guides</PageTitle>
           <ButtonContainer>
-            <CreateButton onClick={handleCreateNew}>Create New</CreateButton>
+            <CreateButton onClick={handleClick}>Create New</CreateButton>
           </ButtonContainer>
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleCreateNew}
+          />
         </TopContainer>
         <TableContainer>
           <ColumnNamesContainer>
@@ -110,24 +162,11 @@ const MyStudyGuides = () => {
                           }}
                         />
                       </StudyGuideContributers>
-                      <StudyGuideOptionsButton
-                        onClick={() => toggleMenu(guide.id)}
+                      <StudyGuideDeleteButton
+                        onClick={() => handleDelete(guide)}
                       >
-                        <FontAwesomeIcon icon={faEllipsisV} size="2x" />
-                        {menuVisible === guide.id && (
-                          <OptionsMenu>
-                            <Option onClick={() => handleView(guide.id)}>
-                              View
-                            </Option>
-                            <Option onClick={() => handleDelete(guide)}>
-                              Delete
-                            </Option>
-                            <Option onClick={() => toggleMenu(null)}>
-                              Close Menu
-                            </Option>
-                          </OptionsMenu>
-                        )}
-                      </StudyGuideOptionsButton>
+                        <FontAwesomeIcon icon={faTrashCan} size="2x" />
+                      </StudyGuideDeleteButton>
                     </StudyGuideListItem>
                   );
                 })}
@@ -270,7 +309,7 @@ const StudyGuideContributers = styled.div`
   color: #9c9c9c;
 `;
 
-const StudyGuideOptionsButton = styled.button`
+const StudyGuideDeleteButton = styled.button`
   display: flex;
   flex: 0.1;
   background-color: transparent;
@@ -283,19 +322,20 @@ const StudyGuideOptionsButton = styled.button`
   }
 `;
 
-const OptionsMenu = styled.div`
-  position: absolute;
-  background-color: #ffffff;
-  border: 1px solid #9c9c9c;
-  z-index: 1000;
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 `;
 
-const Option = styled.div`
-  padding: 8px 16px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f03a47;
-    color: white;
-  }
+const ProgressWrapper = styled.div`
+  width: 100px;
+  height: 100px;
 `;
