@@ -9,7 +9,18 @@ import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
 import Link from "next/link";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import ShareModal from "@/components/ShareModal";
 import { fetchStudyGuide, updateStudyGuideFileName } from "@/firebase/database";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// The following import prevents a Font Awesome icon server-side rendering bug,
+// where the icons flash from a very large icon down to a properly sized one:
+import "@fortawesome/fontawesome-svg-core/styles.css";
+// Prevent fontawesome from adding its CSS since we did it manually above:
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false; /* eslint-disable import/first */
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -27,9 +38,11 @@ const Study = () => {
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
   const [isTopicsShown, setIsTopicsShown] = useState(true);
   const [isFileShown, setIsFileShown] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [fileName, setFileName] = useState("");
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // Fetch the study guide data from Firestore on page load
   useEffect(() => {
@@ -43,6 +56,26 @@ const Study = () => {
 
     fetchData();
   }, [id]);
+
+  // Function to handle opening the share modal
+  const handleShareClick = () => {
+    setIsShareModalOpen(true);
+  };
+
+  // Function to close the share modal
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
+  };
+
+  // Close the menu when the user clicks outside of it
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Open the menu when the user clicks on the ellipsis icon
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   // Update the file name that is displayed at the top of the study guide
   const handleFileNameChange = (e) => {
@@ -142,10 +175,7 @@ const Study = () => {
     <>
       <Navbar />
       <Section>
-        <ToggleButtonsSection>
-          <ToggleButton onClick={() => setIsTopicsShown(!isTopicsShown)}>
-            {isTopicsShown ? "Hide Topics" : "Show Topics"}
-          </ToggleButton>
+        <HeaderSection>
           <Title
             type="text"
             value={fileName}
@@ -154,10 +184,44 @@ const Study = () => {
             onKeyDown={handleKeyDown}
             ref={titleInputRef}
           />
-          <ToggleButton onClick={() => setIsFileShown(!isFileShown)}>
-            {isFileShown ? "Hide File" : "Show File"}
-          </ToggleButton>
-        </ToggleButtonsSection>
+          <StyledFontAwesomeIcon
+            icon={faEllipsisVertical}
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          />
+          <Menu
+            keepMounted
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            open={Boolean(anchorEl)}
+          >
+            <StyledMenuItem
+              onClick={() => {
+                setIsTopicsShown(!isTopicsShown);
+                handleClose();
+              }}
+            >
+              {isTopicsShown ? "Hide Topics" : "Show Topics"}
+            </StyledMenuItem>
+            <StyledMenuItem
+              onClick={() => {
+                setIsFileShown(!isFileShown);
+                handleClose();
+              }}
+            >
+              {isFileShown ? "Hide File" : "Show File"}
+            </StyledMenuItem>
+            <StyledMenuItem
+              onClick={() => {
+                handleShareClick();
+                handleClose();
+              }}
+            >
+              Share
+            </StyledMenuItem>
+          </Menu>
+        </HeaderSection>
         <OutputSection>
           {isTopicsShown && (
             <TopicContainer>
@@ -292,6 +356,11 @@ const Study = () => {
         </OutputSection>
       </Section>
       <Footer />
+      <ShareModal
+        studyGuideId={id}
+        isOpen={isShareModalOpen}
+        onRequestClose={closeShareModal}
+      />
     </>
   );
 };
@@ -324,26 +393,25 @@ const Title = styled.input`
   text-align: center;
 `;
 
-const ToggleButtonsSection = styled.div`
+const HeaderSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
+  padding: 10px;
 `;
 
-const ToggleButton = styled.button`
-  padding: 16px;
-  font-size: 21px;
-  font-weight: bold;
-  color: black;
-  background-color: #f6f4f3;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.3s;
-  max-width: 200px;
-
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   &:hover {
+    transition: color 0.3s;
+    color: #f03a47;
+  }
+`;
+
+const StyledMenuItem = styled(MenuItem)`
+  &:hover {
+    transition: color 0.3s;
     color: #f03a47;
   }
 `;

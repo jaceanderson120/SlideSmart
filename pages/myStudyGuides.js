@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
-import { getUserStudyGuides, deleteStudyGuide } from "@/firebase/database";
+import {
+  getUserStudyGuides,
+  deleteStudyGuide,
+  getUserDisplayName,
+} from "@/firebase/database";
 import { faUserCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -22,6 +26,7 @@ const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
+  const [displayNames, setDisplayNames] = useState({});
   const router = useRouter();
   const fileInputRef = useRef(null);
   const { isLoggedIn, currentUser } = useStateContext();
@@ -43,6 +48,25 @@ const MyStudyGuides = () => {
       fetchStudyGuides();
     }
   }, [currentUser, router]);
+
+  // Fetch display names for contributors
+  useEffect(() => {
+    const fetchDisplayNames = async () => {
+      const names = {};
+      for (const guide of studyGuides) {
+        for (const contributor of guide.contributors) {
+          if (!names[contributor]) {
+            names[contributor] = await getUserDisplayName(contributor);
+          }
+        }
+      }
+      setDisplayNames(names);
+    };
+
+    if (studyGuides.length > 0) {
+      fetchDisplayNames();
+    }
+  }, [studyGuides]);
 
   // Handle the view button click
   const handleView = (id) => {
@@ -81,7 +105,7 @@ const MyStudyGuides = () => {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const studyGuideId = await handleFileUpload(event);
+    const studyGuideId = await handleFileUpload(event, currentUser);
     clearInterval(interval);
     setIsLoading(false);
     if (studyGuideId) {
@@ -130,7 +154,7 @@ const MyStudyGuides = () => {
           <ColumnNamesContainer>
             <ColumnName>Name</ColumnName>
             <ColumnName>Created</ColumnName>
-            <ColumnName>Contributers</ColumnName>
+            <ColumnName>Contributors</ColumnName>
             <OptionsPadding />
           </ColumnNamesContainer>
           <StudyGuideListContainer>
@@ -143,28 +167,38 @@ const MyStudyGuides = () => {
                         <h2>{guide.fileName}</h2>
                       </StudyGuideLink>
                       <StudyGuideCreated>{guide.createdAt}</StudyGuideCreated>
-                      <StudyGuideContributers>
-                        <FontAwesomeIcon
-                          icon={faUserCircle}
-                          size="lg"
-                          data-tooltip-id="contributers-tooltip"
-                          data-tooltip-content={auth.currentUser?.email}
-                          data-tooltip-place="left"
-                        />
-                        <Tooltip
-                          id="contributers-tooltip"
-                          style={{
-                            backgroundColor: "#9c9c9c",
-                            fontSize: "1rem",
-                            padding: "8px",
-                          }}
-                        />
-                      </StudyGuideContributers>
-                      <StudyGuideDeleteButton
-                        onClick={() => handleDelete(guide)}
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} size="2x" />
-                      </StudyGuideDeleteButton>
+                      <StudyGuideContributors>
+                        {guide.contributors.map((contributor) => {
+                          return (
+                            <div key={contributor}>
+                              <FontAwesomeIcon
+                                icon={faUserCircle}
+                                size="lg"
+                                data-tooltip-id={`contributor-tooltip-${contributor}`}
+                                data-tooltip-content={
+                                  displayNames[contributor] || "Loading..."
+                                }
+                                data-tooltip-place="left"
+                              />
+                              <Tooltip
+                                id={`contributor-tooltip-${contributor}`}
+                                style={{
+                                  backgroundColor: "#9c9c9c",
+                                  fontSize: "1rem",
+                                  padding: "8px",
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
+                      </StudyGuideContributors>
+                      {guide.createdBy === currentUser?.uid && (
+                        <StudyGuideDeleteButton
+                          onClick={() => handleDelete(guide)}
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} size="2x" />
+                        </StudyGuideDeleteButton>
+                      )}
                     </StudyGuideListItem>
                   );
                 })}
@@ -304,7 +338,7 @@ const StudyGuideCreated = styled.div`
   font-size: 1rem;
 `;
 
-const StudyGuideContributers = styled.div`
+const StudyGuideContributors = styled.div`
   display: flex;
   flex: 1;
   color: #9c9c9c;

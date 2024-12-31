@@ -6,8 +6,12 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  query,
   runTransaction,
+  setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 
@@ -31,6 +35,8 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         googleSearchResults: studyGuide.googleSearchResults,
         firebaseFileUrl: studyGuide.firebaseFileUrl,
         createdAt: studyGuide.createdAt,
+        createdBy: studyGuide.createdBy,
+        contributors: studyGuide.contributors,
       });
 
       // Get the ID of the new document from the document reference
@@ -78,6 +84,8 @@ const getUserStudyGuides = async (user) => {
             day: "numeric",
           }),
           firebaseFileUrl: data.firebaseFileUrl,
+          createdBy: data.createdBy,
+          contributors: data.contributors,
         };
       });
 
@@ -118,18 +126,87 @@ const updateStudyGuideFileName = async (id, fileName) => {
 // Input: study guide ID
 // Output: None
 const deleteStudyGuide = async (id, storageUrl, userId) => {
+  // Get the list of contributors for the study guide
+  const studyGuideDocRef = doc(db, "studyGuides", id);
+  const studyGuideDoc = await getDoc(studyGuideDocRef);
+  const { contributors } = studyGuideDoc.data();
+
   // Delete the study guide document from the studyGuides collection
   await deleteDoc(doc(db, "studyGuides", id));
 
-  // Delete the study guide ID from the userStudyGuides collection
-  const userDocRef = doc(db, "userStudyGuides", userId);
-  await updateDoc(userDocRef, {
-    studyGuides: arrayRemove(id),
+  // Delete the study guide ID from the userStudyGuides collection for each contributor and if the user has no study guides, delete the userStudyGuides document
+  contributors.forEach(async (contributor) => {
+    const contributorDocRef = doc(db, "userStudyGuides", contributor);
+    await updateDoc(contributorDocRef, {
+      studyGuides: arrayRemove(id),
+    });
+    const contributorDoc = await getDoc(contributorDocRef);
+    const { studyGuides } = contributorDoc.data();
+    if (studyGuides.length === 0) {
+      await deleteDoc(contributorDocRef);
+    }
   });
 
   // Delete the study guide file from Firebase Storage
   const storageRef = ref(storage, storageUrl);
   await deleteObject(storageRef);
+};
+
+// Store user information in Firestore users collection
+// Input: user uid, display name, and email
+// Output: None
+const storeUserInfo = async (uid, name, email) => {
+  const userDocRef = doc(db, "users", uid);
+  await setDoc(userDocRef, { displayName: name, email: email });
+};
+
+// Get the display name of a user
+// Input: user uid
+// Output: user display name
+const getUserDisplayName = async (uid) => {
+  const userDocRef = doc(db, "users", uid);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    const { displayName } = userDoc.data();
+    return displayName;
+  }
+};
+
+// Get a user's uid from their email
+// Input: user email
+// Output: user uid
+const getUserUidFromEmail = async (email) => {
+  const usersCollectionRef = collection(db, "users");
+  const querySnapshot = await getDocs(
+    query(usersCollectionRef, where("email", "==", email))
+  );
+  if (!querySnapshot.empty) {
+    return querySnapshot.docs[0].id;
+  }
+};
+
+// Share a study guide with another user
+// Input: study guide ID and user uid to share with
+// Output: None
+const shareStudyGuide = async (studyGuideId, uid) => {
+  // Update the study guide document with the new contributors
+  const studyGuideDocRef = doc(db, "studyGuides", studyGuideId);
+  await updateDoc(studyGuideDocRef, {
+    contributors: arrayUnion(uid),
+  });
+
+  // Update the userStudyGuides collection for each user with the new study guide ID
+  const userDocRef = doc(db, "userStudyGuides", uid);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    await updateDoc(userDocRef, {
+      studyGuides: arrayUnion(studyGuideId),
+    });
+  } else {
+    await setDoc(userDocRef, {
+      studyGuides: arrayUnion(studyGuideId),
+    });
+  }
 };
 
 export {
@@ -138,4 +215,8 @@ export {
   fetchStudyGuide,
   updateStudyGuideFileName,
   deleteStudyGuide,
+  storeUserInfo,
+  getUserDisplayName,
+  getUserUidFromEmail,
+  shareStudyGuide,
 };

@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
 
-const handleFileUpload = async (event) => {
+const handleFileUpload = async (event, currentUser) => {
   const file = event.target.files[0];
   if (file) {
     // Create FormData object to send the file
@@ -153,6 +153,8 @@ const handleFileUpload = async (event) => {
         googleSearchResults: JSON.stringify(googleSearchResults),
         firebaseFileUrl: firebaseFileUrl,
         createdAt: new Date(),
+        createdBy: currentUser.uid,
+        contributors: [currentUser.uid],
       };
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 

@@ -13,7 +13,7 @@ export default function Home() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
-  const { isLoggedIn } = useStateContext();
+  const { isLoggedIn, currentUser } = useStateContext();
 
   const getRandomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,7 +45,7 @@ export default function Home() {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const studyGuideId = await handleFileUpload(event);
+    const studyGuideId = await handleFileUpload(event, currentUser);
     clearInterval(interval);
     setIsLoading(false);
     if (studyGuideId) {
