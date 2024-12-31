@@ -21,6 +21,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { useStateContext } from "@/context/StateContext";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -43,6 +44,7 @@ const Study = () => {
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const { currentUser } = useStateContext();
 
   // Fetch the study guide data from Firestore on page load
   useEffect(() => {
@@ -212,14 +214,16 @@ const Study = () => {
             >
               {isFileShown ? "Hide File" : "Show File"}
             </StyledMenuItem>
-            <StyledMenuItem
-              onClick={() => {
-                handleShareClick();
-                handleClose();
-              }}
-            >
-              Share
-            </StyledMenuItem>
+            {studyGuide.createdBy === currentUser.uid && (
+              <StyledMenuItem
+                onClick={() => {
+                  handleShareClick();
+                  handleClose();
+                }}
+              >
+                Share
+              </StyledMenuItem>
+            )}
           </Menu>
         </HeaderSection>
         <OutputSection>
