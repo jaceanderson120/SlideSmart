@@ -159,9 +159,13 @@ const handleFileUpload = async (event, currentUser) => {
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 
       // Return the study guide ID if successful
-      return studyGuideId;
+      return { studyGuideId, error: null };
     } catch (error) {
       console.error("Error uploading file:", error);
+      // Check if error type is invalidFileType
+      if (error.message.includes("invalidFileType")) {
+        return { studyGuideId: null, error: "invalidFileType" };
+      }
     }
   }
 };

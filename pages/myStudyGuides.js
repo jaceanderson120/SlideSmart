@@ -21,6 +21,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
+import { ToastContainer, toast } from "react-toastify";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -122,11 +123,18 @@ const MyStudyGuides = () => {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const studyGuideId = await handleFileUpload(event, currentUser);
+    const fileUploadResponse = await handleFileUpload(event, currentUser);
     clearInterval(interval);
     setIsLoading(false);
-    if (studyGuideId) {
-      router.push(`/study/${studyGuideId}`);
+    // fileUpload response is either an object with studyGuideId and an error
+    if (fileUploadResponse.studyGuideId !== null) {
+      router.push(`/study/${fileUploadResponse.studyGuideId}`);
+    } else if (fileUploadResponse.error === "invalidFileType") {
+      toast.error("Invalid file type. Please upload a PDF or PPTX file.");
+      // Reset the file input element
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
@@ -141,6 +149,7 @@ const MyStudyGuides = () => {
 
   return (
     <Container>
+      <ToastContainer position="top-right" />
       <Navbar />
       {isLoading ? (
         <Overlay>
