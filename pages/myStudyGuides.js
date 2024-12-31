@@ -24,9 +24,12 @@ import { useStateContext } from "@/context/StateContext";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
+  const [filteredStudyGuides, setFilteredStudyGuides] = useState([]);
+  const [studyGuidesLoaded, setStudyGuidesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [displayNames, setDisplayNames] = useState({});
+  const [filter, setFilter] = useState("owned");
   const router = useRouter();
   const fileInputRef = useRef(null);
   const { isLoggedIn, currentUser } = useStateContext();
@@ -43,6 +46,7 @@ const MyStudyGuides = () => {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
       setStudyGuides(guides);
+      setStudyGuidesLoaded(true);
     };
     if (currentUser) {
       fetchStudyGuides();
@@ -67,6 +71,19 @@ const MyStudyGuides = () => {
       fetchDisplayNames();
     }
   }, [studyGuides]);
+
+  // Filter study guides based on the selected filter
+  useEffect(() => {
+    if (filter === "owned") {
+      setFilteredStudyGuides(
+        studyGuides.filter((guide) => guide.createdBy === currentUser?.uid)
+      );
+    } else if (filter === "shared") {
+      setFilteredStudyGuides(
+        studyGuides.filter((guide) => guide.createdBy !== currentUser?.uid)
+      );
+    }
+  }, [filter, studyGuides, currentUser]);
 
   // Handle the view button click
   const handleView = (id) => {
@@ -151,16 +168,26 @@ const MyStudyGuides = () => {
           />
         </TopContainer>
         <TableContainer>
+          <FilterContainer>
+            <FilterLabel>Filter:</FilterLabel>
+            <FilterSelect
+              value={filter} // Set the value of the select element
+              onChange={(e) => setFilter(e.target.value)} // Update the filter state on change
+            >
+              <option value="owned">Owned by Me</option>
+              <option value="shared">Shared with Me</option>
+            </FilterSelect>
+          </FilterContainer>
           <ColumnNamesContainer>
             <ColumnName>Name</ColumnName>
             <ColumnName>Created</ColumnName>
             <ColumnName>Contributors</ColumnName>
-            <OptionsPadding />
+            {filter === "owned" && <OptionsPadding />}
           </ColumnNamesContainer>
           <StudyGuideListContainer>
-            {studyGuides?.length > 0 ? (
+            {filteredStudyGuides?.length > 0 ? (
               <ul>
-                {studyGuides.map((guide) => {
+                {filteredStudyGuides.map((guide) => {
                   return (
                     <StudyGuideListItem key={guide.id}>
                       <StudyGuideLink onClick={() => handleView(guide.id)}>
@@ -170,7 +197,7 @@ const MyStudyGuides = () => {
                       <StudyGuideContributors>
                         {guide.contributors.map((contributor) => {
                           return (
-                            <div key={contributor}>
+                            <Contributor key={contributor}>
                               <FontAwesomeIcon
                                 icon={faUserCircle}
                                 size="lg"
@@ -188,7 +215,7 @@ const MyStudyGuides = () => {
                                   padding: "8px",
                                 }}
                               />
-                            </div>
+                            </Contributor>
                           );
                         })}
                       </StudyGuideContributors>
@@ -203,11 +230,13 @@ const MyStudyGuides = () => {
                   );
                 })}
               </ul>
+            ) : !studyGuidesLoaded ? (
+              <StudyGuidesInfoText>Loading...</StudyGuidesInfoText>
             ) : (
-              <NoStudyGuides>
+              <StudyGuidesInfoText>
                 No study guides found.{" "}
                 {!isLoggedIn && "Log in to view your study guides."}
-              </NoStudyGuides>
+              </StudyGuidesInfoText>
             )}
           </StudyGuideListContainer>
         </TableContainer>
@@ -242,6 +271,29 @@ const TopContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 32px;
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 16px;
+`;
+
+const FilterLabel = styled.label`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 8px;
+`;
+
+const FilterSelect = styled.select`
+  padding: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+  background-color: #f6f4f3;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const PageTitle = styled.h1`
@@ -344,6 +396,10 @@ const StudyGuideContributors = styled.div`
   color: #9c9c9c;
 `;
 
+const Contributor = styled.div`
+  margin-right: 8px;
+`;
+
 const StudyGuideDeleteButton = styled.button`
   display: flex;
   flex: 0.1;
@@ -375,7 +431,7 @@ const ProgressWrapper = styled.div`
   height: 100px;
 `;
 
-const NoStudyGuides = styled.p`
+const StudyGuidesInfoText = styled.p`
   font-size: 1rem;
   margin: 16px;
 `;
