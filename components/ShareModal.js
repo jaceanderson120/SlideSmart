@@ -52,7 +52,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
       >
         <ModalContent>
           <h2>Share Study Guide</h2>
-          <SearchField
+          <EmailField
             type="text"
             placeholder="Enter an email address..."
             value={shareEmail}
@@ -95,7 +95,7 @@ const ModalContent = styled.div`
   align-items: center;
 `;
 
-const SearchField = styled.input`
+const EmailField = styled.input`
   width: 100%;
   padding: 8px;
   margin: 16px 0;

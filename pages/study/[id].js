@@ -12,7 +12,11 @@ import Link from "next/link";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import ShareModal from "@/components/ShareModal";
-import { fetchStudyGuide, updateStudyGuideFileName } from "@/firebase/database";
+import {
+  fetchStudyGuide,
+  updateStudyGuideFileName,
+  hasAccessToStudyGuide,
+} from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -44,20 +48,39 @@ const Study = () => {
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const { currentUser } = useStateContext();
+  const { currentUser, loading } = useStateContext();
 
-  // Fetch the study guide data from Firestore on page load
   useEffect(() => {
-    const fetchData = async () => {
-      if (id) {
+    const checkAccessAndFetchData = async () => {
+      // If the state context is still loading, wait for it to finish
+      if (loading) {
+        return;
+      }
+
+      // If the user is not logged in, redirect them to the login page
+      if (!currentUser) {
+        router.push("/login");
+        return;
+      }
+
+      // If the user is logged in, check if they have access to the study guide
+      if (id && currentUser) {
+        const hasAccess = await hasAccessToStudyGuide(id, currentUser.uid);
+        // If the user does not have access to the study guide, redirect them to their study guides page
+        if (!hasAccess) {
+          router.push("/myStudyGuides");
+          return;
+        }
+
+        // If the user has access to the study guide, fetch the study guide data
         const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
         setStudyGuide(fetchedStudyGuide);
         setFileName(fileName);
       }
     };
 
-    fetchData();
-  }, [id]);
+    checkAccessAndFetchData();
+  }, [id, currentUser, router, loading]);
 
   // Function to handle opening the share modal
   const handleShareClick = () => {
@@ -214,7 +237,7 @@ const Study = () => {
             >
               {isFileShown ? "Hide File" : "Show File"}
             </StyledMenuItem>
-            {studyGuide.createdBy === currentUser.uid && (
+            {studyGuide.createdBy === currentUser?.uid && (
               <StyledMenuItem
                 onClick={() => {
                   handleShareClick();

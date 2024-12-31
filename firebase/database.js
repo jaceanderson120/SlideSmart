@@ -209,6 +209,18 @@ const shareStudyGuide = async (studyGuideId, uid) => {
   }
 };
 
+// Check if a user has access to a study guide
+// Input: study guide ID and user uid
+// Output: Boolean indicating if the user has access to the study guide
+const hasAccessToStudyGuide = async (studyGuideId, uid) => {
+  const studyGuideDocRef = doc(db, "studyGuides", studyGuideId);
+  const studyGuideDoc = await getDoc(studyGuideDocRef);
+  if (studyGuideDoc.exists()) {
+    const { createdBy, contributors } = studyGuideDoc.data();
+    return createdBy === uid || contributors.includes(uid);
+  }
+};
+
 export {
   uploadStudyGuideToFirebase,
   getUserStudyGuides,
@@ -219,4 +231,5 @@ export {
   getUserDisplayName,
   getUserUidFromEmail,
   shareStudyGuide,
+  hasAccessToStudyGuide,
 };
