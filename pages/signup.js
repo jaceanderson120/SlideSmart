@@ -1,29 +1,46 @@
 "use client";
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
+import { storeUserInfo } from "@/firebase/database";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [agreed, setAgreed] = useState(false); // State for agreement checkbox
   const router = useRouter();
 
   const signup = (e) => {
     e.preventDefault(); // Prevent page reload
 
+    // Check if all fields are filled
+    if (!email || !password || !firstName || !lastName) {
+      const notify = () =>
+        toast.error("Please fill out all fields before signing up.");
+      notify();
+      return;
+    }
+
     if (!agreed) {
-      alert("You must agree to the Terms of Service and Privacy Policy.");
+      toast.error("You must agree to the Terms of Service and Privacy Policy.");
       return; // Prevent signup if not agreed
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
+        // Update user profile with first and last name
+        await updateProfile(user, {
+          displayName: `${firstName} ${lastName}`,
+        });
+        await storeUserInfo(user.uid, `${firstName} ${lastName}`, email);
         router.push("/");
       })
       .catch((error) => {
@@ -34,18 +51,31 @@ const Signup = () => {
   return (
     <>
       <Navbar />
+      <ToastContainer position="top-right" />
       <Section>
         <Title>Create an Account</Title>
         <Form onSubmit={signup}>
           <Input
+            type="text"
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <Input
             type="email"
-            placeholder="Enter your email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             type="password"
-            placeholder="Enter your password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
