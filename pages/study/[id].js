@@ -25,7 +25,9 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
+import Chatbot from "@/components/Chatbot";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -44,6 +46,7 @@ const Study = () => {
   const [isTopicsShown, setIsTopicsShown] = useState(true);
   const [isFileShown, setIsFileShown] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [fileName, setFileName] = useState("");
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
@@ -380,6 +383,8 @@ const Study = () => {
             </InfoSubContainer>
           </InfoContainer>
           {isFileShown && <FileContainer>{content}</FileContainer>}
+          {/* Pass studyGuide to Chatbot component */}
+          {isChatbotShown && <Chatbot studyGuide={studyGuide} />}
         </OutputSection>
       </Section>
       <Footer />
@@ -387,6 +392,12 @@ const Study = () => {
         studyGuideId={id}
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
+      />
+      <ChatbotIcon
+        icon={faMessage}
+        flip="horizontal"
+        swapOpacity
+        onClick={() => setIsChatbotShown(!isChatbotShown)}
       />
     </>
   );
@@ -412,7 +423,7 @@ const Section = styled.div`
 const Title = styled.input`
   border: none;
   background-color: #f6f4f3;
-  font-size: 40px;
+  font-size: 3rem;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -426,7 +437,6 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
@@ -468,7 +478,7 @@ const TopicTitle = styled.div`
   border-bottom: 2px solid #f03a47;
   color: #f03a47;
   padding-bottom: 16px;
-  font-size: 30px;
+  font-size: 2rem;
   font-weight: bold;
   margin: 32px;
 `;
@@ -529,7 +539,7 @@ const TopicHeaderContainer = styled.div`
 `;
 
 const TopicHeaderTitle = styled.div`
-  font-size: 30px;
+  font-size: 2rem;
   font-weight: bold;
   background-color: #7fa3ff58;
   border-radius: 10px;
@@ -538,7 +548,7 @@ const TopicHeaderTitle = styled.div`
 
 const TopicSummary = styled.div`
   display: flex;
-  font-size: 21px;
+  font-size: 1.5rem;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -549,7 +559,7 @@ const TopicSummary = styled.div`
 
 const TopicVideo = styled.div`
   display: flex;
-  font-size: 21px;
+  font-size: 1.5rem;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -567,7 +577,7 @@ const ImageAndTitle = styled.div`
 
 const TopicQuestion = styled.div`
   display: flex;
-  font-size: 21px;
+  font-size: 1.5rem;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -584,7 +594,7 @@ const TopicAnswerContainer = styled.div`
 
 const TopicAnswer = styled.div`
   display: flex;
-  font-size: 21px;
+  font-size: 1.5rem;
   justify-content: space-between;
   text-align: left;
   padding: 16px;
@@ -594,7 +604,7 @@ const TopicAnswer = styled.div`
 
 const TopicExample = styled.div`
   display: flex;
-  font-size: 21px;
+  font-size: 1.5rem;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -607,7 +617,7 @@ const TopicName = styled.a`
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;
-  font-size: 21px;
+  font-size: 1.5rem;
   text-decoration: none;
   color: inherit;
   transition: background-color 0.3s;
@@ -621,5 +631,19 @@ const TopicName = styled.a`
     background-color: #f03a4770;
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
+  }
+`;
+
+const ChatbotIcon = styled(FontAwesomeIcon)`
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  color: #000000;
+  cursor: pointer;
+  font-size: 2.5rem;
+  z-index: 1000;
+
+  &:hover {
+    color: #f03a47;
   }
 `;
