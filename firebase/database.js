@@ -122,6 +122,18 @@ const updateStudyGuideFileName = async (id, fileName) => {
   await updateDoc(studyGuideDocRef, { fileName });
 };
 
+// Updates the extracted data of a study guide in Firestore
+// Input: study guide ID and new extracted data
+// Output: None
+const updateStudyGuideExtractedData = async (id, extractedData) => {
+  // Ensure extracted data is a string
+  if (typeof extractedData !== "string") {
+    extractedData = JSON.stringify(extractedData);
+  }
+  const studyGuideDocRef = doc(db, "studyGuides", id);
+  await updateDoc(studyGuideDocRef, { extractedData });
+};
+
 // Delete a study guide from Firestore
 // Input: study guide ID
 // Output: None
@@ -226,6 +238,7 @@ export {
   getUserStudyGuides,
   fetchStudyGuide,
   updateStudyGuideFileName,
+  updateStudyGuideExtractedData,
   deleteStudyGuide,
   storeUserInfo,
   getUserDisplayName,

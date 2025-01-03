@@ -15,6 +15,7 @@ import ShareModal from "@/components/ShareModal";
 import {
   fetchStudyGuide,
   updateStudyGuideFileName,
+  updateStudyGuideExtractedData,
   hasAccessToStudyGuide,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -119,10 +120,19 @@ const Study = () => {
     }
   };
 
-  // Handle pressing Enter key to blur the input field
+  // Handle pressing Enter key to blur the title input field
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       titleInputRef.current.blur();
+    }
+  };
+
+  // Save the extracted data to Firestore when the user changes it
+  const updateExtractedData = (extractedData) => {
+    if (studyGuide) {
+      // Ensure that the extracted data is a string before saving it to Firestore
+      const extractedData = JSON.stringify(studyGuide.extractedData);
+      updateStudyGuideExtractedData(studyGuide.id, extractedData);
     }
   };
 
@@ -201,6 +211,24 @@ const Study = () => {
     }));
   };
 
+  const updateStudyGuideObject = (topic, key, value) => {
+    console.log("Prev: ", studyGuide);
+    setStudyGuide((prev) => {
+      const updatedData = {
+        ...prev,
+        extractedData: {
+          ...prev.extractedData,
+          [topic]: {
+            ...prev.extractedData[topic],
+            [key]: value,
+          },
+        },
+      };
+      console.log("Updated: ", updatedData);
+      return updatedData;
+    });
+  };
+
   return (
     <>
       <Navbar />
@@ -244,6 +272,10 @@ const Study = () => {
             </StyledMenuItem>
             <StyledMenuItem
               onClick={() => {
+                if (editMode) {
+                  // Save the extracted data to Firestore when the user changes it
+                  updateExtractedData(studyGuide.extractedData);
+                }
                 setEditMode(!editMode);
                 handleClose();
               }}
@@ -311,6 +343,9 @@ const Study = () => {
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "summary", text);
+                          }}
                           defaultValue={
                             studyGuide.extractedData[key]["summary"]
                           }
@@ -340,6 +375,9 @@ const Study = () => {
                       <TopicExample>
                         <strong style={{ fontWeight: "bold" }}>Example:</strong>
                         <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "example", text);
+                          }}
                           defaultValue={
                             studyGuide.extractedData[key]["example"]
                           }
@@ -359,6 +397,9 @@ const Study = () => {
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "question", text);
+                          }}
                           defaultValue={
                             studyGuide.extractedData[key]["question"]
                           }
@@ -384,6 +425,9 @@ const Study = () => {
                         </TopicAnswerContainer>
                         {collapsedAnswers[key] && (
                           <AutoResizeTextArea
+                            onChange={(text) => {
+                              updateStudyGuideObject(key, "answer", text);
+                            }}
                             defaultValue={
                               studyGuide.extractedData[key]["answer"]
                             }
@@ -535,6 +579,7 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   flex: 2.5;
   height: 80vh;
+  width: 100%;
   position: relative;
   gap: 32px;
   overflow: auto;

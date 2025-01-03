@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const AutoResizeTextArea = ({ defaultValue, editMode }) => {
+const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
   const textAreaRef = useRef(null);
 
   const adjustHeight = () => {
@@ -20,8 +20,9 @@ const AutoResizeTextArea = ({ defaultValue, editMode }) => {
     <TextArea
       ref={textAreaRef}
       defaultValue={defaultValue}
-      onChange={() => {
+      onChange={(e) => {
         adjustHeight(); // Adjust height immediately on user input
+        onChange(e.target.value); // Pass the value to the parent component onChange function
       }}
       disabled={!editMode}
       $editMode={editMode} // Pass editMode to styled component
