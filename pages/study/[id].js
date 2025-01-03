@@ -28,6 +28,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
+import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -48,6 +49,7 @@ const Study = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [editMode, setEditMode] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -240,6 +242,14 @@ const Study = () => {
             >
               {isFileShown ? "Hide File" : "Show File"}
             </StyledMenuItem>
+            <StyledMenuItem
+              onClick={() => {
+                setEditMode(!editMode);
+                handleClose();
+              }}
+            >
+              {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
+            </StyledMenuItem>
             {studyGuide.createdBy === currentUser?.uid && (
               <StyledMenuItem
                 onClick={() => {
@@ -252,6 +262,7 @@ const Study = () => {
             )}
           </Menu>
         </HeaderSection>
+        {editMode && <EditModeText>Edit Mode Enabled!</EditModeText>}
         <OutputSection>
           {isTopicsShown && (
             <TopicContainer>
@@ -299,7 +310,12 @@ const Study = () => {
                             Explanation:
                           </strong>
                         </ImageAndTitle>
-                        {studyGuide.extractedData[key]["summary"]}
+                        <AutoResizeTextArea
+                          defaultValue={
+                            studyGuide.extractedData[key]["summary"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicSummary>
                       <TopicVideo>
                         <ImageAndTitle>
@@ -323,7 +339,12 @@ const Study = () => {
                       </TopicVideo>
                       <TopicExample>
                         <strong style={{ fontWeight: "bold" }}>Example:</strong>
-                        {studyGuide.extractedData[key]["example"]}
+                        <AutoResizeTextArea
+                          defaultValue={
+                            studyGuide.extractedData[key]["example"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicExample>
                       <TopicQuestion>
                         <ImageAndTitle>
@@ -337,9 +358,14 @@ const Study = () => {
                             Practice Problem:
                           </strong>
                         </ImageAndTitle>
-                        {studyGuide.extractedData[key]["question"]}
+                        <AutoResizeTextArea
+                          defaultValue={
+                            studyGuide.extractedData[key]["question"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicQuestion>
-                      <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
+                      <TopicAnswer id={key}>
                         <TopicAnswerContainer>
                           <ImageAndTitle>
                             <Image
@@ -352,12 +378,18 @@ const Study = () => {
                               Answer:
                             </strong>
                           </ImageAndTitle>
-                          <span>
+                          <span onClick={() => toggleAnswer(key)}>
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
                           </span>
                         </TopicAnswerContainer>
-                        {collapsedAnswers[key] &&
-                          studyGuide.extractedData[key]["answer"]}
+                        {collapsedAnswers[key] && (
+                          <AutoResizeTextArea
+                            defaultValue={
+                              studyGuide.extractedData[key]["answer"]
+                            }
+                            editMode={editMode}
+                          />
+                        )}
                       </TopicAnswer>
                     </>
                   )}
@@ -646,4 +678,12 @@ const ChatbotIcon = styled(FontAwesomeIcon)`
   &:hover {
     color: #f03a47;
   }
+`;
+
+const EditModeText = styled.p`
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f03a47;
 `;
