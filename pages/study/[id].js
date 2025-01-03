@@ -212,7 +212,6 @@ const Study = () => {
   };
 
   const updateStudyGuideObject = (topic, key, value) => {
-    console.log("Prev: ", studyGuide);
     setStudyGuide((prev) => {
       const updatedData = {
         ...prev,
@@ -224,7 +223,6 @@ const Study = () => {
           },
         },
       };
-      console.log("Updated: ", updatedData);
       return updatedData;
     });
   };
