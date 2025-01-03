@@ -532,6 +532,7 @@ const OutputSection = styled.div`
   flex-direction: row;
   flex-grow: 1;
   gap: 24px;
+  width: 100%;
 `;
 
 const TopicContainer = styled.div`
