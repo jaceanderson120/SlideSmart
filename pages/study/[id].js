@@ -292,7 +292,11 @@ const Study = () => {
             )}
           </Menu>
         </HeaderSection>
-        {editMode && <EditModeText>Edit Mode Enabled!</EditModeText>}
+        {editMode && (
+          <EditModeText>
+            Edit Mode Enabled! Disable Edit Mode to save any edits!
+          </EditModeText>
+        )}
         <OutputSection>
           {isTopicsShown && (
             <TopicContainer>
