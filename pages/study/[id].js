@@ -30,6 +30,7 @@ import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
+import { toast } from "react-toastify";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -227,6 +228,23 @@ const Study = () => {
     });
   };
 
+  // Function to handle when the user clicks the edit mode option in the menu
+  const handleEditClicked = () => {
+    if (editMode) {
+      // Save the extracted data to Firestore when the user changes it
+      updateExtractedData(studyGuide.extractedData);
+      toast.info(
+        "Edit Mode has been disabled. Your study guide has been saved successfully!"
+      );
+    } else {
+      toast.info(
+        "Edit Mode has been enabled. Make your changes and disable Edit Mode to save!"
+      );
+    }
+    setEditMode(!editMode);
+    handleClose();
+  };
+
   return (
     <>
       <Navbar />
@@ -268,16 +286,7 @@ const Study = () => {
             >
               {isFileShown ? "Hide File" : "Show File"}
             </StyledMenuItem>
-            <StyledMenuItem
-              onClick={() => {
-                if (editMode) {
-                  // Save the extracted data to Firestore when the user changes it
-                  updateExtractedData(studyGuide.extractedData);
-                }
-                setEditMode(!editMode);
-                handleClose();
-              }}
-            >
+            <StyledMenuItem onClick={handleEditClicked}>
               {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
             </StyledMenuItem>
             {studyGuide.createdBy === currentUser?.uid && (
