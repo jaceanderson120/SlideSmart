@@ -15,6 +15,7 @@ import ShareModal from "@/components/ShareModal";
 import {
   fetchStudyGuide,
   updateStudyGuideFileName,
+  updateStudyGuideExtractedData,
   hasAccessToStudyGuide,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +29,8 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
+import AutoResizeTextArea from "@/components/AutoResizeTextArea";
+import { toast } from "react-toastify";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -48,6 +51,7 @@ const Study = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [editMode, setEditMode] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -117,10 +121,19 @@ const Study = () => {
     }
   };
 
-  // Handle pressing Enter key to blur the input field
+  // Handle pressing Enter key to blur the title input field
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       titleInputRef.current.blur();
+    }
+  };
+
+  // Save the extracted data to Firestore when the user changes it
+  const updateExtractedData = (extractedData) => {
+    if (studyGuide) {
+      // Ensure that the extracted data is a string before saving it to Firestore
+      const extractedData = JSON.stringify(studyGuide.extractedData);
+      updateStudyGuideExtractedData(studyGuide.id, extractedData);
     }
   };
 
@@ -199,6 +212,39 @@ const Study = () => {
     }));
   };
 
+  const updateStudyGuideObject = (topic, key, value) => {
+    setStudyGuide((prev) => {
+      const updatedData = {
+        ...prev,
+        extractedData: {
+          ...prev.extractedData,
+          [topic]: {
+            ...prev.extractedData[topic],
+            [key]: value,
+          },
+        },
+      };
+      return updatedData;
+    });
+  };
+
+  // Function to handle when the user clicks the edit mode option in the menu
+  const handleEditClicked = () => {
+    if (editMode) {
+      // Save the extracted data to Firestore when the user changes it
+      updateExtractedData(studyGuide.extractedData);
+      toast.info(
+        "Edit Mode has been disabled. Your study guide has been saved successfully!"
+      );
+    } else {
+      toast.info(
+        "Edit Mode has been enabled. Make your changes and disable Edit Mode to save!"
+      );
+    }
+    setEditMode(!editMode);
+    handleClose();
+  };
+
   return (
     <>
       <Navbar />
@@ -240,6 +286,9 @@ const Study = () => {
             >
               {isFileShown ? "Hide File" : "Show File"}
             </StyledMenuItem>
+            <StyledMenuItem onClick={handleEditClicked}>
+              {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
+            </StyledMenuItem>
             {studyGuide.createdBy === currentUser?.uid && (
               <StyledMenuItem
                 onClick={() => {
@@ -252,6 +301,11 @@ const Study = () => {
             )}
           </Menu>
         </HeaderSection>
+        {editMode && (
+          <EditModeText>
+            Edit Mode Enabled! Disable Edit Mode to save any edits!
+          </EditModeText>
+        )}
         <OutputSection>
           {isTopicsShown && (
             <TopicContainer>
@@ -299,7 +353,15 @@ const Study = () => {
                             Explanation:
                           </strong>
                         </ImageAndTitle>
-                        {studyGuide.extractedData[key]["summary"]}
+                        <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "summary", text);
+                          }}
+                          defaultValue={
+                            studyGuide.extractedData[key]["summary"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicSummary>
                       <TopicVideo>
                         <ImageAndTitle>
@@ -323,7 +385,15 @@ const Study = () => {
                       </TopicVideo>
                       <TopicExample>
                         <strong style={{ fontWeight: "bold" }}>Example:</strong>
-                        {studyGuide.extractedData[key]["example"]}
+                        <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "example", text);
+                          }}
+                          defaultValue={
+                            studyGuide.extractedData[key]["example"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicExample>
                       <TopicQuestion>
                         <ImageAndTitle>
@@ -337,9 +407,17 @@ const Study = () => {
                             Practice Problem:
                           </strong>
                         </ImageAndTitle>
-                        {studyGuide.extractedData[key]["question"]}
+                        <AutoResizeTextArea
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "question", text);
+                          }}
+                          defaultValue={
+                            studyGuide.extractedData[key]["question"]
+                          }
+                          editMode={editMode}
+                        />
                       </TopicQuestion>
-                      <TopicAnswer id={key} onClick={() => toggleAnswer(key)}>
+                      <TopicAnswer id={key}>
                         <TopicAnswerContainer>
                           <ImageAndTitle>
                             <Image
@@ -352,12 +430,21 @@ const Study = () => {
                               Answer:
                             </strong>
                           </ImageAndTitle>
-                          <span>
+                          <span onClick={() => toggleAnswer(key)}>
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
                           </span>
                         </TopicAnswerContainer>
-                        {collapsedAnswers[key] &&
-                          studyGuide.extractedData[key]["answer"]}
+                        {collapsedAnswers[key] && (
+                          <AutoResizeTextArea
+                            onChange={(text) => {
+                              updateStudyGuideObject(key, "answer", text);
+                            }}
+                            defaultValue={
+                              studyGuide.extractedData[key]["answer"]
+                            }
+                            editMode={editMode}
+                          />
+                        )}
                       </TopicAnswer>
                     </>
                   )}
@@ -458,6 +545,7 @@ const OutputSection = styled.div`
   flex-direction: row;
   flex-grow: 1;
   gap: 24px;
+  width: 100%;
 `;
 
 const TopicContainer = styled.div`
@@ -503,6 +591,7 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   flex: 2.5;
   height: 80vh;
+  width: 100%;
   position: relative;
   gap: 32px;
   overflow: auto;
@@ -646,4 +735,12 @@ const ChatbotIcon = styled(FontAwesomeIcon)`
   &:hover {
     color: #f03a47;
   }
+`;
+
+const EditModeText = styled.p`
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f03a47;
 `;
