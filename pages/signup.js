@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
@@ -6,7 +5,7 @@ import { useRouter } from "next/router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { storeUserInfo } from "@/firebase/database";
 
 const Signup = () => {
@@ -51,7 +50,6 @@ const Signup = () => {
   return (
     <>
       <Navbar />
-      <ToastContainer position="top-right" />
       <Section>
         <Title>Create an Account</Title>
         <Form onSubmit={signup}>

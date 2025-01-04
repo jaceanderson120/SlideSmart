@@ -10,6 +10,7 @@ import "@fontsource/public-sans/600.css";
 import "@fontsource/public-sans/700.css";
 import "@fontsource/public-sans/800.css";
 import "@fontsource/public-sans/900.css";
+import { ToastContainer } from "react-toastify";
 
 export const GlobalStyles = createGlobalStyle`
 * {
@@ -38,7 +39,7 @@ export default function App({ Component, pageProps }) {
       <StateContext>
         <Component {...pageProps} />
       </StateContext>
-      
+      <ToastContainer position="top-right" />
     </>
   );
 }

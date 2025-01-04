@@ -21,7 +21,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -149,7 +149,6 @@ const MyStudyGuides = () => {
 
   return (
     <Container>
-      <ToastContainer position="top-right" />
       <Navbar />
       {isLoading ? (
         <Overlay>
