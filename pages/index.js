@@ -7,7 +7,7 @@ import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +63,6 @@ export default function Home() {
 
   return (
     <>
-      <ToastContainer position="top-right" />
       <Navbar />
       {isLoading ? (
         <Overlay>

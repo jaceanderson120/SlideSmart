@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { getUserUidFromEmail, shareStudyGuide } from "@/firebase/database";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useStateContext } from "@/context/StateContext";
 
 Modal.setAppElement("#__next");
@@ -43,7 +43,6 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
 
   return (
     <>
-      <ToastContainer position="top-right" />
       <Modal
         isOpen={isOpen}
         onRequestClose={onRequestClose}
