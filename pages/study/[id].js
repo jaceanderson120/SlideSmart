@@ -316,21 +316,18 @@ const Study = () => {
         )}
         <OutputSection>
           {isTopicsShown && (
-            <TopicContainer>
-              <TopicTitle>Topics</TopicTitle>
-              <TopicScrollableContainer>
-                {studyGuide.extractedData &&
-                  Object.keys(studyGuide.extractedData).map((key) => (
-                    <TopicName
-                      href={`#${key}`}
-                      key={key}
-                      className={activeTopic === key ? "active" : ""}
-                    >
-                      {key}
-                    </TopicName>
-                  ))}
-              </TopicScrollableContainer>
-            </TopicContainer>
+            <ContentContainer>
+              {studyGuide.extractedData &&
+                Object.keys(studyGuide.extractedData).map((key) => (
+                  <TopicName
+                    href={`#${key}`}
+                    key={key}
+                    className={activeTopic === key ? "active" : ""}
+                  >
+                    {key}
+                  </TopicName>
+                ))}
+            </ContentContainer>
           )}
           <InfoContainer>
             {studyGuide.extractedData &&
@@ -512,6 +509,7 @@ export default Study;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100vh;
 `;
 
 const Section = styled.div`
@@ -523,32 +521,37 @@ const Section = styled.div`
   padding: 24px;
   text-align: center;
   color: #000000;
-  background-color: #f6f4f3;
+  background-color: #ffffff;
   gap: 24px;
+  overflow: auto;
 `;
 
 const Title = styled.input`
   border: none;
-  background-color: #f6f4f3;
+  background-color: transparent;
   font-size: ${fontSize.heading};
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  flex-grow: 1;
+  padding: 8px;
   text-align: center;
+  background-color: #f03a4770;
+  border-radius: 10px;
 `;
 
 const HeaderSection = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   font-size: ${fontSize.default};
+  position: absolute;
+  right: 32px;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
@@ -565,60 +568,35 @@ const StyledMenuItem = styled(MenuItem)`
 const OutputSection = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
   gap: 24px;
   width: 100%;
+  overflow: auto;
 `;
 
-const TopicContainer = styled.div`
+const ContentContainer = styled.div`
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   flex: 0.75;
-  height: 80vh;
-  background-color: #f03a4733;
+  background-color: transparent;
   border-radius: 10px;
-  position: relative;
   justify-content: flex-start;
-  overflow: hidden;
-  border: 2px solid #f03a47;
-`;
-
-const TopicTitle = styled.div`
-  border-bottom: 2px solid #f03a47;
-  color: #f03a47;
-  padding-bottom: 16px;
-  font-size: ${fontSize.subheading};
-  font-weight: bold;
-  margin: 32px;
-`;
-
-const TopicScrollableContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  height: 100%;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  align-items: center;
+  text-align: left;
+  gap: 16px;
+  overflow: auto;
 `;
 
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: flex-start;
   align-items: flex-start;
   flex: 2.5;
-  height: 80vh;
   width: 100%;
   position: relative;
   gap: 32px;
   overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 `;
 
 const FileContainer = styled.div`
@@ -631,16 +609,17 @@ const FileContainer = styled.div`
 `;
 
 const InfoSubContainer = styled.div`
-  background-color: #3a6df00f;
+  background-color: #f6f4f3;
   border-radius: 10px;
   padding: 16px;
-  border: 2px solid #7fa3ff;
   width: 100%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const TopicHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
   align-items: center;
   margin-left: 16px;
   margin-top: 30px;
@@ -652,9 +631,16 @@ const TopicHeaderContainer = styled.div`
 const TopicHeaderTitle = styled.div`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  background-color: #7fa3ff58;
-  border-radius: 10px;
   padding: 16px;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 10px;
+  }
 `;
 
 const ImageAndTitle = styled.div`
@@ -683,13 +669,16 @@ const TopicSubContainer = styled.div`
 `;
 
 const TopicName = styled.a`
+  width: 100%;
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;
   font-size: ${fontSize.label};
   text-decoration: none;
   color: inherit;
+  background-color: #f03a4733;
   transition: background-color 0.3s;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
 
   &:hover {
@@ -715,7 +704,7 @@ const ShowHideButton = styled.button`
   padding: 8px;
   font-size: ${fontSize.label};
   color: black;
-  background-color: #7fa3ff58;
+  background-color: #f03a4770;
   border: none;
   border-radius: 8px;
   cursor: pointer;
