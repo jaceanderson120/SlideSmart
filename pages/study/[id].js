@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import styled from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
@@ -247,7 +246,7 @@ const Study = () => {
   };
 
   return (
-    <>
+    <PageContainer>
       <Navbar />
       <Section>
         <HeaderSection>
@@ -499,27 +498,30 @@ const Study = () => {
           )}
         </OutputSection>
       </Section>
-      <Footer />
       <ShareModal
         studyGuideId={id}
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
       />
-    </>
+    </PageContainer>
   );
 };
 
 export default Study;
 
-// Styles
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Section = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 24px;
   text-align: center;
-  height: 100vh;
   color: #000000;
   background-color: #f6f4f3;
   gap: 24px;
