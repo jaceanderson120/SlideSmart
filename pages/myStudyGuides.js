@@ -34,7 +34,14 @@ const MyStudyGuides = () => {
   const [filter, setFilter] = useState("owned");
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { isLoggedIn, currentUser } = useStateContext();
+  const { isLoggedIn, currentUser, loading } = useStateContext();
+
+  // Check if the user is logged in and redirect to the login page if not
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      router.push("/login");
+    }
+  }, [loading, isLoggedIn, router]);
 
   // Fetch the study guides when the component mounts
   useEffect(() => {
@@ -242,10 +249,7 @@ const MyStudyGuides = () => {
             ) : !studyGuidesLoaded ? (
               <StudyGuidesInfoText>Loading...</StudyGuidesInfoText>
             ) : (
-              <StudyGuidesInfoText>
-                No study guides found.{" "}
-                {!isLoggedIn && "Log in to view your study guides."}
-              </StudyGuidesInfoText>
+              <StudyGuidesInfoText>No study guides found.</StudyGuidesInfoText>
             )}
           </StudyGuideListContainer>
         </TableContainer>
