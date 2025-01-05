@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import styled from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
+import textbook from "@/images/textbook.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
@@ -26,11 +26,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import { toast } from "react-toastify";
+import { fontSize } from "@/constants/fontSize";
+import StyledMenuItem from "@/components/StyledMenuItem";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -105,7 +106,7 @@ const Study = () => {
   };
 
   // Open the menu when the user clicks on the ellipsis icon
-  const handleClick = (event) => {
+  const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -117,7 +118,12 @@ const Study = () => {
   // Save the file name to Firestore when the input field is blurred
   const handleFileNameSave = async () => {
     if (studyGuide) {
-      updateStudyGuideFileName(studyGuide.id, fileName);
+      if (fileName.length < 1) {
+        setFileName("Untitled Study Guide");
+        updateStudyGuideFileName(studyGuide.id, "Untitled Study Guide");
+      } else {
+        updateStudyGuideFileName(studyGuide.id, fileName);
+      }
     }
   };
 
@@ -246,7 +252,7 @@ const Study = () => {
   };
 
   return (
-    <>
+    <PageContainer>
       <Navbar />
       <Section>
         <HeaderSection>
@@ -260,9 +266,10 @@ const Study = () => {
           />
           <StyledFontAwesomeIcon
             icon={faEllipsisVertical}
+            size="2x"
             aria-controls="simple-menu"
             aria-haspopup="true"
-            onClick={handleClick}
+            onClick={handleMenuClick}
           />
           <Menu
             keepMounted
@@ -289,6 +296,14 @@ const Study = () => {
             <StyledMenuItem onClick={handleEditClicked}>
               {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
             </StyledMenuItem>
+            <StyledMenuItem
+              onClick={() => {
+                setIsChatbotShown(!isChatbotShown);
+                handleClose();
+              }}
+            >
+              {isChatbotShown ? "Close Sola" : "Open Sola"}
+            </StyledMenuItem>
             {studyGuide.createdBy === currentUser?.uid && (
               <StyledMenuItem
                 onClick={() => {
@@ -308,21 +323,18 @@ const Study = () => {
         )}
         <OutputSection>
           {isTopicsShown && (
-            <TopicContainer>
-              <TopicTitle>Topics</TopicTitle>
-              <TopicScrollableContainer>
-                {studyGuide.extractedData &&
-                  Object.keys(studyGuide.extractedData).map((key) => (
-                    <TopicName
-                      href={`#${key}`}
-                      key={key}
-                      className={activeTopic === key ? "active" : ""}
-                    >
-                      {key}
-                    </TopicName>
-                  ))}
-              </TopicScrollableContainer>
-            </TopicContainer>
+            <ContentContainer>
+              {studyGuide.extractedData &&
+                Object.keys(studyGuide.extractedData).map((key) => (
+                  <TopicName
+                    href={`#${key}`}
+                    key={key}
+                    className={activeTopic === key ? "active" : ""}
+                  >
+                    {key}
+                  </TopicName>
+                ))}
+            </ContentContainer>
           )}
           <InfoContainer>
             {studyGuide.extractedData &&
@@ -341,16 +353,16 @@ const Study = () => {
                   </TopicHeaderContainer>
                   {!collapsedTopics[key] && (
                     <>
-                      <TopicSummary>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={pencil}
                             alt="Pencil Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Explanation:
+                            Summary:
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
@@ -362,14 +374,14 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicSummary>
-                      <TopicVideo>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={youtube}
                             alt="YouTube Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>Video:</strong>
                         </ImageAndTitle>
@@ -382,9 +394,19 @@ const Study = () => {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         ></iframe>
-                      </TopicVideo>
-                      <TopicExample>
-                        <strong style={{ fontWeight: "bold" }}>Example:</strong>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={textbook}
+                            alt="Textbook Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Summary:
+                          </strong>
+                        </ImageAndTitle>
                         <AutoResizeTextArea
                           onChange={(text) => {
                             updateStudyGuideObject(key, "example", text);
@@ -394,17 +416,17 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicExample>
-                      <TopicQuestion>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={question}
                             alt="Question Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Practice Problem:
+                            Question:
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
@@ -416,23 +438,23 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicQuestion>
-                      <TopicAnswer id={key}>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <TopicAnswerContainer>
                           <ImageAndTitle>
                             <Image
                               src={check}
                               alt="Check Mark Logo"
-                              width={64}
-                              height={64}
+                              width={48}
+                              height={48}
                             />
                             <strong style={{ fontWeight: "bold" }}>
                               Answer:
                             </strong>
                           </ImageAndTitle>
-                          <span onClick={() => toggleAnswer(key)}>
+                          <ShowHideButton onClick={() => toggleAnswer(key)}>
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
-                          </span>
+                          </ShowHideButton>
                         </TopicAnswerContainer>
                         {collapsedAnswers[key] && (
                           <AutoResizeTextArea
@@ -445,7 +467,7 @@ const Study = () => {
                             editMode={editMode}
                           />
                         )}
-                      </TopicAnswer>
+                      </TopicSubContainer>
                     </>
                   )}
                 </InfoSubContainer>
@@ -455,7 +477,7 @@ const Study = () => {
                 <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
               </TopicHeaderContainer>
               <>
-                <TopicSummary>
+                <TopicSubContainer>
                   {studyGuide.googleSearchResults.map((search) => {
                     return (
                       <div key={search.title}>
@@ -465,75 +487,79 @@ const Study = () => {
                       </div>
                     );
                   })}
-                </TopicSummary>
+                </TopicSubContainer>
               </>
             </InfoSubContainer>
           </InfoContainer>
           {isFileShown && <FileContainer>{content}</FileContainer>}
           {/* Pass studyGuide to Chatbot component */}
-          {isChatbotShown && <Chatbot studyGuide={studyGuide} />}
+          {/* Pass function to chatbot that minimizes it */}
+          {isChatbotShown && (
+            <Chatbot
+              studyGuide={studyGuide}
+              setIsChatbotShown={setIsChatbotShown}
+            />
+          )}
         </OutputSection>
       </Section>
-      <Footer />
       <ShareModal
         studyGuideId={id}
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
       />
-      <ChatbotIcon
-        icon={faMessage}
-        flip="horizontal"
-        swapOpacity
-        onClick={() => setIsChatbotShown(!isChatbotShown)}
-      />
-    </>
+    </PageContainer>
   );
 };
 
 export default Study;
 
-// Styles
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
 const Section = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 24px;
   text-align: center;
-  height: 100vh;
   color: #000000;
-  background-color: #f6f4f3;
-  font-size: 2rem;
+  background-color: #ffffff;
   gap: 24px;
+  overflow: auto;
 `;
 
 const Title = styled.input`
   border: none;
-  background-color: #f6f4f3;
-  font-size: 3rem;
+  font-size: ${fontSize.heading};
+  font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  flex-grow: 1;
+  padding: 8px;
   text-align: center;
+  background-color: #f03a4770;
+  border-radius: 10px;
+  width: ${({ value }) => value.length + "ch"};
+  min-width: 20%;
+  max-width: 40%;
 `;
 
 const HeaderSection = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  &:hover {
-    transition: color 0.3s;
-    color: #f03a47;
-  }
-`;
-
-const StyledMenuItem = styled(MenuItem)`
+  position: absolute;
+  right: 32px;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
@@ -543,60 +569,35 @@ const StyledMenuItem = styled(MenuItem)`
 const OutputSection = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
   gap: 24px;
   width: 100%;
+  overflow: auto;
 `;
 
-const TopicContainer = styled.div`
+const ContentContainer = styled.div`
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   flex: 0.75;
-  height: 80vh;
-  background-color: #f03a4733;
+  background-color: transparent;
   border-radius: 10px;
-  position: relative;
   justify-content: flex-start;
-  overflow: hidden;
-  border: 2px solid #f03a47;
-`;
-
-const TopicTitle = styled.div`
-  border-bottom: 2px solid #f03a47;
-  color: #f03a47;
-  padding-bottom: 16px;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 32px;
-`;
-
-const TopicScrollableContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  height: 100%;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  align-items: center;
+  text-align: left;
+  gap: 16px;
+  overflow: auto;
 `;
 
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: flex-start;
   align-items: flex-start;
   flex: 2.5;
-  height: 80vh;
   width: 100%;
   position: relative;
   gap: 32px;
   overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 `;
 
 const FileContainer = styled.div`
@@ -609,16 +610,17 @@ const FileContainer = styled.div`
 `;
 
 const InfoSubContainer = styled.div`
-  background-color: #3a6df00f;
+  background-color: #f6f4f3;
   border-radius: 10px;
   padding: 16px;
-  border: 2px solid #7fa3ff;
   width: 100%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const TopicHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
   align-items: center;
   margin-left: 16px;
   margin-top: 30px;
@@ -628,33 +630,18 @@ const TopicHeaderContainer = styled.div`
 `;
 
 const TopicHeaderTitle = styled.div`
-  font-size: 2rem;
+  font-size: ${fontSize.subheading};
   font-weight: bold;
-  background-color: #7fa3ff58;
-  border-radius: 10px;
   padding: 16px;
-`;
 
-const TopicSummary = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const TopicVideo = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 10px;
+  }
 `;
 
 const ImageAndTitle = styled.div`
@@ -664,36 +651,16 @@ const ImageAndTitle = styled.div`
   gap: 16px;
 `;
 
-const TopicQuestion = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
 const TopicAnswerContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const TopicAnswer = styled.div`
+const TopicSubContainer = styled.div`
   display: flex;
-  font-size: 1.5rem;
-  justify-content: space-between;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const TopicExample = styled.div`
-  display: flex;
-  font-size: 1.5rem;
+  font-size: ${fontSize.label};
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -703,14 +670,20 @@ const TopicExample = styled.div`
 `;
 
 const TopicName = styled.a`
+  width: 100%;
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;
-  font-size: 1.5rem;
+  font-size: ${fontSize.label};
   text-decoration: none;
   color: inherit;
+  background-color: #f03a4733;
   transition: background-color 0.3s;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
+  // wrap text
+  white-space: normal;
+  word-wrap: break-word;
 
   &:hover {
     background-color: #f03a4770;
@@ -723,24 +696,25 @@ const TopicName = styled.a`
   }
 `;
 
-const ChatbotIcon = styled(FontAwesomeIcon)`
-  position: fixed;
-  bottom: 2%;
-  right: 2%;
-  color: #000000;
-  cursor: pointer;
-  font-size: 2.5rem;
-  z-index: 1000;
-
-  &:hover {
-    color: #f03a47;
-  }
-`;
-
 const EditModeText = styled.p`
   width: 100%;
   text-align: center;
-  font-size: 1rem;
+  font-size: ${fontSize.secondary};
   font-weight: bold;
   color: #f03a47;
+`;
+
+const ShowHideButton = styled.button`
+  padding: 8px;
+  font-size: ${fontSize.label};
+  color: black;
+  background-color: #f03a4770;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    transition: color 0.3s;
+  }
 `;

@@ -8,6 +8,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { toast } from "react-toastify";
+import { fontSize } from "@/constants/fontSize";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +85,12 @@ export default function Home() {
           </span>{" "}
           Make Sense
         </GradientSectionSlogan>
-        <p style={{ fontSize: "18px", marginTop: "20px", fontWeight: "500" }}>
+        <p
+          style={{
+            fontSize: fontSize.default,
+            marginTop: "20px",
+          }}
+        >
           A software tool that creates comprehensive/interactive Study Guides
           equipped<br></br> with plenty of useful resources to help you succeed
           in the classroom
@@ -162,13 +168,12 @@ const Section = styled.div`
   height: 100vh;
   background-color: #f6f4f3;
   color: #000000;
-  font-size: 2rem;
 `;
 
 const RegisterIcon = styled.div`
   color: white;
   transition: color 0.3s;
-  font-size: 25px;
+  font-size: ${fontSize.default};
   font-weight: bold;
   border-radius: 8px;
   background-color: #f03a47;
@@ -178,7 +183,7 @@ const RegisterIcon = styled.div`
 `;
 
 const LoginIcon = styled.div`
-  font-size: 25px;
+  font-size: ${fontSize.default};
   font-weight: bold;
   margin-right: 20px;
 `;
@@ -192,7 +197,6 @@ const GradientSection = styled.div`
   align-items: center;
   padding-top: 96px;
   text-align: center;
-  font-size: 2rem;
 `;
 
 const HowItWorksSection = styled.div`
@@ -201,12 +205,11 @@ const HowItWorksSection = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  font-size: 2rem;
   background-color: #f6f4f3;
 `;
 
 const HowItWorksSlogan = styled.h1`
-  font-size: 48px;
+  font-size: ${fontSize.heading};
   color: #000000;
   font-weight: bold;
 `;
@@ -243,20 +246,20 @@ const HowItWorksBoxDivider = styled.div`
 `;
 
 const Caption = styled.p`
-  font-size: 25px;
+  font-size: ${fontSize.default};
   margin-top: 16px;
   font-weight: bold;
   text-align: left;
 `;
 
 const Captionv2 = styled.p`
-  font-size: 20px;
+  font-size: ${fontSize.secondary};
   text-align: left;
   margin-top: 10px;
 `;
 
-const GradientSectionSlogan = styled.h1`
-  font-size: 60px;
+const GradientSectionSlogan = styled.p`
+  font-size: ${fontSize.heading};
   color: #000000;
   font-weight: bold;
   margin-top: 100px;
@@ -267,8 +270,8 @@ const SloganBreakLine = styled.div`
 `;
 
 const MakeBetterButton = styled.button`
-  padding: 25px 30px;
-  font-size: 35px;
+  padding: 16px;
+  font-size: ${fontSize.subheading};
   font-weight: bold;
   color: white;
   background-color: #f03a47;

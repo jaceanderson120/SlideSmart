@@ -7,6 +7,8 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { storeUserInfo } from "@/firebase/database";
+import { fontSize } from "@/constants/fontSize";
+import Link from "next/link";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -94,6 +96,9 @@ const Signup = () => {
             .
           </Label>
           <Button type="submit">Sign Up</Button>
+          <Login>
+            Already have an account? <Link href="/login">Login here</Link>
+          </Login>
         </Form>
       </Section>
       <Footer />
@@ -110,13 +115,13 @@ const Section = styled.div`
   height: 100vh;
   background-color: #f6f4f3;
   color: #000000;
-  font-size: 2rem;
   gap: 32px;
   flex-direction: column;
 `;
 
-const Title = styled.h1`
-  margin: 20px 0;
+const Title = styled.p`
+  font-size: ${fontSize.heading};
+  font-weight: bold;
 `;
 
 const Form = styled.form`
@@ -130,7 +135,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: ${fontSize.default};
   color: green;
   width: 300px;
 
@@ -142,7 +147,7 @@ const Input = styled.input`
 
 const Label = styled.label`
   margin: 10px 0;
-  font-size: 16px;
+  font-size: ${fontSize.secondary};
   text-align: left;
   display: flex;
   justify-content: center;
@@ -156,7 +161,7 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: ${fontSize.default};
   transition: color 0.3s;
 
   &:hover {
@@ -166,6 +171,11 @@ const Button = styled.button`
 
 const Checkbox = styled.input`
   margin-right: 5px;
+`;
+
+const Login = styled.div`
+  padding: 20px;
+  font-size: ${fontSize.secondary};
 `;
 
 export default Signup;

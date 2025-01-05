@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getUserUidFromEmail, shareStudyGuide } from "@/firebase/database";
 import { toast } from "react-toastify";
 import { useStateContext } from "@/context/StateContext";
+import { fontSize } from "@/constants/fontSize";
 
 Modal.setAppElement("#__next");
 
@@ -50,7 +51,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
         style={customStyles}
       >
         <ModalContent>
-          <h2>Share Study Guide</h2>
+          <ModalTitle>Share Study Guide</ModalTitle>
           <EmailField
             type="text"
             placeholder="Enter an email address..."
@@ -94,16 +95,21 @@ const ModalContent = styled.div`
   align-items: center;
 `;
 
+const ModalTitle = styled.p`
+  font-size: ${fontSize.heading};
+  font-weight: bold;
+`;
+
 const EmailField = styled.input`
   width: 100%;
   padding: 8px;
   margin: 16px 0;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
 `;
 
 const CloseButton = styled.button`
   padding: 8px;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
   font-weight: bold;
   color: white;
   background-color: #f03a47;
@@ -119,7 +125,7 @@ const CloseButton = styled.button`
 
 const ShareButton = styled.button`
   padding: 8px;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
   font-weight: bold;
   color: black;
   background-color: #f6f4f3;
