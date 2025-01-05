@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { fontSize } from "@/constants/fontSize";
 
 const TOS = () => {
   return (
@@ -207,19 +208,19 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2em;
+  font-size: ${fontSize.heading};
   margin-bottom: 10px;
   color: #333;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 1.5em;
+  font-size: ${fontSize.subheading};
   margin-top: 20px;
   color: #555;
 `;
 
 const Text = styled.p`
-  font-size: 1em;
+  font-size: ${fontSize.default};
   margin-bottom: 15px;
   color: #666;
 `;

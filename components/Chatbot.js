@@ -7,6 +7,7 @@ import {
   faMinimize,
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
+import { fontSize } from "@/constants/fontSize";
 
 const Chatbot = (props) => {
   const [messages, setMessages] = useState(() => {
@@ -164,7 +165,7 @@ const ChatbotHeader = styled.div`
 const IconContainer = styled.div`
   position: absolute;
   left: 8px;
-  font-size: 1.5rem;
+  font-size: ${fontSize.default};
   display: flex;
   gap: 8px;
 `;
@@ -182,7 +183,7 @@ const HeaderText = styled.p`
   flex-grow: 1;
   text-align: center;
   margin: 0;
-  font-size: 2rem;
+  font-size: ${fontSize.heading};
 `;
 
 const MessagesContainer = styled.div`
@@ -206,7 +207,7 @@ const BotMessageContainer = styled.div`
 `;
 
 const UserMessage = styled.div`
-  font-size: 1.25rem;
+  font-size: ${fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 4px;
@@ -216,7 +217,7 @@ const UserMessage = styled.div`
 `;
 
 const BotMessage = styled.div`
-  font-size: 1.25rem;
+  font-size: ${fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 4px;
@@ -237,7 +238,7 @@ const Input = styled.input`
   border: none;
   border-radius: 4px;
   margin-right: 8px;
-  font-size: 1.5rem;
+  font-size: ${fontSize.default};
   color: #000000;
 `;
 

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,6 +5,7 @@ import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
+import { fontSize } from "@/constants/fontSize";
 
 function Navbar() {
   const { isLoggedIn } = useStateContext();
@@ -16,7 +16,7 @@ function Navbar() {
 
   return (
     <NavbarSection>
-      <Image src={logo} alt="SlideSmart Logo" width={64} height={64} />
+      <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
@@ -61,7 +61,7 @@ const NavbarAboutLinks = styled.div`
     text-decoration: none;
     color: inherit;
     transition: color 0.3s;
-    font-size: 20px;
+    font-size: ${fontSize.default};
     font-weight: bold;
   }
 
@@ -78,7 +78,7 @@ const NavbarLoginStyle = styled.div`
     text-decoration: none;
     color: inherit;
     transition: color 0.3s;
-    font-size: 25px;
+    font-size: ${fontSize.default};
     font-weight: bold;
   }
 
@@ -95,7 +95,7 @@ const NavbarRegisterStyle = styled.div`
     text-decoration: none;
     color: white;
     transition: color 0.3s;
-    font-size: 25px;
+    font-size: ${fontSize.default};
     font-weight: bold;
     border-radius: 8px;
     background-color: #f03a47;
@@ -116,7 +116,7 @@ const NavbarLogoutStyle = styled.div`
     text-decoration: none;
     color: inherit;
     transition: color 0.3s;
-    font-size: 25px;
+    font-size: ${fontSize.default};
     font-weight: bold;
   }
 
@@ -131,7 +131,7 @@ const NavbarLoginLinks = styled.div`
   margin-right: 16px;
   padding: 6px;
   display: flex;
-  font-size: 25px;
+  font-size: ${fontSize.default};
   color: #000000;
   font-weight: bold;
 `;
@@ -141,7 +141,7 @@ const NavbarSlideSmart = styled.div`
 
   a {
     text-decoration: none;
-    font-size: 40px;
+    font-size: ${fontSize.heading};
     color: #f03a47;
     font-weight: bold;
   }

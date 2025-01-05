@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
+import { fontSize } from "@/constants/fontSize";
 
 const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
   const textAreaRef = useRef(null);
@@ -50,7 +51,7 @@ const TextArea = styled.textarea`
   width: 100%;
   color: #000000;
   height: auto;
-  font-size: 1.5rem;
+  font-size: ${fontSize.default};
   border: 2px dashed transparent;
   border-radius: 8px;
   padding: 8px;

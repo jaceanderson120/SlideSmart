@@ -22,6 +22,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
+import { fontSize } from "@/constants/fontSize";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -199,7 +200,7 @@ const MyStudyGuides = () => {
                   return (
                     <StudyGuideListItem key={guide.id}>
                       <StudyGuideLink onClick={() => handleView(guide.id)}>
-                        <h2>{guide.fileName}</h2>
+                        {guide.fileName}
                       </StudyGuideLink>
                       <StudyGuideCreated>{guide.createdAt}</StudyGuideCreated>
                       <StudyGuideContributors>
@@ -269,7 +270,6 @@ const Section = styled.div`
   text-align: center;
   flex-grow: 1;
   color: #000000;
-  font-size: 2rem;
   overflow-y: hidden;
   margin-bottom: 32px;
 `;
@@ -288,15 +288,14 @@ const FilterContainer = styled.div`
 `;
 
 const FilterLabel = styled.label`
-  font-size: 1rem;
+  font-size: ${fontSize.default};
   font-weight: bold;
   margin-right: 8px;
 `;
 
 const FilterSelect = styled.select`
   padding: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: ${fontSize.default};
   color: black;
   background-color: #f6f4f3;
   border: none;
@@ -304,8 +303,8 @@ const FilterSelect = styled.select`
   cursor: pointer;
 `;
 
-const PageTitle = styled.h1`
-  font-size: 2rem;
+const PageTitle = styled.p`
+  font-size: ${fontSize.heading};
   font-weight: bold;
   display: flex;
   flex: 1;
@@ -319,7 +318,7 @@ const ButtonContainer = styled.div`
 
 const CreateButton = styled.button`
   padding: 16px;
-  font-size: 1.5rem;
+  font-size: ${fontSize.label};
   font-weight: bold;
   color: white;
   background-color: #f03a47;
@@ -348,7 +347,7 @@ const ColumnName = styled.h2`
   margin: 16px;
   display: flex;
   flex: 1;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
   font-weight: bold;
 `;
 
@@ -382,7 +381,7 @@ const StudyGuideLink = styled.div`
   transition: background-color 0.3s;
   white-space: nowrap;
   overflow: hidden;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
 
   &:hover {
     color: #f03a47;
@@ -395,7 +394,7 @@ const StudyGuideCreated = styled.div`
   flex: 1;
   margin: 16px;
   color: #9c9c9c;
-  font-size: 1rem;
+  font-size: ${fontSize.default};
 `;
 
 const StudyGuideContributors = styled.div`
@@ -406,6 +405,7 @@ const StudyGuideContributors = styled.div`
 
 const Contributor = styled.div`
   margin-right: 8px;
+  font-size: ${fontSize.heading};
 `;
 
 const StudyGuideDeleteButton = styled.button`
@@ -440,6 +440,6 @@ const ProgressWrapper = styled.div`
 `;
 
 const StudyGuidesInfoText = styled.p`
-  font-size: 1rem;
+  font-size: ${fontSize.default};
   margin: 16px;
 `;

@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import styled from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
+import textbook from "@/images/textbook.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
@@ -30,6 +31,7 @@ import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import { toast } from "react-toastify";
+import { fontSize } from "@/constants/fontSize";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -348,16 +350,16 @@ const Study = () => {
                   </TopicHeaderContainer>
                   {!collapsedTopics[key] && (
                     <>
-                      <TopicSummary>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={pencil}
                             alt="Pencil Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Explanation:
+                            Summary:
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
@@ -369,14 +371,14 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicSummary>
-                      <TopicVideo>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={youtube}
                             alt="YouTube Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>Video:</strong>
                         </ImageAndTitle>
@@ -389,9 +391,19 @@ const Study = () => {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         ></iframe>
-                      </TopicVideo>
-                      <TopicExample>
-                        <strong style={{ fontWeight: "bold" }}>Example:</strong>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={textbook}
+                            alt="Textbook Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Summary:
+                          </strong>
+                        </ImageAndTitle>
                         <AutoResizeTextArea
                           onChange={(text) => {
                             updateStudyGuideObject(key, "example", text);
@@ -401,17 +413,17 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicExample>
-                      <TopicQuestion>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <ImageAndTitle>
                           <Image
                             src={question}
                             alt="Question Logo"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Practice Problem:
+                            Question:
                           </strong>
                         </ImageAndTitle>
                         <AutoResizeTextArea
@@ -423,15 +435,15 @@ const Study = () => {
                           }
                           editMode={editMode}
                         />
-                      </TopicQuestion>
-                      <TopicAnswer id={key}>
+                      </TopicSubContainer>
+                      <TopicSubContainer>
                         <TopicAnswerContainer>
                           <ImageAndTitle>
                             <Image
                               src={check}
                               alt="Check Mark Logo"
-                              width={64}
-                              height={64}
+                              width={48}
+                              height={48}
                             />
                             <strong style={{ fontWeight: "bold" }}>
                               Answer:
@@ -452,7 +464,7 @@ const Study = () => {
                             editMode={editMode}
                           />
                         )}
-                      </TopicAnswer>
+                      </TopicSubContainer>
                     </>
                   )}
                 </InfoSubContainer>
@@ -462,7 +474,7 @@ const Study = () => {
                 <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
               </TopicHeaderContainer>
               <>
-                <TopicSummary>
+                <TopicSubContainer>
                   {studyGuide.googleSearchResults.map((search) => {
                     return (
                       <div key={search.title}>
@@ -472,7 +484,7 @@ const Study = () => {
                       </div>
                     );
                   })}
-                </TopicSummary>
+                </TopicSubContainer>
               </>
             </InfoSubContainer>
           </InfoContainer>
@@ -510,14 +522,14 @@ const Section = styled.div`
   height: 100vh;
   color: #000000;
   background-color: #f6f4f3;
-  font-size: 2rem;
   gap: 24px;
 `;
 
 const Title = styled.input`
   border: none;
   background-color: #f6f4f3;
-  font-size: 3rem;
+  font-size: ${fontSize.heading};
+  font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -534,6 +546,7 @@ const HeaderSection = styled.div`
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  font-size: ${fontSize.default};
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
@@ -573,7 +586,7 @@ const TopicTitle = styled.div`
   border-bottom: 2px solid #f03a47;
   color: #f03a47;
   padding-bottom: 16px;
-  font-size: 2rem;
+  font-size: ${fontSize.subheading};
   font-weight: bold;
   margin: 32px;
 `;
@@ -635,33 +648,11 @@ const TopicHeaderContainer = styled.div`
 `;
 
 const TopicHeaderTitle = styled.div`
-  font-size: 2rem;
+  font-size: ${fontSize.subheading};
   font-weight: bold;
   background-color: #7fa3ff58;
   border-radius: 10px;
   padding: 16px;
-`;
-
-const TopicSummary = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const TopicVideo = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
 `;
 
 const ImageAndTitle = styled.div`
@@ -671,36 +662,16 @@ const ImageAndTitle = styled.div`
   gap: 16px;
 `;
 
-const TopicQuestion = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
 const TopicAnswerContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const TopicAnswer = styled.div`
+const TopicSubContainer = styled.div`
   display: flex;
-  font-size: 1.5rem;
-  justify-content: space-between;
-  text-align: left;
-  padding: 16px;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const TopicExample = styled.div`
-  display: flex;
-  font-size: 1.5rem;
+  font-size: ${fontSize.label};
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
@@ -713,7 +684,7 @@ const TopicName = styled.a`
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;
-  font-size: 1.5rem;
+  font-size: ${fontSize.label};
   text-decoration: none;
   color: inherit;
   transition: background-color 0.3s;
@@ -733,7 +704,7 @@ const TopicName = styled.a`
 const EditModeText = styled.p`
   width: 100%;
   text-align: center;
-  font-size: 1rem;
+  font-size: ${fontSize.secondary};
   font-weight: bold;
   color: #f03a47;
 `;

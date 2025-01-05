@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
+import { fontSize } from "@/constants/fontSize";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -65,8 +66,6 @@ const Section = styled.div`
   height: 100vh;
   background-color: #f6f4f3;
   color: #000000;
-  font-size: 2rem;
-  gap: 32px;
   flex-direction: column;
 `;
 
@@ -75,8 +74,10 @@ const Content = styled.div`
   margin: 20px 0;
 `;
 
-const Title = styled.h1`
-  margin: 20px 0;
+const Title = styled.p`
+  font-size: ${fontSize.heading};
+  font-weight: bold;
+  margin-bottom: 20px;
 `;
 
 const Form = styled.form`
@@ -90,7 +91,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: ${fontSize.default};
   color: green;
   width: 300px;
 
@@ -108,7 +109,7 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: ${fontSize.default};
   transition: color 0.3s;
 
   &:hover {
@@ -118,5 +119,5 @@ const Button = styled.button`
 
 const Register = styled.div`
   padding: 20px;
-  font-size: 16px;
+  font-size: ${fontSize.secondary};
 `;
