@@ -687,6 +687,9 @@ const TopicName = styled.a`
   transition: background-color 0.3s;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
+  // wrap text
+  white-space: normal;
+  word-wrap: break-word;
 
   &:hover {
     background-color: #f03a4770;

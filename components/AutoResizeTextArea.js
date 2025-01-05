@@ -17,12 +17,20 @@ const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
     adjustHeight();
   }, [defaultValue]);
 
+  // If width of the container changes, adjust the height
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(adjustHeight);
+    resizeObserver.observe(textAreaRef.current);
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [textAreaRef.current]);
+
   return (
     <TextArea
       ref={textAreaRef}
       defaultValue={defaultValue}
       onChange={(e) => {
-        adjustHeight(); // Adjust height immediately on user input
         onChange(e.target.value); // Pass the value to the parent component onChange function
       }}
       disabled={!editMode}
