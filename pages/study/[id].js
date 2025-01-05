@@ -117,7 +117,12 @@ const Study = () => {
   // Save the file name to Firestore when the input field is blurred
   const handleFileNameSave = async () => {
     if (studyGuide) {
-      updateStudyGuideFileName(studyGuide.id, fileName);
+      if (fileName.length < 1) {
+        setFileName("Untitled Study Guide");
+        updateStudyGuideFileName(studyGuide.id, "Untitled Study Guide");
+      } else {
+        updateStudyGuideFileName(studyGuide.id, fileName);
+      }
     }
   };
 
@@ -528,7 +533,6 @@ const Section = styled.div`
 
 const Title = styled.input`
   border: none;
-  background-color: transparent;
   font-size: ${fontSize.heading};
   font-weight: bold;
   text-overflow: ellipsis;
@@ -538,6 +542,9 @@ const Title = styled.input`
   text-align: center;
   background-color: #f03a4770;
   border-radius: 10px;
+  width: ${({ value }) => value.length + "ch"};
+  min-width: 20%;
+  max-width: 40%;
 `;
 
 const HeaderSection = styled.div`
