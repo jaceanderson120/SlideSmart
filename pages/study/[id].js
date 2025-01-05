@@ -105,7 +105,7 @@ const Study = () => {
   };
 
   // Open the menu when the user clicks on the ellipsis icon
-  const handleClick = (event) => {
+  const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -265,9 +265,10 @@ const Study = () => {
           />
           <StyledFontAwesomeIcon
             icon={faEllipsisVertical}
+            size="2x"
             aria-controls="simple-menu"
             aria-haspopup="true"
-            onClick={handleClick}
+            onClick={handleMenuClick}
           />
           <Menu
             keepMounted
@@ -556,7 +557,6 @@ const HeaderSection = styled.div`
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  font-size: ${fontSize.default};
   position: absolute;
   right: 32px;
   &:hover {
