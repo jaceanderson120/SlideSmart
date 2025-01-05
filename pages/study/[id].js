@@ -26,7 +26,6 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -289,6 +288,14 @@ const Study = () => {
             <StyledMenuItem onClick={handleEditClicked}>
               {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
             </StyledMenuItem>
+            <StyledMenuItem
+              onClick={() => {
+                setIsChatbotShown(!isChatbotShown);
+                handleClose();
+              }}
+            >
+              {isChatbotShown ? "Close Sola" : "Open Sola"}
+            </StyledMenuItem>
             {studyGuide.createdBy === currentUser?.uid && (
               <StyledMenuItem
                 onClick={() => {
@@ -471,7 +478,13 @@ const Study = () => {
           </InfoContainer>
           {isFileShown && <FileContainer>{content}</FileContainer>}
           {/* Pass studyGuide to Chatbot component */}
-          {isChatbotShown && <Chatbot studyGuide={studyGuide} />}
+          {/* Pass function to chatbot that minimizes it */}
+          {isChatbotShown && (
+            <Chatbot
+              studyGuide={studyGuide}
+              setIsChatbotShown={setIsChatbotShown}
+            />
+          )}
         </OutputSection>
       </Section>
       <Footer />
@@ -479,12 +492,6 @@ const Study = () => {
         studyGuideId={id}
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
-      />
-      <ChatbotIcon
-        icon={faMessage}
-        flip="horizontal"
-        swapOpacity
-        onClick={() => setIsChatbotShown(!isChatbotShown)}
       />
     </>
   );
@@ -720,20 +727,6 @@ const TopicName = styled.a`
     background-color: #f03a4770;
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
-  }
-`;
-
-const ChatbotIcon = styled(FontAwesomeIcon)`
-  position: fixed;
-  bottom: 2%;
-  right: 2%;
-  color: #000000;
-  cursor: pointer;
-  font-size: 2.5rem;
-  z-index: 1000;
-
-  &:hover {
-    color: #f03a47;
   }
 `;
 

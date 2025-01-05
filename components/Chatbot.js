@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import {
+  faPaperPlane,
+  faWindowMinimize,
+  faMinimize,
+  faMaximize,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Chatbot = (props) => {
   const [messages, setMessages] = useState(() => {
@@ -10,10 +15,17 @@ const Chatbot = (props) => {
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
   const [input, setInput] = useState("");
+  const [isMaximized, setIsMaximized] = useState(false);
 
   // Get study guide which is passed down from the parent component
   const { studyGuide } = props;
   const extractedData = studyGuide?.extractedData;
+
+  // Get chatbot state from the parent component
+  const { setIsChatbotShown } = props;
+
+  // Ref to the chatbot container
+  const chatbotContainerRef = useRef(null);
 
   useEffect(() => {
     // Save messages to localStorage whenever they change
@@ -46,9 +58,50 @@ const Chatbot = (props) => {
     }
   };
 
+  // Function to handle minimize button click
+  const handleMinimizeClick = () => {
+    // Add a size transition effect
+    chatbotContainerRef.current.style.transition = "width 0.5s, height 0.5s";
+    chatbotContainerRef.current.style.width = "0%";
+    chatbotContainerRef.current.style.height = "0%";
+    // Hide the chatbot after the transition ends
+    chatbotContainerRef.current.addEventListener("transitionend", () => {
+      setIsChatbotShown(false);
+    });
+  };
+
+  // Function to handle maximize button click
+  const handleMaximizeClick = () => {
+    if (chatbotContainerRef.current) {
+      if (chatbotContainerRef.current.style.width === "100%") {
+        // Add a size transition effect
+        chatbotContainerRef.current.style.transition =
+          "width 0.5s, height 0.5s";
+        chatbotContainerRef.current.style.width = "50%";
+        chatbotContainerRef.current.style.height = "75%";
+      } else {
+        // Add a size transition effect
+        chatbotContainerRef.current.style.transition =
+          "width 0.5s, height 0.5s";
+        chatbotContainerRef.current.style.width = "100%";
+        chatbotContainerRef.current.style.height = "100%";
+      }
+    }
+    setIsMaximized((prev) => !prev);
+  };
+
   return (
-    <ChatbotContainer>
-      <ChatbotHeader>Chat with Sola</ChatbotHeader>
+    <ChatbotContainer ref={chatbotContainerRef}>
+      <ChatbotHeader>
+        <IconContainer>
+          <Icon icon={faWindowMinimize} onClick={handleMinimizeClick} />
+          <Icon
+            icon={isMaximized ? faMinimize : faMaximize}
+            onClick={handleMaximizeClick}
+          />
+        </IconContainer>
+        <HeaderText>Chat with Sola</HeaderText>
+      </ChatbotHeader>
       <MessagesContainer>
         {messages.map((message, index) =>
           message.sender === "user" ? (
@@ -86,8 +139,8 @@ const ChatbotContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   position: fixed;
-  bottom: 8%;
-  right: 2%;
+  bottom: 0;
+  right: 0;
   height: 75%;
   width: 50%;
   border: 1px solid #f03a47;
@@ -100,11 +153,35 @@ const ChatbotContainer = styled.div`
 
 const ChatbotHeader = styled.div`
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   padding: 8px;
   border-bottom: 1px solid #f03a47;
   background-color: #f03a4733;
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  left: 8px;
+  font-size: 1.5rem;
+  display: flex;
+  gap: 8px;
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  color: #ffffff;
+  &:hover {
+    color: #f03a47;
+    transition: color 0.3s;
+  }
+`;
+
+const HeaderText = styled.p`
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
   font-size: 2rem;
 `;
 
