@@ -31,6 +31,7 @@ import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
+import StyledMenuItem from "@/components/StyledMenuItem";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -559,13 +560,6 @@ const HeaderSection = styled.div`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   position: absolute;
   right: 32px;
-  &:hover {
-    transition: color 0.3s;
-    color: #f03a47;
-  }
-`;
-
-const StyledMenuItem = styled(MenuItem)`
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
