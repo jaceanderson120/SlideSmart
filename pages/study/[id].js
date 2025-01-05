@@ -449,9 +449,9 @@ const Study = () => {
                               Answer:
                             </strong>
                           </ImageAndTitle>
-                          <span onClick={() => toggleAnswer(key)}>
+                          <ShowHideButton onClick={() => toggleAnswer(key)}>
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
-                          </span>
+                          </ShowHideButton>
                         </TopicAnswerContainer>
                         {collapsedAnswers[key] && (
                           <AutoResizeTextArea
@@ -707,4 +707,19 @@ const EditModeText = styled.p`
   font-size: ${fontSize.secondary};
   font-weight: bold;
   color: #f03a47;
+`;
+
+const ShowHideButton = styled.button`
+  padding: 8px;
+  font-size: ${fontSize.label};
+  color: black;
+  background-color: #7fa3ff58;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    transition: color 0.3s;
+  }
 `;
