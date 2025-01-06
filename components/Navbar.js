@@ -24,14 +24,18 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
 
+  // Close the menu when the user clicks outside of it
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleLogout = () => {
     signOut(auth);
     router.push("/login");
   };
 
-  // Close the menu when the user clicks outside of it
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleAccountClick = () => {
+    router.push("/account");
   };
 
   // Open the menu when the user clicks on the ellipsis icon
@@ -67,6 +71,9 @@ function Navbar() {
               onClose={handleClose}
               open={Boolean(anchorEl)}
             >
+              <StyledMenuItem onClick={handleAccountClick}>
+                Account
+              </StyledMenuItem>
               <StyledMenuItem onClick={handleLogout}>Logout</StyledMenuItem>
             </Menu>
           </>

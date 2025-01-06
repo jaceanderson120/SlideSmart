@@ -34,7 +34,7 @@ const MyStudyGuides = () => {
   const [filter, setFilter] = useState("owned");
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { isLoggedIn, currentUser, loading } = useStateContext();
+  const { isLoggedIn, currentUser, loading, hasSpark } = useStateContext();
 
   // Check if the user is logged in and redirect to the login page if not
   useEffect(() => {
@@ -131,7 +131,11 @@ const MyStudyGuides = () => {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const fileUploadResponse = await handleFileUpload(event, currentUser);
+    const fileUploadResponse = await handleFileUpload(
+      event,
+      currentUser,
+      hasSpark
+    );
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
@@ -143,6 +147,8 @@ const MyStudyGuides = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+    } else if (fileUploadResponse.error === "noSubscription") {
+      toast.error("You need a Spark subscription to use this feature.");
     }
   };
 
