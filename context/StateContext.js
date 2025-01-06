@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "@/firebase/firebase";
+import { auth, app } from "@/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { getSparkStatus } from "@/utils/getSparkStatus";
 
 const Context = createContext();
 
@@ -8,6 +9,7 @@ export const StateContext = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasSpark, setHasSpark] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -20,12 +22,26 @@ export const StateContext = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // Check if user has spark subscription
+  useEffect(() => {
+    // Check if user has spark subscription
+    const checkSpark = async () => {
+      const newSparkStatus = auth.currentUser
+        ? await getSparkStatus(app)
+        : false;
+      setHasSpark(newSparkStatus);
+    };
+
+    checkSpark();
+  }, [app, auth.currentUser?.uid]);
+
   return (
     <Context.Provider
       value={{
         isLoggedIn,
         currentUser,
         loading,
+        hasSpark,
       }}
     >
       {children}

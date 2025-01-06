@@ -3,7 +3,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
 
-const handleFileUpload = async (event, currentUser) => {
+const handleFileUpload = async (event, currentUser, hasSpark) => {
+  if (!hasSpark) {
+    return { studyGuideId: null, error: "noSubscription" };
+  }
   const file = event.target.files[0];
   if (file) {
     // Create FormData object to send the file

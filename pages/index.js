@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -15,7 +15,7 @@ export default function Home() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
-  const { isLoggedIn, currentUser } = useStateContext();
+  const { isLoggedIn, currentUser, hasSpark } = useStateContext();
 
   const getRandomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -47,7 +47,11 @@ export default function Home() {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const fileUploadResponse = await handleFileUpload(event, currentUser);
+    const fileUploadResponse = await handleFileUpload(
+      event,
+      currentUser,
+      hasSpark
+    );
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
@@ -59,6 +63,8 @@ export default function Home() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+    } else if (fileUploadResponse.error === "noSubscription") {
+      toast.error("You need a Spark subscription to use this feature.");
     }
   };
 
