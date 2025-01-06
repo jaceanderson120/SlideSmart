@@ -60,6 +60,7 @@ const TextArea = styled.textarea`
   color: #000000;
   height: auto;
   font-size: ${fontSize.default};
+  line-height: 1.3;
   border: 2px dashed transparent;
   border-radius: 8px;
   padding: 8px;

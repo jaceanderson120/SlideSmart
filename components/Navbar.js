@@ -51,7 +51,6 @@ function Navbar() {
         <Link href="/">Support</Link>
         <Link href="/">Why SlideSmart</Link> */}
       </NavbarAboutLinks>
-
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <>
@@ -143,23 +142,6 @@ const NavbarRegisterStyle = styled.div`
   }
 `;
 
-const NavbarLogoutStyle = styled.div`
-  margin-right: 16px;
-  padding: 6px;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.3s;
-    font-size: ${fontSize.default};
-    font-weight: bold;
-  }
-
-  a:hover {
-    color: #f03a47;
-  }
-`;
-
 const NavbarLoginLinks = styled.div`
   float: right;
   margin-left: auto;
@@ -192,6 +174,7 @@ const NavbarSection = styled.div`
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;

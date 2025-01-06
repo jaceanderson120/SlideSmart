@@ -564,6 +564,7 @@ const HeaderSection = styled.div`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   position: absolute;
   right: 32px;
+  cursor: pointer;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
