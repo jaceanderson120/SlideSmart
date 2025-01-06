@@ -57,6 +57,11 @@ const Study = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser, loading } = useStateContext();
 
+  // When navigating to the study guide page (on mount), clear the chatbot messages
+  useEffect(() => {
+    localStorage.removeItem("chatbotMessages");
+  }, []);
+
   useEffect(() => {
     const checkAccessAndFetchData = async () => {
       // If the state context is still loading, wait for it to finish
@@ -559,6 +564,7 @@ const HeaderSection = styled.div`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   position: absolute;
   right: 32px;
+  cursor: pointer;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;

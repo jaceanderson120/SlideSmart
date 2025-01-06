@@ -8,15 +8,20 @@ import {
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 import { fontSize } from "@/constants/fontSize";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 
 const Chatbot = (props) => {
   const [messages, setMessages] = useState(() => {
     // Retrieve messages from localStorage if available
     const savedMessages = localStorage.getItem("chatbotMessages");
-    return savedMessages ? JSON.parse(savedMessages) : [];
+    return savedMessages
+      ? JSON.parse(savedMessages)
+      : [{ text: "Hello! How can I help you today?", sender: "bot" }];
   });
   const [input, setInput] = useState("");
   const [isMaximized, setIsMaximized] = useState(false);
+  const [loadingResponse, setLoadingResponse] = useState(false);
 
   // Get study guide which is passed down from the parent component
   const { studyGuide } = props;
@@ -28,6 +33,16 @@ const Chatbot = (props) => {
   // Ref to the chatbot container
   const chatbotContainerRef = useRef(null);
 
+  // Ref to the end of the messages container
+  const messagesEndRef = useRef(null);
+
+  // Scroll to the end of the messages container whenever messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   useEffect(() => {
     // Save messages to localStorage whenever they change
     localStorage.setItem("chatbotMessages", JSON.stringify(messages));
@@ -35,6 +50,7 @@ const Chatbot = (props) => {
 
   const handleSend = async () => {
     if (input.trim()) {
+      setLoadingResponse(true);
       setMessages([...messages, { text: input, sender: "user" }]);
       setInput("");
       // Fetch the response from API endpoint
@@ -49,11 +65,20 @@ const Chatbot = (props) => {
       if (chatbotResponse.ok) {
         const responseText = await chatbotResponse.json();
         // Add the response to the messages
+        setLoadingResponse(false);
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: responseText.output, sender: "bot" },
         ]);
       } else {
+        setLoadingResponse(false);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            text: "Sorry, I am having trouble answering. Please try again.",
+            sender: "bot",
+          },
+        ]);
         console.error("Failed to fetch chatbot response");
       }
     }
@@ -115,6 +140,14 @@ const Chatbot = (props) => {
             </BotMessageContainer>
           )
         )}
+        {loadingResponse && (
+          <BotMessageContainer>
+            <BotMessage>
+              <Dots />
+            </BotMessage>
+          </BotMessageContainer>
+        )}
+        <div ref={messagesEndRef} />
       </MessagesContainer>
       <InputArea>
         <Input
@@ -123,6 +156,7 @@ const Chatbot = (props) => {
           placeholder="What can I help you with?"
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
+          disabled={loadingResponse}
         />
         <SendButton icon={faPaperPlane} onClick={handleSend}>
           Send
@@ -144,7 +178,6 @@ const ChatbotContainer = styled.div`
   right: 0;
   height: 75%;
   width: 50%;
-  border: 1px solid #f03a47;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
@@ -158,7 +191,7 @@ const ChatbotHeader = styled.div`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid #f03a47;
+  border-bottom: 1px solid #000000;
   background-color: #f03a4733;
 `;
 
@@ -188,6 +221,7 @@ const HeaderText = styled.p`
 
 const MessagesContainer = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: flex-start;
   padding: 16px;
@@ -214,6 +248,7 @@ const UserMessage = styled.div`
   background-color: #f03a4733;
   color: #000000;
   max-width: 80%;
+  line-height: 1.3;
 `;
 
 const BotMessage = styled.div`
@@ -224,12 +259,13 @@ const BotMessage = styled.div`
   background-color: #7fa3ff58;
   color: #000000;
   max-width: 80%;
+  line-height: 1.3;
 `;
 
 const InputArea = styled.div`
   display: flex;
   padding: 8px;
-  border-top: 1px solid #f03a47;
+  border-top: 1px solid #000000;
 `;
 
 const Input = styled.input`
