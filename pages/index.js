@@ -16,12 +16,6 @@ export default function Home() {
   const fileInputRef = useRef(null);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const { isLoggedIn, currentUser } = useStateContext();
-  const [domLoaded, setDomLoaded] = useState(false);
-
-  // Prevents hydration error
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
 
   const getRandomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -70,111 +64,106 @@ export default function Home() {
 
   return (
     <>
-      {domLoaded && (
-        <>
-          <Navbar />
-          {isLoading ? (
-            <Overlay>
-              <ProgressWrapper>
-                <CircularProgressbar value={loadingPercentage} />
-              </ProgressWrapper>
-            </Overlay>
-          ) : (
-            <></>
-          )}
-          <GradientSection>
-            <GradientSectionSlogan>
-              The AI Application Made
-              <SloganBreakLine />
-              to Make
-              <span style={{ color: "#F03A47", fontWeight: "bold" }}>
-                {" "}
-                Slides
-              </span>{" "}
-              Make Sense
-            </GradientSectionSlogan>
-            <p
-              style={{
-                fontSize: fontSize.default,
-                marginTop: "20px",
-              }}
-            >
-              A software tool that creates comprehensive/interactive Study
-              Guides equipped<br></br> with plenty of useful resources to help
-              you succeed in the classroom
-            </p>
-            <MakeBetterButton onClick={handleClick}>
-              {isLoggedIn ? "Upload File" : "Get Started"}
-            </MakeBetterButton>
-            {/* Hidden file input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
-          </GradientSection>
-          <Section>
-            <HowItWorksSection>
-              <HowItWorksSlogan>It's simple</HowItWorksSlogan>
-              <p
-                style={{
-                  fontSize: "18px",
-                  marginTop: "10px",
-                  fontWeight: "500",
-                }}
-              >
-                How to enhance your slides in less than 1 minute
-              </p>
-              <HowItWorksBoxSection>
-                <HowItWorksBoxDivider>
-                  <HowItWorksBox>
-                    <LoginIcon>Login</LoginIcon>
-                    <RegisterIcon>Register</RegisterIcon>
-                  </HowItWorksBox>
-                  <Caption>Login or Register an Account</Caption>
-                  <Captionv2>
-                    Click Login or Register in the top right of the page and
-                    enter your account details
-                  </Captionv2>
-                </HowItWorksBoxDivider>
-                <HowItWorksBoxDivider>
-                  <HowItWorksBox>
-                    <img
-                      src="https://i.imgur.com/9tCP71d.png"
-                      alt="Upload File"
-                      style={{ width: "100%", height: "auto" }}
-                    ></img>
-                  </HowItWorksBox>
-                  <Caption>Upload Your Slides</Caption>
-                  <Captionv2>
-                    Upload your .ppt or .pdf file by using the Upload File
-                    button
-                  </Captionv2>
-                </HowItWorksBoxDivider>
-                <HowItWorksBoxDivider>
-                  <HowItWorksBox>
-                    <img
-                      src="https://i.imgur.com/6l1zlVv.png"
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        borderRadius: "5px",
-                      }}
-                    ></img>
-                  </HowItWorksBox>
-                  <Caption>Watch the Magic Happen!</Caption>
-                  <Captionv2>
-                    We generate a Study Guide for you divided by topic best
-                    suited to help you succeed
-                  </Captionv2>
-                </HowItWorksBoxDivider>
-              </HowItWorksBoxSection>
-            </HowItWorksSection>
-          </Section>
-          <Footer />
-        </>
+      <Navbar />
+      {isLoading ? (
+        <Overlay>
+          <ProgressWrapper>
+            <CircularProgressbar value={loadingPercentage} />
+          </ProgressWrapper>
+        </Overlay>
+      ) : (
+        <></>
       )}
+      <GradientSection>
+        <GradientSectionSlogan>
+          The AI Application Made
+          <br />
+          to Make
+          <span style={{ color: "#F03A47", fontWeight: "bold" }}>
+            {" "}
+            Slides
+          </span>{" "}
+          Make Sense
+        </GradientSectionSlogan>
+        <p
+          style={{
+            fontSize: fontSize.default,
+            marginTop: "20px",
+          }}
+        >
+          A software tool that creates comprehensive/interactive Study Guides
+          equipped<br></br> with plenty of useful resources to help you succeed
+          in the classroom
+        </p>
+        <MakeBetterButton onClick={handleClick}>
+          {isLoggedIn ? "Upload File" : "Get Started"}
+        </MakeBetterButton>
+        {/* Hidden file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </GradientSection>
+      <Section>
+        <HowItWorksSection>
+          <HowItWorksSlogan>It's simple</HowItWorksSlogan>
+          <p
+            style={{
+              fontSize: "18px",
+              marginTop: "10px",
+              fontWeight: "500",
+            }}
+          >
+            How to enhance your slides in less than 1 minute
+          </p>
+          <HowItWorksBoxSection>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox>
+                <LoginIcon>Login</LoginIcon>
+                <RegisterIcon>Register</RegisterIcon>
+              </HowItWorksBox>
+              <Caption>Login or Register an Account</Caption>
+              <Captionv2>
+                Click Login or Register in the top right of the page and enter
+                your account details
+              </Captionv2>
+            </HowItWorksBoxDivider>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox>
+                <img
+                  src="https://i.imgur.com/9tCP71d.png"
+                  alt="Upload File"
+                  style={{ width: "100%", height: "auto" }}
+                ></img>
+              </HowItWorksBox>
+              <Caption>Upload Your Slides</Caption>
+              <Captionv2>
+                Upload your .ppt or .pdf file by using the Upload File button
+              </Captionv2>
+            </HowItWorksBoxDivider>
+            <HowItWorksBoxDivider>
+              <HowItWorksBox>
+                <img
+                  src="https://i.imgur.com/6l1zlVv.png"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "5px",
+                  }}
+                ></img>
+              </HowItWorksBox>
+              <Caption>Watch the Magic Happen!</Caption>
+              <Captionv2>
+                We generate a Study Guide for you divided by topic best suited
+                to help you succeed
+              </Captionv2>
+            </HowItWorksBoxDivider>
+          </HowItWorksBoxSection>
+        </HowItWorksSection>
+      </Section>
+      <Footer />
     </>
   );
 }
@@ -284,10 +273,6 @@ const GradientSectionSlogan = styled.p`
   color: #000000;
   font-weight: bold;
   margin-top: 100px;
-`;
-
-const SloganBreakLine = styled.div`
-  margin: 10px;
 `;
 
 const MakeBetterButton = styled.button`

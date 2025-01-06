@@ -57,6 +57,11 @@ const Study = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser, loading } = useStateContext();
 
+  // When navigating to the study guide page (on mount), clear the chatbot messages
+  useEffect(() => {
+    localStorage.removeItem("chatbotMessages");
+  }, []);
+
   useEffect(() => {
     const checkAccessAndFetchData = async () => {
       // If the state context is still loading, wait for it to finish
