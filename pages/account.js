@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 
-const PROMO_CODE = process.env.PROMO_CODE;
+const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 
 const Account = () => {
   const { currentUser, loading, hasSpark } = useStateContext();
