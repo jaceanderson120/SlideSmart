@@ -2,7 +2,6 @@ import { AzureOpenAI } from "openai";
 import dotenv from "dotenv";
 import formidable from "formidable";
 import fs from "fs";
-import path from "path";
 
 dotenv.config();
 
