@@ -6,12 +6,15 @@ import {
   faWindowMinimize,
   faMinimize,
   faMaximize,
+  faPaperclip,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { fontSize } from "@/constants/fontSize";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
+import { toast } from "react-toastify";
 
 const Chatbot = (props) => {
   const { hasSpark } = useStateContext();
@@ -30,6 +33,7 @@ const Chatbot = (props) => {
         ];
   });
   const [input, setInput] = useState("");
+  const [uploadedImage, setUploadedImage] = useState(null);
   const [isMaximized, setIsMaximized] = useState(false);
   const [loadingResponse, setLoadingResponse] = useState(false);
 
@@ -46,6 +50,9 @@ const Chatbot = (props) => {
   // Ref to the end of the messages container
   const messagesEndRef = useRef(null);
 
+  // Ref to the file input
+  const fileInputRef = useRef(null);
+
   // Scroll to the end of the messages container whenever messages change
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -59,37 +66,50 @@ const Chatbot = (props) => {
   }, [messages]);
 
   const handleSend = async () => {
-    if (input.trim()) {
+    if (input.trim() || uploadedImage) {
       setLoadingResponse(true);
-      const newMessages = [...messages, { text: input, sender: "user" }];
+      let newMessages;
+      if (uploadedImage) {
+        newMessages = [
+          ...messages,
+          { text: input, image: uploadedImage, sender: "user" },
+        ];
+
+        // Reset the file input and uploaded image
+        setUploadedImage(null);
+        fileInputRef.current.value = "";
+      } else {
+        newMessages = [...messages, { text: input, sender: "user" }];
+      }
       setMessages(newMessages);
       setInput("");
 
       // Get the last 5 messages to send to the API
       const messagesToSend = newMessages.slice(-5);
+
+      // Use FormData to send the image file along with the messages
+      const formData = new FormData();
+      formData.append("messages", JSON.stringify(messagesToSend));
+      formData.append("extractedData", JSON.stringify(extractedData));
+      if (uploadedImage) {
+        formData.append("image", uploadedImage);
+      }
+
       // Fetch the response from API endpoint
       const chatbotResponse = await fetch("/api/chatbot-gpt", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // Send the previous 6 messages (3 user, 3 bot) to the API
-        body: JSON.stringify({
-          messages: messagesToSend,
-          extractedData,
-        }),
+        body: formData,
       });
 
       if (chatbotResponse.ok) {
+        // Add the bot's response to the messages
         const responseText = await chatbotResponse.json();
-        // Add the response to the messages
-        setLoadingResponse(false);
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: responseText.output, sender: "bot" },
         ]);
       } else {
-        setLoadingResponse(false);
+        // Add an error message if the response is not ok
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -97,8 +117,8 @@ const Chatbot = (props) => {
             sender: "bot",
           },
         ]);
-        console.error("Failed to fetch chatbot response");
       }
+      setLoadingResponse(false);
     }
   };
 
@@ -134,6 +154,19 @@ const Chatbot = (props) => {
     setIsMaximized((prev) => !prev);
   };
 
+  // Function to handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Only allow image file types
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload an image file.");
+        return;
+      }
+      setUploadedImage(file);
+    }
+  };
+
   return (
     <ChatbotContainer ref={chatbotContainerRef}>
       <ChatbotHeader>
@@ -151,7 +184,12 @@ const Chatbot = (props) => {
           <React.Fragment key={index}>
             {message.sender === "user" ? (
               <UserMessageContainer>
-                <UserMessage>{message.text}</UserMessage>
+                <UserMessage>
+                  {message.image && (
+                    <StyledImage src={URL.createObjectURL(message.image)} />
+                  )}
+                  {message.text}
+                </UserMessage>
               </UserMessageContainer>
             ) : (
               <BotMessageContainer>
@@ -184,9 +222,24 @@ const Chatbot = (props) => {
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
           disabled={!hasSpark || loadingResponse}
         />
-        <SendButton icon={faPaperPlane} onClick={handleSend}>
-          Send
-        </SendButton>
+        <StyledFontAwesomeIcon
+          icon={uploadedImage ? faX : faPaperclip}
+          onClick={() => {
+            if (!uploadedImage) {
+              fileInputRef.current.click();
+            } else {
+              setUploadedImage(null);
+              fileInputRef.current.value = "";
+            }
+          }}
+        />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleImageUpload}
+        />
+        <StyledFontAwesomeIcon icon={faPaperPlane} onClick={handleSend} />
       </InputArea>
     </ChatbotContainer>
   );
@@ -305,7 +358,7 @@ const Input = styled.input`
   color: #000000;
 `;
 
-const SendButton = styled(FontAwesomeIcon)`
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -316,4 +369,11 @@ const SendButton = styled(FontAwesomeIcon)`
     color: #f03a47;
     transition: color 0.3s;
   }
+`;
+
+const StyledImage = styled.img`
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
 `;
