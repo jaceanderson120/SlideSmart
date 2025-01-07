@@ -11,14 +11,23 @@ import { fontSize } from "@/constants/fontSize";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
+import { useStateContext } from "@/context/StateContext";
 
 const Chatbot = (props) => {
+  const { hasSpark } = useStateContext();
   const [messages, setMessages] = useState(() => {
     // Retrieve messages from localStorage if available
     const savedMessages = localStorage.getItem("chatbotMessages");
     return savedMessages
       ? JSON.parse(savedMessages)
-      : [{ text: "Hello! How can I help you today?", sender: "bot" }];
+      : [
+          {
+            text: hasSpark
+              ? "Hello! How can I help you today?"
+              : "Hi, I'm Professor Sola, a chatbot powered by the powerful GPT-4o model, ready to answer any questions! To interact with me, you must purchase the Spark Plan.",
+            sender: "bot",
+          },
+        ];
   });
   const [input, setInput] = useState("");
   const [isMaximized, setIsMaximized] = useState(false);
@@ -166,10 +175,14 @@ const Chatbot = (props) => {
         <Input
           type="text"
           value={input}
-          placeholder="What can I help you with?"
+          placeholder={
+            hasSpark
+              ? "What can I help you with?"
+              : "Upgrade to Spark to chat with me!"
+          }
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          disabled={loadingResponse}
+          disabled={!hasSpark || loadingResponse}
         />
         <SendButton icon={faPaperPlane} onClick={handleSend}>
           Send
