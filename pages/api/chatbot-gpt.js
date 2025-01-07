@@ -12,27 +12,26 @@ const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 
 export default async function chatbotGPT(req, res) {
   if (req.method === "POST") {
-    // Get the prompt and the study guide extracted data from the request body
-    const { message: prompt, extractedData } = req.body;
-
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
-    }
+    // Get the recent messages and the study guide extracted data from the request body
+    const { messages, extractedData } = req.body;
 
     try {
-      let messages = [
+      const formattedMessages = [
         {
           role: "system",
-          content: `You are a friendly mini golden doodle and a professor named Sola who is answering questions from college students.
-          You are a chatbot that is displayed on an HTML page that has the following content on it:
-          ${JSON.stringify(extractedData)}.`,
+          content: `You are a friendly mini golden doodle and a professor named Sola who is answering questions from college students. You are a chatbot that is displayed on an HTML page that has the following content on it: ${JSON.stringify(
+            extractedData
+          )}.`,
         },
-        { role: "user", content: prompt },
+        ...messages.map((msg) => ({
+          role: msg.sender === "user" ? "user" : "assistant",
+          content: msg.text,
+        })),
       ];
 
       const response = await openai.completions.create({
         model: deployment,
-        messages: messages,
+        messages: formattedMessages,
         max_tokens: 1000,
       });
 

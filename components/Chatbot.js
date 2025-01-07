@@ -10,14 +10,24 @@ import {
 import { fontSize } from "@/constants/fontSize";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
+import { LatexRenderer } from "./LatexRenderer";
+import { useStateContext } from "@/context/StateContext";
 
 const Chatbot = (props) => {
+  const { hasSpark } = useStateContext();
   const [messages, setMessages] = useState(() => {
     // Retrieve messages from localStorage if available
     const savedMessages = localStorage.getItem("chatbotMessages");
     return savedMessages
       ? JSON.parse(savedMessages)
-      : [{ text: "Hello! How can I help you today?", sender: "bot" }];
+      : [
+          {
+            text: hasSpark
+              ? "Hello! How can I help you today?"
+              : "Hi, I'm Professor Sola, a chatbot powered by the powerful GPT-4o model, ready to answer any questions! To interact with me, you must purchase the Spark Plan.",
+            sender: "bot",
+          },
+        ];
   });
   const [input, setInput] = useState("");
   const [isMaximized, setIsMaximized] = useState(false);
@@ -51,15 +61,23 @@ const Chatbot = (props) => {
   const handleSend = async () => {
     if (input.trim()) {
       setLoadingResponse(true);
-      setMessages([...messages, { text: input, sender: "user" }]);
+      const newMessages = [...messages, { text: input, sender: "user" }];
+      setMessages(newMessages);
       setInput("");
+
+      // Get the last 5 messages to send to the API
+      const messagesToSend = newMessages.slice(-5);
       // Fetch the response from API endpoint
       const chatbotResponse = await fetch("/api/chatbot-gpt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: input, extractedData }),
+        // Send the previous 6 messages (3 user, 3 bot) to the API
+        body: JSON.stringify({
+          messages: messagesToSend,
+          extractedData,
+        }),
       });
 
       if (chatbotResponse.ok) {
@@ -129,17 +147,22 @@ const Chatbot = (props) => {
         <HeaderText>Chat with Sola</HeaderText>
       </ChatbotHeader>
       <MessagesContainer>
-        {messages.map((message, index) =>
-          message.sender === "user" ? (
-            <UserMessageContainer key={index}>
-              <UserMessage>{message.text}</UserMessage>
-            </UserMessageContainer>
-          ) : (
-            <BotMessageContainer key={index}>
-              <BotMessage>{message.text}</BotMessage>
-            </BotMessageContainer>
-          )
-        )}
+        {messages.map((message, index) => (
+          <React.Fragment key={index}>
+            {message.sender === "user" ? (
+              <UserMessageContainer>
+                <UserMessage>{message.text}</UserMessage>
+              </UserMessageContainer>
+            ) : (
+              <BotMessageContainer>
+                <BotMessage>
+                  <LatexRenderer>{message.text}</LatexRenderer>
+                </BotMessage>
+              </BotMessageContainer>
+            )}
+            {index === messages.length - 2 && <div ref={messagesEndRef} />}
+          </React.Fragment>
+        ))}
         {loadingResponse && (
           <BotMessageContainer>
             <BotMessage>
@@ -147,16 +170,19 @@ const Chatbot = (props) => {
             </BotMessage>
           </BotMessageContainer>
         )}
-        <div ref={messagesEndRef} />
       </MessagesContainer>
       <InputArea>
         <Input
           type="text"
           value={input}
-          placeholder="What can I help you with?"
+          placeholder={
+            hasSpark
+              ? "What can I help you with?"
+              : "Upgrade to Spark to chat with me!"
+          }
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          disabled={loadingResponse}
+          disabled={!hasSpark || loadingResponse}
         />
         <SendButton icon={faPaperPlane} onClick={handleSend}>
           Send
@@ -181,7 +207,6 @@ const ChatbotContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  overflow-y: auto;
   z-index: 1000;
 `;
 
@@ -249,6 +274,7 @@ const UserMessage = styled.div`
   color: #000000;
   max-width: 80%;
   line-height: 1.3;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const BotMessage = styled.div`
@@ -260,6 +286,7 @@ const BotMessage = styled.div`
   color: #000000;
   max-width: 80%;
   line-height: 1.3;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const InputArea = styled.div`
