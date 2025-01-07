@@ -14,14 +14,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import StyledMenuItem from "./StyledMenuItem";
-import Menu from "@mui/material/Menu";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import CustomMenu from "./CustomMenu";
 
 function Navbar() {
   const { isLoggedIn } = useStateContext();
-  const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
 
   // Close the menu when the user clicks outside of it
@@ -38,10 +36,10 @@ function Navbar() {
     router.push("/account");
   };
 
-  // Open the menu when the user clicks on the ellipsis icon
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const menuItems = [
+    { name: "Account", onClick: handleAccountClick },
+    { name: "Logout", onClick: handleLogout },
+  ];
 
   return (
     <NavbarSection>
@@ -52,31 +50,18 @@ function Navbar() {
       <NavbarAboutLinks>
         <Link href="/myStudyGuides">My Study Guides</Link>
         {/* <Link href="/">How it Works</Link>
-        <Link href="/">Support</Link>
-        <Link href="/">Why SlideSmart</Link> */}
+        <Link href="/">Contact</Link>
+        <Link href="/">Pricing</Link>
+        <Link href="/">About</Link> */}
       </NavbarAboutLinks>
       <NavbarLoginLinks>
         {isLoggedIn ? (
-          <>
-            <StyledFontAwesomeIcon
-              icon={faUserCircle}
-              size="2x"
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleMenuClick}
-            />
-            <Menu
-              keepMounted
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              open={Boolean(anchorEl)}
-            >
-              <StyledMenuItem onClick={handleAccountClick}>
-                Account
-              </StyledMenuItem>
-              <StyledMenuItem onClick={handleLogout}>Logout</StyledMenuItem>
-            </Menu>
-          </>
+          <CustomMenu
+            triggerElement={
+              <StyledFontAwesomeIcon icon={faUserCircle} size="2x" />
+            }
+            menuItems={menuItems}
+          />
         ) : (
           <>
             <NavbarLoginStyle>
