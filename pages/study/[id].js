@@ -256,10 +256,6 @@ const Study = () => {
       onClick: handleFileToggle,
     },
     {
-      name: editMode ? "Disable Edit Mode (Save)" : "Enable Edit Mode",
-      onClick: handleEditClicked,
-    },
-    {
       name: isChatbotShown ? "Hide Sola" : "Show Sola",
       onClick: handleChatbotToggle,
     },
@@ -268,6 +264,14 @@ const Study = () => {
   // Append the share option if needed
   if (studyGuide.createdBy === currentUser?.uid) {
     menuItems.push({ name: "Share", onClick: handleShareClick });
+  }
+
+  // Append the edit mode option if needed
+  if (studyGuide.editors.includes(currentUser?.uid)) {
+    menuItems.push({
+      name: editMode ? "Disable Edit Mode (Save)" : "Enable Edit Mode",
+      onClick: handleEditClicked,
+    });
   }
 
   return (
@@ -282,6 +286,9 @@ const Study = () => {
             onBlur={handleFileNameSave}
             onKeyDown={handleKeyDown}
             ref={titleInputRef}
+            readOnly={
+              studyGuide.editors.includes(currentUser?.uid) ? false : true
+            }
           />
           <MenuTriggerArea>
             <CustomMenu

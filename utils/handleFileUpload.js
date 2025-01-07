@@ -158,6 +158,7 @@ const handleFileUpload = async (event, currentUser, hasSpark) => {
         createdAt: new Date(),
         createdBy: currentUser.uid,
         contributors: [currentUser.uid],
+        editors: [currentUser.uid],
       };
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 

@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import Study from "./study/[id]";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -224,6 +225,7 @@ const MyStudyGuides = () => {
           <ColumnNamesContainer>
             <ColumnName>Name</ColumnName>
             <ColumnName>Created</ColumnName>
+            <ColumnName>Permission</ColumnName>
             <ColumnName>Contributors</ColumnName>
             {filter === "owned" && <OptionsPadding />}
           </ColumnNamesContainer>
@@ -237,6 +239,13 @@ const MyStudyGuides = () => {
                         {guide.fileName}
                       </StudyGuideLink>
                       <StudyGuideCreated>{guide.createdAt}</StudyGuideCreated>
+                      <StudyGuidePermission>
+                        {guide.createdBy === currentUser?.uid
+                          ? "Owner"
+                          : guide.editors.includes(currentUser?.uid)
+                          ? "Editor"
+                          : "Viewer"}
+                      </StudyGuidePermission>
                       <StudyGuideContributors>
                         {guide.contributors.map((contributor) => {
                           return (
@@ -265,6 +274,7 @@ const MyStudyGuides = () => {
                       {guide.createdBy === currentUser?.uid && (
                         <StudyGuideDeleteButton
                           onClick={() => {
+                            console.log(guide.editors);
                             setIsDeleteDialogOpen(true);
                             setGuideToDelete(guide);
                           }}
@@ -434,6 +444,13 @@ const StudyGuideLink = styled.div`
 `;
 
 const StudyGuideCreated = styled.div`
+  display: flex;
+  flex: 1;
+  color: #9c9c9c;
+  font-size: ${fontSize.default};
+`;
+
+const StudyGuidePermission = styled.div`
   display: flex;
   flex: 1;
   color: #9c9c9c;
