@@ -274,7 +274,6 @@ const MyStudyGuides = () => {
                       {guide.createdBy === currentUser?.uid && (
                         <StudyGuideDeleteButton
                           onClick={() => {
-                            console.log(guide.editors);
                             setIsDeleteDialogOpen(true);
                             setGuideToDelete(guide);
                           }}

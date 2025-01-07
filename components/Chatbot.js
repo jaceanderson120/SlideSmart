@@ -10,6 +10,7 @@ import {
 import { fontSize } from "@/constants/fontSize";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
+import { LatexRenderer } from "./LatexRenderer";
 
 const Chatbot = (props) => {
   const [messages, setMessages] = useState(() => {
@@ -51,15 +52,23 @@ const Chatbot = (props) => {
   const handleSend = async () => {
     if (input.trim()) {
       setLoadingResponse(true);
-      setMessages([...messages, { text: input, sender: "user" }]);
+      const newMessages = [...messages, { text: input, sender: "user" }];
+      setMessages(newMessages);
       setInput("");
+
+      // Get the last 5 messages to send to the API
+      const messagesToSend = newMessages.slice(-5);
       // Fetch the response from API endpoint
       const chatbotResponse = await fetch("/api/chatbot-gpt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: input, extractedData }),
+        // Send the previous 6 messages (3 user, 3 bot) to the API
+        body: JSON.stringify({
+          messages: messagesToSend,
+          extractedData,
+        }),
       });
 
       if (chatbotResponse.ok) {
@@ -129,17 +138,22 @@ const Chatbot = (props) => {
         <HeaderText>Chat with Sola</HeaderText>
       </ChatbotHeader>
       <MessagesContainer>
-        {messages.map((message, index) =>
-          message.sender === "user" ? (
-            <UserMessageContainer key={index}>
-              <UserMessage>{message.text}</UserMessage>
-            </UserMessageContainer>
-          ) : (
-            <BotMessageContainer key={index}>
-              <BotMessage>{message.text}</BotMessage>
-            </BotMessageContainer>
-          )
-        )}
+        {messages.map((message, index) => (
+          <React.Fragment key={index}>
+            {message.sender === "user" ? (
+              <UserMessageContainer>
+                <UserMessage>{message.text}</UserMessage>
+              </UserMessageContainer>
+            ) : (
+              <BotMessageContainer>
+                <BotMessage>
+                  <LatexRenderer>{message.text}</LatexRenderer>
+                </BotMessage>
+              </BotMessageContainer>
+            )}
+            {index === messages.length - 2 && <div ref={messagesEndRef} />}
+          </React.Fragment>
+        ))}
         {loadingResponse && (
           <BotMessageContainer>
             <BotMessage>
@@ -147,7 +161,6 @@ const Chatbot = (props) => {
             </BotMessage>
           </BotMessageContainer>
         )}
-        <div ref={messagesEndRef} />
       </MessagesContainer>
       <InputArea>
         <Input
@@ -181,7 +194,6 @@ const ChatbotContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  overflow-y: auto;
   z-index: 1000;
 `;
 
