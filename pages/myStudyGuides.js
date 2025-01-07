@@ -23,6 +23,9 @@ import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
+import CustomMenu from "@/components/CustomMenu";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
+import Study from "./study/[id]";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -32,6 +35,8 @@ const MyStudyGuides = () => {
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [displayNames, setDisplayNames] = useState({});
   const [filter, setFilter] = useState("owned");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
   const fileInputRef = useRef(null);
   const { isLoggedIn, currentUser, loading, hasSpark } = useStateContext();
@@ -94,6 +99,16 @@ const MyStudyGuides = () => {
     }
   }, [filter, studyGuides, currentUser]);
 
+  // Set filter to "owned"
+  const setFilterOwned = () => {
+    setFilter("owned");
+  };
+
+  // Set filter to "shared"
+  const setFilterShared = () => {
+    setFilter("shared");
+  };
+
   // Handle the view button click
   const handleView = (id) => {
     router.push(`/study/${id}`);
@@ -154,7 +169,9 @@ const MyStudyGuides = () => {
 
   // Handle the delete button click
   const handleDelete = (guide) => {
+    // Delete the study guide from the database
     deleteStudyGuide(guide.id, guide.firebaseFileUrl, auth.currentUser.uid);
+
     // Update the study guides state to remove the deleted study guide
     setStudyGuides(
       studyGuides.filter((studyGuide) => studyGuide.id !== guide.id)
@@ -192,17 +209,23 @@ const MyStudyGuides = () => {
         <TableContainer>
           <FilterContainer>
             <FilterLabel>Filter:</FilterLabel>
-            <FilterSelect
-              value={filter} // Set the value of the select element
-              onChange={(e) => setFilter(e.target.value)} // Update the filter state on change
-            >
-              <option value="owned">Owned by Me</option>
-              <option value="shared">Shared with Me</option>
-            </FilterSelect>
+            <CustomMenu
+              triggerElement={
+                <MenuTrigger>
+                  {filter === "owned" ? "Owned by Me" : "Shared with Me"}
+                </MenuTrigger>
+              }
+              menuItems={[
+                { name: "Owned by Me", onClick: setFilterOwned },
+                { name: "Shared with Me", onClick: setFilterShared },
+              ]}
+              arrow={true}
+            />
           </FilterContainer>
           <ColumnNamesContainer>
             <ColumnName>Name</ColumnName>
             <ColumnName>Created</ColumnName>
+            <ColumnName>Permission</ColumnName>
             <ColumnName>Contributors</ColumnName>
             {filter === "owned" && <OptionsPadding />}
           </ColumnNamesContainer>
@@ -216,6 +239,13 @@ const MyStudyGuides = () => {
                         {guide.fileName}
                       </StudyGuideLink>
                       <StudyGuideCreated>{guide.createdAt}</StudyGuideCreated>
+                      <StudyGuidePermission>
+                        {guide.createdBy === currentUser?.uid
+                          ? "Owner"
+                          : guide.editors.includes(currentUser?.uid)
+                          ? "Editor"
+                          : "Viewer"}
+                      </StudyGuidePermission>
                       <StudyGuideContributors>
                         {guide.contributors.map((contributor) => {
                           return (
@@ -243,7 +273,11 @@ const MyStudyGuides = () => {
                       </StudyGuideContributors>
                       {guide.createdBy === currentUser?.uid && (
                         <StudyGuideDeleteButton
-                          onClick={() => handleDelete(guide)}
+                          onClick={() => {
+                            console.log(guide.editors);
+                            setIsDeleteDialogOpen(true);
+                            setGuideToDelete(guide);
+                          }}
                         >
                           <FontAwesomeIcon icon={faTrashCan} size="2x" />
                         </StudyGuideDeleteButton>
@@ -260,6 +294,17 @@ const MyStudyGuides = () => {
           </StudyGuideListContainer>
         </TableContainer>
       </Section>
+      <ConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title="Delete Study Guide"
+        text="Are you sure you want to delete this study guide? You cannot undo this action."
+        onConfirm={() => {
+          setIsDeleteDialogOpen(false);
+          handleDelete(guideToDelete);
+          toast.success("Study guide deleted successfully.");
+        }}
+      />
     </Container>
   );
 };
@@ -294,7 +339,7 @@ const TopContainer = styled.div`
 const FilterContainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 16px;
+  margin-bottom: 32px;
 `;
 
 const FilterLabel = styled.label`
@@ -303,14 +348,9 @@ const FilterLabel = styled.label`
   margin-right: 8px;
 `;
 
-const FilterSelect = styled.select`
-  padding: 8px;
-  font-size: ${fontSize.default};
-  color: black;
-  background-color: #f6f4f3;
-  border: none;
-  border-radius: 8px;
+const MenuTrigger = styled.p`
   cursor: pointer;
+  font-size: ${fontSize.default};
 `;
 
 const PageTitle = styled.p`
@@ -354,7 +394,7 @@ const ColumnNamesContainer = styled.div`
 `;
 
 const ColumnName = styled.h2`
-  margin: 16px;
+  margin-bottom: 16px;
   display: flex;
   flex: 1;
   font-size: ${fontSize.default};
@@ -372,8 +412,9 @@ const StudyGuideListContainer = styled.div`
   flex-grow: 1;
   width: 100%;
   background-color: #ffffff;
-  border: 1px solid #f03a47;
   overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
 `;
 
 const StudyGuideListItem = styled.div`
@@ -381,12 +422,15 @@ const StudyGuideListItem = styled.div`
   padding: 8px;
   border-bottom: 1px solid #9c9c9c;
   align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const StudyGuideLink = styled.div`
   display: flex;
   flex: 1;
-  margin: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
   white-space: nowrap;
@@ -402,7 +446,13 @@ const StudyGuideLink = styled.div`
 const StudyGuideCreated = styled.div`
   display: flex;
   flex: 1;
-  margin: 16px;
+  color: #9c9c9c;
+  font-size: ${fontSize.default};
+`;
+
+const StudyGuidePermission = styled.div`
+  display: flex;
+  flex: 1;
   color: #9c9c9c;
   font-size: ${fontSize.default};
 `;

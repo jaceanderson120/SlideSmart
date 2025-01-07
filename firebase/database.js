@@ -37,6 +37,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         createdAt: studyGuide.createdAt,
         createdBy: studyGuide.createdBy,
         contributors: studyGuide.contributors,
+        editors: studyGuide.editors,
       });
 
       // Get the ID of the new document from the document reference
@@ -86,6 +87,7 @@ const getUserStudyGuides = async (user) => {
           firebaseFileUrl: data.firebaseFileUrl,
           createdBy: data.createdBy,
           contributors: data.contributors,
+          editors: data.editors,
         };
       });
 
@@ -200,12 +202,18 @@ const getUserUidFromEmail = async (email) => {
 // Share a study guide with another user
 // Input: study guide ID and user uid to share with
 // Output: None
-const shareStudyGuide = async (studyGuideId, uid) => {
+const shareStudyGuide = async (studyGuideId, uid, allowEditing) => {
   // Update the study guide document with the new contributors
   const studyGuideDocRef = doc(db, "studyGuides", studyGuideId);
   await updateDoc(studyGuideDocRef, {
     contributors: arrayUnion(uid),
   });
+
+  if (allowEditing) {
+    await updateDoc(studyGuideDocRef, {
+      editors: arrayUnion(uid),
+    });
+  }
 
   // Update the userStudyGuides collection for each user with the new study guide ID
   const userDocRef = doc(db, "userStudyGuides", uid);

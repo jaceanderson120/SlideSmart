@@ -9,7 +9,6 @@ import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
 import Link from "next/link";
-import Menu from "@mui/material/Menu";
 import ShareModal from "@/components/ShareModal";
 import {
   fetchStudyGuide,
@@ -30,7 +29,7 @@ import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
-import StyledMenuItem from "@/components/StyledMenuItem";
+import CustomMenu from "@/components/CustomMenu";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -44,7 +43,6 @@ const Study = () => {
   const { id } = router.query;
   const [studyGuide, setStudyGuide] = useState(null);
   const [activeTopic, setActiveTopic] = useState(null);
-  const [collapsedTopics, setCollapsedTopics] = useState({});
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
   const [isTopicsShown, setIsTopicsShown] = useState(true);
   const [isFileShown, setIsFileShown] = useState(false);
@@ -54,7 +52,6 @@ const Study = () => {
   const [editMode, setEditMode] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
-  const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser, loading } = useStateContext();
 
   // When navigating to the study guide page (on mount), clear the chatbot messages
@@ -102,16 +99,6 @@ const Study = () => {
   // Function to close the share modal
   const closeShareModal = () => {
     setIsShareModalOpen(false);
-  };
-
-  // Close the menu when the user clicks outside of it
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  // Open the menu when the user clicks on the ellipsis icon
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
   };
 
   // Update the file name that is displayed at the top of the study guide
@@ -206,14 +193,6 @@ const Study = () => {
     />
   );
 
-  // Function to toggle if a container is collapsed or not
-  const toggleCollapse = (topic) => {
-    setCollapsedTopics((prev) => ({
-      ...prev,
-      [topic]: !prev[topic],
-    }));
-  };
-
   // Function to toggle if a practice problem answer is collapsed or not
   const toggleAnswer = (answer) => {
     setCollapsedAnswers((prev) => ({
@@ -252,8 +231,48 @@ const Study = () => {
       );
     }
     setEditMode(!editMode);
-    handleClose();
   };
+
+  const handleTopicToggle = () => {
+    setIsTopicsShown(!isTopicsShown);
+  };
+
+  const handleChatbotToggle = () => {
+    setIsChatbotShown(!isChatbotShown);
+  };
+
+  const handleFileToggle = () => {
+    setIsFileShown(!isFileShown);
+  };
+
+  // Menu items for the study guide page
+  const menuItems = [
+    {
+      name: isTopicsShown ? "Hide Topics" : "Show Topics",
+      onClick: handleTopicToggle,
+    },
+    {
+      name: isFileShown ? "Hide File" : "Show File",
+      onClick: handleFileToggle,
+    },
+    {
+      name: isChatbotShown ? "Hide Sola" : "Show Sola",
+      onClick: handleChatbotToggle,
+    },
+  ];
+
+  // Append the share option if needed
+  if (studyGuide.createdBy === currentUser?.uid) {
+    menuItems.push({ name: "Share", onClick: handleShareClick });
+  }
+
+  // Append the edit mode option if needed
+  if (studyGuide.editors.includes(currentUser?.uid)) {
+    menuItems.push({
+      name: editMode ? "Disable Edit Mode (Save)" : "Enable Edit Mode",
+      onClick: handleEditClicked,
+    });
+  }
 
   return (
     <PageContainer>
@@ -267,58 +286,18 @@ const Study = () => {
             onBlur={handleFileNameSave}
             onKeyDown={handleKeyDown}
             ref={titleInputRef}
+            readOnly={
+              studyGuide.editors.includes(currentUser?.uid) ? false : true
+            }
           />
-          <StyledFontAwesomeIcon
-            icon={faEllipsisVertical}
-            size="2x"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleMenuClick}
-          />
-          <Menu
-            keepMounted
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            open={Boolean(anchorEl)}
-          >
-            <StyledMenuItem
-              onClick={() => {
-                setIsTopicsShown(!isTopicsShown);
-                handleClose();
-              }}
-            >
-              {isTopicsShown ? "Hide Topics" : "Show Topics"}
-            </StyledMenuItem>
-            <StyledMenuItem
-              onClick={() => {
-                setIsFileShown(!isFileShown);
-                handleClose();
-              }}
-            >
-              {isFileShown ? "Hide File" : "Show File"}
-            </StyledMenuItem>
-            <StyledMenuItem onClick={handleEditClicked}>
-              {editMode ? "Disable Edit Mode" : "Enable Edit Mode"}
-            </StyledMenuItem>
-            <StyledMenuItem
-              onClick={() => {
-                setIsChatbotShown(!isChatbotShown);
-                handleClose();
-              }}
-            >
-              {isChatbotShown ? "Close Sola" : "Open Sola"}
-            </StyledMenuItem>
-            {studyGuide.createdBy === currentUser?.uid && (
-              <StyledMenuItem
-                onClick={() => {
-                  handleShareClick();
-                  handleClose();
-                }}
-              >
-                Share
-              </StyledMenuItem>
-            )}
-          </Menu>
+          <MenuTriggerArea>
+            <CustomMenu
+              triggerElement={
+                <StyledFontAwesomeIcon icon={faEllipsisVertical} size="2x" />
+              }
+              menuItems={menuItems}
+            />
+          </MenuTriggerArea>
         </HeaderSection>
         {editMode && (
           <EditModeText>
@@ -348,132 +327,108 @@ const Study = () => {
                   id={key}
                   ref={(el) => (topicRefs.current[key] = el)}
                 >
-                  <TopicHeaderContainer
-                    id={key}
-                    onClick={() => toggleCollapse(key)}
-                  >
+                  <TopicHeaderContainer id={key}>
                     <TopicHeaderTitle>{key}</TopicHeaderTitle>
-                    <span>{collapsedTopics[key] ? "▼" : "▲"}</span>
                   </TopicHeaderContainer>
-                  {!collapsedTopics[key] && (
-                    <>
-                      <TopicSubContainer>
-                        <ImageAndTitle>
-                          <Image
-                            src={pencil}
-                            alt="Pencil Logo"
-                            width={48}
-                            height={48}
-                          />
-                          <strong style={{ fontWeight: "bold" }}>
-                            Summary:
-                          </strong>
-                        </ImageAndTitle>
-                        <AutoResizeTextArea
-                          onChange={(text) => {
-                            updateStudyGuideObject(key, "summary", text);
-                          }}
-                          defaultValue={
-                            studyGuide.extractedData[key]["summary"]
-                          }
-                          editMode={editMode}
+                  <TopicSubContainer>
+                    <ImageAndTitle>
+                      <Image
+                        src={pencil}
+                        alt="Pencil Logo"
+                        width={48}
+                        height={48}
+                      />
+                      <strong style={{ fontWeight: "bold" }}>Summary:</strong>
+                    </ImageAndTitle>
+                    <AutoResizeTextArea
+                      onChange={(text) => {
+                        updateStudyGuideObject(key, "summary", text);
+                      }}
+                      defaultValue={studyGuide.extractedData[key]["summary"]}
+                      editMode={editMode}
+                    />
+                  </TopicSubContainer>
+                  <TopicSubContainer>
+                    <ImageAndTitle>
+                      <Image
+                        src={youtube}
+                        alt="YouTube Logo"
+                        width={48}
+                        height={48}
+                      />
+                      <strong style={{ fontWeight: "bold" }}>Video:</strong>
+                    </ImageAndTitle>
+                    <iframe
+                      width="560"
+                      height="315"
+                      src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </TopicSubContainer>
+                  <TopicSubContainer>
+                    <ImageAndTitle>
+                      <Image
+                        src={textbook}
+                        alt="Textbook Logo"
+                        width={48}
+                        height={48}
+                      />
+                      <strong style={{ fontWeight: "bold" }}>Example:</strong>
+                    </ImageAndTitle>
+                    <AutoResizeTextArea
+                      onChange={(text) => {
+                        updateStudyGuideObject(key, "example", text);
+                      }}
+                      defaultValue={studyGuide.extractedData[key]["example"]}
+                      editMode={editMode}
+                    />
+                  </TopicSubContainer>
+                  <TopicSubContainer>
+                    <ImageAndTitle>
+                      <Image
+                        src={question}
+                        alt="Question Logo"
+                        width={48}
+                        height={48}
+                      />
+                      <strong style={{ fontWeight: "bold" }}>Question:</strong>
+                    </ImageAndTitle>
+                    <AutoResizeTextArea
+                      onChange={(text) => {
+                        updateStudyGuideObject(key, "question", text);
+                      }}
+                      defaultValue={studyGuide.extractedData[key]["question"]}
+                      editMode={editMode}
+                    />
+                  </TopicSubContainer>
+                  <TopicSubContainer>
+                    <TopicAnswerContainer>
+                      <ImageAndTitle>
+                        <Image
+                          src={check}
+                          alt="Check Mark Logo"
+                          width={48}
+                          height={48}
                         />
-                      </TopicSubContainer>
-                      <TopicSubContainer>
-                        <ImageAndTitle>
-                          <Image
-                            src={youtube}
-                            alt="YouTube Logo"
-                            width={48}
-                            height={48}
-                          />
-                          <strong style={{ fontWeight: "bold" }}>Video:</strong>
-                        </ImageAndTitle>
-                        <iframe
-                          width="560"
-                          height="315"
-                          src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
-                          title="YouTube video player"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      </TopicSubContainer>
-                      <TopicSubContainer>
-                        <ImageAndTitle>
-                          <Image
-                            src={textbook}
-                            alt="Textbook Logo"
-                            width={48}
-                            height={48}
-                          />
-                          <strong style={{ fontWeight: "bold" }}>
-                            Summary:
-                          </strong>
-                        </ImageAndTitle>
-                        <AutoResizeTextArea
-                          onChange={(text) => {
-                            updateStudyGuideObject(key, "example", text);
-                          }}
-                          defaultValue={
-                            studyGuide.extractedData[key]["example"]
-                          }
-                          editMode={editMode}
-                        />
-                      </TopicSubContainer>
-                      <TopicSubContainer>
-                        <ImageAndTitle>
-                          <Image
-                            src={question}
-                            alt="Question Logo"
-                            width={48}
-                            height={48}
-                          />
-                          <strong style={{ fontWeight: "bold" }}>
-                            Question:
-                          </strong>
-                        </ImageAndTitle>
-                        <AutoResizeTextArea
-                          onChange={(text) => {
-                            updateStudyGuideObject(key, "question", text);
-                          }}
-                          defaultValue={
-                            studyGuide.extractedData[key]["question"]
-                          }
-                          editMode={editMode}
-                        />
-                      </TopicSubContainer>
-                      <TopicSubContainer>
-                        <TopicAnswerContainer>
-                          <ImageAndTitle>
-                            <Image
-                              src={check}
-                              alt="Check Mark Logo"
-                              width={48}
-                              height={48}
-                            />
-                            <strong style={{ fontWeight: "bold" }}>
-                              Answer:
-                            </strong>
-                          </ImageAndTitle>
-                          <ShowHideButton onClick={() => toggleAnswer(key)}>
-                            {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
-                          </ShowHideButton>
-                        </TopicAnswerContainer>
-                        {collapsedAnswers[key] && (
-                          <AutoResizeTextArea
-                            onChange={(text) => {
-                              updateStudyGuideObject(key, "answer", text);
-                            }}
-                            defaultValue={
-                              studyGuide.extractedData[key]["answer"]
-                            }
-                            editMode={editMode}
-                          />
-                        )}
-                      </TopicSubContainer>
-                    </>
-                  )}
+                        <strong style={{ fontWeight: "bold" }}>Answer:</strong>
+                      </ImageAndTitle>
+                      <ShowHideButton onClick={() => toggleAnswer(key)}>
+                        {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
+                      </ShowHideButton>
+                    </TopicAnswerContainer>
+                    {collapsedAnswers[key] && (
+                      <AutoResizeTextArea
+                        onChange={(text) => {
+                          updateStudyGuideObject(key, "answer", text);
+                        }}
+                        defaultValue={studyGuide.extractedData[key]["answer"]}
+                        editMode={editMode}
+                      />
+                    )}
+                  </TopicSubContainer>
                 </InfoSubContainer>
               ))}
             <InfoSubContainer>
@@ -561,10 +516,13 @@ const HeaderSection = styled.div`
   width: 100%;
 `;
 
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+const MenuTriggerArea = styled.div`
   position: absolute;
   right: 32px;
   cursor: pointer;
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
@@ -589,7 +547,8 @@ const ContentContainer = styled.div`
   align-items: center;
   text-align: left;
   gap: 16px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const InfoContainer = styled.div`
@@ -675,7 +634,7 @@ const TopicSubContainer = styled.div`
 `;
 
 const TopicName = styled.a`
-  width: 100%;
+  width: 95%;
   padding: 16px;
   margin-right: 16px;
   margin-left: 16px;

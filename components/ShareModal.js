@@ -5,11 +5,14 @@ import { getUserUidFromEmail, shareStudyGuide } from "@/firebase/database";
 import { toast } from "react-toastify";
 import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
+import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 Modal.setAppElement("#__next");
 
 const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
   const [shareEmail, setShareEmail] = useState("");
+  const [allowEditing, setAllowEditing] = useState(false);
   const { currentUser } = useStateContext();
 
   // Share the study guide with the entered email
@@ -31,7 +34,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
       return;
     }
     // Share the study guide with the user
-    await shareStudyGuide(studyGuideId, uid);
+    await shareStudyGuide(studyGuideId, uid, allowEditing);
     toast.success("Study guide shared successfully!");
     setShareEmail("");
     onRequestClose();
@@ -58,10 +61,18 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
             value={shareEmail}
             onChange={(e) => setShareEmail(e.target.value)}
           />
-          <HorizontalSection>
-            <CloseButton onClick={onCloseClicked}>Close</CloseButton>
-            <ShareButton onClick={onShareClicked}>Share</ShareButton>
-          </HorizontalSection>
+          <AllowEditingSection>
+            <ModalText>Allow Editing</ModalText>
+            <StyledFontAwesomeIcon
+              icon={allowEditing ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setAllowEditing(!allowEditing)}
+            />
+          </AllowEditingSection>
+          <ButtonSection>
+            <ModalButton onClick={onCloseClicked}>Close</ModalButton>
+            <ModalButton onClick={onShareClicked}>Share</ModalButton>
+          </ButtonSection>
         </ModalContent>
       </Modal>
     </>
@@ -77,65 +88,80 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#f6f4f3",
+    border: "none",
+    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
+    maxWidth: "20%",
   },
 };
 
-const HorizontalSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  &:hover {
+    transition: color 0.3s;
+    color: #f03a47;
+  }
 `;
 
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 16px;
 `;
 
 const ModalTitle = styled.p`
-  font-size: ${fontSize.heading};
+  font-size: ${fontSize.subheading};
   font-weight: bold;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 10px;
+  }
+`;
+
+const ModalText = styled.p`
+  font-size: ${fontSize.secondary};
+  line-height: 1.3;
 `;
 
 const EmailField = styled.input`
   width: 100%;
   padding: 8px;
   margin: 16px 0;
-  font-size: ${fontSize.default};
+  font-size: ${fontSize.secondary};
 `;
 
-const CloseButton = styled.button`
+const AllowEditingSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
+
+const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+`;
+
+const ModalButton = styled.button`
   padding: 8px;
-  font-size: ${fontSize.default};
-  font-weight: bold;
-  color: white;
-  background-color: #f03a47;
+  font-size: ${fontSize.secondary};
+  color: #f03a47;
+  background-color: transparent;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: background-color 0.3s;
 
   &:hover {
-    color: black;
-  }
-`;
-
-const ShareButton = styled.button`
-  padding: 8px;
-  font-size: ${fontSize.default};
-  font-weight: bold;
-  color: black;
-  background-color: #f6f4f3;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.3s;
-
-  &:hover {
-    color: #f03a47;
+    background-color: #f03a4770;
   }
 `;
 
