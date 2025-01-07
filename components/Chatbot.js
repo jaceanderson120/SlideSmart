@@ -261,6 +261,7 @@ const UserMessage = styled.div`
   color: #000000;
   max-width: 80%;
   line-height: 1.3;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const BotMessage = styled.div`
@@ -272,6 +273,7 @@ const BotMessage = styled.div`
   color: #000000;
   max-width: 80%;
   line-height: 1.3;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const InputArea = styled.div`
