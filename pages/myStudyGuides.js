@@ -24,6 +24,7 @@ import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -33,6 +34,8 @@ const MyStudyGuides = () => {
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [displayNames, setDisplayNames] = useState({});
   const [filter, setFilter] = useState("owned");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
   const fileInputRef = useRef(null);
   const { isLoggedIn, currentUser, loading, hasSpark } = useStateContext();
@@ -165,7 +168,9 @@ const MyStudyGuides = () => {
 
   // Handle the delete button click
   const handleDelete = (guide) => {
+    // Delete the study guide from the database
     deleteStudyGuide(guide.id, guide.firebaseFileUrl, auth.currentUser.uid);
+
     // Update the study guides state to remove the deleted study guide
     setStudyGuides(
       studyGuides.filter((studyGuide) => studyGuide.id !== guide.id)
@@ -259,7 +264,10 @@ const MyStudyGuides = () => {
                       </StudyGuideContributors>
                       {guide.createdBy === currentUser?.uid && (
                         <StudyGuideDeleteButton
-                          onClick={() => handleDelete(guide)}
+                          onClick={() => {
+                            setIsDeleteDialogOpen(true);
+                            setGuideToDelete(guide);
+                          }}
                         >
                           <FontAwesomeIcon icon={faTrashCan} size="2x" />
                         </StudyGuideDeleteButton>
@@ -276,6 +284,17 @@ const MyStudyGuides = () => {
           </StudyGuideListContainer>
         </TableContainer>
       </Section>
+      <ConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title="Delete Study Guide"
+        text="Are you sure you want to delete this study guide? You cannot undo this action."
+        onConfirm={() => {
+          setIsDeleteDialogOpen(false);
+          handleDelete(guideToDelete);
+          toast.success("Study guide deleted successfully.");
+        }}
+      />
     </Container>
   );
 };
