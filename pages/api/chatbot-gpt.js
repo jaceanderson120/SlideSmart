@@ -84,8 +84,6 @@ export default async function chatbotGPT(req, res) {
           });
         }
 
-        console.log("Formatted messages:", formattedMessages);
-
         const response = await openai.completions.create({
           model: deployment,
           messages: formattedMessages,

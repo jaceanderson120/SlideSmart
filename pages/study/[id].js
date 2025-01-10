@@ -135,6 +135,7 @@ const Study = () => {
   };
 
   useEffect(() => {
+    // When 100% of a topic title is in view, set it as the active topic by calling the callback function
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -144,7 +145,8 @@ const Study = () => {
         });
       },
       {
-        threshold: 0.5,
+        threshold: 1,
+        rootMargin: "0px",
       }
     );
 
@@ -164,7 +166,7 @@ const Study = () => {
   }, [studyGuide]);
 
   if (!studyGuide) {
-    return <p>Loading...</p>;
+    return <></>;
   }
 
   // Split off the query string from the Firebase file URL
@@ -319,15 +321,14 @@ const Study = () => {
                 ))}
             </ContentContainer>
           )}
-          <InfoContainer>
+          <InfoContainer id="infoContainer">
             {studyGuide.extractedData &&
               Object.keys(studyGuide.extractedData).map((key) => (
-                <InfoSubContainer
-                  key={key}
-                  id={key}
-                  ref={(el) => (topicRefs.current[key] = el)}
-                >
-                  <TopicHeaderContainer id={key}>
+                <InfoSubContainer key={key} id={key}>
+                  <TopicHeaderContainer
+                    id={key}
+                    ref={(el) => (topicRefs.current[key] = el)}
+                  >
                     <TopicHeaderTitle>{key}</TopicHeaderTitle>
                   </TopicHeaderContainer>
                   <TopicSubContainer>
