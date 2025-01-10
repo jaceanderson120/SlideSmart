@@ -523,6 +523,8 @@ const MenuTriggerArea = styled.div`
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  padding-left: 10px; // padding to make element easier to click
+  padding-right: 10px;
   &:hover {
     transition: color 0.3s;
     color: #f03a47;

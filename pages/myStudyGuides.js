@@ -8,7 +8,7 @@ import {
   deleteStudyGuide,
   getUserDisplayName,
 } from "@/firebase/database";
-import { faUserCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -25,7 +25,7 @@ import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import Study from "./study/[id]";
+import UserIcon from "@/components/UserIcon";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -34,6 +34,7 @@ const MyStudyGuides = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [displayNames, setDisplayNames] = useState({});
+  const [displayNamesLoaded, setDisplayNamesLoaded] = useState(false);
   const [filter, setFilter] = useState("owned");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [guideToDelete, setGuideToDelete] = useState(null);
@@ -79,6 +80,7 @@ const MyStudyGuides = () => {
         }
       }
       setDisplayNames(names);
+      setDisplayNamesLoaded(true);
     };
 
     if (studyGuides.length > 0) {
@@ -230,7 +232,7 @@ const MyStudyGuides = () => {
             {filter === "owned" && <OptionsPadding />}
           </ColumnNamesContainer>
           <StudyGuideListContainer>
-            {filteredStudyGuides?.length > 0 ? (
+            {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
               <ul>
                 {filteredStudyGuides.map((guide) => {
                   return (
@@ -250,9 +252,15 @@ const MyStudyGuides = () => {
                         {guide.contributors.map((contributor) => {
                           return (
                             <Contributor key={contributor}>
-                              <FontAwesomeIcon
-                                icon={faUserCircle}
-                                size="lg"
+                              <UserIcon
+                                initials={
+                                  displayNames[contributor]
+                                    ? displayNames[contributor]
+                                        .split(" ")
+                                        .map((name) => name[0])
+                                        .join("")
+                                    : "?"
+                                }
                                 data-tooltip-id={`contributor-tooltip-${contributor}`}
                                 data-tooltip-content={
                                   displayNames[contributor] || "Loading..."
@@ -261,9 +269,10 @@ const MyStudyGuides = () => {
                               />
                               <Tooltip
                                 id={`contributor-tooltip-${contributor}`}
+                                // Doesn't work with styled-components
                                 style={{
-                                  backgroundColor: "#9c9c9c",
-                                  fontSize: "1rem",
+                                  backgroundColor: "#f03a47",
+                                  fontSize: `${fontSize.secondary}`,
                                   padding: "8px",
                                 }}
                               />
@@ -286,9 +295,13 @@ const MyStudyGuides = () => {
                 })}
               </ul>
             ) : !studyGuidesLoaded ? (
-              <StudyGuidesInfoText>Loading...</StudyGuidesInfoText>
-            ) : (
+              <StudyGuidesInfoText>
+                Finding your study guides...
+              </StudyGuidesInfoText>
+            ) : displayNamesLoaded ? (
               <StudyGuidesInfoText>No study guides found.</StudyGuidesInfoText>
+            ) : (
+              <StudyGuidesInfoText>Loading contributors...</StudyGuidesInfoText>
             )}
           </StudyGuideListContainer>
         </TableContainer>
