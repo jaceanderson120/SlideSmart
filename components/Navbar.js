@@ -6,7 +6,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -16,15 +15,13 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { useRouter } from "next/router";
 import CustomMenu from "./CustomMenu";
+import UserIcon from "./UserIcon";
+import { useState, useEffect } from "react";
 
 function Navbar() {
   const { isLoggedIn } = useStateContext();
   const router = useRouter();
-
-  // Close the menu when the user clicks outside of it
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [initials, setInitials] = useState("");
 
   const handleLogout = () => {
     signOut(auth);
@@ -39,6 +36,23 @@ function Navbar() {
     { name: "Account", onClick: handleAccountClick },
     { name: "Logout", onClick: handleLogout },
   ];
+
+  // Get the current user's initials
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      // Get the user's name
+      const name = user.displayName;
+      if (name) {
+        // Get the user's initials
+        const initials = name
+          .split(" ")
+          .map((n) => n[0])
+          .join("");
+        setInitials(initials);
+      }
+    }
+  });
 
   return (
     <NavbarSection>
@@ -56,9 +70,7 @@ function Navbar() {
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <CustomMenu
-            triggerElement={
-              <StyledFontAwesomeIcon icon={faUserCircle} size="2x" />
-            }
+            triggerElement={<UserIcon initials={initials} size={48} />}
             menuItems={menuItems}
           />
         ) : (
