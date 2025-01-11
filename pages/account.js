@@ -95,9 +95,9 @@ const Account = () => {
               placeholder="Enter promo code"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
-              disabled={hasPromoCode}
+              disabled={hasPromoCode || hasFreeSparkCode}
             />
-            {!hasPromoCode && (
+            {!hasPromoCode && !hasFreeSparkCode && (
               <PromoCodeButton onClick={checkPromoCode}>Apply</PromoCodeButton>
             )}
           </HorizontalContainer>
