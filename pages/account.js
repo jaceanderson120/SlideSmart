@@ -13,6 +13,7 @@ import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
+const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
 
 const Account = () => {
   const { currentUser, loading, hasSpark } = useStateContext();
@@ -20,6 +21,7 @@ const Account = () => {
   const [email, setEmail] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
+  const [hasFreeSparkCode, setHasFreeSparkCode] = useState(false);
   const [redirectLoading, setRedirectLoading] = useState(false);
   const router = useRouter();
 
@@ -37,7 +39,9 @@ const Account = () => {
   // Direct user to checkout page
   const handleUpgradeClick = async () => {
     setRedirectLoading(true);
-    const priceId = hasPromoCode
+    const priceId = hasFreeSparkCode
+      ? "price_1Qg9wpFfMETtMj8PSTm0FmAz"
+      : hasPromoCode
       ? "price_1QeLrSFfMETtMj8PRMEzHVU6"
       : "price_1QeKd4FfMETtMj8PHiCKlMcS";
     const checkoutUrl = await getCheckoutUrl(app, priceId);
@@ -58,7 +62,11 @@ const Account = () => {
     if (promoCode === PROMO_CODE) {
       toast.success("Promo code applied successfully!");
       setHasPromoCode(true);
+    } else if (promoCode === FREE_SPARK) {
+      toast.success("Promo code applied successfully!");
+      setHasFreeSparkCode(true);
     } else {
+      console.log(FREE_SPARK);
       toast.error("Invalid promo code");
       setHasPromoCode(false);
     }
@@ -83,6 +91,7 @@ const Account = () => {
           <HorizontalContainer>
             <BoldText>Promo Code:</BoldText>
             <PromoCodeInput
+              id="promoCodeInput"
               placeholder="Enter promo code"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
@@ -97,7 +106,11 @@ const Account = () => {
           <>
             <Button onClick={handleUpgradeClick}>Upgrade</Button>
             <PriceText>
-              {hasPromoCode ? "(for $1.00/month)" : "(for $9.99/month)"}
+              {hasFreeSparkCode
+                ? "(FREE!)"
+                : hasPromoCode
+                ? "(for $1.00/month)"
+                : "(for $9.99/month)"}
             </PriceText>
           </>
         )}
