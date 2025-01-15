@@ -1,23 +1,21 @@
-import { uploadStudyGuideToFirebase } from "@/firebase/database";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase/firebase";
-import { v4 as uuidv4 } from "uuid";
+import {
+  uploadStudyGuideToFirebase,
+  uploadFileToFirebase,
+} from "@/firebase/database";
 
-const handleFileUpload = async (event, currentUser, hasSpark) => {
-  if (!hasSpark) {
-    return { studyGuideId: null, error: "noSubscription" };
-  }
-  const file = event.target.files[0];
+const handleFileUpload = async (file, currentUser) => {
   if (file) {
-    // Create FormData object to send the file
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
+      // Upload the file to Firebase Storage
+      const firebaseFileUrl = await uploadFileToFirebase(file);
+
       // Start with extracting data from the form
       const response = await fetch("/api/extract-text", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fileUrl: firebaseFileUrl }),
       });
 
       // Check if the response is OK
@@ -135,19 +133,6 @@ const handleFileUpload = async (event, currentUser, hasSpark) => {
         };
       });
 
-      // If everything was successful up to this point, then upload the file to Firebase Storage
-      const uniqueId = uuidv4();
-      const uniqueFileName = `${uniqueId}_${file.name}`;
-
-      const storageRef = ref(storage, `uploads/${uniqueFileName}`);
-      let firebaseFileUrl = "";
-      try {
-        await uploadBytes(storageRef, file);
-        firebaseFileUrl = await getDownloadURL(storageRef);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-
       // Upload extractedData, googleSearchResults, and firebaseFileUrl to Firestore
       // Use a Firestore transaction to ensure atomicity
       let studyGuide = {
@@ -163,13 +148,9 @@ const handleFileUpload = async (event, currentUser, hasSpark) => {
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 
       // Return the study guide ID if successful
-      return { studyGuideId, error: null };
+      return studyGuideId;
     } catch (error) {
       console.error("Error uploading file:", error);
-      // Check if error type is invalidFileType
-      if (error.message.includes("invalidFileType")) {
-        return { studyGuideId: null, error: "invalidFileType" };
-      }
     }
   }
 };

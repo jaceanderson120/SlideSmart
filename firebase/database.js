@@ -13,7 +13,13 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { ref, deleteObject } from "firebase/storage";
+import {
+  ref,
+  deleteObject,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 // Uploads a study guide to Firestore
 // Input: studyGuide object with the following properties:
@@ -241,6 +247,28 @@ const hasAccessToStudyGuide = async (studyGuideId, uid) => {
   }
 };
 
+// Upload a file to storage
+// Input: file
+// Output: URL of the uploaded file
+const uploadFileToFirebase = async (file) => {
+  const uniqueId = uuidv4();
+  const uniqueFileName = `${uniqueId}_${file.name}`;
+  const storageRef = ref(storage, `uploads/${uniqueFileName}`);
+  let firebaseFileUrl = "";
+
+  try {
+    // Upload the file to Firebase Storage
+    await uploadBytes(storageRef, file);
+
+    // Get the download URL of the uploaded file
+    firebaseFileUrl = await getDownloadURL(storageRef);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+
+  return firebaseFileUrl;
+};
+
 export {
   uploadStudyGuideToFirebase,
   getUserStudyGuides,
@@ -253,4 +281,5 @@ export {
   getUserUidFromEmail,
   shareStudyGuide,
   hasAccessToStudyGuide,
+  uploadFileToFirebase,
 };

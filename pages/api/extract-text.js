@@ -1,84 +1,24 @@
-import formidable from "formidable";
-import fs from "fs";
 import officeParser from "officeparser";
 
-// NEEDED: DISABLE THE DEFAULT NEXT.JS BODY PARSING BEHAVIOR
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// When the frontend sends a request to api/extract this function will be executed
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    const form = formidable({ multiples: false }); // Do not allow multiple file uploads
-    let uploadedFile;
+    const { fileUrl } = req.body;
 
     try {
-      // Parse the incoming form with formidable
-      const { fields, files } = await new Promise((resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-          if (err) {
-            return reject(
-              res.status(500).json({ error: "Error parsing form data" })
-            );
-          }
-          resolve({ fields, files });
-        });
-      });
-
-      // Access the uploaded file
-      uploadedFile = files.file[0];
-
-      // Return if no file was uploaded
-      if (!uploadedFile) {
-        return res.status(400).json({ error: "No file uploaded" });
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch the file");
       }
+      const arrayBuffer = await response.arrayBuffer();
+      const fileBuffer = Buffer.from(arrayBuffer);
 
-      // Check if the file extension is either .pdf or .pptx
-      if (
-        !(
-          uploadedFile.originalFilename.endsWith(".pdf") ||
-          uploadedFile.originalFilename.endsWith(".pptx")
-        )
-      ) {
-        return res.status(400).json({
-          error: "Invalid file type. Only PDF and PPTX files are allowed.",
-          errorType: "invalidFileType",
-        });
-      }
-
-      // Extract text from the PDF file
-      const extractedData = await extractTextFromPDF(uploadedFile.filepath);
-
-      // Send the extracted data as the response
-      res.json(extractedData);
+      const data = await officeParser.parseOfficeAsync(fileBuffer);
+      res.json(data);
     } catch (error) {
       console.error("Error processing the file:", error);
-      res.status(500).json({ error: error.message });
-    } finally {
-      // Remove the temporary file
-      if (uploadedFile) {
-        try {
-          await fs.promises.unlink(uploadedFile.filepath);
-        } catch (unlinkErr) {
-          console.error("Error deleting the temporary file:", unlinkErr);
-        }
-      }
+      res.status(500).json({ error: "Error processing file" });
     }
   } else {
-    res.status(405).json({ message: "Method not allowed" });
-  }
-}
-
-// This function extracts all of the text from a PDF file or Office document
-async function extractTextFromPDF(pdfFilePath) {
-  try {
-    const fileBuffers = fs.readFileSync(pdfFilePath);
-    const data = await officeParser.parseOfficeAsync(fileBuffers);
-    return data;
-  } catch (err) {
-    console.error("Error extracting text:", err);
+    res.status(405).json({ error: "Method not allowed" });
   }
 }

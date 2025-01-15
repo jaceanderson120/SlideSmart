@@ -138,7 +138,7 @@ const MyStudyGuides = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  // Function to handle the create new button click
+  // Function to handle the file selection/upload
   const handleCreateNew = async (event) => {
     setIsLoading(true);
     // Simulate loading progress
@@ -148,24 +148,29 @@ const MyStudyGuides = () => {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const fileUploadResponse = await handleFileUpload(
-      event,
-      currentUser,
-      hasSpark
-    );
-    clearInterval(interval);
-    setIsLoading(false);
-    // fileUpload response is either an object with studyGuideId and an error
-    if (fileUploadResponse.studyGuideId !== null) {
-      router.push(`/study/${fileUploadResponse.studyGuideId}`);
-    } else if (fileUploadResponse.error === "invalidFileType") {
+    const file = event.target.files[0];
+    const fileExtension = file.name.split(".").pop();
+    if (fileExtension !== "pdf" && fileExtension !== "pptx") {
+      clearInterval(interval);
+      setIsLoading(false);
       toast.error("Invalid file type. Please upload a PDF or PPTX file.");
       // Reset the file input element
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-    } else if (fileUploadResponse.error === "noSubscription") {
-      toast.error("You need a Spark subscription to use this feature.");
+      return;
+    } else if (!hasSpark) {
+      clearInterval(interval);
+      setIsLoading(false);
+      toast.error("You need to have a Spark subscription to use this feature.");
+      return;
+    }
+    const studyGuideId = await handleFileUpload(file, currentUser);
+    clearInterval(interval);
+    setIsLoading(false);
+    // fileUpload response is either an object with studyGuideId and an error
+    if (studyGuideId !== null) {
+      router.push(`/study/${studyGuideId}`);
     }
   };
 
