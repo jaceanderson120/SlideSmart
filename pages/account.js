@@ -66,7 +66,6 @@ const Account = () => {
       toast.success("Promo code applied successfully!");
       setHasFreeSparkCode(true);
     } else {
-      console.log(FREE_SPARK);
       toast.error("Invalid promo code");
       setHasPromoCode(false);
     }
