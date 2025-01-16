@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
+import Button from "@/components/Button";
 
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
@@ -97,7 +98,7 @@ const Account = () => {
               disabled={hasPromoCode || hasFreeSparkCode}
             />
             {!hasPromoCode && !hasFreeSparkCode && (
-              <PromoCodeButton onClick={checkPromoCode}>Apply</PromoCodeButton>
+              <Button onClick={checkPromoCode}>Apply</Button>
             )}
           </HorizontalContainer>
         )}
@@ -178,36 +179,6 @@ const PromoCodeInput = styled.input`
   color: #000000;
 `;
 
-const PromoCodeButton = styled.button`
-  padding: 8px;
-  border: none;
-  border-radius: 4px;
-  font-size: ${fontSize.default};
-  color: #000000;
-  background-color: #f03a47;
-  cursor: pointer;
-  transition: color 0.3s;
-  &:hover {
-    color: white;
-  }
-`;
-
 const PriceText = styled.p`
   font-size: ${fontSize.secondary};
-`;
-
-const Button = styled.button`
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #f03a47;
-  color: black;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: ${fontSize.default};
-  transition: color 0.3s;
-
-  &:hover {
-    color: white;
-  }
 `;

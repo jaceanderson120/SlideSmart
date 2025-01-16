@@ -26,6 +26,7 @@ import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import UserIcon from "@/components/UserIcon";
+import Button from "@/components/Button";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -202,7 +203,14 @@ const MyStudyGuides = () => {
           <PageTitle>My Study Guides</PageTitle>
           {isLoggedIn && (
             <ButtonContainer>
-              <CreateButton onClick={handleClick}>Create New</CreateButton>
+              <Button
+                padding="16px"
+                bold
+                fontSize={fontSize.label}
+                onClick={handleClick}
+              >
+                Create New
+              </Button>
             </ButtonContainer>
           )}
           {/* Hidden file input */}
@@ -381,22 +389,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   flex: 1;
-`;
-
-const CreateButton = styled.button`
-  padding: 16px;
-  font-size: ${fontSize.label};
-  font-weight: bold;
-  color: white;
-  background-color: #f03a47;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.3s;
-
-  &:hover {
-    color: black;
-  }
 `;
 
 const TableContainer = styled.div`

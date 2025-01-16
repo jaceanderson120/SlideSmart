@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { storeUserInfo } from "@/firebase/database";
 import { fontSize } from "@/constants/fontSize";
 import Link from "next/link";
+import Button from "@/components/Button";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -95,7 +96,9 @@ const Signup = () => {
             </a>
             .
           </Label>
-          <Button type="submit">Sign Up</Button>
+          <Button type="submit" marginTop="10px" fontSize={fontSize.default}>
+            Sign Up
+          </Button>
           <Login>
             Already have an account? <Link href="/login">Login here</Link>
           </Login>
@@ -151,22 +154,6 @@ const Label = styled.label`
   text-align: left;
   display: flex;
   justify-content: center;
-`;
-
-const Button = styled.button`
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #f03a47;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: ${fontSize.default};
-  transition: color 0.3s;
-
-  &:hover {
-    color: black;
-  }
 `;
 
 const Checkbox = styled.input`

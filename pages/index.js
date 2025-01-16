@@ -9,6 +9,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
+import Button from "@/components/Button";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,9 +107,15 @@ export default function Home() {
           equipped<br></br> with plenty of useful resources to help you succeed
           in the classroom
         </p>
-        <MakeBetterButton onClick={handleClick}>
+        <Button
+          onClick={handleClick}
+          marginTop="40px"
+          padding="16px"
+          bold
+          fontSize={fontSize.subheading}
+        >
           {isLoggedIn ? "Upload File" : "Get Started"}
-        </MakeBetterButton>
+        </Button>
         {/* Hidden file input */}
         <input
           type="file"
@@ -284,23 +291,6 @@ const GradientSectionSlogan = styled.p`
   color: #000000;
   font-weight: bold;
   margin-top: 100px;
-`;
-
-const MakeBetterButton = styled.button`
-  padding: 16px;
-  font-size: ${fontSize.subheading};
-  font-weight: bold;
-  color: white;
-  background-color: #f03a47;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.3s;
-  margin-top: 40px;
-
-  &:hover {
-    color: black;
-  }
 `;
 
 const Overlay = styled.div`

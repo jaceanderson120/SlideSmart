@@ -7,6 +7,7 @@ import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "./Button";
 
 Modal.setAppElement("#__next");
 
@@ -70,8 +71,28 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
             />
           </AllowEditingSection>
           <ButtonSection>
-            <ModalButton onClick={onCloseClicked}>Close</ModalButton>
-            <ModalButton onClick={onShareClicked}>Share</ModalButton>
+            <Button
+              onClick={onCloseClicked}
+              backgroundColor="transparent"
+              hoverBackgroundColor="#f03a4770"
+              padding="8px"
+              fontSize={fontSize.secondary}
+              textColor="#f03a47"
+              hoverTextColor="#f03a47"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={onShareClicked}
+              backgroundColor="transparent"
+              hoverBackgroundColor="#f03a4770"
+              padding="8px"
+              fontSize={fontSize.secondary}
+              textColor="#f03a47"
+              hoverTextColor="#f03a47"
+            >
+              Share
+            </Button>
           </ButtonSection>
         </ModalContent>
       </Modal>
@@ -148,21 +169,6 @@ const ButtonSection = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 4px;
-`;
-
-const ModalButton = styled.button`
-  padding: 8px;
-  font-size: ${fontSize.secondary};
-  color: #f03a47;
-  background-color: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #f03a4770;
-  }
 `;
 
 export default ShareModal;
