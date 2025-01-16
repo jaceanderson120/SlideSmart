@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
+import Button from "@/components/Button";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -45,7 +46,9 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit">Log In</Button>
+            <Button type="submit" marginTop="10px">
+              Log In
+            </Button>
             <Register>
               Don't have an account? <Link href="/signup">Register here</Link>
             </Register>
@@ -98,22 +101,6 @@ const Input = styled.input`
   &:focus {
     border-color: #f03a4770;
     outline: none;
-  }
-`;
-
-const Button = styled.button`
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #f03a47;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: ${fontSize.default};
-  transition: color 0.3s;
-
-  &:hover {
-    color: black;
   }
 `;
 
