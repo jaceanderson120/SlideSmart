@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
+import Button from "./Button";
 
 Modal.setAppElement("#__next");
 
@@ -17,15 +18,31 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
           <ModalTitle>{title}</ModalTitle>
           <ModalText>{text}</ModalText>
           <ButtonSection>
-            <ModalButton onClick={onClose}>Cancel</ModalButton>
-            <ModalButton
+            <Button
+              onClick={onClose}
+              backgroundColor="transparent"
+              hoverBackgroundColor="#f03a4770"
+              padding="8px"
+              fontSize={fontSize.secondary}
+              textColor="#f03a47"
+              hoverTextColor="#f03a47"
+            >
+              Cancel
+            </Button>
+            <Button
               onClick={() => {
                 onConfirm();
                 onClose();
               }}
+              backgroundColor="transparent"
+              hoverBackgroundColor="#f03a4770"
+              padding="8px"
+              fontSize={fontSize.secondary}
+              textColor="#f03a47"
+              hoverTextColor="#f03a47"
             >
               Confirm
-            </ModalButton>
+            </Button>
           </ButtonSection>
         </ModalContent>
       </Modal>
@@ -80,21 +97,6 @@ const ModalTitle = styled.p`
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-`;
-
-const ModalButton = styled.button`
-  padding: 8px;
-  font-size: ${fontSize.secondary};
-  color: #f03a47;
-  background-color: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #f03a4770;
-  }
 `;
 
 export default ConfirmationDialog;

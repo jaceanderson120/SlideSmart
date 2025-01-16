@@ -30,6 +30,7 @@ import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
+import Button from "@/components/Button";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -416,9 +417,17 @@ const Study = () => {
                         />
                         <strong style={{ fontWeight: "bold" }}>Answer:</strong>
                       </ImageAndTitle>
-                      <ShowHideButton onClick={() => toggleAnswer(key)}>
+                      <Button
+                        onClick={() => toggleAnswer(key)}
+                        padding="8px"
+                        fontSize={fontSize.label}
+                        backgroundColor="#f03a4770"
+                        hoverBackgroundColor="#f03a4770"
+                        textColor="#000000"
+                        hoverTextColor="#ffffff"
+                      >
                         {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
-                      </ShowHideButton>
+                      </Button>
                     </TopicAnswerContainer>
                     {collapsedAnswers[key] && (
                       <AutoResizeTextArea
@@ -669,19 +678,4 @@ const EditModeText = styled.p`
   font-size: ${fontSize.secondary};
   font-weight: bold;
   color: #f03a47;
-`;
-
-const ShowHideButton = styled.button`
-  padding: 8px;
-  font-size: ${fontSize.label};
-  color: black;
-  background-color: #f03a4770;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    color: white;
-    transition: color 0.3s;
-  }
 `;
