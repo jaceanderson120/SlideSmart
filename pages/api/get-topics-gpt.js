@@ -61,7 +61,7 @@ export default async function getTopics(req, res) {
     );
     res.status(200).json(topicsAndSummaries);
   } catch (error) {
-    console.error("Error analyzing PowerPoint:", error);
+    console.error("Error analyzing PowerPoint (getting topics):", error);
     res.status(500).json({ error: error.message });
   }
 }

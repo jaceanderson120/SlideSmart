@@ -44,7 +44,7 @@ export default async function createContent(req, res) {
 
     res.status(200).json(createdContent);
   } catch (error) {
-    console.error("Error analyzing PowerPoint:", error);
+    console.error("Error analyzing PowerPoint (creating examples):", error);
     res.status(500).json({ error: error.message });
   }
 }

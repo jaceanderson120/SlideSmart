@@ -57,7 +57,8 @@ const StyledMenuItem = styled(MenuItem)`
   display: flex;
   align-items: center;
   cursor: ${(props) => (props.$clickable ? "pointer" : "default")} !important;
-  background-color: ${(props) => (props.$clickable ? "inherit" : "white")};
+  background-color: ${(props) =>
+    props.$clickable ? "inherit" : "white"} !important;
   transition: background-color 0.3s, color 0.3s;
 
   &:hover {
