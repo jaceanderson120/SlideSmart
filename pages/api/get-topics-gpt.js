@@ -24,11 +24,10 @@ export default async function getTopics(req, res) {
     1. **Explanations for Each Topic**: Create detailed explanations for each topic in the comprehensive learning plan. Include relevant details from the PowerPoint and ensure the explanations are thorough.
     2. **Number of Topics**: Try to limit the number of topics to a maximum of 8 unless you really need to generate more than that. You may combine topics if it makes sense to as needed.
     3. **Transitional Topics**: Feel free to introduce additional topics that connect the existing ones in a cohesive manner.
-    4. **Ordering of Topics**: Maintain the same order of topics as they appear in the PowerPoint. Precede each topic name with its corresponding number to indicate its position.
-    5. **Relevant Content**: Avoid including non-informational items such as homework, exam dates, slide outlines, or lecture summaries in your explanations.
-    6. **YouTube Search Query**: Based on the topic and explanation you create, also create a relevant YouTube search query that a student can use to find additional resources on the topic.
-    7. **Additional Resources**: Include a single Google Search query that students can use to find relevant resources on the topic.
-    8. **Keep in Mind**: The explanations should be detailed enough so that if a student wants to generate practice problems based on the explanation, they can do so.
+    4. **Relevant Content**: Avoid including non-informational items such as homework, exam dates, slide outlines, or lecture summaries in your explanations.
+    5. **YouTube Search Query**: Based on the topic and explanation you create, also create a relevant YouTube search query that a student can use to find additional resources on the topic.
+    6. **Additional Resources**: Include a single Google Search query that students can use to find relevant resources on the topic.
+    7. **Keep in Mind**: The explanations should be detailed enough so that if a student wants to generate practice problems based on the explanation, they can do so.
     Finally, return the data in JSON format as follows: 
     { 
         'topics':
