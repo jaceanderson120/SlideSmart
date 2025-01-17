@@ -36,7 +36,7 @@ const MyStudyGuides = () => {
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [displayNames, setDisplayNames] = useState({});
   const [displayNamesLoaded, setDisplayNamesLoaded] = useState(false);
-  const [filter, setFilter] = useState("owned");
+  const [filter, setFilter] = useState("all");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
@@ -91,7 +91,9 @@ const MyStudyGuides = () => {
 
   // Filter study guides based on the selected filter
   useEffect(() => {
-    if (filter === "owned") {
+    if (filter === "all") {
+      setFilteredStudyGuides(studyGuides);
+    } else if (filter === "owned") {
       setFilteredStudyGuides(
         studyGuides.filter((guide) => guide.createdBy === currentUser?.uid)
       );
@@ -101,6 +103,11 @@ const MyStudyGuides = () => {
       );
     }
   }, [filter, studyGuides, currentUser]);
+
+  // Set filter to "all"
+  const setFilterAll = () => {
+    setFilter("all");
+  };
 
   // Set filter to "owned"
   const setFilterOwned = () => {
@@ -229,10 +236,15 @@ const MyStudyGuides = () => {
             <CustomMenu
               triggerElement={
                 <MenuTrigger>
-                  {filter === "owned" ? "Owned by Me" : "Shared with Me"}
+                  {filter === "all"
+                    ? "All"
+                    : filter === "owned"
+                    ? "Owned by Me"
+                    : "Shared with Me"}
                 </MenuTrigger>
               }
               menuItems={[
+                { name: "All", onClick: setFilterAll },
                 { name: "Owned by Me", onClick: setFilterOwned },
                 { name: "Shared with Me", onClick: setFilterShared },
               ]}
@@ -244,7 +256,7 @@ const MyStudyGuides = () => {
             <ColumnName>Created</ColumnName>
             <ColumnName>Permission</ColumnName>
             <ColumnName>Contributors</ColumnName>
-            {filter === "owned" && <OptionsPadding />}
+            <OptionsPadding />
           </ColumnNamesContainer>
           <StudyGuideListContainer>
             {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
@@ -295,7 +307,7 @@ const MyStudyGuides = () => {
                           );
                         })}
                       </StudyGuideContributors>
-                      {guide.createdBy === currentUser?.uid && (
+                      {guide.createdBy === currentUser?.uid ? (
                         <StudyGuideDeleteButton
                           onClick={() => {
                             setIsDeleteDialogOpen(true);
@@ -304,6 +316,8 @@ const MyStudyGuides = () => {
                         >
                           <FontAwesomeIcon icon={faTrashCan} size="2x" />
                         </StudyGuideDeleteButton>
+                      ) : (
+                        <OptionsPadding />
                       )}
                     </StudyGuideListItem>
                   );
