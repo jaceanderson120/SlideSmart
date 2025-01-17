@@ -116,7 +116,7 @@ export default function Home() {
           bold
           fontSize={fontSize.subheading}
         >
-          {isLoggedIn ? "Upload File" : "Get Started"}
+          {isLoggedIn ? "Upload Course Slides or Notes" : "Get Started"}
         </Button>
         {/* Hidden file input */}
         <input
