@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import textbook from "@/images/textbook.png";
@@ -23,7 +23,14 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faShareFromSquare,
+  faMessage,
+} from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -271,24 +278,7 @@ const Study = () => {
       name: isFileShown ? "Collapse File" : "Show File",
       onClick: handleFileToggle,
     },
-    {
-      name: isChatbotShown ? "Collapse Sola" : "Show Sola",
-      onClick: handleChatbotToggle,
-    },
   ];
-
-  // Append the share option if needed
-  if (studyGuide.createdBy === currentUser?.uid) {
-    menuItems.push({ name: "Share", onClick: handleShareClick });
-  }
-
-  // Append the edit mode option if needed
-  if (studyGuide.editors.includes(currentUser?.uid)) {
-    menuItems.push({
-      name: editMode ? "Disable Edit Mode (Save)" : "Enable Edit Mode",
-      onClick: handleEditClicked,
-    });
-  }
 
   return (
     <PageContainer>
@@ -325,13 +315,46 @@ const Study = () => {
             onKeyDown={handleKeyDown}
             ref={titleInputRef}
             readOnly={
-              studyGuide.editors.includes(currentUser?.uid) ? false : true
+              editMode && studyGuide.editors.includes(currentUser?.uid)
+                ? false
+                : true
             }
+            $editMode={editMode}
           />
           <MenuTriggerArea>
+            {!editMode && (
+              <>
+                {studyGuide.editors.includes(currentUser?.uid) && (
+                  <StyledFontAwesomeIcon
+                    icon={faPencil}
+                    size="2x"
+                    title="Edit"
+                    onClick={handleEditClicked}
+                  />
+                )}
+              </>
+            )}
+            {studyGuide.createdBy === currentUser?.uid && (
+              <StyledFontAwesomeIcon
+                icon={faShareFromSquare}
+                size="2x"
+                title="Share"
+                onClick={handleShareClick}
+              />
+            )}
+            <StyledFontAwesomeIcon
+              icon={faMessage}
+              size="2x"
+              title="Sola"
+              onClick={handleChatbotToggle}
+            />
             <CustomMenu
               triggerElement={
-                <StyledFontAwesomeIcon icon={faEllipsisVertical} size="2x" />
+                <StyledFontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  size="2x"
+                  title="Menu"
+                />
               }
               menuItems={menuItems}
             />
@@ -546,8 +569,30 @@ const Section = styled.div`
   overflow: auto;
 `;
 
+const blinkingBorder = keyframes`
+  0% {
+    border-color: #7fa3ff;
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: #7fa3ff;
+  }
+`;
+
 const Title = styled.input`
-  border: none;
+  ${({ $editMode }) =>
+    $editMode
+      ? css`
+          border: 2px dashed #7fa3ff;
+          animation: ${blinkingBorder} 3s infinite;
+          background-color: transparent;
+        `
+      : css`
+          border: none;
+          background-color: #f03a4770;
+        `}
   font-size: ${fontSize.heading};
   font-weight: bold;
   text-overflow: ellipsis;
@@ -555,7 +600,6 @@ const Title = styled.input`
   white-space: nowrap;
   padding: 8px;
   text-align: center;
-  background-color: #f03a4770;
   border-radius: 10px;
   width: ${({ value }) => value.length + "ch"};
   min-width: 20%;
@@ -577,9 +621,12 @@ const SaveButtonArea = styled.div`
   gap: 8px;
 `;
 const MenuTriggerArea = styled.div`
+  display: flex;
+  flex-direction: row;
   position: absolute;
   right: 32px;
   cursor: pointer;
+  gap: 8px;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
