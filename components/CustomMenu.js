@@ -32,11 +32,14 @@ const CustomMenu = ({ triggerElement, menuItems, arrow }) => {
           <StyledMenuItem
             key={index}
             onClick={() => {
-              item.onClick();
-              handleClose();
+              if (item.onClick) {
+                item.onClick();
+                handleClose();
+              }
             }}
+            $clickable={React.isValidElement(item) ? false : true}
           >
-            {item.name}
+            {React.isValidElement(item) ? item : item.name}
           </StyledMenuItem>
         ))}
       </Menu>
@@ -51,9 +54,16 @@ const TriggerContainer = styled.div`
 `;
 
 const StyledMenuItem = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")} !important;
+  background-color: ${(props) => (props.$clickable ? "inherit" : "white")};
+  transition: background-color 0.3s, color 0.3s;
+
   &:hover {
-    transition: color 0.3s;
-    color: #f03a47;
+    color: ${(props) => (props.$clickable ? "#f03a47" : "#000000")};
+    background-color: ${(props) =>
+      props.$clickable ? "rgba(0,0,0,0.08)" : "white"} !important;
   }
 `;
 
