@@ -16,7 +16,7 @@ import Button from "@/components/Button";
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
 
-const Account = () => {
+const Pricing = () => {
   const { currentUser, loading, hasSpark } = useStateContext();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -75,8 +75,8 @@ const Account = () => {
   return (
     <PageContainer>
       <Navbar />
-      <AccountSection>
-        <Title>Account Page</Title>
+      <PricingSection>
+        <Title>Pricing Page</Title>
         <HorizontalContainer>
           <FontAwesomeIcon icon={faUserCircle} size="2x" />
           <BoldText>{userName}</BoldText>
@@ -118,12 +118,12 @@ const Account = () => {
           <Button onClick={handleManageClick}>Manage Subscription</Button>
         )}
         {redirectLoading && <Dots size={32} color="black" />}
-      </AccountSection>
+      </PricingSection>
     </PageContainer>
   );
 };
 
-export default Account;
+export default Pricing;
 
 const PageContainer = styled.div`
   display: flex;
@@ -133,7 +133,7 @@ const PageContainer = styled.div`
   height: 100vh;
 `;
 
-const AccountSection = styled.div`
+const PricingSection = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;

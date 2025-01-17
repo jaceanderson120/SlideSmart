@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import textbook from "@/images/textbook.png";
@@ -23,7 +23,14 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faShareFromSquare,
+  faMessage,
+} from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -31,6 +38,7 @@ import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -42,6 +50,7 @@ function getViewerUrl(url) {
 const Study = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [initialStudyGuide, setInitialStudyGuide] = useState(null);
   const [studyGuide, setStudyGuide] = useState(null);
   const [activeTopic, setActiveTopic] = useState(null);
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
@@ -51,6 +60,8 @@ const Study = () => {
   const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [fileName, setFileName] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [isDiscardEditsDialogOpen, setIsDiscardEditsDialogOpen] =
+    useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -204,6 +215,7 @@ const Study = () => {
     }));
   };
 
+  // Function to update the study guide object with the new value
   const updateStudyGuideObject = (topic, key, value) => {
     setStudyGuide((prev) => {
       const updatedData = {
@@ -229,11 +241,19 @@ const Study = () => {
         "Edit Mode has been disabled. Your study guide has been saved successfully!"
       );
     } else {
+      setInitialStudyGuide(studyGuide);
       toast.info(
         "Edit Mode has been enabled. Make your changes and disable Edit Mode to save!"
       );
     }
     setEditMode(!editMode);
+  };
+
+  // Function to handle discarding edits
+  const discardEdits = () => {
+    setStudyGuide({ ...initialStudyGuide });
+    setEditMode(false);
+    toast.info("Edits have been discarded!");
   };
 
   const handleTopicToggle = () => {
@@ -251,37 +271,42 @@ const Study = () => {
   // Menu items for the study guide page
   const menuItems = [
     {
-      name: isTopicsShown ? "Hide Topics" : "Show Topics",
+      name: isTopicsShown ? "Collapse Topics" : "Show Topics",
       onClick: handleTopicToggle,
     },
     {
-      name: isFileShown ? "Hide File" : "Show File",
+      name: isFileShown ? "Collapse File" : "Show File",
       onClick: handleFileToggle,
     },
-    {
-      name: isChatbotShown ? "Hide Sola" : "Show Sola",
-      onClick: handleChatbotToggle,
-    },
   ];
-
-  // Append the share option if needed
-  if (studyGuide.createdBy === currentUser?.uid) {
-    menuItems.push({ name: "Share", onClick: handleShareClick });
-  }
-
-  // Append the edit mode option if needed
-  if (studyGuide.editors.includes(currentUser?.uid)) {
-    menuItems.push({
-      name: editMode ? "Disable Edit Mode (Save)" : "Enable Edit Mode",
-      onClick: handleEditClicked,
-    });
-  }
 
   return (
     <PageContainer>
       <Navbar />
       <Section>
         <HeaderSection>
+          {editMode && (
+            <SaveButtonArea>
+              <Button
+                backgroundColor="#7fa3ff70"
+                hoverBackgroundColor="#7fa3ff"
+                textColor="#000000"
+                hoverTextColor="#ffffff"
+                onClick={handleEditClicked}
+              >
+                Save Edits
+              </Button>
+              <Button
+                backgroundColor="#f03a4770"
+                hoverBackgroundColor="#f03a47"
+                textColor="#000000"
+                hoverTextColor="#ffffff"
+                onClick={() => setIsDiscardEditsDialogOpen(true)}
+              >
+                Discard Edits
+              </Button>
+            </SaveButtonArea>
+          )}
           <Title
             type="text"
             value={fileName}
@@ -290,23 +315,51 @@ const Study = () => {
             onKeyDown={handleKeyDown}
             ref={titleInputRef}
             readOnly={
-              studyGuide.editors.includes(currentUser?.uid) ? false : true
+              editMode && studyGuide.editors.includes(currentUser?.uid)
+                ? false
+                : true
             }
+            $editMode={editMode}
           />
           <MenuTriggerArea>
+            {!editMode && (
+              <>
+                {studyGuide.editors.includes(currentUser?.uid) && (
+                  <StyledFontAwesomeIcon
+                    icon={faPencil}
+                    size="2x"
+                    title="Edit"
+                    onClick={handleEditClicked}
+                  />
+                )}
+              </>
+            )}
+            {studyGuide.createdBy === currentUser?.uid && (
+              <StyledFontAwesomeIcon
+                icon={faShareFromSquare}
+                size="2x"
+                title="Share"
+                onClick={handleShareClick}
+              />
+            )}
+            <StyledFontAwesomeIcon
+              icon={faMessage}
+              size="2x"
+              title="Sola"
+              onClick={handleChatbotToggle}
+            />
             <CustomMenu
               triggerElement={
-                <StyledFontAwesomeIcon icon={faEllipsisVertical} size="2x" />
+                <StyledFontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  size="2x"
+                  title="Menu"
+                />
               }
               menuItems={menuItems}
             />
           </MenuTriggerArea>
         </HeaderSection>
-        {editMode && (
-          <EditModeText>
-            Edit Mode Enabled! Disable Edit Mode to save any edits!
-          </EditModeText>
-        )}
         <OutputSection>
           {isTopicsShown && (
             <ContentContainer>
@@ -343,6 +396,7 @@ const Study = () => {
                       <strong style={{ fontWeight: "bold" }}>Summary:</strong>
                     </ImageAndTitle>
                     <AutoResizeTextArea
+                      key={editMode} // Trigger re-render when edit mode changes
                       onChange={(text) => {
                         updateStudyGuideObject(key, "summary", text);
                       }}
@@ -381,6 +435,7 @@ const Study = () => {
                       <strong style={{ fontWeight: "bold" }}>Example:</strong>
                     </ImageAndTitle>
                     <AutoResizeTextArea
+                      key={editMode} // Trigger re-render when edit mode changes
                       onChange={(text) => {
                         updateStudyGuideObject(key, "example", text);
                       }}
@@ -399,6 +454,7 @@ const Study = () => {
                       <strong style={{ fontWeight: "bold" }}>Question:</strong>
                     </ImageAndTitle>
                     <AutoResizeTextArea
+                      key={editMode} // Trigger re-render when edit mode changes
                       onChange={(text) => {
                         updateStudyGuideObject(key, "question", text);
                       }}
@@ -431,6 +487,7 @@ const Study = () => {
                     </TopicAnswerContainer>
                     {collapsedAnswers[key] && (
                       <AutoResizeTextArea
+                        key={editMode} // Trigger re-render when edit mode changes
                         onChange={(text) => {
                           updateStudyGuideObject(key, "answer", text);
                         }}
@@ -476,6 +533,16 @@ const Study = () => {
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
       />
+      <ConfirmationDialog
+        isOpen={isDiscardEditsDialogOpen}
+        onClose={() => setIsDiscardEditsDialogOpen(false)}
+        title="Discard Edits"
+        text="Are you sure you want to discard all edits?"
+        onConfirm={() => {
+          setIsDiscardEditsDialogOpen(false);
+          discardEdits();
+        }}
+      />
     </PageContainer>
   );
 };
@@ -502,8 +569,30 @@ const Section = styled.div`
   overflow: auto;
 `;
 
+const blinkingBorder = keyframes`
+  0% {
+    border-color: #7fa3ff;
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: #7fa3ff;
+  }
+`;
+
 const Title = styled.input`
-  border: none;
+  ${({ $editMode }) =>
+    $editMode
+      ? css`
+          border: 2px dashed #7fa3ff;
+          animation: ${blinkingBorder} 3s infinite;
+          background-color: transparent;
+        `
+      : css`
+          border: none;
+          background-color: #f03a4770;
+        `}
   font-size: ${fontSize.heading};
   font-weight: bold;
   text-overflow: ellipsis;
@@ -511,7 +600,6 @@ const Title = styled.input`
   white-space: nowrap;
   padding: 8px;
   text-align: center;
-  background-color: #f03a4770;
   border-radius: 10px;
   width: ${({ value }) => value.length + "ch"};
   min-width: 20%;
@@ -525,11 +613,20 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
 `;
-
+const SaveButtonArea = styled.div`
+  display: flex;
+  position: absolute;
+  left: 32px;
+  cursor: pointer;
+  gap: 8px;
+`;
 const MenuTriggerArea = styled.div`
+  display: flex;
+  flex-direction: row;
   position: absolute;
   right: 32px;
   cursor: pointer;
+  gap: 8px;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
@@ -670,12 +767,4 @@ const TopicName = styled.a`
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
   }
-`;
-
-const EditModeText = styled.p`
-  width: 100%;
-  text-align: center;
-  font-size: ${fontSize.secondary};
-  font-weight: bold;
-  color: #f03a47;
 `;

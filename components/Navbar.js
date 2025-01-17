@@ -19,7 +19,7 @@ import UserIcon from "./UserIcon";
 import { useState, useEffect } from "react";
 
 function Navbar() {
-  const { isLoggedIn } = useStateContext();
+  const { isLoggedIn, hasSpark } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
 
@@ -28,12 +28,28 @@ function Navbar() {
     router.push("/login");
   };
 
-  const handleAccountClick = () => {
-    router.push("/account");
+  const handleUpgradeManageClick = () => {
+    router.push("/pricing");
   };
 
   const menuItems = [
-    { name: "Account", onClick: handleAccountClick },
+    <MenuItemContainer>
+      <HorizontalContainer>
+        <UserIcon
+          initials={initials}
+          size={48}
+          hoverBackgroundColor="#9c9c9c"
+        />
+        <MenuTextContainer>
+          <p>{auth.currentUser?.displayName}</p>
+          <p>{auth.currentUser?.email}</p>
+        </MenuTextContainer>
+      </HorizontalContainer>
+    </MenuItemContainer>,
+    {
+      name: hasSpark ? "Manage Subscription" : "Upgrade",
+      onClick: handleUpgradeManageClick,
+    },
     { name: "Logout", onClick: handleLogout },
   ];
 
@@ -176,12 +192,30 @@ const NavbarSection = styled.div`
   background-color: #f6f4f3;
 `;
 
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
-  &:hover {
-    transition: color 0.3s;
-    color: #f03a47;
+const MenuTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  gap: 8px;
+`;
+
+const MenuItemContainer = styled.div`
+  padding: 8px;
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 18px;
   }
+`;
+
+const HorizontalContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 export default Navbar;

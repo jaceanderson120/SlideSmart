@@ -72,6 +72,6 @@ const TextArea = styled.textarea`
   ${({ $editMode }) =>
     $editMode &&
     css`
-      animation: ${blinkingBorder} 2s infinite;
+      animation: ${blinkingBorder} 3s infinite;
     `}
 `;

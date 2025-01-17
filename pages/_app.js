@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }) {
       <StateContext>
         <Component {...pageProps} />
       </StateContext>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" autoClose={8000} />
     </>
   );
 }
