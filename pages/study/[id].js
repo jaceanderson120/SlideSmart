@@ -31,7 +31,7 @@ import {
   faShareFromSquare,
   faMessage,
 } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPlus, faGrip } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -40,6 +40,7 @@ import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -291,6 +292,35 @@ const Study = () => {
     }
   };
 
+  // Function to reorder the keys of studyGuide.extractedData
+  const reorderExtractedData = (order) => {
+    setStudyGuide((prev) => {
+      const reorderedData = {};
+      order.forEach((key) => {
+        if (prev.extractedData[key]) {
+          reorderedData[key] = prev.extractedData[key];
+        }
+      });
+      return {
+        ...prev,
+        extractedData: reorderedData,
+      };
+    });
+  };
+
+  // Handle drag end
+  const handleDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items = Array.from(Object.keys(studyGuide.extractedData));
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    reorderExtractedData(items);
+  };
+
   const handleTopicToggle = () => {
     setIsTopicsShown(!isTopicsShown);
   };
@@ -397,31 +427,53 @@ const Study = () => {
         </HeaderSection>
         <OutputSection>
           {isTopicsShown && (
-            <ContentContainer>
-              {studyGuide.extractedData &&
-                Object.keys(studyGuide.extractedData).map((key) => (
-                  <TopicName
-                    href={`#${key}`}
-                    key={key}
-                    className={activeTopic === key ? "active" : ""}
+            <DragDropContext onDragEnd={editMode ? handleDragEnd : () => {}}>
+              <Droppable droppableId="topics">
+                {(provided) => (
+                  <ContentContainer
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                   >
-                    {key}
-                  </TopicName>
-                ))}
-              {editMode && (
-                <Button
-                  backgroundColor="transparent"
-                  textColor="#000000"
-                  hoverBackgroundColor="#f03a4770"
-                  padding="8px"
-                  marginTop="16px"
-                  fontSize={fontSize.label}
-                  onClick={handleAddTopic}
-                >
-                  <FontAwesomeIcon icon={faPlus} /> Add Topic
-                </Button>
-              )}
-            </ContentContainer>
+                    {Object.keys(studyGuide.extractedData).map((key, index) => (
+                      <Draggable
+                        key={key}
+                        draggableId={key}
+                        index={index}
+                        isDragDisabled={!editMode}
+                      >
+                        {(provided) => (
+                          <TopicName
+                            href={`#${key}`}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={activeTopic === key ? "active" : ""}
+                          >
+                            {key}
+                            {editMode && <FontAwesomeIcon icon={faGrip} />}
+                          </TopicName>
+                        )}
+                      </Draggable>
+                    ))}
+                    {/* Placeholder to maintain the space that the dragged item would occupy */}
+                    {provided.placeholder}
+                    {editMode && (
+                      <Button
+                        backgroundColor="transparent"
+                        textColor="#000000"
+                        hoverBackgroundColor="#f03a4770"
+                        padding="8px"
+                        marginTop="16px"
+                        fontSize={fontSize.label}
+                        onClick={handleAddTopic}
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Add Topic
+                      </Button>
+                    )}
+                  </ContentContainer>
+                )}
+              </Droppable>
+            </DragDropContext>
           )}
           <InfoContainer id="infoContainer">
             {studyGuide.extractedData &&
@@ -817,6 +869,9 @@ const TopicSubContainer = styled.div`
 `;
 
 const TopicName = styled.a`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 95%;
   padding: 16px;
   margin-right: 16px;
