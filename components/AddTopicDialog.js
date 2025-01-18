@@ -2,10 +2,13 @@ import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
+import { useState } from "react";
 
 Modal.setAppElement("#__next");
 
-const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
+const AddTopicDialog = ({ isOpen, onClose, onConfirm }) => {
+  const [topicName, setTopicName] = useState("");
+
   return (
     <>
       <Modal
@@ -15,11 +18,18 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
         style={customStyles}
       >
         <ModalContent>
-          <ModalTitle>{title}</ModalTitle>
-          <ModalText>{text}</ModalText>
+          <ModalTitle>Add New Topic</ModalTitle>
+          <ModalInput
+            placeholder="Enter topic name"
+            value={topicName}
+            onChange={(event) => setTopicName(event.target.value)}
+          />
           <ButtonSection>
             <Button
-              onClick={onClose}
+              onClick={() => {
+                setTopicName("");
+                onClose();
+              }}
               backgroundColor="transparent"
               hoverBackgroundColor="#f03a4770"
               padding="8px"
@@ -31,7 +41,8 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
             </Button>
             <Button
               onClick={() => {
-                onConfirm();
+                onConfirm(topicName);
+                setTopicName("");
                 onClose();
               }}
               backgroundColor="transparent"
@@ -97,9 +108,12 @@ const ModalTitle = styled.p`
   }
 `;
 
-const ModalText = styled.p`
+const ModalInput = styled.input`
   font-size: ${fontSize.secondary};
-  line-height: 1.3;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
 `;
 
-export default ConfirmationDialog;
+export default AddTopicDialog;
