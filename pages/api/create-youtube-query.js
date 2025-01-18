@@ -19,7 +19,10 @@ export default async function createYouTubeQuery(req, res) {
   `;
 
   // Creating the user prompt
-  const prompt = `Here is the summary of a topic: ${formattedData}. Please generate a YouTube search query that would help a student learn more about this topic.`;
+  const prompt = `Here is the summary of a topic: ${formattedData}.
+  Please generate a YouTube search query that would help a student learn more about this topic.
+  Make sure the query is clear and concise.
+  Please don't use any language like "tutorial" or "how to" or "explained" in the query.`;
 
   try {
     const completion = await openai.completions.create({
