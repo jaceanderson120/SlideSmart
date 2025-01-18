@@ -278,10 +278,8 @@ const Study = () => {
 
   // Function to delete a sub section of a topic in the study guide
   const handleDeleteSubSection = (topic, subSection) => {
-    console.log(topic, subSection);
     const updatedData = { ...studyGuide };
     delete updatedData.extractedData[topic][subSection];
-    console.log("updatedData", updatedData);
     setStudyGuide(updatedData);
   };
 
