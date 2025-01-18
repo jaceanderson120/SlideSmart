@@ -60,7 +60,8 @@ const customStyles = {
     backgroundColor: "#f6f4f3",
     border: "none",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
-    maxWidth: "20%",
+    maxWidth: "40%",
+    height: "25%",
   },
 };
 
@@ -77,6 +78,8 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
   gap: 16px;
 `;
 

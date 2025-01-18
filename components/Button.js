@@ -10,6 +10,7 @@ const Button = ({
   padding = "10px 20px",
   marginTop = "0px",
   bold = false,
+  underline = false,
   onClick,
   children,
 }) => {
@@ -23,6 +24,7 @@ const Button = ({
       $padding={padding}
       $fontSize={fontSize}
       $marginTop={marginTop}
+      $underline={underline}
       $bold={bold}
     >
       {children}
@@ -48,4 +50,17 @@ const StyledButton = styled.button`
     color: ${(props) => props.$hoverTextColor};
     background-color: ${(props) => props.$hoverBackgroundColor};
   }
+
+  ${(props) =>
+    props.$underline &&
+    `
+    &::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: ${props.$textColor};
+      margin-top: 10px;
+    }
+  `}
 `;

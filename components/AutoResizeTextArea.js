@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import styled, { keyframes, css } from "styled-components";
+import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 
 const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
@@ -41,37 +41,20 @@ const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
 
 export default AutoResizeTextArea;
 
-// Define a blinking border animation
-const blinkingBorder = keyframes`
-  0% {
-    border-color: #7fa3ff;
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: #7fa3ff;
-  }
-`;
-
 // Styled textarea with dynamic blinking border based on props
 const TextArea = styled.textarea`
+  border: none;
   width: 100%;
   color: #000000;
   height: auto;
   font-size: ${fontSize.default};
   line-height: 1.3;
-  border: 2px dashed transparent;
   border-radius: 8px;
   padding: 8px;
   resize: none;
   overflow: hidden;
   outline: none;
-  background-color: transparent;
-
-  ${({ $editMode }) =>
-    $editMode &&
-    css`
-      animation: ${blinkingBorder} 3s infinite;
-    `}
+  background-color: ${(props) => (props.$editMode ? "#ffffff" : "transparent")};
+  box-shadow: ${(props) =>
+    props.$editMode ? "0px 2px 2px rgba(0, 0, 0, 0.05)" : "none"};
 `;

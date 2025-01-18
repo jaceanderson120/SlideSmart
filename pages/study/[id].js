@@ -26,6 +26,7 @@ config.autoAddCss = false; /* eslint-disable import/first */
 import {
   faEllipsisVertical,
   faPencil,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
@@ -41,6 +42,7 @@ import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import AddSectionsContainer from "@/components/AddSectionsContainer";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -66,6 +68,9 @@ const Study = () => {
     useState(false);
   const [topicToDelete, setTopicToDelete] = useState(null);
   const [isDeleteTopicDialogOpen, setIsDeleteTopicDialogOpen] = useState(false);
+  const [isDeleteSubSectionDialogOpen, setIsDeleteSubSectionDialogOpen] =
+    useState(false);
+  const [subSectionToDelete, setSubSectionToDelete] = useState(null);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -269,6 +274,15 @@ const Study = () => {
     setStudyGuide(updatedData);
   };
 
+  // Function to delete a sub section of a topic in the study guide
+  const handleDeleteSubSection = (topic, subSection) => {
+    console.log(topic, subSection);
+    const updatedData = { ...studyGuide };
+    delete updatedData.extractedData[topic][subSection];
+    console.log("updatedData", updatedData);
+    setStudyGuide(updatedData);
+  };
+
   // Function to add a new topic to the study guide
   const handleAddTopic = () => {
     const newTopic = prompt("Enter the name of the new topic:");
@@ -353,19 +367,21 @@ const Study = () => {
           {editMode && (
             <SaveButtonArea>
               <Button
-                backgroundColor="#7fa3ff70"
-                hoverBackgroundColor="#7fa3ff"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
                 textColor="#000000"
-                hoverTextColor="#ffffff"
+                hoverTextColor="#f03a47"
+                underline={true}
                 onClick={handleEditClicked}
               >
                 Save Edits
               </Button>
               <Button
-                backgroundColor="#f03a4770"
-                hoverBackgroundColor="#f03a47"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
                 textColor="#000000"
-                hoverTextColor="#ffffff"
+                hoverTextColor="#f03a47"
+                underline={true}
                 onClick={() => setIsDiscardEditsDialogOpen(true)}
               >
                 Discard Edits
@@ -496,121 +512,226 @@ const Study = () => {
                       />
                     )}
                   </TopicHeaderContainer>
-                  <TopicSubContainer>
-                    <ImageAndTitle>
-                      <Image
-                        src={pencil}
-                        alt="Pencil Logo"
-                        width={48}
-                        height={48}
-                      />
-                      <strong style={{ fontWeight: "bold" }}>Summary:</strong>
-                    </ImageAndTitle>
-                    <AutoResizeTextArea
-                      key={editMode} // Trigger re-render when edit mode changes
-                      onChange={(text) => {
-                        updateStudyGuideObject(key, "summary", text);
-                      }}
-                      defaultValue={studyGuide.extractedData[key]["summary"]}
-                      editMode={editMode}
-                    />
-                  </TopicSubContainer>
-                  <TopicSubContainer>
-                    <ImageAndTitle>
-                      <Image
-                        src={youtube}
-                        alt="YouTube Logo"
-                        width={48}
-                        height={48}
-                      />
-                      <strong style={{ fontWeight: "bold" }}>Video:</strong>
-                    </ImageAndTitle>
-                    {studyGuide.extractedData[key]["youtubeId"] ? (
-                      <iframe
-                        width="560"
-                        height="315"
-                        src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                    ) : (
-                      <NoVideoText>No video available.</NoVideoText>
-                    )}
-                  </TopicSubContainer>
-                  <TopicSubContainer>
-                    <ImageAndTitle>
-                      <Image
-                        src={textbook}
-                        alt="Textbook Logo"
-                        width={48}
-                        height={48}
-                      />
-                      <strong style={{ fontWeight: "bold" }}>Example:</strong>
-                    </ImageAndTitle>
-                    <AutoResizeTextArea
-                      key={editMode} // Trigger re-render when edit mode changes
-                      onChange={(text) => {
-                        updateStudyGuideObject(key, "example", text);
-                      }}
-                      defaultValue={studyGuide.extractedData[key]["example"]}
-                      editMode={editMode}
-                    />
-                  </TopicSubContainer>
-                  <TopicSubContainer>
-                    <ImageAndTitle>
-                      <Image
-                        src={question}
-                        alt="Question Logo"
-                        width={48}
-                        height={48}
-                      />
-                      <strong style={{ fontWeight: "bold" }}>Question:</strong>
-                    </ImageAndTitle>
-                    <AutoResizeTextArea
-                      key={editMode} // Trigger re-render when edit mode changes
-                      onChange={(text) => {
-                        updateStudyGuideObject(key, "question", text);
-                      }}
-                      defaultValue={studyGuide.extractedData[key]["question"]}
-                      editMode={editMode}
-                    />
-                  </TopicSubContainer>
-                  <TopicSubContainer>
-                    <TopicAnswerContainer>
-                      <ImageAndTitle>
-                        <Image
-                          src={check}
-                          alt="Check Mark Logo"
-                          width={48}
-                          height={48}
-                        />
-                        <strong style={{ fontWeight: "bold" }}>Answer:</strong>
-                      </ImageAndTitle>
-                      <Button
-                        onClick={() => toggleAnswer(key)}
-                        padding="8px"
-                        fontSize={fontSize.label}
-                        backgroundColor="#f03a4770"
-                        hoverBackgroundColor="#f03a4770"
-                        textColor="#000000"
-                        hoverTextColor="#ffffff"
-                      >
-                        {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
-                      </Button>
-                    </TopicAnswerContainer>
-                    {collapsedAnswers[key] && (
+                  {studyGuide.extractedData[key]["summary"] && (
+                    <TopicSubContainer>
+                      <ImageAndTitleContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={pencil}
+                            alt="Pencil Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Summary:
+                          </strong>
+                        </ImageAndTitle>
+                        {editMode && (
+                          <StyledFontAwesomeIcon
+                            icon={faX}
+                            onClick={() => {
+                              setTopicToDelete(key);
+                              setSubSectionToDelete("summary");
+                              setIsDeleteSubSectionDialogOpen(true);
+                            }}
+                          />
+                        )}
+                      </ImageAndTitleContainer>
                       <AutoResizeTextArea
                         key={editMode} // Trigger re-render when edit mode changes
                         onChange={(text) => {
-                          updateStudyGuideObject(key, "answer", text);
+                          updateStudyGuideObject(key, "summary", text);
                         }}
-                        defaultValue={studyGuide.extractedData[key]["answer"]}
+                        defaultValue={studyGuide.extractedData[key]["summary"]}
                         editMode={editMode}
                       />
-                    )}
-                  </TopicSubContainer>
+                    </TopicSubContainer>
+                  )}
+                  {studyGuide.extractedData[key]["youtubeId"] && (
+                    <TopicSubContainer>
+                      <ImageAndTitleContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={youtube}
+                            alt="YouTube Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>Video:</strong>
+                        </ImageAndTitle>
+                        {editMode && (
+                          <StyledFontAwesomeIcon
+                            icon={faX}
+                            onClick={() => {
+                              setTopicToDelete(key);
+                              setSubSectionToDelete("youtubeId");
+                              setIsDeleteSubSectionDialogOpen(true);
+                            }}
+                          />
+                        )}
+                      </ImageAndTitleContainer>
+                      {studyGuide.extractedData[key]["youtubeId"] ? (
+                        <iframe
+                          width="560"
+                          height="315"
+                          src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      ) : (
+                        <NoVideoText>No video available.</NoVideoText>
+                      )}
+                    </TopicSubContainer>
+                  )}
+                  {studyGuide.extractedData[key]["example"] && (
+                    <TopicSubContainer>
+                      <ImageAndTitleContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={textbook}
+                            alt="Textbook Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Example:
+                          </strong>
+                        </ImageAndTitle>
+                        {editMode && (
+                          <StyledFontAwesomeIcon
+                            icon={faX}
+                            onClick={() => {
+                              setTopicToDelete(key);
+                              setSubSectionToDelete("example");
+                              setIsDeleteSubSectionDialogOpen(true);
+                            }}
+                          />
+                        )}
+                      </ImageAndTitleContainer>
+                      <AutoResizeTextArea
+                        key={editMode} // Trigger re-render when edit mode changes
+                        onChange={(text) => {
+                          updateStudyGuideObject(key, "example", text);
+                        }}
+                        defaultValue={studyGuide.extractedData[key]["example"]}
+                        editMode={editMode}
+                      />
+                    </TopicSubContainer>
+                  )}
+                  {studyGuide.extractedData[key]["question"] && (
+                    <TopicSubContainer>
+                      <ImageAndTitleContainer>
+                        <ImageAndTitle>
+                          <Image
+                            src={question}
+                            alt="Question Logo"
+                            width={48}
+                            height={48}
+                          />
+                          <strong style={{ fontWeight: "bold" }}>
+                            Question:
+                          </strong>
+                        </ImageAndTitle>
+                        {editMode && (
+                          <StyledFontAwesomeIcon
+                            icon={faX}
+                            onClick={() => {
+                              setTopicToDelete(key);
+                              setSubSectionToDelete("question");
+                              setIsDeleteSubSectionDialogOpen(true);
+                            }}
+                          />
+                        )}
+                      </ImageAndTitleContainer>
+                      <AutoResizeTextArea
+                        key={editMode} // Trigger re-render when edit mode changes
+                        onChange={(text) => {
+                          updateStudyGuideObject(key, "question", text);
+                        }}
+                        defaultValue={studyGuide.extractedData[key]["question"]}
+                        editMode={editMode}
+                      />
+                    </TopicSubContainer>
+                  )}
+                  {studyGuide.extractedData[key]["answer"] && (
+                    <TopicSubContainer>
+                      <TopicAnswerContainer>
+                        <ImageAndTitleContainer>
+                          <ImageAndTitle>
+                            <Image
+                              src={check}
+                              alt="Check Mark Logo"
+                              width={48}
+                              height={48}
+                            />
+                            <strong style={{ fontWeight: "bold" }}>
+                              Answer:
+                            </strong>
+                          </ImageAndTitle>
+                          {editMode && (
+                            <StyledFontAwesomeIcon
+                              icon={faX}
+                              onClick={() => {
+                                setTopicToDelete(key);
+                                setSubSectionToDelete("answer");
+                                setIsDeleteSubSectionDialogOpen(true);
+                              }}
+                            />
+                          )}
+                        </ImageAndTitleContainer>
+                        {!editMode && (
+                          <Button
+                            onClick={() => toggleAnswer(key)}
+                            padding="8px"
+                            fontSize={fontSize.label}
+                            backgroundColor="#f03a4770"
+                            hoverBackgroundColor="#f03a4770"
+                            textColor="#000000"
+                            hoverTextColor="#ffffff"
+                          >
+                            {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
+                          </Button>
+                        )}
+                      </TopicAnswerContainer>
+                      {!editMode ? (
+                        collapsedAnswers[key] && (
+                          <AutoResizeTextArea
+                            key={editMode} // Trigger re-render when edit mode changes
+                            onChange={(text) => {
+                              updateStudyGuideObject(key, "answer", text);
+                            }}
+                            defaultValue={
+                              studyGuide.extractedData[key]["answer"]
+                            }
+                            editMode={editMode}
+                          />
+                        )
+                      ) : (
+                        <AutoResizeTextArea
+                          key={editMode} // Trigger re-render when edit mode changes
+                          onChange={(text) => {
+                            updateStudyGuideObject(key, "answer", text);
+                          }}
+                          defaultValue={studyGuide.extractedData[key]["answer"]}
+                          editMode={editMode}
+                        />
+                      )}
+                    </TopicSubContainer>
+                  )}
+                  {editMode && (
+                    <AddSectionsContainer
+                      topicInfo={studyGuide.extractedData[key]}
+                      handleAddSection={(section) => {
+                        updateStudyGuideObject(
+                          key,
+                          section,
+                          `Fill in the ${section} here...`
+                        );
+                      }}
+                    />
+                  )}
                 </InfoSubContainer>
               ))}
             <InfoSubContainer>
@@ -669,6 +790,26 @@ const Study = () => {
           toast.success("Topic has been deleted successfully.");
         }}
       />
+      <ConfirmationDialog
+        isOpen={isDeleteSubSectionDialogOpen}
+        onClose={() => setIsDeleteSubSectionDialogOpen(false)}
+        title={`Delete ${
+          subSectionToDelete === "youtubeId"
+            ? "Video"
+            : subSectionToDelete?.charAt(0).toUpperCase() +
+              subSectionToDelete?.slice(1)
+        }`}
+        text={`Are you sure you want to delete this ${
+          subSectionToDelete === "youtubeId" ? "video" : subSectionToDelete
+        }? You cannot undo this action unless you discard your edits.`}
+        onConfirm={() => {
+          setIsDeleteSubSectionDialogOpen(false);
+          handleDeleteSubSection(topicToDelete, subSectionToDelete);
+          toast.success(
+            `${topicToDelete}: ${subSectionToDelete} has been deleted successfully.`
+          );
+        }}
+      />
     </PageContainer>
   );
 };
@@ -695,24 +836,11 @@ const Section = styled.div`
   overflow: auto;
 `;
 
-const blinkingBorder = keyframes`
-  0% {
-    border-color: #7fa3ff;
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: #7fa3ff;
-  }
-`;
-
 const Title = styled.input`
   ${({ $editMode }) =>
     $editMode
       ? css`
-          border: 2px dashed #7fa3ff;
-          animation: ${blinkingBorder} 3s infinite;
+          border: 2px dashed #f03a4770;
           background-color: transparent;
         `
       : css`
@@ -821,17 +949,12 @@ const TopicHeaderContainer = styled.div`
   justify-content: space-between;
   position: relative;
   align-items: center;
-  margin-left: 16px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-right: 30px;
-  cursor: pointer;
+  padding: 16px;
 `;
 
 const TopicHeaderTitle = styled.div`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  padding: 16px;
 
   &::after {
     content: "";
@@ -841,6 +964,13 @@ const TopicHeaderTitle = styled.div`
     background-color: #000000;
     margin-top: 10px;
   }
+`;
+
+const ImageAndTitleContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const ImageAndTitle = styled.div`
