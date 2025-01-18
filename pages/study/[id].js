@@ -27,6 +27,7 @@ import {
   faEllipsisVertical,
   faPencil,
   faX,
+  faRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
@@ -44,6 +45,8 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AddSectionsContainer from "@/components/AddSectionsContainer";
 import AddTopicDialog from "@/components/AddTopicDialog";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -73,6 +76,10 @@ const Study = () => {
     useState(false);
   const [subSectionToDelete, setSubSectionToDelete] = useState(null);
   const [isAddTopicDialogOpen, setIsAddTopicDialogOpen] = useState(false);
+  const [isNewYoutubeVideoDialogOpen, setIsNewYoutubeVideoDialogOpen] =
+    useState(false);
+  const [topicForNewYoutubeVideo, setTopicForNewYoutubeVideo] = useState(null);
+  const [findingNewYoutubeVideo, setfindingNewYoutubeVideo] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -300,7 +307,7 @@ const Study = () => {
           ...prev.extractedData,
           [topicName]: {
             summary: "Fill in the summary here...",
-            youtubeId: "",
+            youtubeId: "None",
             example: "Fill in the example here...",
             question: "Fill in the question here...",
             answer: "Fill in the answer here...",
@@ -363,6 +370,35 @@ const Study = () => {
       onClick: handleFileToggle,
     },
   ];
+
+  // Get a new YouTube video
+  const getNewYoutubeVideo = async (topic, data) => {
+    setfindingNewYoutubeVideo(true);
+    // Filter the data to only be the topic name and summary
+    const filteredData = {
+      summary: data.summary,
+    };
+    const res = await fetch("/api/create-youtube-query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filteredData), // Sending the topic as JSON
+    });
+    const query = await res.json();
+    const res2 = await fetch("/api/get-youtube-video", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }), // Sending the topic as JSON
+    });
+    const videoId = await res2.json();
+
+    // Update the study guide object with the new YouTube video ID
+    updateStudyGuideObject(topic, "youtubeId", videoId);
+    setfindingNewYoutubeVideo(false);
+  };
 
   return (
     <PageContainer>
@@ -567,17 +603,27 @@ const Study = () => {
                           <strong style={{ fontWeight: "bold" }}>Video:</strong>
                         </ImageAndTitle>
                         {editMode && (
-                          <StyledFontAwesomeIcon
-                            icon={faX}
-                            onClick={() => {
-                              setTopicToDelete(key);
-                              setSubSectionToDelete("youtubeId");
-                              setIsDeleteSubSectionDialogOpen(true);
-                            }}
-                          />
+                          <div>
+                            <StyledFontAwesomeIcon
+                              icon={faRotateLeft}
+                              onClick={() => {
+                                setTopicForNewYoutubeVideo(key);
+                                setIsNewYoutubeVideoDialogOpen(true);
+                              }}
+                            />
+                            <StyledFontAwesomeIcon
+                              icon={faX}
+                              onClick={() => {
+                                setTopicToDelete(key);
+                                setSubSectionToDelete("youtubeId");
+                                setIsDeleteSubSectionDialogOpen(true);
+                              }}
+                            />
+                          </div>
                         )}
                       </ImageAndTitleContainer>
-                      {studyGuide.extractedData[key]["youtubeId"] ? (
+                      {!findingNewYoutubeVideo &&
+                      studyGuide.extractedData[key]["youtubeId"] !== "None" ? (
                         <iframe
                           width="560"
                           height="315"
@@ -587,8 +633,13 @@ const Study = () => {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         ></iframe>
+                      ) : findingNewYoutubeVideo ? (
+                        <Dots />
                       ) : (
-                        <NoVideoText>No video available.</NoVideoText>
+                        <NoVideoText>
+                          No video available. Please fill in the topic summary
+                          and then generate a video.
+                        </NoVideoText>
                       )}
                     </TopicSubContainer>
                   )}
@@ -734,7 +785,9 @@ const Study = () => {
                         updateStudyGuideObject(
                           key,
                           section,
-                          `Fill in the ${section} here...`
+                          section === "youtubeId"
+                            ? "None"
+                            : `Fill in the ${section} here...`
                         );
                       }}
                     />
@@ -812,8 +865,20 @@ const Study = () => {
         onConfirm={() => {
           setIsDeleteSubSectionDialogOpen(false);
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
-          toast.success(
-            `${topicToDelete}: ${subSectionToDelete} has been deleted successfully.`
+        }}
+      />
+      <ConfirmationDialog
+        isOpen={isNewYoutubeVideoDialogOpen}
+        onClose={() => {
+          setIsNewYoutubeVideoDialogOpen(false);
+        }}
+        title="Find a New YouTube Video"
+        text="SlideSmart uses AI to analyze your topic summary and find the best YouTube video to help you learn. Please confirm to proceed."
+        onConfirm={() => {
+          setIsNewYoutubeVideoDialogOpen(false);
+          getNewYoutubeVideo(
+            topicForNewYoutubeVideo,
+            studyGuide.extractedData[topicForNewYoutubeVideo]
           );
         }}
       />

@@ -16,7 +16,18 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
           Add Summary
         </Button>
       )}
-      {/* Do the same thing for example, question, answer */}
+      {!topicInfo["youtubeId"] && (
+        <Button
+          padding="8px"
+          backgroundColor="#f03a4770"
+          hoverBackgroundColor="#f03a4770"
+          textColor="#000000"
+          hoverTextColor="#ffffff"
+          onClick={() => handleAddSection("youtubeId")}
+        >
+          Add Video
+        </Button>
+      )}
       {!topicInfo["example"] && (
         <Button
           padding="8px"
