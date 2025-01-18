@@ -339,7 +339,7 @@ const MyStudyGuides = () => {
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         title="Delete Study Guide"
-        text="Are you sure you want to delete this study guide? You cannot undo this action."
+        text={`Are you sure you want to delete this study guide?\n\nYou cannot undo this action.`}
         onConfirm={() => {
           setIsDeleteDialogOpen(false);
           handleDelete(guideToDelete);

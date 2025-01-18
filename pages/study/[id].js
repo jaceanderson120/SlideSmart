@@ -843,7 +843,7 @@ const Study = () => {
         isOpen={isDeleteTopicDialogOpen}
         onClose={() => setIsDeleteTopicDialogOpen(false)}
         title="Delete Study Guide Topic"
-        text="Are you sure you want to delete this study guide topic? You cannot undo this action unless you discard your edits."
+        text={`Are you sure you want to delete this study guide topic?\n\nYou cannot undo this action unless you discard your edits.`}
         onConfirm={() => {
           setIsDeleteTopicDialogOpen(false);
           handleTopicDelete(topicToDelete);
@@ -861,7 +861,7 @@ const Study = () => {
         }`}
         text={`Are you sure you want to delete this ${
           subSectionToDelete === "youtubeId" ? "video" : subSectionToDelete
-        }? You cannot undo this action unless you discard your edits.`}
+        }?\n\nYou cannot undo this action unless you discard your edits.`}
         onConfirm={() => {
           setIsDeleteSubSectionDialogOpen(false);
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
@@ -873,7 +873,9 @@ const Study = () => {
           setIsNewYoutubeVideoDialogOpen(false);
         }}
         title="Find a New YouTube Video"
-        text="SlideSmart uses AI to analyze your topic summary and find the best YouTube video to help you learn. Please confirm to proceed."
+        text={`SlideSmart uses AI and complex algorithms to analyze your topic summary and find the best YouTube video to help you learn.
+        
+          Please confirm that your topic summary reflects what you wish to learn.`}
         onConfirm={() => {
           setIsNewYoutubeVideoDialogOpen(false);
           getNewYoutubeVideo(

@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
+import React from "react";
 
 Modal.setAppElement("#__next");
 
@@ -16,7 +17,14 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
       >
         <ModalContent>
           <ModalTitle>{title}</ModalTitle>
-          <ModalText>{text}</ModalText>
+          <ModalText>
+            {text.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </ModalText>
           <ButtonSection>
             <Button
               onClick={onClose}
