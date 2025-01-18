@@ -31,6 +31,7 @@ import {
   faShareFromSquare,
   faMessage,
 } from "@fortawesome/free-regular-svg-icons";
+import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -62,6 +63,8 @@ const Study = () => {
   const [editMode, setEditMode] = useState(false);
   const [isDiscardEditsDialogOpen, setIsDiscardEditsDialogOpen] =
     useState(false);
+  const [topicToDelete, setTopicToDelete] = useState(null);
+  const [isDeleteTopicDialogOpen, setIsDeleteTopicDialogOpen] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -241,7 +244,9 @@ const Study = () => {
         "Edit Mode has been disabled. Your study guide has been saved successfully!"
       );
     } else {
-      setInitialStudyGuide(studyGuide);
+      // Doing this ensures that initialStudyGuide and studyGuide point to different objects in memory
+      // This is called a deep copy
+      setInitialStudyGuide(JSON.parse(JSON.stringify(studyGuide)));
       toast.info(
         "Edit Mode has been enabled. Make your changes and disable Edit Mode to save!"
       );
@@ -254,6 +259,36 @@ const Study = () => {
     setStudyGuide({ ...initialStudyGuide });
     setEditMode(false);
     toast.info("Edits have been discarded!");
+  };
+
+  // Function to delete a topic from the study guide
+  const handleTopicDelete = (topic) => {
+    const updatedData = { ...studyGuide };
+    delete updatedData.extractedData[topic];
+    setStudyGuide(updatedData);
+  };
+
+  // Function to add a new topic to the study guide
+  const handleAddTopic = () => {
+    const newTopic = prompt("Enter the name of the new topic:");
+    if (newTopic) {
+      setStudyGuide((prev) => {
+        const updatedData = {
+          ...prev,
+          extractedData: {
+            ...prev.extractedData,
+            [newTopic]: {
+              summary: "Fill in the summary here...",
+              youtubeId: "",
+              example: "Fill in the example here...",
+              question: "Fill in the question here...",
+              answer: "Fill in the answer here...",
+            },
+          },
+        };
+        return updatedData;
+      });
+    }
   };
 
   const handleTopicToggle = () => {
@@ -373,6 +408,19 @@ const Study = () => {
                     {key}
                   </TopicName>
                 ))}
+              {editMode && (
+                <Button
+                  backgroundColor="transparent"
+                  textColor="#000000"
+                  hoverBackgroundColor="#f03a4770"
+                  padding="8px"
+                  marginTop="16px"
+                  fontSize={fontSize.label}
+                  onClick={handleAddTopic}
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Add Topic
+                </Button>
+              )}
             </ContentContainer>
           )}
           <InfoContainer id="infoContainer">
@@ -384,6 +432,17 @@ const Study = () => {
                     ref={(el) => (topicRefs.current[key] = el)}
                   >
                     <TopicHeaderTitle>{key}</TopicHeaderTitle>
+                    {editMode && (
+                      <StyledFontAwesomeIcon
+                        icon={faTrashCan}
+                        size="lg"
+                        title="Menu"
+                        onClick={() => {
+                          setTopicToDelete(key);
+                          setIsDeleteTopicDialogOpen(true);
+                        }}
+                      />
+                    )}
                   </TopicHeaderContainer>
                   <TopicSubContainer>
                     <ImageAndTitle>
@@ -414,15 +473,19 @@ const Study = () => {
                       />
                       <strong style={{ fontWeight: "bold" }}>Video:</strong>
                     </ImageAndTitle>
-                    <iframe
-                      width="560"
-                      height="315"
-                      src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
-                      title="YouTube video player"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    {studyGuide.extractedData[key]["youtubeId"] ? (
+                      <iframe
+                        width="560"
+                        height="315"
+                        src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    ) : (
+                      <NoVideoText>No video available.</NoVideoText>
+                    )}
                   </TopicSubContainer>
                   <TopicSubContainer>
                     <ImageAndTitle>
@@ -541,6 +604,17 @@ const Study = () => {
         onConfirm={() => {
           setIsDiscardEditsDialogOpen(false);
           discardEdits();
+        }}
+      />
+      <ConfirmationDialog
+        isOpen={isDeleteTopicDialogOpen}
+        onClose={() => setIsDeleteTopicDialogOpen(false)}
+        title="Delete Study Guide Topic"
+        text="Are you sure you want to delete this study guide topic? You cannot undo this action unless you discard your edits."
+        onConfirm={() => {
+          setIsDeleteTopicDialogOpen(false);
+          handleTopicDelete(topicToDelete);
+          toast.success("Topic has been deleted successfully.");
         }}
       />
     </PageContainer>
@@ -767,4 +841,11 @@ const TopicName = styled.a`
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
   }
+`;
+
+const NoVideoText = styled.p`
+  font-size: ${fontSize.default};
+  font-style: italic;
+  color: #000000;
+  padding: 8px;
 `;
