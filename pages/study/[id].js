@@ -43,6 +43,7 @@ import Button from "@/components/Button";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AddSectionsContainer from "@/components/AddSectionsContainer";
+import AddTopicDialog from "@/components/AddTopicDialog";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -71,6 +72,7 @@ const Study = () => {
   const [isDeleteSubSectionDialogOpen, setIsDeleteSubSectionDialogOpen] =
     useState(false);
   const [subSectionToDelete, setSubSectionToDelete] = useState(null);
+  const [isAddTopicDialogOpen, setIsAddTopicDialogOpen] = useState(false);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -284,26 +286,31 @@ const Study = () => {
   };
 
   // Function to add a new topic to the study guide
-  const handleAddTopic = () => {
-    const newTopic = prompt("Enter the name of the new topic:");
-    if (newTopic) {
-      setStudyGuide((prev) => {
-        const updatedData = {
-          ...prev,
-          extractedData: {
-            ...prev.extractedData,
-            [newTopic]: {
-              summary: "Fill in the summary here...",
-              youtubeId: "",
-              example: "Fill in the example here...",
-              question: "Fill in the question here...",
-              answer: "Fill in the answer here...",
-            },
-          },
-        };
-        return updatedData;
-      });
+  const handleAddTopic = (topicName) => {
+    if (studyGuide.extractedData[topicName]) {
+      toast.error("Topic already exists. Please choose a different name.");
+      return;
+    } else if (topicName.length < 1) {
+      toast.error("Topic name cannot be empty. Please enter a valid name.");
+      return;
     }
+
+    setStudyGuide((prev) => {
+      const updatedData = {
+        ...prev,
+        extractedData: {
+          ...prev.extractedData,
+          [topicName]: {
+            summary: "Fill in the summary here...",
+            youtubeId: "",
+            example: "Fill in the example here...",
+            question: "Fill in the question here...",
+            answer: "Fill in the answer here...",
+          },
+        },
+      };
+      return updatedData;
+    });
   };
 
   // Function to reorder the keys of studyGuide.extractedData
@@ -481,7 +488,9 @@ const Study = () => {
                         padding="8px"
                         marginTop="16px"
                         fontSize={fontSize.label}
-                        onClick={handleAddTopic}
+                        onClick={() => {
+                          setIsAddTopicDialogOpen(true);
+                        }}
                       >
                         <FontAwesomeIcon icon={faPlus} /> Add Topic
                       </Button>
@@ -809,6 +818,13 @@ const Study = () => {
             `${topicToDelete}: ${subSectionToDelete} has been deleted successfully.`
           );
         }}
+      />
+      <AddTopicDialog
+        isOpen={isAddTopicDialogOpen}
+        onClose={() => {
+          setIsAddTopicDialogOpen(false);
+        }}
+        onConfirm={handleAddTopic}
       />
     </PageContainer>
   );
