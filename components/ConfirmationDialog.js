@@ -69,7 +69,7 @@ const customStyles = {
     border: "none",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
     maxWidth: "40%",
-    height: "25%",
+    height: "auto",
   },
 };
 

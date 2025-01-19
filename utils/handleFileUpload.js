@@ -129,7 +129,7 @@ const handleFileUpload = async (file, currentUser) => {
           question: createdContent[topic]?.question || "",
           answer: createdContent[topic]?.answer || "",
           example: createdExampleContent[topic]?.example || "",
-          youtubeId: youtubeResponses[index],
+          youtubeIds: youtubeResponses[index],
         };
       });
 

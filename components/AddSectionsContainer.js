@@ -4,7 +4,7 @@ import Button from "./Button";
 const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
   return (
     <Container>
-      {!topicInfo["summary"] && (
+      {!topicInfo["summary"] && topicInfo["summary"] !== "" && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"
@@ -16,19 +16,19 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
           Add Summary
         </Button>
       )}
-      {!topicInfo["youtubeId"] && (
+      {!topicInfo["youtubeIds"] && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"
           hoverBackgroundColor="#f03a4770"
           textColor="#000000"
           hoverTextColor="#ffffff"
-          onClick={() => handleAddSection("youtubeId")}
+          onClick={() => handleAddSection("youtubeIds")}
         >
           Add Video
         </Button>
       )}
-      {!topicInfo["example"] && (
+      {!topicInfo["example"] && topicInfo["example"] !== "" && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"
@@ -40,7 +40,7 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
           Add Example
         </Button>
       )}
-      {!topicInfo["question"] && (
+      {!topicInfo["question"] && topicInfo["question"] !== "" && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"
@@ -52,7 +52,7 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
           Add Question
         </Button>
       )}
-      {!topicInfo["answer"] && (
+      {!topicInfo["answer"] && topicInfo["answer"] !== "" && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"

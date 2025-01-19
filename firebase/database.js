@@ -82,6 +82,9 @@ const getUserStudyGuides = async (user) => {
         const studyGuideDocRef = doc(db, "studyGuides", id);
         const studyGuideDoc = await getDoc(studyGuideDocRef);
         const data = studyGuideDoc.data();
+        if (!data) {
+          return null;
+        }
         return {
           id: studyGuideDoc.id,
           fileName: data.fileName,
