@@ -28,6 +28,8 @@ import {
   faPencil,
   faX,
   faRotateLeft,
+  faArrowRight,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
@@ -80,6 +82,7 @@ const Study = () => {
     useState(false);
   const [topicForNewYoutubeVideo, setTopicForNewYoutubeVideo] = useState(null);
   const [findingNewYoutubeVideo, setfindingNewYoutubeVideo] = useState(false);
+  const [videoIndices, setVideoIndices] = useState([]);
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
@@ -115,6 +118,13 @@ const Study = () => {
         const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
         setStudyGuide(fetchedStudyGuide);
         setFileName(fileName);
+
+        // Set the youtube indices to zeros for each topic
+        const indices = {};
+        Object.keys(fetchedStudyGuide.extractedData).forEach((key) => {
+          indices[key] = 0;
+        });
+        setVideoIndices(indices);
       }
     };
 
@@ -307,7 +317,7 @@ const Study = () => {
           ...prev.extractedData,
           [topicName]: {
             summary: "Fill in the summary here...",
-            youtubeId: "None",
+            youtubeIds: "None",
             example: "Fill in the example here...",
             question: "Fill in the question here...",
             answer: "Fill in the answer here...",
@@ -396,8 +406,41 @@ const Study = () => {
     const videoId = await res2.json();
 
     // Update the study guide object with the new YouTube video ID
-    updateStudyGuideObject(topic, "youtubeId", videoId);
+    updateStudyGuideObject(topic, "youtubeIds", videoId);
     setfindingNewYoutubeVideo(false);
+  };
+
+  // Function to go to previous video
+  const goToPreviousVideo = (topic) => {
+    if (videoIndices[topic] > 0) {
+      setVideoIndices((prev) => ({
+        ...prev,
+        [topic]: prev[topic] - 1,
+      }));
+    } else {
+      setVideoIndices((prev) => ({
+        ...prev,
+        [topic]: studyGuide.extractedData[topic]["youtubeIds"].length - 1,
+      }));
+    }
+  };
+
+  // Function to go to next video
+  const goToNextVideo = (topic) => {
+    if (
+      videoIndices[topic] <
+      studyGuide.extractedData[topic]["youtubeIds"].length - 1
+    ) {
+      setVideoIndices((prev) => ({
+        ...prev,
+        [topic]: prev[topic] + 1,
+      }));
+    } else {
+      setVideoIndices((prev) => ({
+        ...prev,
+        [topic]: 0,
+      }));
+    }
   };
 
   return (
@@ -547,7 +590,7 @@ const Study = () => {
                       <StyledFontAwesomeIcon
                         icon={faTrashCan}
                         size="lg"
-                        title="Menu"
+                        title="Delete Topic"
                         onClick={() => {
                           setTopicToDelete(key);
                           setIsDeleteTopicDialogOpen(true);
@@ -555,7 +598,8 @@ const Study = () => {
                       />
                     )}
                   </TopicHeaderContainer>
-                  {studyGuide.extractedData[key]["summary"] && (
+                  {(studyGuide.extractedData[key]["summary"] ||
+                    studyGuide.extractedData[key]["summary"] === "") && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -577,6 +621,7 @@ const Study = () => {
                               setSubSectionToDelete("summary");
                               setIsDeleteSubSectionDialogOpen(true);
                             }}
+                            title="Delete Summary"
                           />
                         )}
                       </ImageAndTitleContainer>
@@ -590,7 +635,7 @@ const Study = () => {
                       />
                     </TopicSubContainer>
                   )}
-                  {studyGuide.extractedData[key]["youtubeId"] && (
+                  {studyGuide.extractedData[key]["youtubeIds"] && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -602,32 +647,54 @@ const Study = () => {
                           />
                           <strong style={{ fontWeight: "bold" }}>Video:</strong>
                         </ImageAndTitle>
-                        {editMode && (
-                          <div>
-                            <StyledFontAwesomeIcon
-                              icon={faRotateLeft}
-                              onClick={() => {
-                                setTopicForNewYoutubeVideo(key);
-                                setIsNewYoutubeVideoDialogOpen(true);
-                              }}
-                            />
-                            <StyledFontAwesomeIcon
-                              icon={faX}
-                              onClick={() => {
-                                setTopicToDelete(key);
-                                setSubSectionToDelete("youtubeId");
-                                setIsDeleteSubSectionDialogOpen(true);
-                              }}
-                            />
-                          </div>
-                        )}
+                        <div>
+                          <StyledFontAwesomeIcon
+                            icon={faArrowLeft}
+                            onClick={() => {
+                              goToPreviousVideo(key);
+                            }}
+                            title="Previous Video"
+                          />
+                          <StyledFontAwesomeIcon
+                            icon={faArrowRight}
+                            onClick={() => {
+                              goToNextVideo(key);
+                            }}
+                            title="Next Video"
+                          />
+                          {editMode && (
+                            <>
+                              <StyledFontAwesomeIcon
+                                icon={faRotateLeft}
+                                onClick={() => {
+                                  setTopicForNewYoutubeVideo(key);
+                                  setIsNewYoutubeVideoDialogOpen(true);
+                                }}
+                                title="Find New Videos"
+                              />
+                              <StyledFontAwesomeIcon
+                                icon={faX}
+                                onClick={() => {
+                                  setTopicToDelete(key);
+                                  setSubSectionToDelete("youtubeIds");
+                                  setIsDeleteSubSectionDialogOpen(true);
+                                }}
+                                title="Delete Video"
+                              />
+                            </>
+                          )}
+                        </div>
                       </ImageAndTitleContainer>
                       {!findingNewYoutubeVideo &&
-                      studyGuide.extractedData[key]["youtubeId"] !== "None" ? (
+                      studyGuide.extractedData[key]["youtubeIds"] !== "None" ? (
                         <iframe
                           width="560"
                           height="315"
-                          src={`https://www.youtube.com/embed/${studyGuide.extractedData[key]["youtubeId"]}`}
+                          src={`https://www.youtube.com/embed/${
+                            studyGuide.extractedData[key]["youtubeIds"][
+                              videoIndices[key]
+                            ]
+                          }`}
                           title="YouTube video player"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -643,7 +710,8 @@ const Study = () => {
                       )}
                     </TopicSubContainer>
                   )}
-                  {studyGuide.extractedData[key]["example"] && (
+                  {(studyGuide.extractedData[key]["example"] ||
+                    studyGuide.extractedData[key]["example"] === "") && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -665,6 +733,7 @@ const Study = () => {
                               setSubSectionToDelete("example");
                               setIsDeleteSubSectionDialogOpen(true);
                             }}
+                            title="Delete Example"
                           />
                         )}
                       </ImageAndTitleContainer>
@@ -678,7 +747,8 @@ const Study = () => {
                       />
                     </TopicSubContainer>
                   )}
-                  {studyGuide.extractedData[key]["question"] && (
+                  {(studyGuide.extractedData[key]["question"] ||
+                    studyGuide.extractedData[key]["question"] === "") && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -700,6 +770,7 @@ const Study = () => {
                               setSubSectionToDelete("question");
                               setIsDeleteSubSectionDialogOpen(true);
                             }}
+                            title="Delete Question"
                           />
                         )}
                       </ImageAndTitleContainer>
@@ -713,7 +784,8 @@ const Study = () => {
                       />
                     </TopicSubContainer>
                   )}
-                  {studyGuide.extractedData[key]["answer"] && (
+                  {(studyGuide.extractedData[key]["answer"] ||
+                    studyGuide.extractedData[key]["answer"] === "") && (
                     <TopicSubContainer>
                       <TopicAnswerContainer>
                         <ImageAndTitleContainer>
@@ -736,6 +808,7 @@ const Study = () => {
                                 setSubSectionToDelete("answer");
                                 setIsDeleteSubSectionDialogOpen(true);
                               }}
+                              title="Delete Answer"
                             />
                           )}
                         </ImageAndTitleContainer>
@@ -785,7 +858,7 @@ const Study = () => {
                         updateStudyGuideObject(
                           key,
                           section,
-                          section === "youtubeId"
+                          section === "youtubeIds"
                             ? "None"
                             : `Fill in the ${section} here...`
                         );
@@ -854,14 +927,16 @@ const Study = () => {
         isOpen={isDeleteSubSectionDialogOpen}
         onClose={() => setIsDeleteSubSectionDialogOpen(false)}
         title={`Delete ${
-          subSectionToDelete === "youtubeId"
+          subSectionToDelete === "youtubeIds"
             ? "Video"
             : subSectionToDelete?.charAt(0).toUpperCase() +
               subSectionToDelete?.slice(1)
         }`}
         text={`Are you sure you want to delete this ${
-          subSectionToDelete === "youtubeId" ? "video" : subSectionToDelete
-        }?\n\nYou cannot undo this action unless you discard your edits.`}
+          subSectionToDelete === "youtubeIds"
+            ? "video? This will delete all videos that are currently available by clicking the next button."
+            : subSectionToDelete + "?"
+        }\n\nYou cannot undo this action unless you discard your edits.`}
         onConfirm={() => {
           setIsDeleteSubSectionDialogOpen(false);
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
@@ -872,10 +947,8 @@ const Study = () => {
         onClose={() => {
           setIsNewYoutubeVideoDialogOpen(false);
         }}
-        title="Find a New YouTube Video"
-        text={`SlideSmart uses AI and complex algorithms to analyze your topic summary and find the best YouTube video to help you learn.
-        
-          Please confirm that your topic summary reflects what you wish to learn.`}
+        title="Find More Videos"
+        text={`SlideSmart uses AI and complex algorithms to analyze your topic summary and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your summary.\n\nPlease confirm that your topic summary reflects what you wish to learn.`}
         onConfirm={() => {
           setIsNewYoutubeVideoDialogOpen(false);
           getNewYoutubeVideo(
@@ -970,6 +1043,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   &:hover {
     transition: color 0.3s;
     color: #f03a47;
+    cursor: pointer;
   }
 `;
 

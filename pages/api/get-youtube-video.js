@@ -94,11 +94,14 @@ export default async function getYoutubeVideo(req, res) {
       }))
       .sort((a, b) => b.score - a.score);
 
-    // Get the video ID with the highest score
-    const bestVideo = scoredVideos.length > 0 ? scoredVideos[0].id : null;
+    // Get the video IDs of the videos with the top 5 best scores
+    const bestVideos =
+      scoredVideos.length > 0
+        ? scoredVideos.slice(0, 5).map((video) => video.id)
+        : null;
 
     // Send the best video ID back to the client
-    res.json(bestVideo);
+    res.json(bestVideos);
   } catch (error) {
     console.error("Error fetching YouTube video:", error);
     res.status(500).json({ error: error.message });

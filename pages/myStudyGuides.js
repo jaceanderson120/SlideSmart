@@ -55,6 +55,14 @@ const MyStudyGuides = () => {
     const fetchStudyGuides = async () => {
       const guides = await getUserStudyGuides(currentUser);
       if (!guides) {
+        setDisplayNamesLoaded(true);
+        setStudyGuidesLoaded(true);
+        return;
+      }
+      // If all guides are null, return
+      if (guides.every((guide) => guide === null)) {
+        setDisplayNamesLoaded(true);
+        setStudyGuidesLoaded(true);
         return;
       }
       // Sort the study guides by created date
