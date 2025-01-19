@@ -10,6 +10,7 @@ import { handleFileUpload } from "@/utils/handleFileUpload";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
+import CreateModal from "@/components/CreateModal";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,7 @@ export default function Home() {
   const fileInputRef = useRef(null);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const { isLoggedIn, currentUser, hasSpark } = useStateContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getRandomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -32,14 +34,14 @@ export default function Home() {
 
   const handleClick = () => {
     if (isLoggedIn) {
-      handleUploadClick();
+      setIsModalOpen(true);
     } else {
       router.push("/login");
     }
   };
 
   // Function to handle the file selection/upload
-  const handleFileChange = async (event) => {
+  const handleUploadSubmit = async (file, isGlobal) => {
     setIsLoading(true);
     // Simulate loading progress
     const interval = setInterval(() => {
@@ -48,7 +50,6 @@ export default function Home() {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const file = event.target.files[0];
     const fileExtension = file.name.split(".").pop();
     if (fileExtension !== "pdf" && fileExtension !== "pptx") {
       clearInterval(interval);
@@ -67,7 +68,7 @@ export default function Home() {
       );
       return;
     }
-    const studyGuideId = await handleFileUpload(file, currentUser);
+    const studyGuideId = await handleFileUpload(file, isGlobal, currentUser);
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
@@ -119,12 +120,11 @@ export default function Home() {
           {isLoggedIn ? "Upload Course Slides or Notes" : "Get Started"}
         </Button>
         {/* Hidden file input */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
+        <CreateModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          onUpload={handleUploadSubmit}
+        ></CreateModal>
       </GradientSection>
       <Section>
         <HowItWorksSection>

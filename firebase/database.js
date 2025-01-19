@@ -44,6 +44,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         createdBy: studyGuide.createdBy,
         contributors: studyGuide.contributors,
         editors: studyGuide.editors,
+        isGlobal: studyGuide.isGlobal,
       });
 
       // Get the ID of the new document from the document reference
@@ -97,6 +98,7 @@ const getUserStudyGuides = async (user) => {
           createdBy: data.createdBy,
           contributors: data.contributors,
           editors: data.editors,
+          isGlobal: data.isGlobal,
         };
       });
 
