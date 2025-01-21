@@ -39,10 +39,10 @@ function Navbar() {
         </MenuTextContainer>
       </HorizontalContainer>
     </MenuItemContainer>,
-    {
-      name: hasSpark ? "Manage Subscription" : "Upgrade",
-      onClick: handleUpgradeManageClick,
-    },
+    // {
+    //   name: hasSpark ? "Manage Subscription" : "Upgrade",
+    //   onClick: handleUpgradeManageClick,
+    // },
     { name: "Logout", onClick: handleLogout },
   ];
 
