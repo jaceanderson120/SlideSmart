@@ -1,4 +1,5 @@
 export const fontSize = {
+  xlheading: "40px",
   heading: "30px",
   subheading: "24px",
   label: "20px",
