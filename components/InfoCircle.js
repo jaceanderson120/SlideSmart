@@ -76,7 +76,10 @@ const renderText = (title, subtitle, align) => {
           textAnchor={align}
           dominantBaseline="middle"
           fontSize={fontSizeTitle}
-          fontWeight={"bold"}
+          style={{
+            fontWeight: "bold",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }}
           fill="#000"
         >
           {line}
