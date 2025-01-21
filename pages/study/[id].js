@@ -448,30 +448,6 @@ const Study = () => {
       <Navbar />
       <Section>
         <HeaderSection>
-          {editMode && (
-            <SaveButtonArea>
-              <Button
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor="#000000"
-                hoverTextColor="#f03a47"
-                underline={true}
-                onClick={handleEditClicked}
-              >
-                Save Edits
-              </Button>
-              <Button
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor="#000000"
-                hoverTextColor="#f03a47"
-                underline={true}
-                onClick={() => setIsDiscardEditsDialogOpen(true)}
-              >
-                Discard Edits
-              </Button>
-            </SaveButtonArea>
-          )}
           <Title
             type="text"
             value={fileName}
@@ -497,6 +473,30 @@ const Study = () => {
                     onClick={handleEditClicked}
                   />
                 )}
+              </>
+            )}
+            {editMode && (
+              <>
+                <Button
+                  backgroundColor="transparent"
+                  hoverBackgroundColor="transparent"
+                  textColor="#000000"
+                  hoverTextColor="#f03a47"
+                  underline={true}
+                  onClick={handleEditClicked}
+                >
+                  Save Edits
+                </Button>
+                <Button
+                  backgroundColor="transparent"
+                  hoverBackgroundColor="transparent"
+                  textColor="#000000"
+                  hoverTextColor="#f03a47"
+                  underline={true}
+                  onClick={() => setIsDiscardEditsDialogOpen(true)}
+                >
+                  Discard Edits
+                </Button>
               </>
             )}
             {studyGuide.createdBy === currentUser?.uid && (
