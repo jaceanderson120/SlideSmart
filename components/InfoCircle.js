@@ -76,7 +76,10 @@ const renderText = (title, subtitle, align) => {
           textAnchor={align}
           dominantBaseline="middle"
           fontSize={fontSizeTitle}
-          fontWeight="bold"
+          style={{
+            fontWeight: "bold",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+          }}
           fill="#000"
         >
           {line}
@@ -100,8 +103,8 @@ const renderText = (title, subtitle, align) => {
 };
 
 const CircleContainer = styled.div`
-  width: min(80vh, 40vw);
-  height: min(80vh, 40vw);
+  width: min(85vh, 45vw);
+  height: min(85vh, 45vw);
   display: flex;
   justify-content: center;
   align-items: center;
