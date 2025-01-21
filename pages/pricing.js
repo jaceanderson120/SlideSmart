@@ -26,6 +26,11 @@ const Pricing = () => {
   const [redirectLoading, setRedirectLoading] = useState(false);
   const router = useRouter();
 
+  // Redirect users to the home page to disable access to this page
+  useEffect(() => {
+    router.push("/");
+  }, [router]);
+
   // Fetch user information
   useEffect(() => {
     if (!loading && !currentUser) {
