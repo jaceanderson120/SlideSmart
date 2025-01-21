@@ -69,15 +69,14 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      {isLoggedIn && (
-        <NavbarAboutLinks>
-          <Link href="/dashboard">Dashboard</Link>
-          {/* <Link href="/">How it Works</Link>
-        <Link href="/">Contact</Link>
+      <NavbarAboutLinks>
+        {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
+        <Link href="/how-it-works">How it Works</Link>
+        {/* <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>
         <Link href="/">About</Link> */}
-        </NavbarAboutLinks>
-      )}
+      </NavbarAboutLinks>
+
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <CustomMenu
@@ -185,6 +184,7 @@ const NavbarSection = styled.div`
   padding: 16px;
   border-bottom: 1px solid gray;
   background-color: #f6f4f3;
+  z-index: 100;
 `;
 
 const MenuTextContainer = styled.div`
