@@ -8,6 +8,12 @@ import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+// The following import prevents a Font Awesome icon server-side rendering bug,
+// where the icons flash from a very large icon down to a properly sized one:
+import "@fortawesome/fontawesome-svg-core/styles.css";
+// Prevent fontawesome from adding its CSS since we did it manually above:
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false; /* eslint-disable import/first */
 
 export default function Home() {
   const router = useRouter();
@@ -82,6 +88,20 @@ export default function Home() {
               </InstructionSubtitle>
             </InstructionArea>
           </InstructionContainer>
+          <MoreContainer>
+            <Button
+              textColor="#f03a47"
+              backgroundColor="transparent"
+              hoverBackgroundColor="#f03a47"
+              onClick={() => router.push("/how-it-works")}
+            >
+              Still confused? Learn more about how SlideSmart works!
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                style={{ marginLeft: "10px" }}
+              />
+            </Button>
+          </MoreContainer>
         </Section>
       </PageContainer>
       <Footer />
@@ -92,7 +112,7 @@ export default function Home() {
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const Section = styled.div`
@@ -104,6 +124,7 @@ const Section = styled.div`
   justify-content: flex-start;
   align-items: center;
   text-align: center;
+  gap: 80px;
 `;
 
 const SloganContainer = styled.div`
@@ -135,7 +156,6 @@ const InstructionContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 32px;
-  margin-top: 100px;
 `;
 
 const InstructionArea = styled.div`
@@ -166,4 +186,12 @@ const InstructionTitle = styled.p`
 const InstructionSubtitle = styled.p`
   font-size: ${fontSize.default};
   color: #000000;
+`;
+
+const MoreContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 16px;
 `;

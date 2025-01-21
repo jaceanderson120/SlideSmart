@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Image from "next/image";
 
-const PictureFrame = ({ src, alt }) => {
+const PictureFrame = ({ src, alt, align }) => {
   return (
-    <Frame>
+    <Frame align={align}>
       <StyledImage src={src} alt={alt} />
     </Frame>
   );
@@ -12,12 +12,25 @@ const PictureFrame = ({ src, alt }) => {
 export default PictureFrame;
 
 const Frame = styled.div`
-  border-right: 8px solid #f03a4770;
-  border-top: 8px solid #f03a4770;
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
   padding: 16px;
   background-color: #ffffff;
+
+  ${({ align }) =>
+    align === "left"
+      ? css`
+          border-left: 8px solid #f03a4770;
+          border-top: 8px solid #f03a4770;
+        `
+      : align === "right"
+      ? css`
+          border-right: 8px solid #f03a4770;
+          border-top: 8px solid #f03a4770;
+        `
+      : css`
+          border-top: 8px solid #f03a4770;
+        `}
 `;
 
 const StyledImage = styled(Image)`

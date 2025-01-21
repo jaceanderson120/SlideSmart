@@ -185,6 +185,7 @@ const NavbarSection = styled.div`
   padding: 16px;
   border-bottom: 1px solid gray;
   background-color: #f6f4f3;
+  z-index: 100;
 `;
 
 const MenuTextContainer = styled.div`
