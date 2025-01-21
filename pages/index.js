@@ -6,6 +6,8 @@ import { useStateContext } from "@/context/StateContext";
 import "react-circular-progressbar/dist/styles.css";
 import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function Home() {
   const router = useRouter();
@@ -47,7 +49,8 @@ export default function Home() {
               fontSize={fontSize.subheading}
               marginTop="10px"
             >
-              {isLoggedIn ? "Go to Dashboard" : "Get Started"}
+              {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
+              <FontAwesomeIcon icon={faArrowRight} />
             </Button>
           </SloganContainer>
           <InstructionContainer>
