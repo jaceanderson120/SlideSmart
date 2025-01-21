@@ -217,7 +217,7 @@ const Dashboard = () => {
       )}
       <Section>
         <TopContainer>
-          <PageTitle>Dashboard - My Study Guides</PageTitle>
+          <PageTitle>Dashboard</PageTitle>
           {isLoggedIn && (
             <ButtonContainer>
               <Button
@@ -469,10 +469,11 @@ const StudyGuideLink = styled.div`
   white-space: nowrap;
   overflow: hidden;
   font-size: ${fontSize.default};
+  transition: color 0.3s, transform 0.3s;
 
   &:hover {
     color: #f03a47;
-    transition: color 0.3s;
+    transform: scale(1.02);
   }
 `;
 

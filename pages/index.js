@@ -50,6 +50,35 @@ export default function Home() {
               {isLoggedIn ? "Go to Dashboard" : "Get Started"}
             </Button>
           </SloganContainer>
+          <InstructionContainer>
+            <InstructionArea>
+              <InstructionLabel>How to Begin</InstructionLabel>
+              <InstructionTitle>
+                Register/Login to Access Your Dashboard
+              </InstructionTitle>
+              <InstructionSubtitle>
+                On your dashboard, click the "Create New" button and upload a
+                PPTX or PDF file to create a study guide.
+              </InstructionSubtitle>
+            </InstructionArea>
+            <InstructionArea>
+              <InstructionLabel>The Study Guide</InstructionLabel>
+              <InstructionTitle>Navigate Your Study Guide</InstructionTitle>
+              <InstructionSubtitle>
+                Browse topics, learn from highly-rated videos, access real
+                world-examples, and practice questions!
+              </InstructionSubtitle>
+            </InstructionArea>
+            <InstructionArea>
+              <InstructionLabel>Features</InstructionLabel>
+              <InstructionTitle>Features to Help You Excel</InstructionTitle>
+              <InstructionSubtitle>
+                Fully customize your study guide, share it with friends, and
+                answer any questions with the help of our GPT-powered tutor,
+                Sola.
+              </InstructionSubtitle>
+            </InstructionArea>
+          </InstructionContainer>
         </Section>
       </PageContainer>
       <Footer />
@@ -79,7 +108,7 @@ const SloganContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 64px;
+  margin-top: 100px;
   gap: 20px;
 `;
 
@@ -95,4 +124,43 @@ const SubSlogan = styled.p`
   font-size: ${fontSize.default};
   color: #000000;
   line-height: 1.3;
+`;
+
+const InstructionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 100px;
+`;
+
+const InstructionArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 30%;
+`;
+
+const InstructionLabel = styled.div`
+  font-size: ${fontSize.label};
+  font-weight: bold;
+  color: #000000;
+  background-color: #f6f4f3;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const InstructionTitle = styled.p`
+  font-size: ${fontSize.subheading};
+  font-weight: bold;
+  color: #000000;
+`;
+
+const InstructionSubtitle = styled.p`
+  font-size: ${fontSize.default};
+  color: #000000;
 `;

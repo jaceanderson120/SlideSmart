@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import styled, { keyframes, css } from "styled-components";
+import styled, { css } from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import textbook from "@/images/textbook.png";
