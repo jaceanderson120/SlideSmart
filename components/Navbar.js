@@ -69,15 +69,14 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      {isLoggedIn && (
-        <NavbarAboutLinks>
-          <Link href="/dashboard">Dashboard</Link>
-          <Link href="/how-it-works">How it Works</Link>
-          {/* <Link href="/">Contact</Link>
+      <NavbarAboutLinks>
+        {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
+        <Link href="/how-it-works">How it Works</Link>
+        {/* <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>
         <Link href="/">About</Link> */}
-        </NavbarAboutLinks>
-      )}
+      </NavbarAboutLinks>
+
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <CustomMenu
