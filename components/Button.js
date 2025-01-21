@@ -49,6 +49,7 @@ const StyledButton = styled.button`
   &:hover {
     color: ${(props) => props.$hoverTextColor};
     background-color: ${(props) => props.$hoverBackgroundColor};
+    transform: scale(0.99);
   }
 
   ${(props) =>

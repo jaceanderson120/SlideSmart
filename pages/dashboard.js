@@ -28,7 +28,7 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
 
-const MyStudyGuides = () => {
+const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
   const [filteredStudyGuides, setFilteredStudyGuides] = useState([]);
   const [studyGuidesLoaded, setStudyGuidesLoaded] = useState(false);
@@ -217,7 +217,7 @@ const MyStudyGuides = () => {
       )}
       <Section>
         <TopContainer>
-          <PageTitle>My Study Guides</PageTitle>
+          <PageTitle>Dashboard - My Study Guides</PageTitle>
           {isLoggedIn && (
             <ButtonContainer>
               <Button
@@ -358,7 +358,7 @@ const MyStudyGuides = () => {
   );
 };
 
-export default MyStudyGuides;
+export default Dashboard;
 
 const Container = styled.div`
   display: flex;
