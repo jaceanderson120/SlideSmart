@@ -479,23 +479,21 @@ const Study = () => {
               <>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="transparent"
+                  hoverBackgroundColor="#f03a4770"
                   textColor="#000000"
-                  hoverTextColor="#f03a47"
-                  underline={true}
+                  hoverTextColor="#000000"
                   onClick={handleEditClicked}
                 >
-                  Save Edits
+                  Save
                 </Button>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="transparent"
+                  hoverBackgroundColor="#f03a4770"
                   textColor="#000000"
-                  hoverTextColor="#f03a47"
-                  underline={true}
+                  hoverTextColor="#000000"
                   onClick={() => setIsDiscardEditsDialogOpen(true)}
                 >
-                  Discard Edits
+                  Discard
                 </Button>
               </>
             )}
@@ -1035,6 +1033,7 @@ const MenuTriggerArea = styled.div`
   right: 32px;
   cursor: pointer;
   gap: 8px;
+  align-items: center;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
