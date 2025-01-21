@@ -6,13 +6,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// The following import prevents a Font Awesome icon server-side rendering bug,
-// where the icons flash from a very large icon down to a properly sized one:
-import "@fortawesome/fontawesome-svg-core/styles.css";
-// Prevent fontawesome from adding its CSS since we did it manually above:
-import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false; /* eslint-disable import/first */
 import { useRouter } from "next/router";
 import CustomMenu from "./CustomMenu";
 import UserIcon from "./UserIcon";
@@ -76,13 +69,15 @@ function Navbar() {
       <NavbarSlideSmart>
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
-      <NavbarAboutLinks>
-        <Link href="/myStudyGuides">My Study Guides</Link>
-        {/* <Link href="/">How it Works</Link>
+      {isLoggedIn && (
+        <NavbarAboutLinks>
+          <Link href="/dashboard">Dashboard</Link>
+          {/* <Link href="/">How it Works</Link>
         <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>
         <Link href="/">About</Link> */}
-      </NavbarAboutLinks>
+        </NavbarAboutLinks>
+      )}
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <CustomMenu

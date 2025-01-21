@@ -44,11 +44,12 @@ const StyledButton = styled.button`
   cursor: pointer;
   font-size: ${(props) => props.$fontSize};
   margin-top: ${(props) => props.$marginTop};
-  transition: color 0.3s, background-color 0.3s;
+  transition: color 0.3s, background-color 0.3s, transform 0.3s;
 
   &:hover {
     color: ${(props) => props.$hoverTextColor};
     background-color: ${(props) => props.$hoverBackgroundColor};
+    transform: scale(1.02);
   }
 
   ${(props) =>
