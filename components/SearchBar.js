@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
-import StudyGuideList from "./StudyGuideList"; // <-- We'll create this next
+import StudyGuideList from "./StudyGuideList";
 
 const SearchBar = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -19,7 +19,6 @@ const SearchBar = () => {
 
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
-    // Pass the search term to your getPublicStudyGuides
     setHasSearched(true);
     const guides = await getPublicStudyGuides(inputText);
     setStudyGuides(guides);
