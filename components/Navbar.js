@@ -78,6 +78,7 @@ function Navbar() {
       </NavbarSlideSmart>
       <NavbarAboutLinks>
         <Link href="/myStudyGuides">My Study Guides</Link>
+        <Link href="/publicStudyGuides">Find Slides</Link>
         {/* <Link href="/">How it Works</Link>
         <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>

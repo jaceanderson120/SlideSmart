@@ -41,7 +41,7 @@ export default function Home() {
   };
 
   // Function to handle the file selection/upload
-  const handleUploadSubmit = async (file, isGlobal) => {
+  const handleUploadSubmit = async (file, isPublic) => {
     setIsLoading(true);
     // Simulate loading progress
     const interval = setInterval(() => {
@@ -68,7 +68,7 @@ export default function Home() {
       );
       return;
     }
-    const studyGuideId = await handleFileUpload(file, isGlobal, currentUser);
+    const studyGuideId = await handleFileUpload(file, isPublic, currentUser);
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error

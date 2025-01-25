@@ -44,7 +44,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         createdBy: studyGuide.createdBy,
         contributors: studyGuide.contributors,
         editors: studyGuide.editors,
-        isGlobal: studyGuide.isGlobal,
+        isPublic: studyGuide.isPublic,
       });
 
       // Get the ID of the new document from the document reference
@@ -98,7 +98,7 @@ const getUserStudyGuides = async (user) => {
           createdBy: data.createdBy,
           contributors: data.contributors,
           editors: data.editors,
-          isGlobal: data.isGlobal,
+          isPublic: data.isPublic,
         };
       });
 
@@ -106,6 +106,23 @@ const getUserStudyGuides = async (user) => {
       return guides;
     }
   }
+};
+
+const getPublicStudyGuides = async (search_input) => {
+  const snapshot = await getDocs(collection(db, "studyGuides"));
+
+  // 2. Convert docs to an array of objects
+  const allGuides = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  // 3. Filter locally for filenames containing the search string
+  const filtered = allGuides.filter((guide) =>
+    guide.fileName?.toLowerCase().includes(search_input.toLowerCase())
+  );
+
+  return filtered;
 };
 
 // Fetches a specific study guide from Firestore
@@ -287,4 +304,5 @@ export {
   shareStudyGuide,
   hasAccessToStudyGuide,
   uploadFileToFirebase,
+  getPublicStudyGuides,
 };

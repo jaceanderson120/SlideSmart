@@ -11,12 +11,12 @@ Modal.setAppElement("#__next");
 
 const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
   const [file, setFile] = useState(null);
-  const [isGlobal, setIsGlobal] = useState(true);
+  const [isPublic, setIsPublic] = useState(true);
 
   const handleClose = () => {
     // Reset local state
     setFile(null);
-    setIsGlobal(true);
+    setIsPublic(true);
     onRequestClose();
   };
 
@@ -30,7 +30,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
       return;
     }
     // Call the parent callback
-    onUpload(file, isGlobal);
+    onUpload(file, isPublic);
 
     // Close modal afterwards
     handleClose();
@@ -48,11 +48,11 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
         <FileInput type="file" onChange={handleFileChange} />
 
         <ToggleSection>
-          <ModalText>{isGlobal ? "Public" : "Private"}</ModalText>
+          <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
           <StyledFontAwesomeIcon
-            icon={isGlobal ? faToggleOn : faToggleOff}
+            icon={isPublic ? faToggleOn : faToggleOff}
             size="lg"
-            onClick={() => setIsGlobal(!isGlobal)}
+            onClick={() => setIsPublic(!isPublic)}
           />
         </ToggleSection>
 

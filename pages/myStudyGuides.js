@@ -27,6 +27,7 @@ import CustomMenu from "@/components/CustomMenu";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
+import CreateModal from "@/components/CreateModal";
 
 const MyStudyGuides = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -42,6 +43,7 @@ const MyStudyGuides = () => {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const { isLoggedIn, currentUser, loading, hasSpark } = useStateContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Check if the user is logged in and redirect to the login page if not
   useEffect(() => {
@@ -109,6 +111,8 @@ const MyStudyGuides = () => {
       setFilteredStudyGuides(
         studyGuides.filter((guide) => guide.createdBy !== currentUser?.uid)
       );
+    } else if (filter === "public") {
+      setFilteredStudyGuides(studyGuides.filter((guide) => guide.isPublic));
     }
   }, [filter, studyGuides, currentUser]);
 
@@ -127,24 +131,19 @@ const MyStudyGuides = () => {
     setFilter("shared");
   };
 
+  const setFilterPublic = () => {
+    setFilter("public");
+  };
+
   // Handle the view button click
   const handleView = (id) => {
     router.push(`/study/${id}`);
   };
 
-  // Function to handle the button click and open the file selector
-  const handleUploadClick = () => {
-    // Programmatically click the hidden file input
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
   // Function to handle when the create new button is clicked
   const handleClick = () => {
-    // Check if the user is logged in
     if (isLoggedIn) {
-      handleUploadClick();
+      setIsModalOpen(true);
     } else {
       router.push("/login");
     }
@@ -155,7 +154,7 @@ const MyStudyGuides = () => {
   };
 
   // Function to handle the file selection/upload
-  const handleCreateNew = async (event) => {
+  const handleUploadSubmit = async (file, isPublic) => {
     setIsLoading(true);
     // Simulate loading progress
     const interval = setInterval(() => {
@@ -164,8 +163,9 @@ const MyStudyGuides = () => {
         return newPercentage > 100 ? 100 : newPercentage;
       });
     }, 1000);
-    const file = event.target.files[0];
+
     const fileExtension = file.name.split(".").pop();
+
     if (fileExtension !== "pdf" && fileExtension !== "pptx") {
       clearInterval(interval);
       setIsLoading(false);
@@ -183,7 +183,7 @@ const MyStudyGuides = () => {
       );
       return;
     }
-    const studyGuideId = await handleFileUpload(file, currentUser);
+    const studyGuideId = await handleFileUpload(file, isPublic, currentUser);
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
@@ -221,22 +221,21 @@ const MyStudyGuides = () => {
           {isLoggedIn && (
             <ButtonContainer>
               <Button
+                onClick={handleClick}
+                marginTop="40px"
                 padding="16px"
                 bold
-                fontSize={fontSize.label}
-                onClick={handleClick}
+                fontSize={fontSize.subheading}
               >
                 Create New
               </Button>
             </ButtonContainer>
           )}
-          {/* Hidden file input */}
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleCreateNew}
-          />
+          <CreateModal
+            isOpen={isModalOpen}
+            onRequestClose={() => setIsModalOpen(false)}
+            onUpload={handleUploadSubmit}
+          ></CreateModal>
         </TopContainer>
         <TableContainer>
           <FilterContainer>
@@ -248,13 +247,16 @@ const MyStudyGuides = () => {
                     ? "All"
                     : filter === "owned"
                     ? "Owned by Me"
-                    : "Shared with Me"}
+                    : filter === "shared"
+                    ? "Shared with Me"
+                    : "Downloaded Publically"}
                 </MenuTrigger>
               }
               menuItems={[
                 { name: "All", onClick: setFilterAll },
                 { name: "Owned by Me", onClick: setFilterOwned },
                 { name: "Shared with Me", onClick: setFilterShared },
+                { name: "Downloaded Publically", onClick: setFilterPublic },
               ]}
               arrow={true}
             />
