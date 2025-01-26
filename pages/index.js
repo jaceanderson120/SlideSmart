@@ -24,14 +24,6 @@ export default function Home() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  // Function to handle the button click and open the file selector
-  const handleUploadClick = () => {
-    // Programmatically click the hidden file input
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
   const handleClick = () => {
     if (isLoggedIn) {
       setIsModalOpen(true);

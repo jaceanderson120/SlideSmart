@@ -86,6 +86,7 @@ const Study = () => {
   const topicRefs = useRef({});
   const titleInputRef = useRef(null);
   const { currentUser, loading } = useStateContext();
+  const [hasFirebaseUrl, setHasFirebaseUrl] = useState(false);
 
   // When navigating to the study guide page (on mount), clear the chatbot messages
   useEffect(() => {
@@ -110,7 +111,7 @@ const Study = () => {
         const hasAccess = await hasAccessToStudyGuide(id, currentUser.uid);
         // If the user does not have access to the study guide, redirect them to their study guides page
         if (!hasAccess) {
-          router.push("/myStudyGuides");
+          router.push(`/study/public/${id}`);
           return;
         }
 
@@ -118,6 +119,13 @@ const Study = () => {
         const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
         setStudyGuide(fetchedStudyGuide);
         setFileName(fileName);
+
+        // Check if fetchedStudyGuide has firebaseFileUrl
+        if (fetchedStudyGuide.firebaseFileUrl) {
+          setHasFirebaseUrl(true);
+        } else {
+          setHasFirebaseUrl(false);
+        }
 
         // Set the youtube indices to zeros for each topic
         const indices = {};
@@ -209,31 +217,34 @@ const Study = () => {
     return <></>;
   }
 
-  // Split off the query string from the Firebase file URL
-  const baseFileUrl = studyGuide.firebaseFileUrl.split("?")[0];
+  let content;
+  if (hasFirebaseUrl) {
+    // Split off the query string from the Firebase file URL
+    const baseFileUrl = studyGuide.firebaseFileUrl.split("?")[0];
 
-  // Get the file extension from the base URL
-  const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
+    // Get the file extension from the base URL
+    const fileExtension = baseFileUrl.split(".").pop().toLowerCase();
 
-  // Set the viewer URL to the Firebase file URL by default, but if it's a PowerPoint file, use the Google Drive viewer
-  let viewerUrl = studyGuide.firebaseFileUrl;
-  if (fileExtension === "pptx") {
-    viewerUrl = getViewerUrl(studyGuide.firebaseFileUrl);
+    // Set the viewer URL to the Firebase file URL by default, but if it's a PowerPoint file, use the Google Drive viewer
+    let viewerUrl = studyGuide.firebaseFileUrl;
+    if (fileExtension === "pptx") {
+      viewerUrl = getViewerUrl(studyGuide.firebaseFileUrl);
+    }
+
+    // Set the content to be an iframe with the viewer URL
+    content = (
+      <iframe
+        src={viewerUrl}
+        style={{
+          border: "none",
+          width: "100%",
+          height: "80vh",
+          transform: "scale(0.95)",
+          transformOrigin: "0 0",
+        }}
+      />
+    );
   }
-
-  // Set the content to be an iframe with the viewer URL
-  const content = (
-    <iframe
-      src={viewerUrl}
-      style={{
-        border: "none",
-        width: "100%",
-        height: "80vh",
-        transform: "scale(0.95)",
-        transformOrigin: "0 0",
-      }}
-    />
-  );
 
   // Function to toggle if a practice problem answer is collapsed or not
   const toggleAnswer = (answer) => {
@@ -370,16 +381,26 @@ const Study = () => {
   };
 
   // Menu items for the study guide page
-  const menuItems = [
-    {
-      name: isTopicsShown ? "Collapse Topics" : "Show Topics",
-      onClick: handleTopicToggle,
-    },
-    {
-      name: isFileShown ? "Collapse File" : "Show File",
-      onClick: handleFileToggle,
-    },
-  ];
+  let menuItems;
+  if (hasFirebaseUrl) {
+    menuItems = [
+      {
+        name: isTopicsShown ? "Collapse Topics" : "Show Topics",
+        onClick: handleTopicToggle,
+      },
+      {
+        name: isFileShown ? "Collapse File" : "Show File",
+        onClick: handleFileToggle,
+      },
+    ];
+  } else {
+    menuItems = [
+      {
+        name: isTopicsShown ? "Collapse Topics" : "Show Topics",
+        onClick: handleTopicToggle,
+      },
+    ];
+  }
 
   // Get a new YouTube video
   const getNewYoutubeVideo = async (topic, data) => {

@@ -6,7 +6,7 @@ const StudyGuideList = ({ guides }) => {
   const router = useRouter();
 
   const handleClick = (guideId) => {
-    router.push(`/study/${guideId}`);
+    router.push(`/study/public/${guideId}`);
   };
 
   if (!guides || guides.length === 0) {

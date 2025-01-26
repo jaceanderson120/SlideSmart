@@ -145,6 +145,7 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
         contributors: [currentUser.uid],
         editors: [currentUser.uid],
         isPublic: isPublic,
+        gotFromPublic: false,
       };
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 
