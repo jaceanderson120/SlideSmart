@@ -6,13 +6,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// The following import prevents a Font Awesome icon server-side rendering bug,
-// where the icons flash from a very large icon down to a properly sized one:
-import "@fortawesome/fontawesome-svg-core/styles.css";
-// Prevent fontawesome from adding its CSS since we did it manually above:
-import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false; /* eslint-disable import/first */
 import { useRouter } from "next/router";
 import CustomMenu from "./CustomMenu";
 import UserIcon from "./UserIcon";
@@ -46,10 +39,10 @@ function Navbar() {
         </MenuTextContainer>
       </HorizontalContainer>
     </MenuItemContainer>,
-    {
-      name: hasSpark ? "Manage Subscription" : "Upgrade",
-      onClick: handleUpgradeManageClick,
-    },
+    // {
+    //   name: hasSpark ? "Manage Subscription" : "Upgrade",
+    //   onClick: handleUpgradeManageClick,
+    // },
     { name: "Logout", onClick: handleLogout },
   ];
 
@@ -77,13 +70,14 @@ function Navbar() {
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
       <NavbarAboutLinks>
-        <Link href="/myStudyGuides">My Study Guides</Link>
-        <Link href="/publicStudyGuides">Find Slides</Link>
-        {/* <Link href="/">How it Works</Link>
-        <Link href="/">Contact</Link>
+        {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
+        {isLoggedIn && <Link href="/publicStudyGuides">Find Slides</Link>}
+        <Link href="/how-it-works">How it Works</Link>
+        {/* <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>
         <Link href="/">About</Link> */}
       </NavbarAboutLinks>
+
       <NavbarLoginLinks>
         {isLoggedIn ? (
           <CustomMenu
@@ -191,6 +185,7 @@ const NavbarSection = styled.div`
   padding: 16px;
   border-bottom: 1px solid gray;
   background-color: #f6f4f3;
+  z-index: 100;
 `;
 
 const MenuTextContainer = styled.div`

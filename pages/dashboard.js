@@ -29,7 +29,7 @@ import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
 import CreateModal from "@/components/CreateModal";
 
-const MyStudyGuides = () => {
+const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
   const [filteredStudyGuides, setFilteredStudyGuides] = useState([]);
   const [studyGuidesLoaded, setStudyGuidesLoaded] = useState(false);
@@ -217,7 +217,7 @@ const MyStudyGuides = () => {
       )}
       <Section>
         <TopContainer>
-          <PageTitle>My Study Guides</PageTitle>
+          <PageTitle>Dashboard</PageTitle>
           {isLoggedIn && (
             <ButtonContainer>
               <Button
@@ -360,7 +360,7 @@ const MyStudyGuides = () => {
   );
 };
 
-export default MyStudyGuides;
+export default Dashboard;
 
 const Container = styled.div`
   display: flex;
@@ -471,10 +471,11 @@ const StudyGuideLink = styled.div`
   white-space: nowrap;
   overflow: hidden;
   font-size: ${fontSize.default};
+  transition: color 0.3s, transform 0.3s;
 
   &:hover {
     color: #f03a47;
-    transition: color 0.3s;
+    transform: scale(1.02);
   }
 `;
 

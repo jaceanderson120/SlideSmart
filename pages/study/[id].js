@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import styled, { keyframes, css } from "styled-components";
+import styled, { css } from "styled-components";
 import Image from "next/image";
 import youtube from "@/images/youtube.png";
 import textbook from "@/images/textbook.png";
@@ -469,30 +469,6 @@ const Study = () => {
       <Navbar />
       <Section>
         <HeaderSection>
-          {editMode && (
-            <SaveButtonArea>
-              <Button
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor="#000000"
-                hoverTextColor="#f03a47"
-                underline={true}
-                onClick={handleEditClicked}
-              >
-                Save Edits
-              </Button>
-              <Button
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor="#000000"
-                hoverTextColor="#f03a47"
-                underline={true}
-                onClick={() => setIsDiscardEditsDialogOpen(true)}
-              >
-                Discard Edits
-              </Button>
-            </SaveButtonArea>
-          )}
           <Title
             type="text"
             value={fileName}
@@ -518,6 +494,28 @@ const Study = () => {
                     onClick={handleEditClicked}
                   />
                 )}
+              </>
+            )}
+            {editMode && (
+              <>
+                <Button
+                  backgroundColor="transparent"
+                  hoverBackgroundColor="#f03a4770"
+                  textColor="#000000"
+                  hoverTextColor="#000000"
+                  onClick={handleEditClicked}
+                >
+                  Save
+                </Button>
+                <Button
+                  backgroundColor="transparent"
+                  hoverBackgroundColor="#f03a4770"
+                  textColor="#000000"
+                  hoverTextColor="#000000"
+                  onClick={() => setIsDiscardEditsDialogOpen(true)}
+                >
+                  Discard
+                </Button>
               </>
             )}
             {studyGuide.createdBy === currentUser?.uid && (
@@ -1056,6 +1054,7 @@ const MenuTriggerArea = styled.div`
   right: 32px;
   cursor: pointer;
   gap: 8px;
+  align-items: center;
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
