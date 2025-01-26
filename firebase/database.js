@@ -191,9 +191,11 @@ const deleteStudyGuide = async (id, storageUrl, userId) => {
     }
   });
 
-  // Delete the study guide file from Firebase Storage
-  const storageRef = ref(storage, storageUrl);
-  await deleteObject(storageRef);
+  // Delete the study guide file from Firebase Storage if it exists
+  if (storageUrl != null) {
+    const storageRef = ref(storage, storageUrl);
+    await deleteObject(storageRef);
+  }
 };
 
 // Store user information in Firestore users collection
