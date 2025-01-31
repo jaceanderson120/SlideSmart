@@ -1,0 +1,95 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import Navbar from "@/components/Navbar";
+import TextField from "@mui/material/TextField";
+import Button from "@/components/Button";
+import { fontSize } from "@/constants/fontSize";
+import { getPublicStudyGuides } from "@/firebase/database";
+import StudyGuideList from "@/components/StudyGuideList";
+import Footer from "@/components/Footer";
+
+const FindSlides = () => {
+  const [hasSearched, setHasSearched] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [studyGuides, setStudyGuides] = useState([]); // store fetched guides
+
+  // Update local input state on every keystroke
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  // Trigger the search and update studyGuides state
+  const handleSearch = async () => {
+    setHasSearched(true);
+    const guides = await getPublicStudyGuides(inputText);
+    setStudyGuides(guides);
+  };
+
+  // If user presses 'Enter', run the same search function
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  return (
+    <>
+      <PageContainer>
+        <Navbar />
+        <Section>
+          <TopContainer>
+            <PageTitle>Search for Public Slides</PageTitle>
+          </TopContainer>
+          <SearchContainer>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Enter a keyword..."
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+            <Button onClick={handleSearch}>Search</Button>
+          </SearchContainer>
+          {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+        </Section>
+      </PageContainer>
+      <Footer />
+    </>
+  );
+};
+
+export default FindSlides;
+
+const PageContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  background-color: #f6f4f3;
+`;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 32px;
+`;
+
+const PageTitle = styled.p`
+  font-size: ${fontSize.heading};
+  font-weight: bold;
+  flex: 1;
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;

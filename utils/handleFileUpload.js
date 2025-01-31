@@ -3,7 +3,7 @@ import {
   uploadFileToFirebase,
 } from "@/firebase/database";
 
-const handleFileUpload = async (file, currentUser) => {
+const handleFileUpload = async (file, isPublic, currentUser) => {
   if (file) {
     try {
       // Upload the file to Firebase Storage
@@ -144,6 +144,8 @@ const handleFileUpload = async (file, currentUser) => {
         createdBy: currentUser.uid,
         contributors: [currentUser.uid],
         editors: [currentUser.uid],
+        isPublic: isPublic,
+        gotFromPublic: false,
       };
       const studyGuideId = await uploadStudyGuideToFirebase(studyGuide);
 
