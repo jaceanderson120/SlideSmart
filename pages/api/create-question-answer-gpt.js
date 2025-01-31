@@ -15,15 +15,15 @@ export default async function createContent(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const topicsAndSummmaries = req.body; // Get the slides data from the request body
+  const data = req.body; // Get the slides data from the request body
 
   // Creating the user message for practice problems
   const userMessage2 = `
-            I am providing you with JSON in the following format: { 'topicName1': 'explanation', 'topicName2': 'explanation' ... }.
-            Here is the JSON object: ${JSON.stringify(topicsAndSummmaries)}.
-            For each topic, please create a practice problem example. Please make sure that the practice problem answer can be found in and related back to the topic explanation.
-            Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
-        `;
+    I am providing you with JSON in the following format: { 'topicName1': 'explanation1', 'topicName2': 'explanation2' ... }.
+    Here is the JSON object: ${JSON.stringify(data)}.
+    For each topic, please create a practice problem example. Please make sure that the practice problem answer can be found in and related back to the topic explanation.
+    Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
+  `;
 
   // Start the OpenAI completion for practice problems without waiting for YouTube API
   try {

@@ -15,9 +15,8 @@ export default async function createYouTubeQuery(req, res) {
 
   // Creating the user prompt
   const prompt = `Here is the explanation of a topic: ${data}.
-  Please generate a YouTube search query that would help a student learn more about this topic.
-  Make sure the query is clear and concise.
-  Please don't use any language like "tutorial" or "how to" or "explained" in the query.`;
+  Please generate a Google search query that would help a student learn more about this topic.
+  Make sure the query is clear and concise.`;
 
   try {
     const completion = await openai.completions.create({
@@ -26,7 +25,7 @@ export default async function createYouTubeQuery(req, res) {
         {
           role: "system",
           content:
-            "You are a professional at generating YouTube search queries given a topic. You respond to prompts with a YouTube search query.",
+            "You are a professional at generating Google search queries given a topic. You respond to prompts with a Google search query only.",
         },
         { role: "user", content: prompt },
       ],
@@ -36,7 +35,7 @@ export default async function createYouTubeQuery(req, res) {
 
     res.status(200).json(query);
   } catch (error) {
-    console.error("Error creating a YouTube search query:", error);
+    console.error("Error creating a Google search query:", error);
     res.status(500).json({ error: error.message });
   }
 }

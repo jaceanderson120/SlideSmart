@@ -17,13 +17,19 @@ export default async function searchGoogle(req, res) {
     }
 
     const results = await response.json();
-    // Filter down to the top 3 results
-    const filteredResults = results.items?.slice(0, 3).map((item) => ({
-      title: item.title,
-      link: item.link,
-      snippet: item.snippet,
-    }));
-    res.status(200).json(filteredResults);
+
+    if (!results.items || results.items.length === 0) {
+      // Still a 200 response, but no search results
+      return res.status(200).json({ error: "No search results found" });
+    }
+
+    // Filter down to the top 1 result
+    const topResult = {
+      title: results.items[0].title,
+      link: results.items[0].link,
+      snippet: results.items[0].snippet,
+    };
+    res.status(200).json(topResult);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Failed to fetch search results");
