@@ -9,7 +9,6 @@ import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
 import check from "@/images/check.png";
 import Link from "next/link";
-import SaveFileButton from "@/components/SaveFileButton";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
 import Button from "@/components/Button";
 import {
@@ -220,7 +219,7 @@ const PublicStudy = () => {
         <HeaderSection>
           <Title readOnly type="text" value={fileName} ref={titleInputRef} />
           <MenuTriggerArea>
-            <SaveFileButton onClick={saveStudyGuide}></SaveFileButton>
+            <Button onClick={saveStudyGuide}>Save File</Button>
           </MenuTriggerArea>
         </HeaderSection>
         <OutputSection>

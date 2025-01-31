@@ -141,7 +141,7 @@ const Dashboard = () => {
   };
 
   // Function to handle when the create new button is clicked
-  const handleClick = () => {
+  const handleCreateNewClick = () => {
     if (isLoggedIn) {
       setIsModalOpen(true);
     } else {
@@ -221,8 +221,7 @@ const Dashboard = () => {
           {isLoggedIn && (
             <ButtonContainer>
               <Button
-                onClick={handleClick}
-                marginTop="40px"
+                onClick={handleCreateNewClick}
                 padding="16px"
                 bold
                 fontSize={fontSize.subheading}
