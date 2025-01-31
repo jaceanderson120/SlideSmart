@@ -111,7 +111,7 @@ const Study = () => {
         const hasAccess = await hasAccessToStudyGuide(id, currentUser.uid);
         // If the user does not have access to the study guide, redirect them to their study guides page
         if (!hasAccess) {
-          router.push(`/study/public/${id}`);
+          router.push(`/dashboard`);
           return;
         }
 

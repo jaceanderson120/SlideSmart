@@ -27,29 +27,42 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
       // Get the extracted data as a string
       const extractedData = await response.json();
 
-      // Send extracted data to GPT to retrieve topics + summaries object from data
-      const topicsAndSummariesResponse = await fetch("/api/get-topics-gpt", {
+      // Send extracted data to GPT to retrieve topics + explanations object from data
+      const topicsAndExplanationsResponse = await fetch("/api/get-topics-gpt", {
         method: "POST",
         body: extractedData,
       });
 
-      // Check if topicsAndSummariesResponse is OK
-      if (!topicsAndSummariesResponse.ok) {
+      // Check if topicsAndExplanationsResponse is OK
+      if (!topicsAndExplanationsResponse.ok) {
         throw new Error("Failed to fetch topics and summaries");
       }
 
       // Get the topics and summaries as JSON
-      const topicsAndSummaries = await topicsAndSummariesResponse.json();
-      const topics = Object.keys(topicsAndSummaries["topics"]); // Extracting topics
-      const googleSearchQuery = topicsAndSummaries["googleSearchQuery"]; // Extracting Google search query
+      const topicsAndExplanations = await topicsAndExplanationsResponse.json();
+      const topics = Object.keys(topicsAndExplanations); // Extracting topics
 
-      // Get the YouTube search queries for each topic
-      const queries = topics.map(
-        (topic) => topicsAndSummaries["topics"][topic][1]
+      // Generate a promise to get a YouTube video query for each topic
+      const queries = topics.map((topic) =>
+        fetch("/api/create-youtube-query", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(topicsAndExplanations[topic]),
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to create YouTube query");
+          }
+          return res.json(); // Return the YouTube query
+        })
       );
 
+      // Resolve all YouTube video queries
+      const youtubeQueries = await Promise.all(queries);
+
       // Prepare an array of fetch promises for YouTube videos
-      const youtubePromises = queries.map((query) =>
+      const youtubePromises = youtubeQueries.map((query) =>
         fetch("/api/get-youtube-video", {
           method: "POST",
           headers: {
@@ -64,13 +77,13 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
         })
       );
 
-      // Prepare the fetch for create-content
-      const createContentPromise = fetch("/api/create-content-gpt", {
+      // Generate a practice question and answer for each topic
+      const createContentPromise = fetch("/api/create-question-answer-gpt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(topicsAndSummaries["topics"]),
+        body: JSON.stringify(topicsAndExplanations),
       });
 
       // Prepare the fetch for getting examples
@@ -79,17 +92,45 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(topicsAndSummaries["topics"]),
+        body: JSON.stringify(topicsAndExplanations),
       });
 
+      // Generate a Google search query for each topic
+      const googleSearchQueries = topics.map((topic) =>
+        fetch("/api/create-google-query", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(topicsAndExplanations[topic]),
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to create Google query");
+          }
+          return res.json(); // Return the Google query
+        })
+      );
+
+      // Resolve all Google search queries
+      const googleSearchQueriesResponse = await Promise.all(
+        googleSearchQueries
+      );
+
       // Prepare the fetch for the Google search query
-      const googleSearchQueryPromise = fetch("/api/search-google", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: googleSearchQuery }),
-      });
+      const googleResultsPromise = googleSearchQueriesResponse.map((query) =>
+        fetch("/api/search-google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch Google search results");
+          }
+          return res.json(); // Return the google search results
+        })
+      );
 
       // Wait for both the YouTube video and create content fetches to complete
       const [
@@ -101,10 +142,26 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
         Promise.all(youtubePromises), // Resolve all YouTube video fetches
         createContentPromise, // Resolve create content fetch
         createExamplesPromise, // Resolve examples promise
-        googleSearchQueryPromise, // Resolve Google search query fetch
+        Promise.all(googleResultsPromise), // Resolve Google search query fetch
       ]);
 
-      const googleSearchResults = await googleSearchResponse.json();
+      // Create array of Google search results
+      let googleSearchResults = googleSearchResponse.map((result) => {
+        if (!result.error) {
+          return {
+            title: result.title,
+            link: result.link,
+            snippet: result.snippet,
+          };
+        } else {
+          return null;
+        }
+      });
+
+      // Filter null values from googleSearchResults
+      const filteredGoogleSearchResults = googleSearchResults.filter(
+        (result) => result !== null
+      );
 
       // Check if createdContentResponse is OK
       if (!createdContentResponse.ok) {
@@ -125,11 +182,11 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
       const combinedResponse = {};
       topics.forEach((topic, index) => {
         combinedResponse[topic] = {
-          summary: topicsAndSummaries["topics"][topic][0],
+          summary: topicsAndExplanations[topic],
           question: createdContent[topic]?.question || "",
           answer: createdContent[topic]?.answer || "",
-          example: createdExampleContent[topic]?.example || "",
-          youtubeIds: youtubeResponses[index],
+          example: createdExampleContent[topic] || "",
+          youtubeIds: youtubeResponses[index] || [],
         };
       });
 
@@ -138,7 +195,7 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
       let studyGuide = {
         fileName: file.name,
         extractedData: JSON.stringify(combinedResponse),
-        googleSearchResults: JSON.stringify(googleSearchResults),
+        googleSearchResults: JSON.stringify(filteredGoogleSearchResults),
         firebaseFileUrl: firebaseFileUrl,
         createdAt: new Date(),
         createdBy: currentUser.uid,

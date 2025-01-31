@@ -38,7 +38,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
       transaction.set(studyGuideRef, {
         fileName: studyGuide.fileName,
         extractedData: studyGuide.extractedData,
-        googleSearchResults: studyGuide.googleSearchResults,
+        googleSearchResults: studyGuide.googleSearchResults || "",
         firebaseFileUrl: studyGuide.firebaseFileUrl,
         createdAt: studyGuide.createdAt,
         createdBy: studyGuide.createdBy,
@@ -139,7 +139,7 @@ const fetchStudyGuide = async (id) => {
       id: studyGuideDoc.id,
       ...data,
       extractedData: JSON.parse(data.extractedData),
-      googleSearchResults: JSON.parse(data.googleSearchResults),
+      googleSearchResults: JSON.parse(data.googleSearchResults || "{}"),
     };
     const fileName = data.fileName;
     return { fetchedStudyGuide, fileName };
