@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Navbar from "@/components/Navbar";
 import TextField from "@mui/material/TextField";
-import Button from "./Button";
+import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
-import StudyGuideList from "./StudyGuideList";
+import StudyGuideList from "@/components/StudyGuideList";
+import Footer from "@/components/Footer";
 
-const SearchBar = () => {
+const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [inputText, setInputText] = useState("");
   const [studyGuides, setStudyGuides] = useState([]); // store fetched guides
@@ -32,39 +33,38 @@ const SearchBar = () => {
   };
 
   return (
-    <Container>
-      <Navbar />
-      <Section>
-        <TopContainer>
-          <PageTitle>Search for Public Slides</PageTitle>
-        </TopContainer>
-      </Section>
-      <Section>
-        <SearchContainer>
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            placeholder="Enter a keyword..."
-            value={inputText}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-          />
-          <Button onClick={handleSearch}>Search</Button>
-        </SearchContainer>
-        {/* 
-          Render the StudyGuideList component, which shows each guide's name
-          and clicks through to the guide.
-        */}
-        {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
-      </Section>
-    </Container>
+    <>
+      <PageContainer>
+        <Navbar />
+        <Section>
+          <TopContainer>
+            <PageTitle>Search for Public Slides</PageTitle>
+          </TopContainer>
+          <SearchContainer>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Enter a keyword..."
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+            <Button onClick={handleSearch}>Search</Button>
+          </SearchContainer>
+          {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+        </Section>
+      </PageContainer>
+      <Footer />
+    </>
   );
 };
 
-const Container = styled.div`
+export default FindSlides;
+
+const PageContainer = styled.div`
   display: flex;
-  flex-direction: column;
   height: 100vh;
+  flex-direction: column;
   background-color: #f6f4f3;
 `;
 
@@ -72,9 +72,7 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-grow: 1;
   text-align: center;
-  margin-bottom: 32px;
 `;
 
 const TopContainer = styled.div`
@@ -93,7 +91,5 @@ const PageTitle = styled.p`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between the textfield and the button */
+  gap: 8px;
 `;
-
-export default SearchBar;

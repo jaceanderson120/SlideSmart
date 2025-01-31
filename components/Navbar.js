@@ -71,7 +71,7 @@ function Navbar() {
       </NavbarSlideSmart>
       <NavbarAboutLinks>
         {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
-        {isLoggedIn && <Link href="/publicStudyGuides">Find Slides</Link>}
+        {isLoggedIn && <Link href="/find-slides">Find Slides</Link>}
         <Link href="/how-it-works">How it Works</Link>
         {/* <Link href="/">Contact</Link>
         <Link href="/">Pricing</Link>

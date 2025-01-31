@@ -92,7 +92,6 @@ const PublicStudy = () => {
 
       // If the user has access to the study guide, fetch the study guide data
       const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
-      console.log(fetchedStudyGuide);
       setStudyGuide(fetchedStudyGuide);
       setFileName(fileName);
 

@@ -9,7 +9,6 @@ import editMode from "@/images/editMode.png";
 import register from "@/images/register.png";
 import share from "@/images/share.png";
 import DecorationCircle from "@/components/DecorationCircle";
-import { fontSize } from "@/constants/fontSize";
 
 const HowItWorks = () => {
   return (
