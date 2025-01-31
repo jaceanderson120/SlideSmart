@@ -4,16 +4,16 @@ import Button from "./Button";
 const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
   return (
     <Container>
-      {!topicInfo["summary"] && topicInfo["summary"] !== "" && (
+      {!topicInfo["explanation"] && topicInfo["explanation"] !== "" && (
         <Button
           padding="8px"
           backgroundColor="#f03a4770"
           hoverBackgroundColor="#f03a4770"
           textColor="#000000"
           hoverTextColor="#ffffff"
-          onClick={() => handleAddSection("summary")}
+          onClick={() => handleAddSection("explanation")}
         >
-          Add Summary
+          Add Explanation
         </Button>
       )}
       {!topicInfo["youtubeIds"] && (

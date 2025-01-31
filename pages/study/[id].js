@@ -327,7 +327,7 @@ const Study = () => {
         extractedData: {
           ...prev.extractedData,
           [topicName]: {
-            summary: "Fill in the summary here...",
+            explanation: "Fill in the explanation here...",
             youtubeIds: "None",
             example: "Fill in the example here...",
             question: "Fill in the question here...",
@@ -405,9 +405,9 @@ const Study = () => {
   // Get a new YouTube video
   const getNewYoutubeVideo = async (topic, data) => {
     setfindingNewYoutubeVideo(true);
-    // Filter the data to only be the topic name and summary
+    // Filter the data to only be the topic name and explanation
     const filteredData = {
-      summary: data.summary,
+      explanation: data.explanation,
     };
     const res = await fetch("/api/create-youtube-query", {
       method: "POST",
@@ -617,8 +617,8 @@ const Study = () => {
                       />
                     )}
                   </TopicHeaderContainer>
-                  {(studyGuide.extractedData[key]["summary"] ||
-                    studyGuide.extractedData[key]["summary"] === "") && (
+                  {(studyGuide.extractedData[key]["explanation"] ||
+                    studyGuide.extractedData[key]["explanation"] === "") && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -629,7 +629,7 @@ const Study = () => {
                             height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Summary:
+                            Explanation:
                           </strong>
                         </ImageAndTitle>
                         {editMode && (
@@ -637,19 +637,21 @@ const Study = () => {
                             icon={faX}
                             onClick={() => {
                               setTopicToDelete(key);
-                              setSubSectionToDelete("summary");
+                              setSubSectionToDelete("explanation");
                               setIsDeleteSubSectionDialogOpen(true);
                             }}
-                            title="Delete Summary"
+                            title="Delete explanation"
                           />
                         )}
                       </ImageAndTitleContainer>
                       <AutoResizeTextArea
                         key={editMode} // Trigger re-render when edit mode changes
                         onChange={(text) => {
-                          updateStudyGuideObject(key, "summary", text);
+                          updateStudyGuideObject(key, "explanation", text);
                         }}
-                        defaultValue={studyGuide.extractedData[key]["summary"]}
+                        defaultValue={
+                          studyGuide.extractedData[key]["explanation"]
+                        }
                         editMode={editMode}
                       />
                     </TopicSubContainer>
@@ -723,8 +725,8 @@ const Study = () => {
                         <Dots />
                       ) : (
                         <NoVideoText>
-                          No video available. Please fill in the topic summary
-                          and then generate a video.
+                          No video available. Please fill in the topic
+                          explanation and then generate a video.
                         </NoVideoText>
                       )}
                     </TopicSubContainer>
@@ -967,7 +969,7 @@ const Study = () => {
           setIsNewYoutubeVideoDialogOpen(false);
         }}
         title="Find More Videos"
-        text={`SlideSmart uses AI and complex algorithms to analyze your topic summary and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your summary.\n\nPlease confirm that your topic summary reflects what you wish to learn.`}
+        text={`SlideSmart uses AI and complex algorithms to analyze your topic explanation and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your explanation.\n\nPlease confirm that your topic explanation reflects what you wish to learn.`}
         onConfirm={() => {
           setIsNewYoutubeVideoDialogOpen(false);
           getNewYoutubeVideo(

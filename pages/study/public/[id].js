@@ -268,8 +268,8 @@ const PublicStudy = () => {
                   >
                     <TopicHeaderTitle>{key}</TopicHeaderTitle>
                   </TopicHeaderContainer>
-                  {(studyGuide.extractedData[key]["summary"] ||
-                    studyGuide.extractedData[key]["summary"] === "") && (
+                  {(studyGuide.extractedData[key]["explanation"] ||
+                    studyGuide.extractedData[key]["explanation"] === "") && (
                     <TopicSubContainer>
                       <ImageAndTitleContainer>
                         <ImageAndTitle>
@@ -280,16 +280,18 @@ const PublicStudy = () => {
                             height={48}
                           />
                           <strong style={{ fontWeight: "bold" }}>
-                            Summary:
+                            Explanation:
                           </strong>
                         </ImageAndTitle>
                       </ImageAndTitleContainer>
                       <AutoResizeTextArea
                         key={editMode} // Trigger re-render when edit mode changes
                         onChange={(text) => {
-                          updateStudyGuideObject(key, "summary", text);
+                          updateStudyGuideObject(key, "explanation", text);
                         }}
-                        defaultValue={studyGuide.extractedData[key]["summary"]}
+                        defaultValue={
+                          studyGuide.extractedData[key]["explanation"]
+                        }
                         editMode={editMode}
                       />
                     </TopicSubContainer>

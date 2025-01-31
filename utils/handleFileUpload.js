@@ -182,7 +182,7 @@ const handleFileUpload = async (file, isPublic, currentUser) => {
       const combinedResponse = {};
       topics.forEach((topic, index) => {
         combinedResponse[topic] = {
-          summary: topicsAndExplanations[topic],
+          explanation: topicsAndExplanations[topic],
           question: createdContent[topic]?.question || "",
           answer: createdContent[topic]?.answer || "",
           example: createdExampleContent[topic] || "",
