@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
@@ -24,7 +25,12 @@ export default function Login() {
         router.push("/dashboard");
       })
       .catch((error) => {
-        console.error(error);
+        const notify = () =>
+          toast.error(
+            "Your username and password do not match. Please try again."
+          );
+        notify();
+        return;
       });
   };
 

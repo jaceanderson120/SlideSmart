@@ -959,12 +959,11 @@ const Study = () => {
           {isFileShown && <FileContainer>{content}</FileContainer>}
           {/* Pass studyGuide to Chatbot component */}
           {/* Pass function to chatbot that minimizes it */}
-          {isChatbotShown && (
-            <Chatbot
-              studyGuide={studyGuide}
-              setIsChatbotShown={setIsChatbotShown}
-            />
-          )}
+          <Chatbot
+            studyGuide={studyGuide}
+            setIsChatbotShown={setIsChatbotShown}
+            isChatbotShown={isChatbotShown}
+          />
         </OutputSection>
       </Section>
       <ShareModal
