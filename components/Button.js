@@ -14,6 +14,7 @@ const Button = ({
   style,
   onClick,
   children,
+  disabled,
 }) => {
   return (
     <StyledButton

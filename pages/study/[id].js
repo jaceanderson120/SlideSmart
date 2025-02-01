@@ -924,6 +924,9 @@ const Study = () => {
         studyGuideId={id}
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
+        icon={
+          <FontAwesomeIcon icon={faShareFromSquare} size="3x" color="#f03a47" />
+        }
       />
       <ConfirmationDialog
         isOpen={isDiscardEditsDialogOpen}
