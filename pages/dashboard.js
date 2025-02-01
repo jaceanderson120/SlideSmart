@@ -115,7 +115,9 @@ const Dashboard = () => {
         studyGuides.filter((guide) => guide.createdBy !== currentUser?.uid)
       );
     } else if (filter === "public") {
-      setFilteredStudyGuides(studyGuides.filter((guide) => guide.isPublic));
+      setFilteredStudyGuides(
+        studyGuides.filter((guide) => guide.isPublic && guide.gotFromPublic)
+      );
     }
   }, [filter, studyGuides, currentUser]);
 
