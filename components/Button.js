@@ -11,6 +11,7 @@ const Button = ({
   marginTop = "0px",
   bold = false,
   underline = false,
+  style,
   onClick,
   children,
 }) => {
@@ -26,6 +27,7 @@ const Button = ({
       $marginTop={marginTop}
       $underline={underline}
       $bold={bold}
+      style={style}
     >
       {children}
     </StyledButton>

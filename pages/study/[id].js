@@ -945,6 +945,7 @@ const Study = () => {
           handleTopicDelete(topicToDelete);
           toast.success("Topic has been deleted successfully.");
         }}
+        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
       />
       <ConfirmationDialog
         isOpen={isDeleteSubSectionDialogOpen}
@@ -964,6 +965,7 @@ const Study = () => {
           setIsDeleteSubSectionDialogOpen(false);
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
         }}
+        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
       />
       <ConfirmationDialog
         isOpen={isNewYoutubeVideoDialogOpen}
