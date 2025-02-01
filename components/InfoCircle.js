@@ -49,7 +49,7 @@ const InfoCircle = ({ title, subtitle, align }) => {
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid meet"
       >
-        <circle cx="50" cy="50" r="50" fill="#fce2e4" />
+        <circle cx="50" cy="50" r="50" fill={colors.primary33} />
         {renderText(title, subtitle, align)}
       </svg>
     </CircleContainer>
