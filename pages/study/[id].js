@@ -704,20 +704,6 @@ const Study = () => {
                           <strong style={{ fontWeight: "bold" }}>Video:</strong>
                         </ImageAndTitle>
                         <div>
-                          <StyledFontAwesomeIcon
-                            icon={faArrowLeft}
-                            onClick={() => {
-                              goToPreviousVideo(key);
-                            }}
-                            title="Previous Video"
-                          />
-                          <StyledFontAwesomeIcon
-                            icon={faArrowRight}
-                            onClick={() => {
-                              goToNextVideo(key);
-                            }}
-                            title="Next Video"
-                          />
                           {editMode && (
                             <>
                               <StyledFontAwesomeIcon
@@ -741,23 +727,49 @@ const Study = () => {
                           )}
                         </div>
                       </ImageAndTitleContainer>
-                      {!findingNewYoutubeVideo &&
-                      studyGuide.extractedData[key]["youtubeIds"] !== "None" ? (
-                        <iframe
-                          width="560"
-                          height="315"
-                          src={`https://www.youtube.com/embed/${
-                            studyGuide.extractedData[key]["youtubeIds"][
-                              videoIndices[key]
-                            ]
-                          }`}
-                          title="YouTube video player"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      ) : findingNewYoutubeVideo ? (
+                      {topicForNewYoutubeVideo === key &&
+                      findingNewYoutubeVideo ? (
                         <Dots />
+                      ) : studyGuide.extractedData[key]["youtubeIds"] !==
+                        "None" ? (
+                        <VideoContainer>
+                          <iframe
+                            width="560"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${
+                              studyGuide.extractedData[key]["youtubeIds"][
+                                videoIndices[key]
+                              ]
+                            }`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                          <SwitchVideoContainer>
+                            <StyledFontAwesomeIcon
+                              icon={faArrowLeft}
+                              onClick={() => {
+                                goToPreviousVideo(key);
+                              }}
+                              title="Previous Video"
+                            />
+                            <span>
+                              {videoIndices[key] + 1} of{" "}
+                              {
+                                studyGuide.extractedData[key]["youtubeIds"]
+                                  .length
+                              }
+                            </span>
+                            <StyledFontAwesomeIcon
+                              icon={faArrowRight}
+                              onClick={() => {
+                                goToNextVideo(key);
+                              }}
+                              title="Next Video"
+                            />
+                          </SwitchVideoContainer>
+                        </VideoContainer>
                       ) : (
                         <NoVideoText>
                           No video available. Please fill in the topic
@@ -1254,4 +1266,20 @@ const NoVideoText = styled.p`
   font-style: italic;
   color: ${colors.black};
   padding: 8px;
+`;
+
+const VideoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+`;
+
+const SwitchVideoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: ${fontSize.label};
 `;
