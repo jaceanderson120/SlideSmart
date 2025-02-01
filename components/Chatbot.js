@@ -43,7 +43,7 @@ const Chatbot = (props) => {
   const extractedData = studyGuide?.extractedData;
 
   // Get chatbot state from the parent component
-  const { setIsChatbotShown } = props;
+  const { setIsChatbotShown, isChatbotShown } = props;
 
   // Ref to the chatbot container
   const chatbotContainerRef = useRef(null);
@@ -125,29 +125,16 @@ const Chatbot = (props) => {
 
   // Function to handle minimize button click
   const handleMinimizeClick = () => {
-    // Add a size transition effect
-    chatbotContainerRef.current.style.transition = "width 0.5s, height 0.5s";
-    chatbotContainerRef.current.style.width = "0%";
-    chatbotContainerRef.current.style.height = "0%";
-    // Hide the chatbot after the transition ends
-    chatbotContainerRef.current.addEventListener("transitionend", () => {
-      setIsChatbotShown(false);
-    });
+    setIsChatbotShown(false);
   };
 
   // Function to handle maximize button click
   const handleMaximizeClick = () => {
     if (chatbotContainerRef.current) {
       if (chatbotContainerRef.current.style.width === "100%") {
-        // Add a size transition effect
-        chatbotContainerRef.current.style.transition =
-          "width 0.5s, height 0.5s";
         chatbotContainerRef.current.style.width = "50%";
         chatbotContainerRef.current.style.height = "75%";
       } else {
-        // Add a size transition effect
-        chatbotContainerRef.current.style.transition =
-          "width 0.5s, height 0.5s";
         chatbotContainerRef.current.style.width = "100%";
         chatbotContainerRef.current.style.height = "100%";
       }
@@ -169,7 +156,13 @@ const Chatbot = (props) => {
   };
 
   return (
-    <ChatbotContainer ref={chatbotContainerRef}>
+    <ChatbotContainer
+      ref={chatbotContainerRef}
+      style={{
+        display: isChatbotShown ? "flex" : "none",
+        transition: "width 0.5s, height 0.5s",
+      }}
+    >
       <ChatbotHeader>
         <IconContainer>
           <Icon icon={faWindowMinimize} onClick={handleMinimizeClick} />
