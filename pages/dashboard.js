@@ -457,6 +457,7 @@ const TableContainer = styled.div`
 
 const ColumnNamesContainer = styled.div`
   display: flex;
+  gap: 16px;
 `;
 
 const ColumnName = styled.h2`
@@ -488,6 +489,8 @@ const StudyGuideListItem = styled.div`
   padding: 8px;
   border-bottom: 1px solid ${colors.gray};
   align-items: center;
+  width: 100%;
+  gap: 16px;
 
   &:last-child {
     border-bottom: none;
@@ -495,14 +498,16 @@ const StudyGuideListItem = styled.div`
 `;
 
 const StudyGuideLink = styled.div`
-  display: flex;
+  display: block;
   flex: 2;
   cursor: pointer;
   transition: background-color 0.3s;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: ${fontSize.default};
   transition: color 0.3s, transform 0.3s;
+  min-width: 0;
 
   &:hover {
     color: ${colors.primary};
