@@ -455,24 +455,26 @@ const PublicStudy = () => {
                   )}
                 </InfoSubContainer>
               ))}
-            <InfoSubContainer>
-              <TopicHeaderContainer>
-                <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
-              </TopicHeaderContainer>
-              <>
-                <TopicSubContainer>
-                  {studyGuide.googleSearchResults.map((search) => {
-                    return (
-                      <div key={search.title}>
-                        <Link href={search.link} target="_blank">
-                          {search.title}
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </TopicSubContainer>
-              </>
-            </InfoSubContainer>
+            {studyGuide.googleSearchResults.length > 0 && (
+              <InfoSubContainer>
+                <TopicHeaderContainer>
+                  <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
+                </TopicHeaderContainer>
+                <>
+                  <TopicSubContainer>
+                    {studyGuide.googleSearchResults.map((search) => {
+                      return (
+                        <div key={search.title}>
+                          <Link href={search.link} target="_blank">
+                            {search.title}
+                          </Link>
+                        </div>
+                      );
+                    })}
+                  </TopicSubContainer>
+                </>
+              </InfoSubContainer>
+            )}
           </InfoContainer>
         </OutputSection>
       </Section>
