@@ -68,9 +68,11 @@ const Dashboard = () => {
         return;
       }
       // Sort the study guides by created date
-      guides.sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
+      if (guides.length > 0) {
+        guides.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      }
       setStudyGuides(guides);
       setStudyGuidesLoaded(true);
     };
@@ -154,7 +156,14 @@ const Dashboard = () => {
   };
 
   // Function to handle the file selection/upload
-  const handleUploadSubmit = async (file, isPublic) => {
+  const handleUploadSubmit = async (
+    file,
+    isPublic,
+    includeVideos,
+    includeExamples,
+    includeQuestions,
+    includeResources
+  ) => {
     setIsLoading(true);
     // Simulate loading progress
     const interval = setInterval(() => {
@@ -183,7 +192,15 @@ const Dashboard = () => {
       );
       return;
     }
-    const studyGuideId = await handleFileUpload(file, isPublic, currentUser);
+    const studyGuideId = await handleFileUpload(
+      file,
+      isPublic,
+      includeVideos,
+      includeExamples,
+      includeQuestions,
+      includeResources,
+      currentUser
+    );
     clearInterval(interval);
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
