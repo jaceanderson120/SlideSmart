@@ -15,6 +15,7 @@ import { colors } from "@/constants/colors";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [retypePassword, setRetypePassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [agreed, setAgreed] = useState(false); // State for agreement checkbox
@@ -24,9 +25,16 @@ const Signup = () => {
     e.preventDefault(); // Prevent page reload
 
     // Check if all fields are filled
-    if (!email || !password || !firstName || !lastName) {
+    if (!email || !password || !firstName || !lastName || !retypePassword) {
       const notify = () =>
         toast.error("Please fill out all fields before signing up.");
+      notify();
+      return;
+    }
+
+    if (retypePassword != password) {
+      const notify = () =>
+        toast.error("Your passwords do not match. Please try again.");
       notify();
       return;
     }
@@ -80,6 +88,12 @@ const Signup = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Re-Type Password"
+            value={retypePassword}
+            onChange={(e) => setRetypePassword(e.target.value)}
           />
           <Label>
             <Checkbox

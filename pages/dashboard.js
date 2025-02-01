@@ -286,11 +286,11 @@ const Dashboard = () => {
             />
           </FilterContainer>
           <ColumnNamesContainer>
-            <ColumnName flex={2}>Name</ColumnName>
-            <ColumnName flex={1}>Created</ColumnName>
-            <ColumnName flex={1}>Permission</ColumnName>
-            <ColumnName flex={1}>Contributors</ColumnName>
-            <ColumnName flex={1}>Visibility</ColumnName>
+            <ColumnName $flex={2}>Name</ColumnName>
+            <ColumnName $flex={1}>Created</ColumnName>
+            <ColumnName $flex={1}>Permission</ColumnName>
+            <ColumnName $flex={1}>Contributors</ColumnName>
+            <ColumnName $flex={1}>Visibility</ColumnName>
             <OptionsPadding />
           </ColumnNamesContainer>
           <StudyGuideListContainer>
@@ -463,7 +463,7 @@ const ColumnNamesContainer = styled.div`
 const ColumnName = styled.h2`
   margin-bottom: 16px;
   display: flex;
-  flex: ${(props) => props.flex};
+  flex: ${(props) => props.$flex};
   font-size: ${fontSize.default};
   font-weight: bold;
 `;
