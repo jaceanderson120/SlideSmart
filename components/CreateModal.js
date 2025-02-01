@@ -12,6 +12,10 @@ Modal.setAppElement("#__next");
 const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
   const [file, setFile] = useState(null);
   const [isPublic, setIsPublic] = useState(true);
+  const [includeVideos, setIncludeVideos] = useState(true);
+  const [includeExamples, setIncludeExamples] = useState(true);
+  const [includeQuestions, setIncludeQuestions] = useState(true);
+  const [includeResources, setIncludeResources] = useState(true);
 
   const handleClose = () => {
     // Reset local state
@@ -30,7 +34,14 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
       return;
     }
     // Call the parent callback
-    onUpload(file, isPublic);
+    onUpload(
+      file,
+      isPublic,
+      includeVideos,
+      includeExamples,
+      includeQuestions,
+      includeResources
+    );
 
     // Close modal afterwards
     handleClose();
@@ -46,16 +57,48 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
       <ModalContent>
         <ModalTitle>Upload a File</ModalTitle>
         <FileInput type="file" onChange={handleFileChange} />
-
         <ToggleSection>
-          <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
-          <StyledFontAwesomeIcon
-            icon={isPublic ? faToggleOn : faToggleOff}
-            size="lg"
-            onClick={() => setIsPublic(!isPublic)}
-          />
+          <ToggleArea>
+            <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
+            <StyledFontAwesomeIcon
+              icon={isPublic ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setIsPublic(!isPublic)}
+            />
+          </ToggleArea>
+          <ToggleArea>
+            <ModalText>Include Videos</ModalText>
+            <StyledFontAwesomeIcon
+              icon={includeVideos ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setIncludeVideos(!includeVideos)}
+            />
+          </ToggleArea>
+          <ToggleArea>
+            <ModalText>Include Examples</ModalText>
+            <StyledFontAwesomeIcon
+              icon={includeExamples ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setIncludeExamples(!includeExamples)}
+            />
+          </ToggleArea>
+          <ToggleArea>
+            <ModalText>Include Q/A</ModalText>
+            <StyledFontAwesomeIcon
+              icon={includeQuestions ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setIncludeQuestions(!includeQuestions)}
+            />
+          </ToggleArea>
+          <ToggleArea>
+            <ModalText>Include Resources</ModalText>
+            <StyledFontAwesomeIcon
+              icon={includeResources ? faToggleOn : faToggleOff}
+              size="lg"
+              onClick={() => setIncludeResources(!includeResources)}
+            />
+          </ToggleArea>
         </ToggleSection>
-
         <ButtonSection>
           <Button
             onClick={handleClose}
@@ -143,9 +186,16 @@ const FileInput = styled.input`
 
 const ToggleSection = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 8px;
-  align-items: center;
+  width: 100%;
+`;
+
+const ToggleArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const ButtonSection = styled.div`
