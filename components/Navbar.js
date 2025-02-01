@@ -32,7 +32,7 @@ function Navbar() {
         <UserIcon
           initials={initials}
           size={48}
-          hoverBackgroundColor="{colors.gray}"
+          hoverBackgroundColor={colors.gray}
         />
         <MenuTextContainer>
           <p>{auth.currentUser?.displayName}</p>
@@ -149,7 +149,7 @@ const NavbarRegisterStyle = styled.div`
     border-radius: 8px;
     background-color: ${colors.primary};
     padding: 6px;
-    border: 2px solid {colors.primary};
+    border: 2px solid ${colors.primary};
   }
 
   a:hover {
@@ -185,7 +185,7 @@ const NavbarSection = styled.div`
   width: 100%;
   padding: 16px;
   border-bottom: 1px solid gray;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   z-index: 100;
 `;
 

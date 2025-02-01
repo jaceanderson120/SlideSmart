@@ -15,6 +15,7 @@ import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
+import { colors } from "@/constants/colors";
 
 const Chatbot = (props) => {
   const { hasSpark } = useStateContext();
@@ -269,7 +270,7 @@ const ChatbotHeader = styled.div`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid {colors.black};
+  border-bottom: 1px solid ${colors.black};
   background-color: ${colors.primary33};
 `;
 
@@ -335,7 +336,7 @@ const BotMessage = styled.div`
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 0px 8px 8px 8px;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   color: ${colors.black};
   max-width: 80%;
   line-height: 1.3;
@@ -345,7 +346,7 @@ const BotMessage = styled.div`
 const InputArea = styled.div`
   display: flex;
   padding: 8px;
-  border-top: 1px solid {colors.black};
+  border-top: 1px solid ${colors.black};
 `;
 
 const Input = styled.input`

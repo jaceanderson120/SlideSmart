@@ -527,7 +527,7 @@ const Study = () => {
               <>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="{colors.primary70}"
+                  hoverBackgroundColor={colors.primary70}
                   textColor={colors.black}
                   hoverTextColor={colors.black}
                   onClick={handleEditClicked}
@@ -536,7 +536,7 @@ const Study = () => {
                 </Button>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="{colors.primary70}"
+                  hoverBackgroundColor={colors.primary70}
                   textColor={colors.black}
                   hoverTextColor={colors.black}
                   onClick={() => setIsDiscardEditsDialogOpen(true)}
@@ -611,7 +611,7 @@ const Study = () => {
                       <Button
                         backgroundColor="transparent"
                         textColor={colors.black}
-                        hoverBackgroundColor="{colors.primary70}"
+                        hoverBackgroundColor={colors.primary70}
                         padding="8px"
                         marginTop="16px"
                         fontSize={fontSize.label}
@@ -869,8 +869,8 @@ const Study = () => {
                             onClick={() => toggleAnswer(key)}
                             padding="8px"
                             fontSize={fontSize.label}
-                            backgroundColor="{colors.primary70}"
-                            hoverBackgroundColor="{colors.primary70}"
+                            backgroundColor={colors.primary70}
+                            hoverBackgroundColor={colors.primary70}
                             textColor={colors.black}
                             hoverTextColor={colors.white}
                           >
@@ -1052,7 +1052,7 @@ const Section = styled.div`
   padding: 24px;
   text-align: center;
   color: ${colors.black};
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   gap: 24px;
   overflow: auto;
 `;
@@ -1061,7 +1061,7 @@ const Title = styled.input`
   ${({ $editMode }) =>
     $editMode
       ? css`
-          border: 2px dashed {colors.primary70};
+          border: 2px dashed ${colors.primary70};
           background-color: transparent;
         `
       : css`

@@ -1,3 +1,4 @@
+import { colors } from "@/constants/colors";
 import React from "react";
 import styled from "styled-components";
 
@@ -16,7 +17,7 @@ const DecorationCircle = ({ diameter, left, right, top, bottom }) => {
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid meet"
       >
-        <circle cx="50" cy="50" r="50" fill="#f03a47" />
+        <circle cx="50" cy="50" r="50" fill={colors.primary} />
       </svg>
     </CircleContainer>
   );

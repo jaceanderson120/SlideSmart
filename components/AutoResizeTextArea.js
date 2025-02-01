@@ -56,7 +56,7 @@ const TextArea = styled.textarea`
   overflow: hidden;
   outline: none;
   background-color: ${(props) =>
-    props.$editMode ? colors.white : "transparent"};
+    props.$editMode ? colors.lightGray : "transparent"};
   box-shadow: ${(props) =>
     props.$editMode ? "0px 2px 2px rgba(0, 0, 0, 0.05)" : "none"};
 `;

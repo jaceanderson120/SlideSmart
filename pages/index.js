@@ -102,7 +102,11 @@ const PageContainer = styled.div`
 const Section = styled.div`
   width: 100%;
   flex-grow: 1;
-  background: linear-gradient(to bottom, #ff6c7633, #fff0f0cc, #ff6c7633);
+  background: linear-gradient(
+    to bottom,
+    ${colors.primary70},
+    ${colors.primary33}
+  );
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

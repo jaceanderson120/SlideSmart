@@ -32,7 +32,7 @@ const AddTopicDialog = ({ isOpen, onClose, onConfirm }) => {
                 onClose();
               }}
               backgroundColor="transparent"
-              hoverBackgroundColor="{colors.primary70}"
+              hoverBackgroundColor={colors.primary70}
               padding="8px"
               fontSize={fontSize.secondary}
               textColor={colors.primary}
@@ -47,7 +47,7 @@ const AddTopicDialog = ({ isOpen, onClose, onConfirm }) => {
                 onClose();
               }}
               backgroundColor="transparent"
-              hoverBackgroundColor="{colors.primary70}"
+              hoverBackgroundColor={colors.primary70}
               padding="8px"
               fontSize={fontSize.secondary}
               textColor={colors.primary}
@@ -69,7 +69,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "#f6f4f3",
+    backgroundColor: colors.lightGray,
     border: "none",
     boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
     maxWidth: "40%",

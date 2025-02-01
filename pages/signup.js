@@ -10,6 +10,7 @@ import { storeUserInfo } from "@/firebase/database";
 import { fontSize } from "@/constants/fontSize";
 import Link from "next/link";
 import Button from "@/components/Button";
+import { colors } from "@/constants/colors";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -116,7 +117,7 @@ const Section = styled.div`
   padding: 32px;
   text-align: center;
   height: 100vh;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   color: ${colors.black};
   gap: 32px;
   flex-direction: column;
@@ -136,7 +137,7 @@ const Form = styled.form`
 const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${colors.gray};
   border-radius: 5px;
   font-size: ${fontSize.default};
   color: green;

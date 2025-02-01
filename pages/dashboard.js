@@ -397,7 +397,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
 `;
 
 const Section = styled.div`
@@ -486,7 +486,7 @@ const StudyGuideListContainer = styled.div`
 const StudyGuideListItem = styled.div`
   display: flex;
   padding: 8px;
-  border-bottom: 1px solid {colors.gray};
+  border-bottom: 1px solid ${colors.gray};
   align-items: center;
 
   &:last-child {

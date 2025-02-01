@@ -93,7 +93,7 @@ const ResourceItem = styled.div`
 
 const SlideSmartCopyRight = styled.div`
   font-size: ${fontSize.secondary};
-  color: #8b8b8b;
+  color: ${colors.gray};
   padding: 16px;
   text-align: center;
 `;

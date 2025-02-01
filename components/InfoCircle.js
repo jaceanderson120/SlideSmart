@@ -1,3 +1,4 @@
+import { colors } from "@/constants/colors";
 import React from "react";
 import styled from "styled-components";
 
@@ -80,7 +81,7 @@ const renderText = (title, subtitle, align) => {
             fontWeight: "bold",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
           }}
-          fill="#000"
+          fill={colors.black}
         >
           {line}
         </text>
@@ -93,7 +94,7 @@ const renderText = (title, subtitle, align) => {
           textAnchor={align}
           dominantBaseline="middle"
           fontSize={fontSizeSubtitle}
-          fill="#000"
+          fill={colors.black}
         >
           {line}
         </text>

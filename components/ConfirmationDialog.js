@@ -41,9 +41,9 @@ const ConfirmationDialog = ({
               hoverBackgroundColor="transparent"
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#5c5c5c"
+              textColor={colors.gray}
               hoverTextColor={colors.primary}
-              style={{ border: "1px solid #5c5c5c" }}
+              style={{ border: `1px solid ${colors.gray}` }}
             >
               Cancel
             </Button>

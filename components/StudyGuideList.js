@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { colors } from "@/constants/colors";
 
 const StudyGuideList = ({ guides }) => {
   const router = useRouter();
@@ -42,11 +43,11 @@ const ListItem = styled.div`
   text-align: left;
 
   &:hover {
-    background: #eee;
+    background: ${colors.lightGray};
   }
 `;
 
 const NoResults = styled.div`
   margin-top: 16px;
-  color: #666;
+  color: ${colors.black};
 `;
