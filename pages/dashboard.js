@@ -17,7 +17,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { Tooltip } from "react-tooltip";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
@@ -226,7 +226,14 @@ const Dashboard = () => {
       {isLoading ? (
         <Overlay>
           <ProgressWrapper>
-            <CircularProgressbar value={loadingPercentage} />
+            <CircularProgressbar
+              value={loadingPercentage}
+              text={`${loadingPercentage}%`}
+              styles={buildStyles({
+                pathColor: "#f03a47",
+                textColor: "#000000",
+              })}
+            />
           </ProgressWrapper>
         </Overlay>
       ) : (
