@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
 import React from "react";
+import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
@@ -41,7 +42,7 @@ const ConfirmationDialog = ({
               padding="12px"
               fontSize={fontSize.secondary}
               textColor="#5c5c5c"
-              hoverTextColor="#f03a47"
+              hoverTextColor={colors.primary}
               style={{ border: "1px solid #5c5c5c" }}
             >
               Cancel
@@ -51,12 +52,12 @@ const ConfirmationDialog = ({
                 onConfirm();
                 onClose();
               }}
-              backgroundColor="#f03a47"
-              hoverBackgroundColor="#f03a47"
+              backgroundColor={colors.primary}
+              hoverBackgroundColor={colors.primary}
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#ffffff"
-              hoverTextColor="#000000"
+              textColor={colors.white}
+              hoverTextColor={colors.black}
             >
               Confirm
             </Button>
@@ -74,7 +75,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "#f6f4f3",
+    backgroundColor: colors.lightGray,
     border: "none",
     boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
     maxWidth: "30%",
@@ -110,7 +111,7 @@ const ModalTitle = styled.p`
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-  color: #5c5c5c;
+  color: ${colors.gray};
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;

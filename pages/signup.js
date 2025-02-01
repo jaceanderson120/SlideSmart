@@ -117,7 +117,7 @@ const Section = styled.div`
   text-align: center;
   height: 100vh;
   background-color: #f6f4f3;
-  color: #000000;
+  color: ${colors.black};
   gap: 32px;
   flex-direction: column;
 `;
@@ -143,7 +143,7 @@ const Input = styled.input`
   width: 300px;
 
   &:focus {
-    border-color: #f03a4770;
+    border-color: ${colors.primary70};
     outline: none;
   }
 `;

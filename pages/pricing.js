@@ -181,7 +181,7 @@ const PromoCodeInput = styled.input`
   border: none;
   border-radius: 4px;
   font-size: ${fontSize.default};
-  color: #000000;
+  color: ${colors.black};
 `;
 
 const PriceText = styled.p`

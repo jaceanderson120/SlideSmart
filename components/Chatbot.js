@@ -259,7 +259,7 @@ const ChatbotContainer = styled.div`
   width: 50%;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: ${colors.white};
   z-index: 1000;
 `;
 
@@ -269,8 +269,8 @@ const ChatbotHeader = styled.div`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid #000000;
-  background-color: #f03a4733;
+  border-bottom: 1px solid {colors.black};
+  background-color: ${colors.primary33};
 `;
 
 const IconContainer = styled.div`
@@ -283,9 +283,9 @@ const IconContainer = styled.div`
 
 const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: #ffffff;
+  color: ${colors.white};
   &:hover {
-    color: #f03a47;
+    color: ${colors.primary};
     transition: color 0.3s;
   }
 `;
@@ -322,9 +322,9 @@ const UserMessage = styled.div`
   font-size: ${fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
-  border-radius: 4px;
-  background-color: #f03a4733;
-  color: #000000;
+  border-radius: 8px 0px 8px 8px;
+  background-color: ${colors.primary33};
+  color: ${colors.black};
   max-width: 80%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -334,9 +334,9 @@ const BotMessage = styled.div`
   font-size: ${fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
-  border-radius: 4px;
-  background-color: #7fa3ff58;
-  color: #000000;
+  border-radius: 0px 8px 8px 8px;
+  background-color: #f6f4f3;
+  color: ${colors.black};
   max-width: 80%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -345,7 +345,7 @@ const BotMessage = styled.div`
 const InputArea = styled.div`
   display: flex;
   padding: 8px;
-  border-top: 1px solid #000000;
+  border-top: 1px solid {colors.black};
 `;
 
 const Input = styled.input`
@@ -355,18 +355,18 @@ const Input = styled.input`
   border-radius: 4px;
   margin-right: 8px;
   font-size: ${fontSize.default};
-  color: #000000;
+  color: ${colors.black};
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  color: #9c9c9c;
+  color: ${colors.gray};
   cursor: pointer;
 
   &:hover {
-    color: #f03a47;
+    color: ${colors.primary};
     transition: color 0.3s;
   }
 `;

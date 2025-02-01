@@ -1,14 +1,15 @@
 import { fontSize } from "@/constants/fontSize";
 import styled from "styled-components";
+import { colors } from "@/constants/colors";
 
 // The $ before the prop name is a convention to indicate that the prop is a styled component prop
 
 const UserIcon = ({
   initials = "?", // Default to "?" if no initials are provided
-  color = "#ffffff", // Default black color
-  hoverColor = "#ffffff", // Default white hover color
-  backgroundColor = "#9c9c9c", // Default light gray background
-  hoverBackgroundColor = "#f03a47", // Default darker gray on hover
+  color = colors.white, // Default black color
+  hoverColor = colors.white, // Default white hover color
+  backgroundColor = colors.gray, // Default light gray background
+  hoverBackgroundColor = colors.primary, // Default darker gray on hover
   size = 32, // Default size in pixels
   ...props
 }) => {

@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
+import { colors } from "@/constants/colors";
 
 export default function Home() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function Home() {
               The AI Application Made
               <br />
               to Make
-              <span style={{ color: "#F03A47", fontWeight: "bold" }}>
+              <span style={{ color: colors.primary, fontWeight: "bold" }}>
                 {" "}
                 Slides
               </span>{" "}
@@ -72,10 +73,10 @@ export default function Home() {
           </InstructionContainer>
           <MoreContainer>
             <Button
-              textColor="#f03a47"
-              hoverTextColor="#ffffff"
+              textColor={colors.primary}
+              hoverTextColor={colors.white}
               backgroundColor="transparent"
-              hoverBackgroundColor="#f03a47"
+              hoverBackgroundColor={colors.primary}
               onClick={() => router.push("/how-it-works")}
             >
               Still confused? Learn more about how SlideSmart works!
@@ -122,7 +123,7 @@ const SloganContainer = styled.div`
 
 const Slogan = styled.p`
   font-size: ${fontSize.xlheading};
-  color: #000000;
+  color: ${colors.black};
   font-weight: bold;
   line-height: 1.3;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -130,7 +131,7 @@ const Slogan = styled.p`
 
 const SubSlogan = styled.p`
   font-size: ${fontSize.default};
-  color: #000000;
+  color: ${colors.black};
   line-height: 1.3;
 `;
 
@@ -142,7 +143,7 @@ const InstructionContainer = styled.div`
   gap: 32px;
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  color: #000000;
+  color: ${colors.black};
 `;
 
 const MoreContainer = styled.div`

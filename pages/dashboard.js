@@ -28,6 +28,7 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
 import CreateModal from "@/components/CreateModal";
+import { colors } from "@/constants/colors";
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -230,8 +231,8 @@ const Dashboard = () => {
               value={loadingPercentage}
               text={`${loadingPercentage}%`}
               styles={buildStyles({
-                pathColor: "#f03a47",
-                textColor: "#000000",
+                pathColor: colors.primary,
+                textColor: colors.black,
               })}
             />
           </ProgressWrapper>
@@ -332,7 +333,7 @@ const Dashboard = () => {
                                 id={`contributor-tooltip-${contributor}`}
                                 // Doesn't work with styled-components
                                 style={{
-                                  backgroundColor: "#f03a47",
+                                  backgroundColor: colors.primary,
                                   fontSize: `${fontSize.secondary}`,
                                   padding: "8px",
                                 }}
@@ -382,7 +383,9 @@ const Dashboard = () => {
           handleDelete(guideToDelete);
           toast.success("Study guide deleted successfully.");
         }}
-        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
+        icon={
+          <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
+        }
       />
     </Container>
   );
@@ -403,7 +406,7 @@ const Section = styled.div`
   align-items: center;
   text-align: center;
   flex-grow: 1;
-  color: #000000;
+  color: ${colors.black};
   overflow-y: hidden;
   margin-bottom: 32px;
 `;
@@ -474,7 +477,7 @@ const StudyGuideListContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
-  background-color: #ffffff;
+  background-color: ${colors.white};
   overflow-y: auto;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
@@ -483,7 +486,7 @@ const StudyGuideListContainer = styled.div`
 const StudyGuideListItem = styled.div`
   display: flex;
   padding: 8px;
-  border-bottom: 1px solid #9c9c9c;
+  border-bottom: 1px solid {colors.gray};
   align-items: center;
 
   &:last-child {
@@ -502,7 +505,7 @@ const StudyGuideLink = styled.div`
   transition: color 0.3s, transform 0.3s;
 
   &:hover {
-    color: #f03a47;
+    color: ${colors.primary};
     transform: scale(1.02);
   }
 `;
@@ -510,27 +513,27 @@ const StudyGuideLink = styled.div`
 const StudyGuideCreated = styled.div`
   display: flex;
   flex: 1;
-  color: #9c9c9c;
+  color: ${colors.gray};
   font-size: ${fontSize.default};
 `;
 
 const StudyGuidePermission = styled.div`
   display: flex;
   flex: 1;
-  color: #9c9c9c;
+  color: ${colors.gray};
   font-size: ${fontSize.default};
 `;
 
 const StudyGuideContributors = styled.div`
   display: flex;
   flex: 1;
-  color: #9c9c9c;
+  color: ${colors.gray};
 `;
 
 const StudyGuideVisibility = styled.div`
   display: flex;
   flex: 1;
-  color: #9c9c9c;
+  color: ${colors.gray};
   font-size: ${fontSize.default};
 `;
 
@@ -547,7 +550,7 @@ const StudyGuideDeleteButton = styled.button`
   cursor: pointer;
 
   &:hover svg {
-    color: #f03a47;
+    color: ${colors.primary};
     transition: color 0.3s;
   }
 `;

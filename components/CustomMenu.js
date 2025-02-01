@@ -4,6 +4,7 @@ import { MenuItem } from "@mui/material";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "@/constants/colors";
 
 const CustomMenu = ({ triggerElement, menuItems, arrow }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -62,7 +63,7 @@ const StyledMenuItem = styled(MenuItem)`
   transition: background-color 0.3s, color 0.3s;
 
   &:hover {
-    color: ${(props) => (props.$clickable ? "#f03a47" : "#000000")};
+    color: ${(props) => (props.$clickable ? colors.primary : colors.black)};
     background-color: ${(props) =>
       props.$clickable ? "rgba(0,0,0,0.08)" : "white"} !important;
   }

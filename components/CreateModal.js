@@ -6,6 +6,7 @@ import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "./Button";
+import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
@@ -126,19 +127,19 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             padding="12px"
             fontSize={fontSize.secondary}
             textColor="#5c5c5c"
-            hoverTextColor="#f03a47"
+            hoverTextColor={colors.primary}
             style={{ border: "1px solid #5c5c5c" }}
           >
             Close
           </Button>
           <Button
             onClick={handleUploadClick}
-            backgroundColor="#f03a47"
-            hoverBackgroundColor="#f03a47"
+            backgroundColor={colors.primary}
+            hoverBackgroundColor={colors.primary}
             padding="12px"
             fontSize={fontSize.secondary}
-            textColor="#ffffff"
-            hoverTextColor="#000000"
+            textColor={colors.white}
+            hoverTextColor={colors.black}
           >
             Create
           </Button>
@@ -169,7 +170,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
   &:hover {
     transition: color 0.3s;
-    color: #f03a47;
+    color: ${colors.primary};
   }
 `;
 

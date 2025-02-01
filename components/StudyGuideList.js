@@ -34,7 +34,7 @@ const ListContainer = styled.div`
 `;
 
 const ListItem = styled.div`
-  background: #fff;
+  background: ${colors.white};
   margin-bottom: 8px;
   padding: 12px;
   border-radius: 4px;

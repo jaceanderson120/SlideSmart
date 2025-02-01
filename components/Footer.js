@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/images/logo.png";
 import Link from "next/link";
 import { fontSize } from "@/constants/fontSize";
+import { colors } from "@/constants/colors";
 
 const Footer = () => {
   return (
@@ -37,7 +38,7 @@ const FooterSection = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #333;
+  border-top: 1px solid ${colors.black};
   background-color: white;
   color: white;
   text-align: center;
@@ -61,7 +62,7 @@ const SlideSmart = styled.div`
   a {
     text-decoration: none;
     font-size: ${fontSize.heading};
-    color: #f03a47;
+    color: ${colors.primary};
     font-weight: bold;
     margin-left: 16px;
   }
@@ -71,7 +72,7 @@ const Resources = styled.div`
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  color: #333;
+  color: ${colors.black};
 `;
 
 const ResourceItem = styled.div`
@@ -100,7 +101,7 @@ const SlideSmartCopyRight = styled.div`
 const Line = styled.div`
   width: 80%;
   height: 0.5px;
-  background-color: #9e9e9e;
+  background-color: ${colors.gray};
   display: flex;
 `;
 

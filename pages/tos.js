@@ -243,5 +243,5 @@ const Link = styled.a`
 `;
 
 const Strong = styled.strong`
-  color: #000;
+  color: ${colors.black};
 `;

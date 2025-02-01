@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
 import { useState } from "react";
+import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
@@ -31,11 +32,11 @@ const AddTopicDialog = ({ isOpen, onClose, onConfirm }) => {
                 onClose();
               }}
               backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
+              hoverBackgroundColor="{colors.primary70}"
               padding="8px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
-              hoverTextColor="#f03a47"
+              textColor={colors.primary}
+              hoverTextColor={colors.primary}
             >
               Cancel
             </Button>
@@ -46,11 +47,11 @@ const AddTopicDialog = ({ isOpen, onClose, onConfirm }) => {
                 onClose();
               }}
               backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
+              hoverBackgroundColor="{colors.primary70}"
               padding="8px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
-              hoverTextColor="#f03a47"
+              textColor={colors.primary}
+              hoverTextColor={colors.primary}
             >
               Confirm
             </Button>
@@ -103,7 +104,7 @@ const ModalTitle = styled.p`
     display: block;
     width: 100%;
     height: 1px;
-    background-color: #000000;
+    background-color: ${colors.black};
     margin-top: 10px;
   }
 `;
