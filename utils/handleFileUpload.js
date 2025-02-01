@@ -59,7 +59,10 @@ const handleFileUpload = async (
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(topicsAndExplanations[topic]),
+            body: JSON.stringify({
+              topic: topic,
+              data: topicsAndExplanations[topic],
+            }),
           }).then((res) => {
             if (!res.ok) {
               throw new Error("Failed to create YouTube query");
