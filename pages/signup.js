@@ -44,7 +44,7 @@ const Signup = () => {
           displayName: `${firstName} ${lastName}`,
         });
         await storeUserInfo(user.uid, `${firstName} ${lastName}`, email);
-        router.push("/");
+        router.push("/dashboard");
       })
       .catch((error) => {
         console.error(error);
