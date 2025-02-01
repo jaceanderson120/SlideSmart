@@ -32,6 +32,13 @@ const Signup = () => {
       return;
     }
 
+    if (password.length < 6) {
+      const notify = () =>
+        toast.error("Passwords must be more than 6 characters.");
+      notify();
+      return;
+    }
+
     if (retypePassword != password) {
       const notify = () =>
         toast.error("Your passwords do not match. Please try again.");
