@@ -505,6 +505,7 @@ const StudyGuideLink = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
   font-size: ${fontSize.default};
   transition: color 0.3s, transform 0.3s;
   min-width: 0;
