@@ -1,14 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faWindowMinimize,
-  faMinimize,
-  faMaximize,
-  faPaperclip,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faImage, faX } from "@fortawesome/free-solid-svg-icons";
 import { fontSize } from "@/constants/fontSize";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
@@ -35,7 +28,7 @@ const Chatbot = (props) => {
   });
   const [input, setInput] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [isMaximized, setIsMaximized] = useState(false);
+  const [uploadedImageURL, setUploadedImageURL] = useState(null);
   const [loadingResponse, setLoadingResponse] = useState(false);
 
   // Get study guide which is passed down from the parent component
@@ -43,27 +36,22 @@ const Chatbot = (props) => {
   const extractedData = studyGuide?.extractedData;
 
   // Get chatbot state from the parent component
-  const { setIsChatbotShown, isChatbotShown } = props;
-
-  // Ref to the chatbot container
-  const chatbotContainerRef = useRef(null);
-
-  // Ref to the end of the messages container
-  const messagesEndRef = useRef(null);
+  const { setIsChatbotShown } = props;
 
   // Ref to the file input
   const fileInputRef = useRef(null);
 
-  // Scroll to the end of the messages container whenever messages change
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
   useEffect(() => {
     // Save messages to localStorage whenever they change
     localStorage.setItem("chatbotMessages", JSON.stringify(messages));
+  }, [messages]);
+
+  // Scroll to the bottom of the messages container whenever messages change
+  const messagesContainerRef = useRef(null);
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollIntoView({ block: "end" });
+    }
   }, [messages]);
 
   const handleSend = async () => {
@@ -73,11 +61,12 @@ const Chatbot = (props) => {
       if (uploadedImage) {
         newMessages = [
           ...messages,
-          { text: input, image: uploadedImage, sender: "user" },
+          { text: input, image: uploadedImageURL, sender: "user" },
         ];
 
         // Reset the file input and uploaded image
         setUploadedImage(null);
+        setUploadedImageURL(null);
         fileInputRef.current.value = "";
       } else {
         newMessages = [...messages, { text: input, sender: "user" }];
@@ -128,20 +117,6 @@ const Chatbot = (props) => {
     setIsChatbotShown(false);
   };
 
-  // Function to handle maximize button click
-  const handleMaximizeClick = () => {
-    if (chatbotContainerRef.current) {
-      if (chatbotContainerRef.current.style.width === "100%") {
-        chatbotContainerRef.current.style.width = "50%";
-        chatbotContainerRef.current.style.height = "75%";
-      } else {
-        chatbotContainerRef.current.style.width = "100%";
-        chatbotContainerRef.current.style.height = "100%";
-      }
-    }
-    setIsMaximized((prev) => !prev);
-  };
-
   // Function to handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -152,24 +127,15 @@ const Chatbot = (props) => {
         return;
       }
       setUploadedImage(file);
+      setUploadedImageURL(URL.createObjectURL(file));
     }
   };
 
   return (
-    <ChatbotContainer
-      ref={chatbotContainerRef}
-      style={{
-        display: isChatbotShown ? "flex" : "none",
-        transition: "width 0.5s, height 0.5s",
-      }}
-    >
+    <ChatbotContainer>
       <ChatbotHeader>
         <IconContainer>
-          <Icon icon={faWindowMinimize} onClick={handleMinimizeClick} />
-          <Icon
-            icon={isMaximized ? faMinimize : faMaximize}
-            onClick={handleMaximizeClick}
-          />
+          <Icon icon={faX} onClick={handleMinimizeClick} />
         </IconContainer>
         <HeaderText>Chat with Sola</HeaderText>
       </ChatbotHeader>
@@ -179,9 +145,7 @@ const Chatbot = (props) => {
             {message.sender === "user" ? (
               <UserMessageContainer>
                 <UserMessage>
-                  {message.image && (
-                    <StyledImage src={URL.createObjectURL(message.image)} />
-                  )}
+                  {message.image && <StyledImage src={message.image} />}
                   {message.text}
                 </UserMessage>
               </UserMessageContainer>
@@ -192,7 +156,6 @@ const Chatbot = (props) => {
                 </BotMessage>
               </BotMessageContainer>
             )}
-            {index === messages.length - 2 && <div ref={messagesEndRef} />}
           </React.Fragment>
         ))}
         {loadingResponse && (
@@ -202,8 +165,12 @@ const Chatbot = (props) => {
             </BotMessage>
           </BotMessageContainer>
         )}
+        <div ref={messagesContainerRef} style={{ height: 1 }} />
       </MessagesContainer>
       <InputArea>
+        {uploadedImageURL && (
+          <Thumbnail src={uploadedImageURL} alt="Uploaded" />
+        )}
         <Input
           type="text"
           value={input}
@@ -217,12 +184,13 @@ const Chatbot = (props) => {
           disabled={!hasSpark || loadingResponse}
         />
         <StyledFontAwesomeIcon
-          icon={uploadedImage ? faX : faPaperclip}
+          icon={uploadedImage ? faX : faImage}
           onClick={() => {
             if (!uploadedImage) {
               fileInputRef.current.click();
             } else {
               setUploadedImage(null);
+              setUploadedImageURL(null);
               fileInputRef.current.value = "";
             }
           }}
@@ -244,17 +212,17 @@ export default Chatbot;
 // Styles
 const ChatbotContainer = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  height: 75%;
-  width: 50%;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
   background-color: ${colors.white};
-  z-index: 1000;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+  position: absolute;
 `;
 
 const ChatbotHeader = styled.div`
@@ -263,8 +231,12 @@ const ChatbotHeader = styled.div`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid ${colors.black};
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
   background-color: ${colors.primary33};
+  margin-top: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
 `;
 
 const IconContainer = styled.div`
@@ -273,11 +245,12 @@ const IconContainer = styled.div`
   font-size: ${fontSize.default};
   display: flex;
   gap: 8px;
+  padding: 8px;
 `;
 
 const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: ${colors.white};
+  color: ${colors.black};
   &:hover {
     color: ${colors.primary};
     transition: color 0.3s;
@@ -293,11 +266,13 @@ const HeaderText = styled.p`
 
 const MessagesContainer = styled.div`
   display: flex;
-  flex-grow: 1;
+  flex: 1;
+  height: 100%;
   flex-direction: column;
   justify-content: flex-start;
   padding: 16px;
   overflow-y: auto;
+  overflow-anchor: none;
 `;
 
 const UserMessageContainer = styled.div`
@@ -313,13 +288,15 @@ const BotMessageContainer = styled.div`
 `;
 
 const UserMessage = styled.div`
+  display: flex;
+  flex-direction: column;
   font-size: ${fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 8px 0px 8px 8px;
   background-color: ${colors.primary33};
   color: ${colors.black};
-  max-width: 80%;
+  max-width: 90%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
@@ -331,15 +308,21 @@ const BotMessage = styled.div`
   border-radius: 0px 8px 8px 8px;
   background-color: ${colors.lightGray};
   color: ${colors.black};
-  max-width: 80%;
+  max-width: 90%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 `;
 
 const InputArea = styled.div`
   display: flex;
+  align-items: center;
   padding: 8px;
-  border-top: 1px solid ${colors.black};
+  border-radius: 16px;
+  background-color: ${colors.white};
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 8px;
+  margin-left: 8px;
+  margin-right: 8px;
 `;
 
 const Input = styled.input`
@@ -348,6 +331,7 @@ const Input = styled.input`
   border: none;
   border-radius: 4px;
   margin-right: 8px;
+  background-color: transparent;
   font-size: ${fontSize.default};
   color: ${colors.black};
 `;
@@ -367,7 +351,15 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 const StyledImage = styled.img`
   max-width: 100%;
-  height: auto;
+  max-height: 200px;
   border-radius: 8px;
   margin-top: 10px;
+  object-fit: contain;
+`;
+
+const Thumbnail = styled.img`
+  height: 40px;
+  width: auto;
+  border-radius: 4px;
+  margin-right: 8px;
 `;

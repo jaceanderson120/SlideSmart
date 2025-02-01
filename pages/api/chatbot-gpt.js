@@ -15,6 +15,7 @@ const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
 
@@ -97,5 +98,7 @@ export default async function chatbotGPT(req, res) {
         return res.status(500).json({ error: "Internal Server Error" });
       }
     });
+  } else {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 }

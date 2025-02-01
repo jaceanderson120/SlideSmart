@@ -378,6 +378,11 @@ const Study = () => {
   };
 
   const handleChatbotToggle = () => {
+    // Collapse topics and file when chatbot is shown
+    if (!isChatbotShown) {
+      setIsTopicsShown(false);
+      setIsFileShown(false);
+    }
     setIsChatbotShown(!isChatbotShown);
   };
 
@@ -520,7 +525,7 @@ const Study = () => {
                 {studyGuide.editors.includes(currentUser?.uid) && (
                   <StyledFontAwesomeIcon
                     icon={faPencil}
-                    size="2x"
+                    size="xl"
                     title="Edit"
                     onClick={handleEditClicked}
                   />
@@ -552,7 +557,7 @@ const Study = () => {
             {studyGuide.createdBy === currentUser?.uid && (
               <StyledFontAwesomeIcon
                 icon={faShareFromSquare}
-                size="2x"
+                size="xl"
                 title="Share"
                 onClick={handleShareClick}
               />
@@ -563,7 +568,7 @@ const Study = () => {
               )}
             <StyledFontAwesomeIcon
               icon={faMessage}
-              size="2x"
+              size="xl"
               title="Sola"
               onClick={handleChatbotToggle}
             />
@@ -571,7 +576,7 @@ const Study = () => {
               triggerElement={
                 <StyledFontAwesomeIcon
                   icon={faEllipsisVertical}
-                  size="2x"
+                  size="xl"
                   title="Menu"
                 />
               }
@@ -957,13 +962,12 @@ const Study = () => {
             )}
           </InfoContainer>
           {isFileShown && <FileContainer>{content}</FileContainer>}
-          {/* Pass studyGuide to Chatbot component */}
-          {/* Pass function to chatbot that minimizes it */}
-          <Chatbot
-            studyGuide={studyGuide}
-            setIsChatbotShown={setIsChatbotShown}
-            isChatbotShown={isChatbotShown}
-          />
+          <ChatbotContainer $isChatbotShown={isChatbotShown}>
+            <Chatbot
+              studyGuide={studyGuide}
+              setIsChatbotShown={setIsChatbotShown}
+            />
+          </ChatbotContainer>
         </OutputSection>
       </Section>
       <ShareModal
@@ -1056,6 +1060,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const Section = styled.div`
@@ -1068,8 +1073,8 @@ const Section = styled.div`
   text-align: center;
   color: ${colors.black};
   background-color: ${colors.lightGray};
-  gap: 24px;
-  overflow: auto;
+  gap: 12px;
+  overflow: hidden;
 `;
 
 const Title = styled.input`
@@ -1083,7 +1088,7 @@ const Title = styled.input`
           border: none;
           background-color: ${colors.primary70};
         `}
-  font-size: ${fontSize.heading};
+  font-size: ${fontSize.subheading};
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1129,7 +1134,7 @@ const OutputSection = styled.div`
   flex-direction: row;
   gap: 24px;
   width: 100%;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 const ContentContainer = styled.div`
@@ -1281,4 +1286,13 @@ const SwitchVideoContainer = styled.div`
   align-items: center;
   gap: 8px;
   font-size: ${fontSize.label};
+`;
+
+const ChatbotContainer = styled.div`
+  display: flex;
+  flex: ${({ $isChatbotShown }) => ($isChatbotShown ? "2.5" : "0")};
+  overflow: hidden;
+  overscroll-behavior: contain;
+  height: 100%;
+  position: relative;
 `;
