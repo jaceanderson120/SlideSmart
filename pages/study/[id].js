@@ -15,6 +15,7 @@ import {
   updateStudyGuideFileName,
   updateStudyGuideExtractedData,
   hasAccessToStudyGuide,
+  uploadStudyGuideToFirebase,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -109,14 +110,17 @@ const Study = () => {
       // If the user is logged in, check if they have access to the study guide
       if (id && currentUser) {
         const hasAccess = await hasAccessToStudyGuide(id, currentUser.uid);
-        // If the user does not have access to the study guide, redirect them to their study guides page
-        if (!hasAccess) {
+
+        // If the user has access to the study guide, fetch the study guide data
+        const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
+
+        // If the user does not have access to the study guide AND the study guide is private, redirect them to their study guides page
+        if (!hasAccess && !fetchedStudyGuide.isPublic) {
           router.push(`/dashboard`);
           return;
         }
 
-        // If the user has access to the study guide, fetch the study guide data
-        const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
+        // Set the study guide and file name
         setStudyGuide(fetchedStudyGuide);
         setFileName(fileName);
 
@@ -464,6 +468,28 @@ const Study = () => {
     }
   };
 
+  // Handle user saving the study guide
+  const saveStudyGuide = async () => {
+    let studyGuideClone = {
+      fileName: studyGuide.fileName,
+      extractedData: JSON.stringify(studyGuide.extractedData),
+      googleSearchResults: JSON.stringify(studyGuide.googleSearchResults),
+      firebaseFileUrl: null,
+      createdAt: new Date(),
+      createdBy: currentUser.uid,
+      contributors: [currentUser.uid],
+      editors: [currentUser.uid],
+      isPublic: false,
+      gotFromPublic: true,
+    };
+
+    const studyGuideId = await uploadStudyGuideToFirebase(studyGuideClone);
+
+    if (studyGuideId !== null) {
+      router.push(`/study/${studyGuideId}`);
+    }
+  };
+
   return (
     <PageContainer>
       <Navbar />
@@ -526,6 +552,10 @@ const Study = () => {
                 onClick={handleShareClick}
               />
             )}
+            {studyGuide.isPublic &&
+              !studyGuide.contributors.includes(currentUser?.uid) && (
+                <Button onClick={saveStudyGuide}>Save File</Button>
+              )}
             <StyledFontAwesomeIcon
               icon={faMessage}
               size="2x"
@@ -1013,7 +1043,7 @@ const Section = styled.div`
   padding: 24px;
   text-align: center;
   color: #000000;
-  background-color: #ffffff;
+  background-color: #f6f4f3;
   gap: 24px;
   overflow: auto;
 `;
@@ -1049,13 +1079,7 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
 `;
-const SaveButtonArea = styled.div`
-  display: flex;
-  position: absolute;
-  left: 32px;
-  cursor: pointer;
-  gap: 8px;
-`;
+
 const MenuTriggerArea = styled.div`
   display: flex;
   flex-direction: row;
@@ -1121,7 +1145,7 @@ const FileContainer = styled.div`
 `;
 
 const InfoSubContainer = styled.div`
-  background-color: #f6f4f3;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 16px;
   width: 100%;
