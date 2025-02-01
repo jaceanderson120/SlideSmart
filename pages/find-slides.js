@@ -8,6 +8,7 @@ import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "@/components/StudyGuideList";
 import Footer from "@/components/Footer";
 import { colors } from "@/constants/colors";
+import keywordExtractor from "keyword-extractor";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -21,7 +22,15 @@ const FindSlides = () => {
 
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
+    // Extract the keywords from the search bar
+    let keyWords = keywordExtractor.extract(inputText, {
+      language: "english",
+      remove_digits: true,
+      return_changed_case: true,
+      remove_duplicates: true,
+    });
     setHasSearched(true);
+    // When we decide on how to move foward with a more advanced search swap out the inputText for keyWords array and then handle that on the backend
     const guides = await getPublicStudyGuides(inputText);
     setStudyGuides(guides);
   };
