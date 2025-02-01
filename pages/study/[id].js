@@ -50,6 +50,7 @@ import AddSectionsContainer from "@/components/AddSectionsContainer";
 import AddTopicDialog from "@/components/AddTopicDialog";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
+import { colors } from "@/constants/colors";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -526,18 +527,18 @@ const Study = () => {
               <>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="#f03a4770"
-                  textColor="#000000"
-                  hoverTextColor="#000000"
+                  hoverBackgroundColor={colors.primary70}
+                  textColor={colors.black}
+                  hoverTextColor={colors.black}
                   onClick={handleEditClicked}
                 >
                   Save
                 </Button>
                 <Button
                   backgroundColor="transparent"
-                  hoverBackgroundColor="#f03a4770"
-                  textColor="#000000"
-                  hoverTextColor="#000000"
+                  hoverBackgroundColor={colors.primary70}
+                  textColor={colors.black}
+                  hoverTextColor={colors.black}
                   onClick={() => setIsDiscardEditsDialogOpen(true)}
                 >
                   Discard
@@ -609,8 +610,8 @@ const Study = () => {
                     {editMode && (
                       <Button
                         backgroundColor="transparent"
-                        textColor="#000000"
-                        hoverBackgroundColor="#f03a4770"
+                        textColor={colors.black}
+                        hoverBackgroundColor={colors.primary70}
                         padding="8px"
                         marginTop="16px"
                         fontSize={fontSize.label}
@@ -868,10 +869,10 @@ const Study = () => {
                             onClick={() => toggleAnswer(key)}
                             padding="8px"
                             fontSize={fontSize.label}
-                            backgroundColor="#f03a4770"
-                            hoverBackgroundColor="#f03a4770"
-                            textColor="#000000"
-                            hoverTextColor="#ffffff"
+                            backgroundColor={colors.primary70}
+                            hoverBackgroundColor={colors.primary70}
+                            textColor={colors.black}
+                            hoverTextColor={colors.white}
                           >
                             {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
                           </Button>
@@ -955,7 +956,11 @@ const Study = () => {
         isOpen={isShareModalOpen}
         onRequestClose={closeShareModal}
         icon={
-          <FontAwesomeIcon icon={faShareFromSquare} size="3x" color="#f03a47" />
+          <FontAwesomeIcon
+            icon={faShareFromSquare}
+            size="3x"
+            color={colors.primary}
+          />
         }
       />
       <ConfirmationDialog
@@ -978,7 +983,9 @@ const Study = () => {
           handleTopicDelete(topicToDelete);
           toast.success("Topic has been deleted successfully.");
         }}
-        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
+        icon={
+          <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
+        }
       />
       <ConfirmationDialog
         isOpen={isDeleteSubSectionDialogOpen}
@@ -998,7 +1005,9 @@ const Study = () => {
           setIsDeleteSubSectionDialogOpen(false);
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
         }}
-        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
+        icon={
+          <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
+        }
       />
       <ConfirmationDialog
         isOpen={isNewYoutubeVideoDialogOpen}
@@ -1042,8 +1051,8 @@ const Section = styled.div`
   align-items: flex-start;
   padding: 24px;
   text-align: center;
-  color: #000000;
-  background-color: #f6f4f3;
+  color: ${colors.black};
+  background-color: ${colors.lightGray};
   gap: 24px;
   overflow: auto;
 `;
@@ -1052,12 +1061,12 @@ const Title = styled.input`
   ${({ $editMode }) =>
     $editMode
       ? css`
-          border: 2px dashed #f03a4770;
+          border: 2px dashed ${colors.primary70};
           background-color: transparent;
         `
       : css`
           border: none;
-          background-color: #f03a4770;
+          background-color: ${colors.primary70};
         `}
   font-size: ${fontSize.heading};
   font-weight: bold;
@@ -1095,7 +1104,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding-right: 10px;
   &:hover {
     transition: color 0.3s;
-    color: #f03a47;
+    color: ${colors.primary};
     cursor: pointer;
   }
 `;
@@ -1145,7 +1154,7 @@ const FileContainer = styled.div`
 `;
 
 const InfoSubContainer = styled.div`
-  background-color: #ffffff;
+  background-color: ${colors.white};
   border-radius: 10px;
   padding: 16px;
   width: 100%;
@@ -1169,7 +1178,7 @@ const TopicHeaderTitle = styled.div`
     display: block;
     width: 100%;
     height: 1px;
-    background-color: #000000;
+    background-color: ${colors.black};
     margin-top: 10px;
   }
 `;
@@ -1217,7 +1226,7 @@ const TopicName = styled.a`
   font-size: ${fontSize.label};
   text-decoration: none;
   color: inherit;
-  background-color: #f03a4733;
+  background-color: ${colors.primary33};
   transition: background-color 0.3s;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
@@ -1226,11 +1235,11 @@ const TopicName = styled.a`
   word-wrap: break-word;
 
   &:hover {
-    background-color: #f03a4770;
+    background-color: ${colors.primary70};
   }
 
   &.active {
-    background-color: #f03a4770;
+    background-color: ${colors.primary70};
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
   }
@@ -1239,6 +1248,6 @@ const TopicName = styled.a`
 const NoVideoText = styled.p`
   font-size: ${fontSize.default};
   font-style: italic;
-  color: #000000;
+  color: ${colors.black};
   padding: 8px;
 `;

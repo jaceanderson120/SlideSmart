@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import Button from "@/components/Button";
+import { colors } from "@/constants/colors";
 
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
@@ -144,7 +145,7 @@ const PricingSection = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   width: 100%;
   padding: 32px;
   gap: 20px;
@@ -181,7 +182,7 @@ const PromoCodeInput = styled.input`
   border: none;
   border-radius: 4px;
   font-size: ${fontSize.default};
-  color: #000000;
+  color: ${colors.black};
 `;
 
 const PriceText = styled.p`

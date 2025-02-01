@@ -8,6 +8,7 @@ import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "./Button";
+import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
@@ -82,20 +83,20 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
               hoverBackgroundColor="transparent"
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#5c5c5c"
-              hoverTextColor="#f03a47"
-              style={{ border: "1px solid #5c5c5c" }}
+              textColor={colors.gray}
+              hoverTextColor={colors.primary}
+              style={{ border: `1px solid ${colors.gray}` }}
             >
               Close
             </Button>
             <Button
               onClick={onShareClicked}
-              backgroundColor="#f03a47"
-              hoverBackgroundColor="#f03a47"
+              backgroundColor={colors.primary}
+              hoverBackgroundColor={colors.primary}
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#ffffff"
-              hoverTextColor="#000000"
+              textColor={colors.white}
+              hoverTextColor={colors.black}
             >
               Share
             </Button>
@@ -113,7 +114,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "#f6f4f3",
+    backgroundColor: colors.lightGray,
     border: "none",
     boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
     maxWidth: "30%",
@@ -127,7 +128,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
   &:hover {
     transition: color 0.3s;
-    color: #f03a47;
+    color: ${colors.primary};
   }
 `;
 
@@ -157,7 +158,7 @@ const ModalTitle = styled.p`
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-  color: #5c5c5c;
+  color: ${colors.gray};
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;

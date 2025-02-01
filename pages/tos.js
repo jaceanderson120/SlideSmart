@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
+import { colors } from "@/constants/colors";
 
 const TOS = () => {
   return (
@@ -243,5 +244,5 @@ const Link = styled.a`
 `;
 
 const Strong = styled.strong`
-  color: #000;
+  color: ${colors.black};
 `;

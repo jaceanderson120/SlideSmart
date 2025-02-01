@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import CustomMenu from "./CustomMenu";
 import UserIcon from "./UserIcon";
 import { useState, useEffect } from "react";
+import { colors } from "@/constants/colors";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
@@ -31,7 +32,7 @@ function Navbar() {
         <UserIcon
           initials={initials}
           size={48}
-          hoverBackgroundColor="#9c9c9c"
+          hoverBackgroundColor={colors.gray}
         />
         <MenuTextContainer>
           <p>{auth.currentUser?.displayName}</p>
@@ -114,7 +115,7 @@ const NavbarAboutLinks = styled.div`
   }
 
   a:hover {
-    color: #f03a47;
+    color: ${colors.primary};
   }
 `;
 
@@ -131,7 +132,7 @@ const NavbarLoginStyle = styled.div`
   }
 
   a:hover {
-    color: #f03a47;
+    color: ${colors.primary};
   }
 `;
 
@@ -141,14 +142,14 @@ const NavbarRegisterStyle = styled.div`
 
   a {
     text-decoration: none;
-    color: white;
+    color: ${colors.white};
     transition: color 0.3s;
     font-size: ${fontSize.default};
     font-weight: bold;
     border-radius: 8px;
-    background-color: #f03a47;
+    background-color: ${colors.primary};
     padding: 6px;
-    border: 2px solid #f03a47;
+    border: 2px solid ${colors.primary};
   }
 
   a:hover {
@@ -163,7 +164,7 @@ const NavbarLoginLinks = styled.div`
   padding: 6px;
   display: flex;
   font-size: ${fontSize.default};
-  color: #000000;
+  color: ${colors.black};
   font-weight: bold;
 `;
 
@@ -173,7 +174,7 @@ const NavbarSlideSmart = styled.div`
   a {
     text-decoration: none;
     font-size: ${fontSize.heading};
-    color: #f03a47;
+    color: ${colors.primary};
     font-weight: bold;
   }
 `;
@@ -184,7 +185,7 @@ const NavbarSection = styled.div`
   width: 100%;
   padding: 16px;
   border-bottom: 1px solid gray;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
   z-index: 100;
 `;
 
@@ -202,7 +203,7 @@ const MenuItemContainer = styled.div`
     display: block;
     width: 100%;
     height: 1px;
-    background-color: #000000;
+    background-color: ${colors.black};
     margin-top: 18px;
   }
 `;

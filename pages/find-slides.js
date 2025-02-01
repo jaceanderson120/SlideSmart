@@ -7,6 +7,7 @@ import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "@/components/StudyGuideList";
 import Footer from "@/components/Footer";
+import { colors } from "@/constants/colors";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -65,7 +66,7 @@ const PageContainer = styled.div`
   display: flex;
   height: 100vh;
   flex-direction: column;
-  background-color: #f6f4f3;
+  background-color: ${colors.lightGray};
 `;
 
 const Section = styled.div`

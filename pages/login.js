@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
+import { colors } from "@/constants/colors";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -67,8 +68,8 @@ const Section = styled.div`
   padding: 32px;
   text-align: center;
   height: 100vh;
-  background-color: #f6f4f3;
-  color: #000000;
+  background-color: ${colors.lightGray};
+  color: ${colors.black};
   flex-direction: column;
 `;
 
@@ -92,14 +93,14 @@ const Form = styled.form`
 const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${colors.gray};
   border-radius: 5px;
   font-size: ${fontSize.default};
   color: green;
   width: 300px;
 
   &:focus {
-    border-color: #f03a4770;
+    border-color: ${colors.primary70};
     outline: none;
   }
 `;
