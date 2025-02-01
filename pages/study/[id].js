@@ -410,10 +410,13 @@ const Study = () => {
   // Get a new YouTube video
   const getNewYoutubeVideo = async (topic, data) => {
     setfindingNewYoutubeVideo(true);
+
     // Filter the data to only be the topic name and explanation
     const filteredData = {
+      topic: topic,
       explanation: data.explanation,
     };
+
     const res = await fetch("/api/create-youtube-query", {
       method: "POST",
       headers: {
@@ -422,6 +425,7 @@ const Study = () => {
       body: JSON.stringify(filteredData), // Sending the topic as JSON
     });
     const query = await res.json();
+
     const res2 = await fetch("/api/get-youtube-video", {
       method: "POST",
       headers: {
