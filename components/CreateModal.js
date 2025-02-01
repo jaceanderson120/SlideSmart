@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { toast } from "react-toastify";
@@ -16,12 +16,17 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
   const [includeExamples, setIncludeExamples] = useState(true);
   const [includeQuestions, setIncludeQuestions] = useState(true);
   const [includeResources, setIncludeResources] = useState(true);
+  const fileInputRef = useRef(null);
 
   const handleClose = () => {
     // Reset local state
     setFile(null);
     setIsPublic(true);
     onRequestClose();
+  };
+
+  const handleFileInputClick = () => {
+    fileInputRef.current.click();
   };
 
   const handleFileChange = (e) => {
@@ -55,8 +60,22 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
       contentLabel="Upload File"
     >
       <ModalContent>
-        <ModalTitle>Upload a File</ModalTitle>
-        <FileInput type="file" onChange={handleFileChange} />
+        <ModalTitle>Create a New Study Guide</ModalTitle>
+        <ModalText>
+          Please select a file to upload and choose what you would like to
+          include in the study guide.
+        </ModalText>
+        <FileInput type="file" onChange={handleFileChange} ref={fileInputRef} />
+        <Button
+          onClick={handleFileInputClick}
+          style={{
+            maxWidth: "60%",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        >
+          {file ? file.name : "Select File"}
+        </Button>
         <ToggleSection>
           <ToggleArea>
             <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
@@ -103,24 +122,25 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
           <Button
             onClick={handleClose}
             backgroundColor="transparent"
-            hoverBackgroundColor="#f03a4770"
-            padding="8px"
+            hoverBackgroundColor="transparent"
+            padding="12px"
             fontSize={fontSize.secondary}
-            textColor="#f03a47"
+            textColor="#5c5c5c"
             hoverTextColor="#f03a47"
+            style={{ border: "1px solid #5c5c5c" }}
           >
             Close
           </Button>
           <Button
             onClick={handleUploadClick}
-            backgroundColor="transparent"
-            hoverBackgroundColor="#f03a4770"
-            padding="8px"
+            backgroundColor="#f03a47"
+            hoverBackgroundColor="#f03a47"
+            padding="12px"
             fontSize={fontSize.secondary}
-            textColor="#f03a47"
-            hoverTextColor="#f03a47"
+            textColor="#ffffff"
+            hoverTextColor="#000000"
           >
-            Submit
+            Create
           </Button>
         </ButtonSection>
       </ModalContent>
@@ -134,12 +154,14 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
-    marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#f6f4f3",
     border: "none",
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
-    maxWidth: "20%",
+    boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+    maxWidth: "30%",
+    height: "auto",
+    padding: "24px",
+    borderRadius: "16px",
   },
 };
 
@@ -151,37 +173,40 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   }
 `;
 
+const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+`;
+
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
 `;
 
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #000000;
-    margin-top: 10px;
-  }
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
+  color: #5c5c5c;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 `;
 
 const FileInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin: 16px 0;
-  font-size: ${fontSize.secondary};
+  display: none;
 `;
 
 const ToggleSection = styled.div`
@@ -196,15 +221,6 @@ const ToggleArea = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-`;
-
-const ButtonSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px;
 `;
 
 export default CreateModal;

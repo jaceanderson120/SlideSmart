@@ -11,7 +11,7 @@ import Button from "./Button";
 
 Modal.setAppElement("#__next");
 
-const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
+const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
   const [shareEmail, setShareEmail] = useState("");
   const [allowEditing, setAllowEditing] = useState(false);
   const { currentUser } = useStateContext();
@@ -55,6 +55,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
         style={customStyles}
       >
         <ModalContent>
+          {icon}
           <ModalTitle>Share Study Guide</ModalTitle>
           <EmailField
             type="text"
@@ -62,6 +63,10 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
             value={shareEmail}
             onChange={(e) => setShareEmail(e.target.value)}
           />
+          <ModalText>
+            Please enter the email address of the user you want to share this
+            study guide with.
+          </ModalText>
           <AllowEditingSection>
             <ModalText>Allow Editing</ModalText>
             <StyledFontAwesomeIcon
@@ -74,22 +79,23 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose }) => {
             <Button
               onClick={onCloseClicked}
               backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
-              padding="8px"
+              hoverBackgroundColor="transparent"
+              padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
+              textColor="#5c5c5c"
               hoverTextColor="#f03a47"
+              style={{ border: "1px solid #5c5c5c" }}
             >
               Close
             </Button>
             <Button
               onClick={onShareClicked}
-              backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
-              padding="8px"
+              backgroundColor="#f03a47"
+              hoverBackgroundColor="#f03a47"
+              padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
-              hoverTextColor="#f03a47"
+              textColor="#ffffff"
+              hoverTextColor="#000000"
             >
               Share
             </Button>
@@ -106,12 +112,14 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
-    marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#f6f4f3",
     border: "none",
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
-    maxWidth: "20%",
+    boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+    maxWidth: "30%",
+    height: "auto",
+    padding: "24px",
+    borderRadius: "16px",
   },
 };
 
@@ -123,36 +131,41 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   }
 `;
 
+const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+`;
+
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
 `;
 
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #000000;
-    margin-top: 10px;
-  }
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
+  color: #5c5c5c;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 `;
 
 const EmailField = styled.input`
   width: 100%;
   padding: 8px;
-  margin: 16px 0;
   font-size: ${fontSize.secondary};
 `;
 
@@ -160,15 +173,6 @@ const AllowEditingSection = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
-`;
-
-const ButtonSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px;
 `;
 
 export default ShareModal;

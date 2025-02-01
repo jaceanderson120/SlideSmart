@@ -6,7 +6,14 @@ import React from "react";
 
 Modal.setAppElement("#__next");
 
-const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
+const ConfirmationDialog = ({
+  isOpen,
+  title,
+  text,
+  onClose,
+  onConfirm,
+  icon,
+}) => {
   return (
     <>
       <Modal
@@ -16,6 +23,7 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
         style={customStyles}
       >
         <ModalContent>
+          {icon}
           <ModalTitle>{title}</ModalTitle>
           <ModalText>
             {text.split("\n").map((line, index) => (
@@ -29,11 +37,12 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
             <Button
               onClick={onClose}
               backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
-              padding="8px"
+              hoverBackgroundColor="transparent"
+              padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
+              textColor="#5c5c5c"
               hoverTextColor="#f03a47"
+              style={{ border: "1px solid #5c5c5c" }}
             >
               Cancel
             </Button>
@@ -42,12 +51,12 @@ const ConfirmationDialog = ({ isOpen, title, text, onClose, onConfirm }) => {
                 onConfirm();
                 onClose();
               }}
-              backgroundColor="transparent"
-              hoverBackgroundColor="#f03a4770"
-              padding="8px"
+              backgroundColor="#f03a47"
+              hoverBackgroundColor="#f03a47"
+              padding="12px"
               fontSize={fontSize.secondary}
-              textColor="#f03a47"
-              hoverTextColor="#f03a47"
+              textColor="#ffffff"
+              hoverTextColor="#000000"
             >
               Confirm
             </Button>
@@ -67,9 +76,11 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
     backgroundColor: "#f6f4f3",
     border: "none",
-    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.2)",
-    maxWidth: "40%",
+    boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+    maxWidth: "30%",
     height: "auto",
+    padding: "24px",
+    borderRadius: "16px",
   },
 };
 
@@ -77,37 +88,32 @@ const ButtonSection = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 32px;
 `;
 
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  height: 100%;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
 `;
 
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #000000;
-    margin-top: 10px;
-  }
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
+  color: #5c5c5c;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 `;
 
 export default ConfirmationDialog;

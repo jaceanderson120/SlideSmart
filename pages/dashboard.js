@@ -17,7 +17,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { Tooltip } from "react-tooltip";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
@@ -226,7 +226,14 @@ const Dashboard = () => {
       {isLoading ? (
         <Overlay>
           <ProgressWrapper>
-            <CircularProgressbar value={loadingPercentage} />
+            <CircularProgressbar
+              value={loadingPercentage}
+              text={`${loadingPercentage}%`}
+              styles={buildStyles({
+                pathColor: "#f03a47",
+                textColor: "#000000",
+              })}
+            />
           </ProgressWrapper>
         </Overlay>
       ) : (
@@ -278,10 +285,11 @@ const Dashboard = () => {
             />
           </FilterContainer>
           <ColumnNamesContainer>
-            <ColumnName>Name</ColumnName>
-            <ColumnName>Created</ColumnName>
-            <ColumnName>Permission</ColumnName>
-            <ColumnName>Contributors</ColumnName>
+            <ColumnName flex={2}>Name</ColumnName>
+            <ColumnName flex={1}>Created</ColumnName>
+            <ColumnName flex={1}>Permission</ColumnName>
+            <ColumnName flex={1}>Contributors</ColumnName>
+            <ColumnName flex={1}>Visibility</ColumnName>
             <OptionsPadding />
           </ColumnNamesContainer>
           <StudyGuideListContainer>
@@ -333,6 +341,9 @@ const Dashboard = () => {
                           );
                         })}
                       </StudyGuideContributors>
+                      <StudyGuideVisibility>
+                        {guide.isPublic ? "Public" : "Private"}
+                      </StudyGuideVisibility>
                       {guide.createdBy === currentUser?.uid ? (
                         <StudyGuideDeleteButton
                           onClick={() => {
@@ -364,13 +375,14 @@ const Dashboard = () => {
       <ConfirmationDialog
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
-        title="Delete Study Guide"
-        text={`Are you sure you want to delete this study guide?\n\nYou cannot undo this action.`}
+        title="Are you sure you want to delete this study guide?"
+        text={`"${guideToDelete?.fileName}"\nwill be permanently deleted.`}
         onConfirm={() => {
           setIsDeleteDialogOpen(false);
           handleDelete(guideToDelete);
           toast.success("Study guide deleted successfully.");
         }}
+        icon={<FontAwesomeIcon icon={faTrashCan} size="3x" color="#f03a47" />}
       />
     </Container>
   );
@@ -447,7 +459,7 @@ const ColumnNamesContainer = styled.div`
 const ColumnName = styled.h2`
   margin-bottom: 16px;
   display: flex;
-  flex: 1;
+  flex: ${(props) => props.flex};
   font-size: ${fontSize.default};
   font-weight: bold;
 `;
@@ -481,7 +493,7 @@ const StudyGuideListItem = styled.div`
 
 const StudyGuideLink = styled.div`
   display: flex;
-  flex: 1;
+  flex: 2;
   cursor: pointer;
   transition: background-color 0.3s;
   white-space: nowrap;
@@ -513,6 +525,13 @@ const StudyGuideContributors = styled.div`
   display: flex;
   flex: 1;
   color: #9c9c9c;
+`;
+
+const StudyGuideVisibility = styled.div`
+  display: flex;
+  flex: 1;
+  color: #9c9c9c;
+  font-size: ${fontSize.default};
 `;
 
 const Contributor = styled.div`
