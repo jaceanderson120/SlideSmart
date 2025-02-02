@@ -3,7 +3,7 @@
 //        hiddenExplanations: string with the hidden explanations
 // Output: explanation, string with the generated explanation
 const generateExplanation = async (topic, hiddenExplanations) => {
-  const hiddenExplanation = JSON.parse(hiddenExplanations)[topic];
+  const hiddenExplanation = hiddenExplanations[topic];
 
   // Create object of topic and explanation
   const data = {};
@@ -29,7 +29,7 @@ const generateExplanation = async (topic, hiddenExplanations) => {
 //        hiddenExamples: string with the hidden examples
 // Output: example, string with the generated example
 const generateExample = async (topic, hiddenExamples) => {
-  const hiddenExample = JSON.parse(hiddenExamples)[topic];
+  const hiddenExample = hiddenExamples[topic];
 
   // Create object of topic and example
   const data = {};
@@ -55,7 +55,7 @@ const generateExample = async (topic, hiddenExamples) => {
 //        hiddenQuestions: string with the hidden questions
 // Output: question, string with the generated question
 const generateQuestionAnswer = async (topic, hiddenQuestions) => {
-  const hiddenQuestion = JSON.parse(hiddenQuestions)[topic];
+  const hiddenQuestion = hiddenQuestions[topic];
 
   // Create object of topic and question
   const data = {};

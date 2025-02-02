@@ -324,12 +324,6 @@ const Study = () => {
     delete updatedData.extractedData[topic];
     delete updatedData.hiddenExplanations[topic];
 
-    console.log(updatedData.extractedData, typeof updatedData.extractedData);
-    console.log(
-      updatedData.hiddenExplanations,
-      typeof updatedData.hiddenExplanations
-    );
-
     setStudyGuide(updatedData);
   };
 
@@ -348,7 +342,7 @@ const Study = () => {
   };
 
   // Function to add a new topic to the study guide
-  const handleAddTopic = (topicName) => {
+  const handleAddTopic = (topicName, explanation) => {
     if (studyGuide.extractedData[topicName]) {
       toast.error("Topic already exists. Please choose a different name.");
       return;
@@ -363,12 +357,16 @@ const Study = () => {
         extractedData: {
           ...prev.extractedData,
           [topicName]: {
-            explanation: "Fill in the explanation here...",
+            explanation: explanation,
             youtubeIds: "None",
             example: "Fill in the example here...",
             question: "Fill in the question here...",
             answer: "Fill in the answer here...",
           },
+        },
+        hiddenExplanations: {
+          ...prev.hiddenExplanations,
+          [topicName]: explanation,
         },
       };
       return updatedData;
@@ -811,7 +809,12 @@ const Study = () => {
                             height="315"
                             src={`https://www.youtube.com/embed/${
                               studyGuide.extractedData[key]["youtubeIds"][
-                                videoIndices[key]
+                                isNaN(videoIndices[key]) ||
+                                videoIndices[key] >=
+                                  studyGuide.extractedData[key]["youtubeIds"]
+                                    .length
+                                  ? 1
+                                  : videoIndices[key]
                               ]
                             }`}
                             title="YouTube video player"
@@ -828,7 +831,10 @@ const Study = () => {
                               title="Previous Video"
                             />
                             <span>
-                              {videoIndices[key] + 1} of{" "}
+                              {isNaN(videoIndices[key])
+                                ? 1
+                                : videoIndices[key] + 1}{" "}
+                              of{" "}
                               {
                                 studyGuide.extractedData[key]["youtubeIds"]
                                   .length
