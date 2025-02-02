@@ -38,6 +38,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
       transaction.set(studyGuideRef, {
         fileName: studyGuide.fileName,
         extractedData: studyGuide.extractedData,
+        hiddenExplanations: studyGuide.hiddenExplanations || "",
         googleSearchResults: studyGuide.googleSearchResults || "",
         firebaseFileUrl: studyGuide.firebaseFileUrl,
         createdAt: studyGuide.createdAt,
@@ -140,6 +141,7 @@ const fetchStudyGuide = async (id) => {
       ...data,
       extractedData: JSON.parse(data.extractedData),
       googleSearchResults: JSON.parse(data.googleSearchResults || "{}"),
+      hiddenExplanations: JSON.parse(data.hiddenExplanations || "{}"),
     };
     const fileName = data.fileName;
     return { fetchedStudyGuide, fileName };
@@ -164,6 +166,14 @@ const updateStudyGuideExtractedData = async (id, extractedData) => {
   }
   const studyGuideDocRef = doc(db, "studyGuides", id);
   await updateDoc(studyGuideDocRef, { extractedData });
+};
+
+// Updates the hidden explanations of a study guide in Firestore
+// Input: study guide ID and new hidden explanations
+// Output: None
+const updateStudyGuideHiddenExplanations = async (id, hiddenExplanations) => {
+  const studyGuideDocRef = doc(db, "studyGuides", id);
+  await updateDoc(studyGuideDocRef, { hiddenExplanations });
 };
 
 // Delete a study guide from Firestore
@@ -301,6 +311,7 @@ export {
   fetchStudyGuide,
   updateStudyGuideFileName,
   updateStudyGuideExtractedData,
+  updateStudyGuideHiddenExplanations,
   deleteStudyGuide,
   storeUserInfo,
   getUserDisplayName,

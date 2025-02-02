@@ -223,11 +223,18 @@ const handleFileUpload = async (
         }
       });
 
+      // Create an object of {"topic": "explanation"} pairs
+      const topicsAndExplanationsObject = {};
+      topics.forEach((topic) => {
+        topicsAndExplanationsObject[topic] = topicsAndExplanations[topic];
+      });
+
       // Upload extractedData, googleSearchResults, and firebaseFileUrl to Firestore
       // Use a Firestore transaction to ensure atomicity
       let studyGuide = {
         fileName: file.name,
         extractedData: JSON.stringify(combinedResponse),
+        hiddenExplanations: JSON.stringify(topicsAndExplanationsObject),
         googleSearchResults: filteredGoogleSearchResults
           ? JSON.stringify(filteredGoogleSearchResults)
           : JSON.stringify([]),

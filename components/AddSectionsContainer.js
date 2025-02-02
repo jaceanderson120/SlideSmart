@@ -48,21 +48,12 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
           hoverBackgroundColor={colors.primary70}
           textColor={colors.black}
           hoverTextColor={colors.white}
-          onClick={() => handleAddSection("question")}
+          onClick={() => {
+            handleAddSection("question");
+            handleAddSection("answer");
+          }}
         >
-          Add Question
-        </Button>
-      )}
-      {!topicInfo["answer"] && topicInfo["answer"] !== "" && (
-        <Button
-          padding="8px"
-          backgroundColor={colors.primary70}
-          hoverBackgroundColor={colors.primary70}
-          textColor={colors.black}
-          hoverTextColor={colors.white}
-          onClick={() => handleAddSection("answer")}
-        >
-          Add Answer
+          Add Q/A
         </Button>
       )}
     </Container>
