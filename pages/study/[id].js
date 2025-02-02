@@ -289,7 +289,6 @@ const Study = () => {
       };
       return updatedData;
     });
-    console.log("Updated");
   };
 
   // Function to handle when the user clicks the edit mode option in the menu
@@ -320,18 +319,16 @@ const Study = () => {
 
   // Function to delete a topic from the study guide
   const handleTopicDelete = (topic) => {
-    // Parse hiddenExplanations before making modifications
-    const parsedHiddenExplanations = JSON.parse(studyGuide.hiddenExplanations);
-
     // Update the study guide extracted data and hidden explanations to remove the topic
     const updatedData = { ...studyGuide };
     delete updatedData.extractedData[topic];
-    delete parsedHiddenExplanations[topic];
+    delete updatedData.hiddenExplanations[topic];
 
-    // Stringify the modified hiddenExplanations
-    updatedData.hiddenExplanations = JSON.stringify(parsedHiddenExplanations);
-
-    console.log(updatedData.hiddenExplanations);
+    console.log(updatedData.extractedData, typeof updatedData.extractedData);
+    console.log(
+      updatedData.hiddenExplanations,
+      typeof updatedData.hiddenExplanations
+    );
 
     setStudyGuide(updatedData);
   };

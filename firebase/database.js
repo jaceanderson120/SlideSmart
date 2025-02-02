@@ -141,6 +141,7 @@ const fetchStudyGuide = async (id) => {
       ...data,
       extractedData: JSON.parse(data.extractedData),
       googleSearchResults: JSON.parse(data.googleSearchResults || "{}"),
+      hiddenExplanations: JSON.parse(data.hiddenExplanations || "{}"),
     };
     const fileName = data.fileName;
     return { fetchedStudyGuide, fileName };
