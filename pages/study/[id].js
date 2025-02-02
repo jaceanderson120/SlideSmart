@@ -16,6 +16,7 @@ import {
   updateStudyGuideExtractedData,
   hasAccessToStudyGuide,
   uploadStudyGuideToFirebase,
+  updateStudyGuideHiddenExplanations,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -189,11 +190,15 @@ const Study = () => {
   };
 
   // Save the extracted data to Firestore when the user changes it
-  const updateExtractedData = (extractedData) => {
+  const updateStudyGuideOnFirestore = () => {
     if (studyGuide) {
       // Ensure that the extracted data is a string before saving it to Firestore
       const extractedData = JSON.stringify(studyGuide.extractedData);
       updateStudyGuideExtractedData(studyGuide.id, extractedData);
+
+      // Save the hidden explanations to Firestore
+      const hiddenExplanations = JSON.stringify(studyGuide.hiddenExplanations);
+      updateStudyGuideHiddenExplanations(studyGuide.id, hiddenExplanations);
     }
   };
 
@@ -290,8 +295,8 @@ const Study = () => {
   // Function to handle when the user clicks the edit mode option in the menu
   const handleEditClicked = () => {
     if (editMode) {
-      // Save the extracted data to Firestore when the user changes it
-      updateExtractedData(studyGuide.extractedData);
+      // Save the extracted data and hidden explanantions to Firestore when the user changes it
+      updateStudyGuideOnFirestore();
       toast.info(
         "Edit Mode has been disabled. Your study guide has been saved successfully!"
       );
@@ -315,8 +320,19 @@ const Study = () => {
 
   // Function to delete a topic from the study guide
   const handleTopicDelete = (topic) => {
+    // Parse hiddenExplanations before making modifications
+    const parsedHiddenExplanations = JSON.parse(studyGuide.hiddenExplanations);
+
+    // Update the study guide extracted data and hidden explanations to remove the topic
     const updatedData = { ...studyGuide };
     delete updatedData.extractedData[topic];
+    delete parsedHiddenExplanations[topic];
+
+    // Stringify the modified hiddenExplanations
+    updatedData.hiddenExplanations = JSON.stringify(parsedHiddenExplanations);
+
+    console.log(updatedData.hiddenExplanations);
+
     setStudyGuide(updatedData);
   };
 

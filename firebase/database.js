@@ -167,6 +167,14 @@ const updateStudyGuideExtractedData = async (id, extractedData) => {
   await updateDoc(studyGuideDocRef, { extractedData });
 };
 
+// Updates the hidden explanations of a study guide in Firestore
+// Input: study guide ID and new hidden explanations
+// Output: None
+const updateStudyGuideHiddenExplanations = async (id, hiddenExplanations) => {
+  const studyGuideDocRef = doc(db, "studyGuides", id);
+  await updateDoc(studyGuideDocRef, { hiddenExplanations });
+};
+
 // Delete a study guide from Firestore
 // Input: study guide ID
 // Output: None
@@ -302,6 +310,7 @@ export {
   fetchStudyGuide,
   updateStudyGuideFileName,
   updateStudyGuideExtractedData,
+  updateStudyGuideHiddenExplanations,
   deleteStudyGuide,
   storeUserInfo,
   getUserDisplayName,
