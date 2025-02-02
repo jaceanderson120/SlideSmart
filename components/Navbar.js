@@ -110,7 +110,7 @@ const NavbarAboutLinks = styled.div`
     text-decoration: none;
     color: inherit;
     transition: color 0.3s;
-    font-size: ${fontSize.default};
+    font-size: ${fontSize.label};
     font-weight: bold;
   }
 

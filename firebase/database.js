@@ -38,6 +38,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
       transaction.set(studyGuideRef, {
         fileName: studyGuide.fileName,
         extractedData: studyGuide.extractedData,
+        hiddenExplanations: studyGuide.hiddenExplanations || "",
         googleSearchResults: studyGuide.googleSearchResults || "",
         firebaseFileUrl: studyGuide.firebaseFileUrl,
         createdAt: studyGuide.createdAt,

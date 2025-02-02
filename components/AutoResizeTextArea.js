@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import { colors } from "@/constants/colors";
 
-const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
+const AutoResizeTextArea = ({ value, onChange, editMode }) => {
   const textAreaRef = useRef(null);
 
   const adjustHeight = () => {
@@ -16,7 +16,7 @@ const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
   // Adjust height on mount and when value changes
   useEffect(() => {
     adjustHeight();
-  }, [defaultValue]);
+  }, [value]);
 
   // If width of the container changes, adjust the height
   useEffect(() => {
@@ -30,7 +30,7 @@ const AutoResizeTextArea = ({ defaultValue, onChange, editMode }) => {
   return (
     <TextArea
       ref={textAreaRef}
-      defaultValue={defaultValue}
+      value={value}
       onChange={(e) => {
         onChange(e.target.value); // Pass the value to the parent component onChange function
       }}
