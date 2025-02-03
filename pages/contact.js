@@ -9,6 +9,7 @@ import { fontSize } from "@/constants/fontSize";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -19,6 +20,9 @@ const Contact = () => {
   const [body, setBody] = useState("");
 
   const { currentUser } = useStateContext();
+
+  // Check if the user is logged in using custom hook
+  useAuthRedirect();
 
   const sendEmail = () => {
     if (!firstName || !lastName || !email || !subject || !body) {

@@ -18,7 +18,7 @@ const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
 
 const Pricing = () => {
-  const { currentUser, loading, hasSpark } = useStateContext();
+  const { currentUser, loadingUser, hasSpark } = useStateContext();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [promoCode, setPromoCode] = useState("");
@@ -34,14 +34,14 @@ const Pricing = () => {
 
   // Fetch user information
   useEffect(() => {
-    if (!loading && !currentUser) {
+    if (!loadingUser && !currentUser) {
       router.push("/login");
     }
-    if (!loading) {
+    if (!loadingUser) {
       setUserName(currentUser?.displayName);
       setEmail(currentUser?.email);
     }
-  }, [loading, currentUser]);
+  }, [loadingUser, currentUser]);
 
   // Direct user to checkout page
   const handleUpgradeClick = async () => {

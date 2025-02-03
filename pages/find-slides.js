@@ -9,11 +9,15 @@ import StudyGuideList from "@/components/StudyGuideList";
 import Footer from "@/components/Footer";
 import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [inputText, setInputText] = useState("");
   const [studyGuides, setStudyGuides] = useState([]); // store fetched guides
+
+  // Check if the user is logged in using custom hook
+  useAuthRedirect();
 
   // Update local input state on every keystroke
   const handleInputChange = (e) => {

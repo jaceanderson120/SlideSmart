@@ -8,14 +8,14 @@ const Context = createContext();
 export const StateContext = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(true);
   const [hasSpark, setHasSpark] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoggedIn(!!user); // Set to true if user is signed in, false otherwise
       setCurrentUser(user); // Set the current user
-      setLoading(false);
+      setLoadingUser(false);
     });
 
     // Cleanup subscription on unmount
@@ -41,7 +41,7 @@ export const StateContext = ({ children }) => {
       value={{
         isLoggedIn,
         currentUser,
-        loading,
+        loadingUser,
         hasSpark,
       }}
     >

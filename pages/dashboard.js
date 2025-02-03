@@ -29,6 +29,7 @@ import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
 import CreateModal from "@/components/CreateModal";
 import { colors } from "@/constants/colors";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -43,15 +44,11 @@ const Dashboard = () => {
   const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { isLoggedIn, currentUser, loading, hasSpark } = useStateContext();
+  const { isLoggedIn, currentUser, hasSpark } = useStateContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Check if the user is logged in and redirect to the login page if not
-  useEffect(() => {
-    if (!loading && !isLoggedIn) {
-      router.push("/login");
-    }
-  }, [loading, isLoggedIn, router]);
+  // Check if the user is logged in using custom hook
+  useAuthRedirect();
 
   // Fetch the study guides when the component mounts
   useEffect(() => {
