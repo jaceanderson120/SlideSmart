@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 // import useAuthRedirect from "@/hooks/useAuthRedirect";
-import withAuth from "@/hoc/withAuth";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -21,6 +21,12 @@ const Contact = () => {
   const [body, setBody] = useState("");
 
   const { currentUser } = useStateContext();
+
+  // State to determine if useAuthRedirect has finished
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  useAuthRedirect(() => {
+    setCheckingAuth(false);
+  });
 
   const sendEmail = () => {
     if (!firstName || !lastName || !email || !subject || !body) {
@@ -66,96 +72,98 @@ const Contact = () => {
   };
 
   return (
-    <>
-      <PageContainer>
-        <Navbar />
-        <Section>
-          <LeftSection>
-            <PageTitle>CONTACT US</PageTitle>
-            <Subtitle>
-              SlideSmart is here <br></br>{" "}
-              <SubtitleSpan>to help you</SubtitleSpan>
-            </Subtitle>
-            <Subtext>
-              Feel free to contact our support team if you have any inquiries
-              relating to the application.
-            </Subtext>
-            <Subtext>
-              Your form sends us an email. Once we receive your email, we will
-              respond to you as soon as possible.
-            </Subtext>
-          </LeftSection>
-          <RightSection>
-            <FormBox>
-              <InputContainer>
-                <InputLabel>First name</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter your first name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Last name</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter your last name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Email</InputLabel>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Subject</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter the subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Message</InputLabel>
-                <TextArea
-                  type="text"
-                  placeholder="Enter your message"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <ButtonContainer>
-                {!sendingEmail ? (
-                  <Button onClick={sendEmail} padding="16px">
-                    Submit
-                  </Button>
-                ) : (
-                  <Dots />
-                )}
-              </ButtonContainer>
-            </FormBox>
-          </RightSection>
-        </Section>
-      </PageContainer>
-      <Footer />
-    </>
+    !checkingAuth && (
+      <>
+        <PageContainer>
+          <Navbar />
+          <Section>
+            <LeftSection>
+              <PageTitle>CONTACT US</PageTitle>
+              <Subtitle>
+                SlideSmart is here <br></br>{" "}
+                <SubtitleSpan>to help you</SubtitleSpan>
+              </Subtitle>
+              <Subtext>
+                Feel free to contact our support team if you have any inquiries
+                relating to the application.
+              </Subtext>
+              <Subtext>
+                Your form sends us an email. Once we receive your email, we will
+                respond to you as soon as possible.
+              </Subtext>
+            </LeftSection>
+            <RightSection>
+              <FormBox>
+                <InputContainer>
+                  <InputLabel>First name</InputLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter your first name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={sendingEmail}
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <InputLabel>Last name</InputLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter your last name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={sendingEmail}
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <InputLabel>Email</InputLabel>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={sendingEmail}
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <InputLabel>Subject</InputLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter the subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    disabled={sendingEmail}
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <InputLabel>Message</InputLabel>
+                  <TextArea
+                    type="text"
+                    placeholder="Enter your message"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    disabled={sendingEmail}
+                  />
+                </InputContainer>
+                <ButtonContainer>
+                  {!sendingEmail ? (
+                    <Button onClick={sendEmail} padding="16px">
+                      Submit
+                    </Button>
+                  ) : (
+                    <Dots />
+                  )}
+                </ButtonContainer>
+              </FormBox>
+            </RightSection>
+          </Section>
+        </PageContainer>
+        <Footer />
+      </>
+    )
   );
 };
 
-export default withAuth(Contact);
+export default Contact;
 
 const PageContainer = styled.div`
   display: flex;
