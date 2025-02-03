@@ -74,8 +74,8 @@ function Navbar() {
         {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
         {isLoggedIn && <Link href="/find-slides">Find Slides</Link>}
         <Link href="/how-it-works">How it Works</Link>
-        {/* <Link href="/">Contact</Link>
-        <Link href="/">Pricing</Link>
+        <Link href="/contact">Contact Us</Link>
+        {/* <Link href="/">Pricing</Link>
         <Link href="/">About</Link> */}
       </NavbarAboutLinks>
 
