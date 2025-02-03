@@ -47,9 +47,10 @@ const Dashboard = () => {
   const { isLoggedIn, currentUser, hasSpark } = useStateContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [loadingUser, setLoadingUser] = useState(true);
+  // State to determine if useAuthRedirect has finished
+  const [checkingAuth, setCheckingAuth] = useState(true);
   useAuthRedirect(() => {
-    setLoadingUser(false);
+    setCheckingAuth(false);
   });
 
   // Fetch the study guides when the component mounts
@@ -223,7 +224,7 @@ const Dashboard = () => {
   };
 
   return (
-    !loadingUser && (
+    !checkingAuth && (
       <Container>
         <Navbar />
         {isLoading ? (
