@@ -13,6 +13,7 @@ import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import Button from "@/components/Button";
 import { colors } from "@/constants/colors";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
@@ -32,16 +33,10 @@ const Pricing = () => {
     router.push("/");
   }, [router]);
 
-  // Fetch user information
-  useEffect(() => {
-    if (!loadingUser && !currentUser) {
-      router.push("/login");
-    }
-    if (!loadingUser) {
-      setUserName(currentUser?.displayName);
-      setEmail(currentUser?.email);
-    }
-  }, [loadingUser, currentUser]);
+  useAuthRedirect(() => {
+    setUserName(currentUser?.displayName);
+    setEmail(currentUser?.email);
+  });
 
   // Direct user to checkout page
   const handleUpgradeClick = async () => {
