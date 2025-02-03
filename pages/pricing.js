@@ -13,7 +13,7 @@ import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import Button from "@/components/Button";
 import { colors } from "@/constants/colors";
-import useAuthRedirect from "@/hooks/useAuthRedirect";
+import withAuth from "@/hoc/withAuth";
 
 const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
 const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
@@ -33,13 +33,8 @@ const Pricing = () => {
     router.push("/");
   }, [router]);
 
-  // State to determine if useAuthRedirect has finished
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  useAuthRedirect(() => {
-    setCheckingAuth(false);
-    setUserName(currentUser?.displayName);
-    setEmail(currentUser?.email);
-  });
+  // setUserName(currentUser?.displayName);
+  // setEmail(currentUser?.email);
 
   // Direct user to checkout page
   const handleUpgradeClick = async () => {
@@ -77,59 +72,57 @@ const Pricing = () => {
   };
 
   return (
-    !checkingAuth && (
-      <PageContainer>
-        <Navbar />
-        <PricingSection>
-          <Title>Pricing Page</Title>
+    <PageContainer>
+      <Navbar />
+      <PricingSection>
+        <Title>Pricing Page</Title>
+        <HorizontalContainer>
+          <FontAwesomeIcon icon={faUserCircle} size="2x" />
+          <BoldText>{userName}</BoldText>
+          <Text>({email})</Text>
+        </HorizontalContainer>
+        <HorizontalContainer>
+          {" "}
+          <BoldText>Subscription:</BoldText>
+          <Text>{hasSpark ? "Spark Plan" : "None"}</Text>
+        </HorizontalContainer>
+        {!hasSpark && (
           <HorizontalContainer>
-            <FontAwesomeIcon icon={faUserCircle} size="2x" />
-            <BoldText>{userName}</BoldText>
-            <Text>({email})</Text>
+            <BoldText>Promo Code:</BoldText>
+            <PromoCodeInput
+              id="promoCodeInput"
+              placeholder="Enter promo code"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              disabled={hasPromoCode || hasFreeSparkCode}
+            />
+            {!hasPromoCode && !hasFreeSparkCode && (
+              <Button onClick={checkPromoCode}>Apply</Button>
+            )}
           </HorizontalContainer>
-          <HorizontalContainer>
-            {" "}
-            <BoldText>Subscription:</BoldText>
-            <Text>{hasSpark ? "Spark Plan" : "None"}</Text>
-          </HorizontalContainer>
-          {!hasSpark && (
-            <HorizontalContainer>
-              <BoldText>Promo Code:</BoldText>
-              <PromoCodeInput
-                id="promoCodeInput"
-                placeholder="Enter promo code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                disabled={hasPromoCode || hasFreeSparkCode}
-              />
-              {!hasPromoCode && !hasFreeSparkCode && (
-                <Button onClick={checkPromoCode}>Apply</Button>
-              )}
-            </HorizontalContainer>
-          )}
-          {!hasSpark && !redirectLoading && (
-            <>
-              <Button onClick={handleUpgradeClick}>Upgrade</Button>
-              <PriceText>
-                {hasFreeSparkCode
-                  ? "(FREE!)"
-                  : hasPromoCode
-                  ? "(for $1.00/month)"
-                  : "(for $9.99/month)"}
-              </PriceText>
-            </>
-          )}
-          {hasSpark && !redirectLoading && (
-            <Button onClick={handleManageClick}>Manage Subscription</Button>
-          )}
-          {redirectLoading && <Dots size={32} color="black" />}
-        </PricingSection>
-      </PageContainer>
-    )
+        )}
+        {!hasSpark && !redirectLoading && (
+          <>
+            <Button onClick={handleUpgradeClick}>Upgrade</Button>
+            <PriceText>
+              {hasFreeSparkCode
+                ? "(FREE!)"
+                : hasPromoCode
+                ? "(for $1.00/month)"
+                : "(for $9.99/month)"}
+            </PriceText>
+          </>
+        )}
+        {hasSpark && !redirectLoading && (
+          <Button onClick={handleManageClick}>Manage Subscription</Button>
+        )}
+        {redirectLoading && <Dots size={32} color="black" />}
+      </PricingSection>
+    </PageContainer>
   );
 };
 
-export default Pricing;
+export default withAuth(Pricing);
 
 const PageContainer = styled.div`
   display: flex;
