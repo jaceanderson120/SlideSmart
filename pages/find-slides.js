@@ -9,18 +9,12 @@ import StudyGuideList from "@/components/StudyGuideList";
 import Footer from "@/components/Footer";
 import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
-import useAuthRedirect from "@/hooks/useAuthRedirect";
+import withAuth from "@/hoc/withAuth";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [inputText, setInputText] = useState("");
   const [studyGuides, setStudyGuides] = useState([]); // store fetched guides
-
-  // State to determine if useAuthRedirect has finished
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  useAuthRedirect(() => {
-    setCheckingAuth(false);
-  });
 
   // Update local input state on every keystroke
   const handleInputChange = (e) => {
@@ -50,35 +44,33 @@ const FindSlides = () => {
   };
 
   return (
-    !checkingAuth && (
-      <>
-        <PageContainer>
-          <Navbar />
-          <Section>
-            <TopContainer>
-              <PageTitle>Search for Public Slides</PageTitle>
-            </TopContainer>
-            <SearchContainer>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                placeholder="Enter a keyword..."
-                value={inputText}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-              />
-              <Button onClick={handleSearch}>Search</Button>
-            </SearchContainer>
-            {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
-          </Section>
-        </PageContainer>
-        <Footer />
-      </>
-    )
+    <>
+      <PageContainer>
+        <Navbar />
+        <Section>
+          <TopContainer>
+            <PageTitle>Search for Public Slides</PageTitle>
+          </TopContainer>
+          <SearchContainer>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Enter a keyword..."
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+            <Button onClick={handleSearch}>Search</Button>
+          </SearchContainer>
+          {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+        </Section>
+      </PageContainer>
+      <Footer />
+    </>
   );
 };
 
-export default FindSlides;
+export default withAuth(FindSlides);
 
 const PageContainer = styled.div`
   display: flex;
