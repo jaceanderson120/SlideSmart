@@ -21,11 +21,8 @@ import { colors } from "@/constants/colors";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Footer from "@/components/Footer";
 
-const PROMO_CODE = process.env.NEXT_PUBLIC_PROMO_CODE;
-const FREE_SPARK = process.env.NEXT_PUBLIC_FREE_SPARK;
-
 const Pricing = () => {
-  const { currentUser, hasSpark } = useStateContext();
+  const { hasSpark } = useStateContext();
   const [redirectLoading, setRedirectLoading] = useState(false);
   const router = useRouter();
 
