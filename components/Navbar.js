@@ -83,36 +83,40 @@ function Navbar() {
           <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
           SlideSmart
         </LogoContainer>
-        <Button
-          onClick={() => router.push("/find-slides")}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={colors.black}
-          hoverTextColor={colors.primary}
-        >
-          Find Slides
-        </Button>
-        <Button
-          onClick={() => router.push("/contact")}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={colors.black}
-          hoverTextColor={colors.primary}
-        >
-          Contact Us
-        </Button>
-        <Button
-          onClick={() => router.push("/pricing")}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={colors.black}
-          hoverTextColor={colors.primary}
-        >
-          Pricing
-        </Button>
+        {isLoggedIn && (
+          <>
+            <Button
+              onClick={() => router.push("/find-slides")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Find Slides
+            </Button>
+            <Button
+              onClick={() => router.push("/contact")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Contact Us
+            </Button>
+            <Button
+              onClick={() => router.push("/pricing")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Pricing
+            </Button>
+          </>
+        )}
         <Button
           onClick={() => router.push("/how-it-works")}
           padding="8px"
@@ -170,7 +174,7 @@ const NavbarSection = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px;
+  padding: 6px 12px;
   border-bottom: 1px solid ${colors.gray};
   background-color: ${colors.lightGray};
   z-index: 100;
@@ -191,7 +195,6 @@ const RightButtonSection = styled.div`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 16px;
   gap: 8px;
   font-size: ${fontSize.subheading};
   font-weight: bold;
