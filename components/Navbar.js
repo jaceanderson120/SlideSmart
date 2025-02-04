@@ -176,7 +176,7 @@ const NavbarSection = styled.div`
   width: 100%;
   padding: 6px 12px;
   border-bottom: 1px solid ${colors.gray};
-  background-color: ${colors.lightGray};
+  background-color: ${colors.white};
   z-index: 100;
 `;
 

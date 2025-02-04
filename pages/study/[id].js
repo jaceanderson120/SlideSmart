@@ -32,12 +32,13 @@ import {
   faArrowRight,
   faArrowLeft,
   faMagicWandSparkles,
+  faTrashCan,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
   faMessage,
 } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan, faPlus, faGrip } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -46,7 +47,6 @@ import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AddSectionsContainer from "@/components/AddSectionsContainer";
 import AddTopicDialog from "@/components/AddTopicDialog";
 import { Dots } from "react-activity";
@@ -57,6 +57,7 @@ import {
   generateExplanation,
   generateQuestionAnswer,
 } from "@/utils/generateStudyGuideSections";
+import StudyGuideTopics from "@/components/StudyGuideTopics";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -647,57 +648,23 @@ const Study = () => {
           </MenuTriggerArea>
         </HeaderSection>
         <OutputSection>
-          {isTopicsShown && (
-            <DragDropContext onDragEnd={editMode ? handleDragEnd : () => {}}>
-              <Droppable droppableId="topics">
-                {(provided) => (
-                  <ContentContainer
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {Object.keys(studyGuide.extractedData).map((key, index) => (
-                      <Draggable
-                        key={key}
-                        draggableId={key}
-                        index={index}
-                        isDragDisabled={!editMode}
-                      >
-                        {(provided) => (
-                          <TopicName
-                            href={`#${key}`}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={activeTopic === key ? "active" : ""}
-                          >
-                            {key}
-                            {editMode && <FontAwesomeIcon icon={faGrip} />}
-                          </TopicName>
-                        )}
-                      </Draggable>
-                    ))}
-                    {/* Placeholder to maintain the space that the dragged item would occupy */}
-                    {provided.placeholder}
-                    {editMode && (
-                      <Button
-                        backgroundColor="transparent"
-                        textColor={colors.black}
-                        hoverBackgroundColor={colors.primary70}
-                        padding="8px"
-                        marginTop="16px"
-                        fontSize={fontSize.label}
-                        onClick={() => {
-                          setIsAddTopicDialogOpen(true);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPlus} /> Add Topic
-                      </Button>
-                    )}
-                  </ContentContainer>
-                )}
-              </Droppable>
-            </DragDropContext>
+          {!isTopicsShown && !isChatbotShown && (
+            <IconContainer>
+              <StyledFontAwesomeIcon
+                icon={faChevronRight}
+                onClick={handleTopicToggle}
+              />
+            </IconContainer>
           )}
+          <StudyGuideTopics
+            topics={Object.keys(studyGuide.extractedData)}
+            editMode={editMode}
+            onDragEnd={handleDragEnd}
+            setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
+            activeTopic={activeTopic}
+            isTopicsShown={isTopicsShown}
+            flex={isTopicsShown ? "0.75" : "0"}
+          />
           <InfoContainer id="infoContainer">
             {studyGuide.extractedData &&
               Object.keys(studyGuide.extractedData).map((key) => (
@@ -1259,20 +1226,6 @@ const OutputSection = styled.div`
   overflow: hidden;
 `;
 
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 0.75;
-  background-color: transparent;
-  border-radius: 10px;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: left;
-  gap: 16px;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
-
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -1359,34 +1312,10 @@ const TopicSubContainer = styled.div`
   gap: 16px;
 `;
 
-const TopicName = styled.a`
+const IconContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 95%;
-  padding: 16px;
-  margin-right: 16px;
-  margin-left: 16px;
-  font-size: ${fontSize.label};
-  text-decoration: none;
-  color: inherit;
-  background-color: ${colors.primary33};
-  transition: background-color 0.3s;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  // wrap text
-  white-space: normal;
-  word-wrap: break-word;
-
-  &:hover {
-    background-color: ${colors.primary70};
-  }
-
-  &.active {
-    background-color: ${colors.primary70};
-    font-weight: bold;
-    transition: font-weight 0.3s ease, color 0.3s ease;
-  }
+  justify-content: center;
 `;
 
 const NoVideoText = styled.p`
