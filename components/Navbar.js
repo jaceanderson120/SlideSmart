@@ -71,12 +71,15 @@ function Navbar() {
         <Link href="/">SlideSmart</Link>
       </NavbarSlideSmart>
       <NavbarAboutLinks>
-        {isLoggedIn && <Link href="/dashboard">Dashboard</Link>}
-        {isLoggedIn && <Link href="/find-slides">Find Slides</Link>}
-        {isLoggedIn && <Link href="/contact">Contact Us</Link>}
+        {isLoggedIn && (
+          <>
+            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/find-slides">Find Slides</Link>
+            <Link href="/contact">Contact Us</Link>
+            <Link href="/pricing">Pricing</Link>
+          </>
+        )}
         <Link href="/how-it-works">How it Works</Link>
-        {/* <Link href="/">Pricing</Link>
-        <Link href="/">About</Link> */}
       </NavbarAboutLinks>
 
       <NavbarLoginLinks>
