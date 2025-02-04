@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
+import Head from "next/head";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 const Signup = () => {
@@ -79,6 +80,14 @@ const Signup = () => {
 
   return (
     <>
+      <Head>
+        <title>SlideSmart - Register</title>
+        <meta
+          name="description"
+          content="Register to SlideSmart to access your study guides and resources."
+        />
+        <link rel="canonical" href="https://www.slidesmartai.com/signup" />
+      </Head>
       <PageContainer>
         <Navbar />
         <Section>

@@ -2,10 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import { colors } from "@/constants/colors";
+import Head from "next/head";
 
 const TOS = () => {
   return (
     <>
+      <Head>
+        <title>SlideSmart - TOS and Privacy Policy</title>
+        <meta
+          name="description"
+          content="SlideSmart's Terms of Service and Privacy Policy"
+        />
+        <link rel="canonical" href="https://www.slidesmartai.com/tos" />
+      </Head>
       <Container>
         <Title>Terms of Service</Title>
         <Text>
