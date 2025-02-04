@@ -12,6 +12,7 @@ import showFile from "@/images/showFile.png";
 import DecorationCircle from "@/components/DecorationCircle";
 import { colors } from "@/constants/colors";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 const HowItWorks = () => {
   const [decorCircleDiameter, setDecorCircleDiameter] = useState(50);
@@ -32,129 +33,142 @@ const HowItWorks = () => {
   }, []);
 
   return (
-    <PageContainer>
-      <Navbar />
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          left="-5%"
-          top="-15%"
+    <>
+      <Head>
+        <title>SlideSmart - How It Works</title>
+        <meta
+          name="description"
+          content="Learn how to create and navigate your study guides on SlideSmart!"
         />
-        <LeftPictureContainer>
-          <PictureFrame src={register} alt="Register or Login" align="left" />
-        </LeftPictureContainer>
-        <RightCircleContainer>
-          <InfoCircle
-            title="Get Started by Registering or Logging In"
-            subtitle="Click the 'Get Started' button on the home page, or use the buttons in the top right corner to register or login."
-            align="end"
-          />
-        </RightCircleContainer>
-      </StepContainer>
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          right="-5%"
-          top="-15%"
+        <link
+          rel="canonical"
+          href="https://www.slidesmartai.com/how-it-works"
         />
-        <LeftCircleContainer>
-          <InfoCircle
-            title="Access Your Dashboard to Create a Study Guide"
-            subtitle={`On your dashboard, click the "Create New" button and upload a PPTX or PDF file to create a study guide. All your study guides will be saved here!`}
-            align="start"
+      </Head>
+      <PageContainer>
+        <Navbar />
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            left="-5%"
+            top="-15%"
           />
-        </LeftCircleContainer>
-        <RightPictureContainer>
-          <PictureFrame src={dashboard} alt="Dashboard" align="right" />
-        </RightPictureContainer>
-      </StepContainer>
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          left="-5%"
-          top="-15%"
-        />
-        <LeftPictureContainer>
-          <PictureFrame src={studyGuide} alt="Study Guide" align="left" />
-        </LeftPictureContainer>
-        <RightCircleContainer>
-          <InfoCircle
-            title="Navigate Your Study Guide"
-            subtitle="Browse topics, learn from highly-rated videos, access real world-examples, and practice questions!"
-            align="end"
+          <LeftPictureContainer>
+            <PictureFrame src={register} alt="Register or Login" align="left" />
+          </LeftPictureContainer>
+          <RightCircleContainer>
+            <InfoCircle
+              title="Get Started by Registering or Logging In"
+              subtitle="Click the 'Get Started' button on the home page, or use the buttons in the top right corner to register or login."
+              align="end"
+            />
+          </RightCircleContainer>
+        </StepContainer>
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            right="-5%"
+            top="-15%"
           />
-        </RightCircleContainer>
-      </StepContainer>
+          <LeftCircleContainer>
+            <InfoCircle
+              title="Access Your Dashboard to Create a Study Guide"
+              subtitle={`On your dashboard, click the "Create New" button and upload a PPTX or PDF file to create a study guide. All your study guides will be saved here!`}
+              align="start"
+            />
+          </LeftCircleContainer>
+          <RightPictureContainer>
+            <PictureFrame src={dashboard} alt="Dashboard" align="right" />
+          </RightPictureContainer>
+        </StepContainer>
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            left="-5%"
+            top="-15%"
+          />
+          <LeftPictureContainer>
+            <PictureFrame src={studyGuide} alt="Study Guide" align="left" />
+          </LeftPictureContainer>
+          <RightCircleContainer>
+            <InfoCircle
+              title="Navigate Your Study Guide"
+              subtitle="Browse topics, learn from highly-rated videos, access real world-examples, and practice questions!"
+              align="end"
+            />
+          </RightCircleContainer>
+        </StepContainer>
 
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          right="-5%"
-          top="-15%"
-        />
-        <LeftCircleContainer>
-          <InfoCircle
-            title="Edit Your Study Guide"
-            subtitle="Fully customize your study guide with Edit Mode - Reorder/create/remove topics, change the title, edit any section, regenerate videos, and more!"
-            align="start"
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            right="-5%"
+            top="-15%"
           />
-        </LeftCircleContainer>
-        <RightPictureContainer>
-          <PictureFrame src={editMode} alt="Edit Mode" align="right" />
-        </RightPictureContainer>
-      </StepContainer>
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          left="-5%"
-          top="-15%"
-        />
-        <LeftPictureContainer>
-          <PictureFrame src={showFile} alt="Show File" align="left" />
-        </LeftPictureContainer>
-        <RightCircleContainer>
-          <InfoCircle
-            title="View Slides and Guide Side-by-Side"
-            subtitle={`Click on the three dots in the upper right corner and choose "Show File" to view your slides and study guide side-by-side!`}
-            align="end"
+          <LeftCircleContainer>
+            <InfoCircle
+              title="Edit Your Study Guide"
+              subtitle="Fully customize your study guide with Edit Mode - Reorder/create/remove topics, change the title, edit any section, regenerate videos, and more!"
+              align="start"
+            />
+          </LeftCircleContainer>
+          <RightPictureContainer>
+            <PictureFrame src={editMode} alt="Edit Mode" align="right" />
+          </RightPictureContainer>
+        </StepContainer>
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            left="-5%"
+            top="-15%"
           />
-        </RightCircleContainer>
-      </StepContainer>
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          right="-5%"
-          top="-15%"
-        />
-        <LeftCircleContainer>
-          <InfoCircle
-            title="Chat with Sola, our GPT-4o AI Assistant"
-            subtitle="Click the chat icon on the top right of your study guide to ask Sola any questions you have! Also, if you upload an image to Sola, she can answer questions about it!"
-            align="start"
+          <LeftPictureContainer>
+            <PictureFrame src={showFile} alt="Show File" align="left" />
+          </LeftPictureContainer>
+          <RightCircleContainer>
+            <InfoCircle
+              title="View Slides and Guide Side-by-Side"
+              subtitle={`Click on the three dots in the upper right corner and choose "Show File" to view your slides and study guide side-by-side!`}
+              align="end"
+            />
+          </RightCircleContainer>
+        </StepContainer>
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            right="-5%"
+            top="-15%"
           />
-        </LeftCircleContainer>
-        <RightPictureContainer>
-          <PictureFrame src={sola} alt="Sola" align="right" />
-        </RightPictureContainer>
-      </StepContainer>
-      <StepContainer>
-        <DecorationCircle
-          diameter={decorCircleDiameter}
-          left="-5%"
-          top="-15%"
-        />
-        <LeftPictureContainer>
-          <PictureFrame src={share} alt="Share" align="left" />
-        </LeftPictureContainer>
-        <RightCircleContainer>
-          <InfoCircle
-            title="Share Your Study Guide with Friends"
-            subtitle="Click the share button in the upper right corner, enter your friend's email, and they will be able to access your study guide from their dashboard!"
-            align="end"
+          <LeftCircleContainer>
+            <InfoCircle
+              title="Chat with Sola, our GPT-4o AI Assistant"
+              subtitle="Click the chat icon on the top right of your study guide to ask Sola any questions you have! Also, if you upload an image to Sola, she can answer questions about it!"
+              align="start"
+            />
+          </LeftCircleContainer>
+          <RightPictureContainer>
+            <PictureFrame src={sola} alt="Sola" align="right" />
+          </RightPictureContainer>
+        </StepContainer>
+        <StepContainer>
+          <DecorationCircle
+            diameter={decorCircleDiameter}
+            left="-5%"
+            top="-15%"
           />
-        </RightCircleContainer>
-      </StepContainer>
-    </PageContainer>
+          <LeftPictureContainer>
+            <PictureFrame src={share} alt="Share" align="left" />
+          </LeftPictureContainer>
+          <RightCircleContainer>
+            <InfoCircle
+              title="Share Your Study Guide with Friends"
+              subtitle="Click the share button in the upper right corner, enter your friend's email, and they will be able to access your study guide from their dashboard!"
+              align="end"
+            />
+          </RightCircleContainer>
+        </StepContainer>
+      </PageContainer>
+    </>
   );
 };
 

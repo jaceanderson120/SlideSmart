@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
+import Head from "next/head";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -50,31 +51,41 @@ const FindSlides = () => {
   };
 
   return (
-    !checkingAuth && (
-      <>
-        <PageContainer>
-          <Navbar />
-          <Section>
-            <TopContainer>
-              <PageTitle>Search for Public Slides</PageTitle>
-            </TopContainer>
-            <SearchContainer>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                placeholder="Enter a keyword..."
-                value={inputText}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-              />
-              <Button onClick={handleSearch}>Search</Button>
-            </SearchContainer>
-            {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
-          </Section>
-        </PageContainer>
-        <Footer />
-      </>
-    )
+    <>
+      <Head>
+        <title>SlideSmart - Find Public Slides</title>
+        <meta
+          name="description"
+          content="Search for public study guides on SlideSmart."
+        />
+        <link rel="canonical" href="https://www.slidesmartai.com/find-slides" />
+      </Head>
+      {!checkingAuth && (
+        <>
+          <PageContainer>
+            <Navbar />
+            <Section>
+              <TopContainer>
+                <PageTitle>Search for Public Slides</PageTitle>
+              </TopContainer>
+              <SearchContainer>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  placeholder="Enter a keyword..."
+                  value={inputText}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                />
+                <Button onClick={handleSearch}>Search</Button>
+              </SearchContainer>
+              {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+            </Section>
+          </PageContainer>
+          <Footer />
+        </>
+      )}
+    </>
   );
 };
 

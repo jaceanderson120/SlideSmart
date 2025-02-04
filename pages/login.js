@@ -30,6 +30,7 @@ import CredentialsForm from "@/components/CredentialsForm";
 import GoogleButton from "@/components/GoogleButton";
 import OrLine from "@/components/OrLine";
 import Agreement from "@/components/Agreement";
+import Head from "next/head";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -56,6 +57,14 @@ export default function Login() {
 
   return (
     <>
+      <Head>
+        <title>SlideSmart - Login</title>
+        <meta
+          name="description"
+          content="Login to SlideSmart to access your study guides and resources."
+        />
+        <link rel="canonical" href="https://www.slidesmartai.com/login" />
+      </Head>
       <PageContainer>
         <Navbar />
         <Section>
