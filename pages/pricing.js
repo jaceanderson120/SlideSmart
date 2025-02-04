@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"; // must be from next/navigation not
 import { useStateContext } from "@/context/StateContext";
 import { useState } from "react";
 import { fontSize } from "@/constants/fontSize";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
@@ -48,17 +48,19 @@ const Pricing = () => {
   };
 
   const basicPlanDesc = [
-    "Create 3 Study Guides per Month",
-    "Edit Mode",
-    "Share Study Guides with Friends",
+    { text: "Unlimited Study Guides", icon: faCheck },
+    { text: "Edit + Share Study Guides", icon: faCheck },
+    { text: "No Access to Sola: Our GPT-4o Powered Tutor", icon: faX },
+    { text: "No Auto-Generation Tools", icon: faX },
+    { text: "No Public Study Guide Saves", icon: faX },
   ];
 
   const sparkPlanDesc = [
-    "Basic Plan Features",
-    "Unlimited Study Guides",
+    "All Basic Plan Features",
     "Unlimited Access to Sola: Our GPT-4o Powered Tutor",
-    "Edit Mode with Auto-Generation Tools",
+    "Edit Mode with Unlimited Access to our Auto-Generation Tools",
     "Unlimited Public Study Guide Saves",
+    "Unlimited YouTube Video Generation",
   ];
 
   return (
@@ -90,14 +92,16 @@ const Pricing = () => {
                 )}
                 <PricingCardLabel>Included with Basic:</PricingCardLabel>
                 <Underline />
-                {basicPlanDesc.map((desc, index) => (
+                {basicPlanDesc.map((item, index) => (
                   <PricingCardDescription key={index}>
                     <FontAwesomeIcon
-                      icon={faCheck}
-                      color={colors.primary}
+                      icon={item.icon}
+                      color={
+                        item.icon === faX ? colors.primary70 : colors.primary
+                      }
                       size="2x"
                     />
-                    {desc}
+                    {item.text}
                   </PricingCardDescription>
                 ))}
               </PricingCard>
@@ -156,14 +160,12 @@ export default Pricing;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
 `;
 
 const PricingContainer = styled.div`
   width: 100%;
-  height: 100%;
+  flex-grow: 1;
   background: linear-gradient(
     to bottom,
     ${colors.primary70},
@@ -174,9 +176,7 @@ const PricingContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  padding: 32px;
-  overflow: scroll;
-  gap: 48px;
+  overflow-x: scroll;
 `;
 
 const TopSection = styled.div`
@@ -185,6 +185,8 @@ const TopSection = styled.div`
   align-items: center;
   gap: 16px;
   width: 100%;
+  margin-bottom: 16px;
+  padding: 32px;
 `;
 
 const BottomSection = styled.div`
@@ -193,6 +195,7 @@ const BottomSection = styled.div`
   align-items: stretch;
   width: 100%;
   gap: 48px;
+  padding: 32px;
 `;
 
 const PageTitle = styled.p`
@@ -266,7 +269,7 @@ const PricingCardDescription = styled.div`
   align-items: center;
   font-size: ${fontSize.default};
   color: ${colors.gray};
-  gap: 8px;
+  gap: 16px;
   text-align: left;
   line-height: 1.3;
   margin-bottom: 16px;
