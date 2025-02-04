@@ -509,6 +509,12 @@ const Study = () => {
 
   // Handle user saving the study guide
   const saveStudyGuide = async () => {
+    if (!hasSpark) {
+      toast.error(
+        "You need to upgrade to the Spark Plan to save this study guide."
+      );
+      return;
+    }
     let studyGuideClone = {
       fileName: studyGuide.fileName,
       extractedData: JSON.stringify(studyGuide.extractedData),
