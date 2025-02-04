@@ -21,7 +21,7 @@ const Chatbot = (props) => {
           {
             text: hasSpark
               ? "Hello! How can I help you today?"
-              : "Hi, I'm Professor Sola, a chatbot powered by the powerful GPT-4o model, ready to answer any questions! To interact with me, you must purchase the Spark Plan.",
+              : "Hi, I'm Professor Sola, a chatbot powered by the powerful GPT-4o model, ready to answer any questions and analyze any images! To interact with me, you must purchase the Spark Plan.",
             sender: "bot",
           },
         ];
@@ -55,6 +55,10 @@ const Chatbot = (props) => {
   }, [messages]);
 
   const handleSend = async () => {
+    if (!hasSpark) {
+      toast.error("Upgrade to Spark to chat with me!");
+      return;
+    }
     if (input.trim() || uploadedImage) {
       setLoadingResponse(true);
       let newMessages;
@@ -186,6 +190,10 @@ const Chatbot = (props) => {
         <StyledFontAwesomeIcon
           icon={uploadedImage ? faX : faImage}
           onClick={() => {
+            if (!hasSpark) {
+              toast.error("Upgrade to Spark to send images!");
+              return;
+            }
             if (!uploadedImage) {
               fileInputRef.current.click();
             } else {

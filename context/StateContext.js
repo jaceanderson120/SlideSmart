@@ -29,8 +29,7 @@ export const StateContext = ({ children }) => {
       const newSparkStatus = auth.currentUser
         ? await getSparkStatus(app)
         : false;
-      // setHasSpark(newSparkStatus);
-      setHasSpark(true);
+      setHasSpark(newSparkStatus);
     };
 
     checkSpark();

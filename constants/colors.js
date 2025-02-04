@@ -4,6 +4,6 @@ export const colors = {
   primary33: "#f04a3733",
   black: "#000000",
   white: "#ffffff",
-  lightGray: "#f6f4f3",
+  lightGray: "#fff5f6",
   gray: "#5c5c5c",
 };
