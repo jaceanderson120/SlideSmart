@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
@@ -11,6 +10,15 @@ import CustomMenu from "./CustomMenu";
 import UserIcon from "./UserIcon";
 import { useState, useEffect } from "react";
 import { colors } from "@/constants/colors";
+import Button from "./Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// The following import prevents a Font Awesome icon server-side rendering bug,
+// where the icons flash from a very large icon down to a properly sized one:
+import "@fortawesome/fontawesome-svg-core/styles.css";
+// Prevent fontawesome from adding its CSS since we did it manually above:
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false; /* eslint-disable import/first */
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
@@ -20,6 +28,10 @@ function Navbar() {
   const handleLogout = () => {
     signOut(auth);
     router.push("/login");
+  };
+
+  const handleDashboardClick = () => {
+    router.push("/dashboard");
   };
 
   const handleUpgradeManageClick = () => {
@@ -40,10 +52,10 @@ function Navbar() {
         </MenuTextContainer>
       </HorizontalContainer>
     </MenuItemContainer>,
-    // {
-    //   name: hasSpark ? "Manage Subscription" : "Upgrade",
-    //   onClick: handleUpgradeManageClick,
-    // },
+    {
+      name: hasSpark ? "Manage Subscription" : "Upgrade",
+      onClick: handleUpgradeManageClick,
+    },
     { name: "Logout", onClick: handleLogout },
   ];
 
@@ -66,130 +78,135 @@ function Navbar() {
 
   return (
     <NavbarSection>
-      <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-      <NavbarSlideSmart>
-        <Link href="/">SlideSmart</Link>
-      </NavbarSlideSmart>
-      <NavbarAboutLinks>
-        {isLoggedIn && (
-          <>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/find-slides">Find Slides</Link>
-            <Link href="/contact">Contact Us</Link>
-            <Link href="/pricing">Pricing</Link>
-          </>
-        )}
-        <Link href="/how-it-works">How it Works</Link>
-      </NavbarAboutLinks>
-
-      <NavbarLoginLinks>
+      <LeftButtonSection>
+        <LogoContainer onClick={() => router.push("/")}>
+          <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
+          SlideSmart
+        </LogoContainer>
+        <Button
+          onClick={() => router.push("/find-slides")}
+          padding="8px"
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          textColor={colors.black}
+          hoverTextColor={colors.primary}
+        >
+          Find Slides
+        </Button>
+        <Button
+          onClick={() => router.push("/contact")}
+          padding="8px"
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          textColor={colors.black}
+          hoverTextColor={colors.primary}
+        >
+          Contact Us
+        </Button>
+        <Button
+          onClick={() => router.push("/pricing")}
+          padding="8px"
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          textColor={colors.black}
+          hoverTextColor={colors.primary}
+        >
+          Pricing
+        </Button>
+        <Button
+          onClick={() => router.push("/how-it-works")}
+          padding="8px"
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          textColor={colors.black}
+          hoverTextColor={colors.primary}
+        >
+          How it Works
+        </Button>
+      </LeftButtonSection>
+      <RightButtonSection>
         {isLoggedIn ? (
-          <CustomMenu
-            triggerElement={<UserIcon initials={initials} size={48} />}
-            menuItems={menuItems}
-          />
+          <>
+            {router.pathname !== "/dashboard" && (
+              <Button onClick={handleDashboardClick} padding="8px" bold>
+                Dashboard
+              </Button>
+            )}
+            <CustomMenu
+              triggerElement={
+                <UserIcon
+                  initials={initials}
+                  backgroundColor={colors.primary}
+                  hoverColor={colors.black}
+                />
+              }
+              menuItems={menuItems}
+            />
+          </>
         ) : (
           <>
-            <NavbarLoginStyle>
-              <Link href="/login">Login</Link>
-            </NavbarLoginStyle>
-            <NavbarRegisterStyle>
-              <Link href="/signup">Register</Link>
-            </NavbarRegisterStyle>
+            <Button
+              onClick={() => router.push("/login")}
+              bold
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Login
+            </Button>
+            <Button onClick={() => router.push("/signup")} bold padding="8px">
+              Get Started <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
           </>
         )}
-      </NavbarLoginLinks>
+      </RightButtonSection>
     </NavbarSection>
   );
 }
 
-const NavbarAboutLinks = styled.div`
-  margin-left: 50px;
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.3s;
-    font-size: ${fontSize.label};
-    font-weight: bold;
-  }
-
-  a:hover {
-    color: ${colors.primary};
-  }
-`;
-
-const NavbarLoginStyle = styled.div`
-  margin-left: 16px;
-  padding: 6px;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.3s;
-    font-size: ${fontSize.default};
-    font-weight: bold;
-  }
-
-  a:hover {
-    color: ${colors.primary};
-  }
-`;
-
-const NavbarRegisterStyle = styled.div`
-  margin-left: 16px;
-  padding: 6px;
-
-  a {
-    text-decoration: none;
-    color: ${colors.white};
-    transition: color 0.3s;
-    font-size: ${fontSize.default};
-    font-weight: bold;
-    border-radius: 8px;
-    background-color: ${colors.primary};
-    padding: 6px;
-    border: 2px solid ${colors.primary};
-  }
-
-  a:hover {
-    color: black;
-  }
-`;
-
-const NavbarLoginLinks = styled.div`
-  float: right;
-  margin-left: auto;
-  margin-right: 16px;
-  padding: 6px;
-  display: flex;
-  font-size: ${fontSize.default};
-  color: ${colors.black};
-  font-weight: bold;
-`;
-
-const NavbarSlideSmart = styled.div`
-  margin-left: 16px;
-
-  a {
-    text-decoration: none;
-    font-size: ${fontSize.heading};
-    color: ${colors.primary};
-    font-weight: bold;
-  }
-`;
-
 const NavbarSection = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
-  padding: 16px;
-  border-bottom: 1px solid gray;
+  padding: 8px;
+  border-bottom: 1px solid ${colors.gray};
   background-color: ${colors.lightGray};
   z-index: 100;
+`;
+
+const LeftButtonSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const RightButtonSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  font-size: ${fontSize.subheading};
+  font-weight: bold;
+  color: ${colors.primary};
+
+  a {
+    text-decoration: none;
+    font-size: ${fontSize.subheading};
+    color: ${colors.primary};
+    font-weight: bold;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const MenuTextContainer = styled.div`

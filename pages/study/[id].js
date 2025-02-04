@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import styled, { css } from "styled-components";
 import Image from "next/image";
-import youtube from "@/images/youtube.png";
 import textbook from "@/images/textbook.png";
 import pencil from "@/images/pencil.png";
 import question from "@/images/question.png";
@@ -768,101 +767,6 @@ const Study = () => {
                       />
                     </TopicSubContainer>
                   )}
-                  {studyGuide.extractedData[key]["youtubeIds"] && (
-                    <TopicSubContainer>
-                      <ImageAndTitleContainer>
-                        <ImageAndTitle>
-                          <Image
-                            src={youtube}
-                            alt="YouTube Logo"
-                            width={48}
-                            height={48}
-                          />
-                          <strong style={{ fontWeight: "bold" }}>Video:</strong>
-                        </ImageAndTitle>
-                        <div>
-                          {editMode && (
-                            <>
-                              <StyledFontAwesomeIcon
-                                icon={faRotateLeft}
-                                onClick={() => {
-                                  setTopicForNewYoutubeVideo(key);
-                                  setIsNewYoutubeVideoDialogOpen(true);
-                                }}
-                                title="Find New Videos"
-                              />
-                              <StyledFontAwesomeIcon
-                                icon={faX}
-                                onClick={() => {
-                                  setTopicToDelete(key);
-                                  setSubSectionToDelete("youtubeIds");
-                                  setIsDeleteSubSectionDialogOpen(true);
-                                }}
-                                title="Delete Video"
-                              />
-                            </>
-                          )}
-                        </div>
-                      </ImageAndTitleContainer>
-                      {topicForNewYoutubeVideo === key &&
-                      findingNewYoutubeVideo ? (
-                        <Dots />
-                      ) : studyGuide.extractedData[key]["youtubeIds"] !==
-                        "None" ? (
-                        <VideoContainer>
-                          <iframe
-                            width="560"
-                            height="315"
-                            src={`https://www.youtube.com/embed/${
-                              studyGuide.extractedData[key]["youtubeIds"][
-                                isNaN(videoIndices[key]) ||
-                                videoIndices[key] >=
-                                  studyGuide.extractedData[key]["youtubeIds"]
-                                    .length
-                                  ? 1
-                                  : videoIndices[key]
-                              ]
-                            }`}
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          ></iframe>
-                          <SwitchVideoContainer>
-                            <StyledFontAwesomeIcon
-                              icon={faArrowLeft}
-                              onClick={() => {
-                                goToPreviousVideo(key);
-                              }}
-                              title="Previous Video"
-                            />
-                            <span>
-                              {isNaN(videoIndices[key])
-                                ? 1
-                                : videoIndices[key] + 1}{" "}
-                              of{" "}
-                              {
-                                studyGuide.extractedData[key]["youtubeIds"]
-                                  .length
-                              }
-                            </span>
-                            <StyledFontAwesomeIcon
-                              icon={faArrowRight}
-                              onClick={() => {
-                                goToNextVideo(key);
-                              }}
-                              title="Next Video"
-                            />
-                          </SwitchVideoContainer>
-                        </VideoContainer>
-                      ) : (
-                        <NoVideoText>
-                          No video available. Please fill in the topic
-                          explanation and then generate a video.
-                        </NoVideoText>
-                      )}
-                    </TopicSubContainer>
-                  )}
                   {(studyGuide.extractedData[key]["example"] ||
                     studyGuide.extractedData[key]["example"] === "") && (
                     <TopicSubContainer>
@@ -1010,6 +914,95 @@ const Study = () => {
                           value={studyGuide.extractedData[key]["answer"]}
                           editMode={editMode}
                         />
+                      )}
+                    </TopicSubContainer>
+                  )}
+                  {studyGuide.extractedData[key]["youtubeIds"] && (
+                    <TopicSubContainer>
+                      <ImageAndTitleContainer>
+                        <ImageAndTitle>
+                          <strong style={{ fontWeight: "bold" }}>Video:</strong>
+                        </ImageAndTitle>
+                        <div>
+                          {editMode && (
+                            <>
+                              <StyledFontAwesomeIcon
+                                icon={faRotateLeft}
+                                onClick={() => {
+                                  setTopicForNewYoutubeVideo(key);
+                                  setIsNewYoutubeVideoDialogOpen(true);
+                                }}
+                                title="Find New Videos"
+                              />
+                              <StyledFontAwesomeIcon
+                                icon={faX}
+                                onClick={() => {
+                                  setTopicToDelete(key);
+                                  setSubSectionToDelete("youtubeIds");
+                                  setIsDeleteSubSectionDialogOpen(true);
+                                }}
+                                title="Delete Video"
+                              />
+                            </>
+                          )}
+                        </div>
+                      </ImageAndTitleContainer>
+                      {topicForNewYoutubeVideo === key &&
+                      findingNewYoutubeVideo ? (
+                        <Dots />
+                      ) : studyGuide.extractedData[key]["youtubeIds"] !==
+                        "None" ? (
+                        <VideoContainer>
+                          <iframe
+                            width="560"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${
+                              studyGuide.extractedData[key]["youtubeIds"][
+                                isNaN(videoIndices[key]) ||
+                                videoIndices[key] >=
+                                  studyGuide.extractedData[key]["youtubeIds"]
+                                    .length
+                                  ? 1
+                                  : videoIndices[key]
+                              ]
+                            }`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                          <SwitchVideoContainer>
+                            <StyledFontAwesomeIcon
+                              icon={faArrowLeft}
+                              onClick={() => {
+                                goToPreviousVideo(key);
+                              }}
+                              title="Previous Video"
+                            />
+                            <span>
+                              {isNaN(videoIndices[key])
+                                ? 1
+                                : videoIndices[key] + 1}{" "}
+                              of{" "}
+                              {
+                                studyGuide.extractedData[key]["youtubeIds"]
+                                  .length
+                              }
+                            </span>
+                            <StyledFontAwesomeIcon
+                              icon={faArrowRight}
+                              onClick={() => {
+                                goToNextVideo(key);
+                              }}
+                              title="Next Video"
+                            />
+                          </SwitchVideoContainer>
+                        </VideoContainer>
+                      ) : (
+                        <NoVideoText>
+                          No video available. Please fill in the topic
+                          explanation and then generate a video.
+                        </NoVideoText>
                       )}
                     </TopicSubContainer>
                   )}
