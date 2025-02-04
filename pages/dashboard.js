@@ -187,13 +187,6 @@ const Dashboard = () => {
         fileInputRef.current.value = "";
       }
       return;
-    } else if (!hasSpark) {
-      clearInterval(interval);
-      setIsLoading(false);
-      toast.error(
-        `You need to have a Spark subscription to use this feature. To upgrade, navigate to your account icon and select "Upgrade".`
-      );
-      return;
     }
     const studyGuideId = await handleFileUpload(
       file,
