@@ -15,6 +15,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { colors } from "@/constants/colors";
+import Head from "next/head";
 
 export default function Home() {
   const router = useRouter();
@@ -30,6 +31,16 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>
+          SlideSmart - The AI Application Made to Make Slides Make Sense
+        </title>
+        <meta
+          name="description"
+          content="We turn your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
+        />
+        <link rel="canonical" href="https://www.slidesmartai.com/" />
+      </Head>
       <PageContainer>
         <Navbar />
         <Section>
