@@ -32,12 +32,12 @@ import {
   faArrowRight,
   faArrowLeft,
   faMagicWandSparkles,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
   faMessage,
 } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan, faPlus, faGrip } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/Chatbot";
 import AutoResizeTextArea from "@/components/AutoResizeTextArea";
@@ -46,7 +46,6 @@ import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AddSectionsContainer from "@/components/AddSectionsContainer";
 import AddTopicDialog from "@/components/AddTopicDialog";
 import { Dots } from "react-activity";
@@ -57,6 +56,7 @@ import {
   generateExplanation,
   generateQuestionAnswer,
 } from "@/utils/generateStudyGuideSections";
+import StudyGuideTopics from "@/components/StudyGuideTopics";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -648,55 +648,13 @@ const Study = () => {
         </HeaderSection>
         <OutputSection>
           {isTopicsShown && (
-            <DragDropContext onDragEnd={editMode ? handleDragEnd : () => {}}>
-              <Droppable droppableId="topics">
-                {(provided) => (
-                  <ContentContainer
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {Object.keys(studyGuide.extractedData).map((key, index) => (
-                      <Draggable
-                        key={key}
-                        draggableId={key}
-                        index={index}
-                        isDragDisabled={!editMode}
-                      >
-                        {(provided) => (
-                          <TopicName
-                            href={`#${key}`}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={activeTopic === key ? "active" : ""}
-                          >
-                            {key}
-                            {editMode && <FontAwesomeIcon icon={faGrip} />}
-                          </TopicName>
-                        )}
-                      </Draggable>
-                    ))}
-                    {/* Placeholder to maintain the space that the dragged item would occupy */}
-                    {provided.placeholder}
-                    {editMode && (
-                      <Button
-                        backgroundColor="transparent"
-                        textColor={colors.black}
-                        hoverBackgroundColor={colors.primary70}
-                        padding="8px"
-                        marginTop="16px"
-                        fontSize={fontSize.label}
-                        onClick={() => {
-                          setIsAddTopicDialogOpen(true);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPlus} /> Add Topic
-                      </Button>
-                    )}
-                  </ContentContainer>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <StudyGuideTopics
+              topics={Object.keys(studyGuide.extractedData)}
+              editMode={editMode}
+              onDragEnd={handleDragEnd}
+              setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
+              activeTopic={activeTopic}
+            />
           )}
           <InfoContainer id="infoContainer">
             {studyGuide.extractedData &&
