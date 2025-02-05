@@ -240,6 +240,7 @@ const handleFileUpload = async (
           : JSON.stringify([]),
         firebaseFileUrl: firebaseFileUrl,
         createdAt: new Date(),
+        lastModified: new Date(),
         createdBy: currentUser.uid,
         contributors: [currentUser.uid],
         editors: [currentUser.uid],
