@@ -571,6 +571,8 @@ const Study = () => {
               padding="0px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
             >
               <FontAwesomeIcon icon={faArrowLeft} size="lg" /> Back to Dashboard
             </Button>
@@ -1174,7 +1176,7 @@ const HeaderSection = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: ${colors.primary70};
+  background-color: ${colors.lightGray};
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   margin-bottom: 16px;
   padding-top: 4px;
@@ -1218,7 +1220,7 @@ const InfoContainer = styled.div`
   flex: 2.5;
   flex-direction: column;
   width: 100%;
-  gap: 16px;
+  gap: 32px;
   overflow: scroll;
   padding-right: 16px;
   padding-bottom: 16px;
@@ -1245,6 +1247,8 @@ const InfoSubContainer = styled.div`
   background-color: ${colors.white};
   border-radius: 12px;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+  border-left: 4px solid ${colors.primary33};
+  border-top: 4px solid ${colors.primary33};
 `;
 
 const TopicHeaderContainer = styled.div`

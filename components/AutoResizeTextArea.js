@@ -53,7 +53,6 @@ const Container = styled.div`
 
 const Label = styled.label`
   font-weight: bold;
-  margin-bottom: 4px;
 `;
 
 const TextArea = styled.textarea`
