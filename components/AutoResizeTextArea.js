@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import { colors } from "@/constants/colors";
 
-const AutoResizeTextArea = ({ value, onChange, editMode }) => {
+const AutoResizeTextArea = ({ value, onChange, editMode, label }) => {
   const textAreaRef = useRef(null);
 
   const adjustHeight = () => {
@@ -28,21 +28,34 @@ const AutoResizeTextArea = ({ value, onChange, editMode }) => {
   }, [textAreaRef.current]);
 
   return (
-    <TextArea
-      ref={textAreaRef}
-      value={value}
-      onChange={(e) => {
-        onChange(e.target.value); // Pass the value to the parent component onChange function
-      }}
-      disabled={!editMode}
-      $editMode={editMode} // Pass editMode to styled component
-    />
+    <Container>
+      <Label>{label}</Label>
+      <TextArea
+        ref={textAreaRef}
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value); // Pass the value to the parent component onChange function
+        }}
+        disabled={!editMode}
+        $editMode={editMode} // Pass editMode to styled component
+      />
+    </Container>
   );
 };
 
 export default AutoResizeTextArea;
 
-// Styled textarea with dynamic blinking border based on props
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const Label = styled.label`
+  font-weight: bold;
+  margin-bottom: 4px;
+`;
+
 const TextArea = styled.textarea`
   border: none;
   width: 100%;

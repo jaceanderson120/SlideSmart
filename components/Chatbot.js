@@ -260,7 +260,7 @@ const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
   color: ${colors.black};
   &:hover {
-    color: ${colors.primary};
+    color: ${colors.white};
     transition: color 0.3s;
   }
 `;
