@@ -46,6 +46,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         contributors: studyGuide.contributors,
         editors: studyGuide.editors,
         isPublic: studyGuide.isPublic,
+        gotFromPublic: studyGuide.gotFromPublic,
       });
 
       // Get the ID of the new document from the document reference
@@ -100,6 +101,7 @@ const getUserStudyGuides = async (user) => {
           contributors: data.contributors,
           editors: data.editors,
           isPublic: data.isPublic,
+          gotFromPublic: data.gotFromPublic,
         };
       });
 

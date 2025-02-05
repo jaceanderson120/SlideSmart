@@ -117,7 +117,7 @@ const Dashboard = () => {
       );
     } else if (filter === "public") {
       setFilteredStudyGuides(
-        studyGuides.filter((guide) => guide.gotFromPublic)
+        studyGuides.filter((guide) => guide.gotFromPublic == true)
       );
     }
   }, [filter, studyGuides, currentUser]);
