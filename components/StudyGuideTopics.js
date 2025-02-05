@@ -70,8 +70,8 @@ const Container = styled.div`
   display: flex;
   flex: ${(props) => (props.flex ? props.flex : "0")};
   flex-direction: column;
+  padding: 16px;
   background-color: transparent;
-  border-radius: 10px;
   justify-content: flex-start;
   align-items: center;
   text-align: left;
@@ -92,13 +92,10 @@ const TopicName = styled.a`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 95%;
   padding: 16px;
-  margin-right: 16px;
-  margin-left: 16px;
   font-size: ${fontSize.label};
   text-decoration: none;
-  color: inherit;
+  color: ${colors.black};
   background-color: ${colors.primary33};
   transition: background-color 0.3s;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
