@@ -20,8 +20,15 @@ const AutoResizeTextArea = ({ value, onChange, editMode, label }) => {
 
   // If width of the container changes, adjust the height
   useEffect(() => {
-    const resizeObserver = new ResizeObserver(adjustHeight);
-    resizeObserver.observe(textAreaRef.current);
+    const resizeObserver = new ResizeObserver(() => {
+      // Debounce the callback to avoid infinite loop
+      setTimeout(adjustHeight, 0);
+    });
+
+    if (textAreaRef.current) {
+      resizeObserver.observe(textAreaRef.current);
+    }
+
     return () => {
       resizeObserver.disconnect();
     };

@@ -93,7 +93,7 @@ export default FindSlides;
 
 const PageContainer = styled.div`
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   flex-direction: column;
   background-color: ${colors.lightGray};
 `;
