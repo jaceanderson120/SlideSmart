@@ -130,10 +130,12 @@ const Dashboard = () => {
       sorted.sort((a, b) => b.fileName.localeCompare(a.fileName));
     } else if (sorting === "Date Created") {
       sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    } else if (sorting === "Date Modified") {
-      sorted.sort(
-        (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
-      );
+    } else if (sorting === "Last Modified") {
+      sorted.sort((a, b) => {
+        const dateA = a.lastModified.toDate();
+        const dateB = b.lastModified.toDate();
+        return dateB - dateA;
+      });
     }
 
     setFilteredStudyGuides(sorted);
@@ -174,9 +176,9 @@ const Dashboard = () => {
     setSorting("Date Created");
   };
 
-  // Set sorting to "Date Modified"
+  // Set sorting to "Last Modified"
   const setSortDateModified = () => {
-    setSorting("Date Modified");
+    setSorting("Last Modified");
   };
 
   // Handle the view button click
@@ -344,14 +346,14 @@ const Dashboard = () => {
                           ? "Z-A"
                           : sorting === "Date Created"
                           ? "Date Created"
-                          : "Date Modified"}
+                          : "Last Modified"}
                       </MenuTrigger>
                     }
                     menuItems={[
                       { name: "A-Z", onClick: setSortAtoZ },
                       { name: "Z-A", onClick: setSortZtoA },
                       { name: "Date Created", onClick: setSortDateCreated },
-                      { name: "Date Modified", onClick: setSortDateModified },
+                      { name: "Last Modified", onClick: setSortDateModified },
                     ]}
                     arrow={true}
                   />

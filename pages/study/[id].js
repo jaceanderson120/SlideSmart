@@ -188,9 +188,7 @@ const Study = () => {
   const updateStudyGuideOnFirestore = () => {
     if (studyGuide) {
       // Ensure that the extracted data is a string before saving it to Firestore
-      let extractedData = studyGuide.extractedData;
-      extractedData["lastModified"] = new Date();
-      extractedData = JSON.stringify(extractedData);
+      const extractedData = JSON.stringify(studyGuide.extractedData);
       updateStudyGuideExtractedData(studyGuide.id, extractedData);
 
       // Save the hidden explanations to Firestore

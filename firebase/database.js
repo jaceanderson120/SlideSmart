@@ -103,6 +103,7 @@ const getUserStudyGuides = async (user) => {
           editors: data.editors,
           isPublic: data.isPublic,
           gotFromPublic: data.gotFromPublic,
+          lastModified: data.lastModified,
         };
       });
 
@@ -163,13 +164,25 @@ const updateStudyGuideFileName = async (id, fileName) => {
 // Input: study guide ID and new extracted data
 // Output: None
 const updateStudyGuideExtractedData = async (id, extractedData) => {
+  // Extract topics from the extracted data
+  let topics;
+  if (typeof extractedData === "string") {
+    topics = Object.keys(JSON.parse(extractedData));
+  } else {
+    topics = Object.keys(extractedData);
+  }
+
   // Ensure extracted data is a string
-  let topics = Object.keys(extractedData);
   if (typeof extractedData !== "string") {
     extractedData = JSON.stringify(extractedData);
   }
   const studyGuideDocRef = doc(db, "studyGuides", id);
-  await updateDoc(studyGuideDocRef, { extractedData });
+
+  // Update the extracted data and last modified date of the study guide
+  await updateDoc(studyGuideDocRef, {
+    extractedData,
+    lastModified: new Date(),
+  });
 
   // Update the topics of the study guide
   await updateStudyGuideTopics(id, topics);
