@@ -234,6 +234,7 @@ const handleFileUpload = async (
       let studyGuide = {
         fileName: file.name,
         extractedData: JSON.stringify(combinedResponse),
+        topics: topics,
         hiddenExplanations: JSON.stringify(topicsAndExplanationsObject),
         googleSearchResults: filteredGoogleSearchResults
           ? JSON.stringify(filteredGoogleSearchResults)

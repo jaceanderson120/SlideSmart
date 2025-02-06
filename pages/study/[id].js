@@ -514,6 +514,7 @@ const Study = () => {
     let studyGuideClone = {
       fileName: studyGuide.fileName,
       extractedData: JSON.stringify(studyGuide.extractedData),
+      topics: Object.keys(studyGuide.extractedData),
       hiddenExplanations: JSON.stringify(studyGuide.hiddenExplanations),
       googleSearchResults: JSON.stringify(studyGuide.googleSearchResults),
       firebaseFileUrl: null,
