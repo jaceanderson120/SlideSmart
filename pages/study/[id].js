@@ -52,7 +52,6 @@ import {
   generateQuestionAnswer,
 } from "@/utils/generateStudyGuideSections";
 import StudyGuideTopics from "@/components/StudyGuideTopics";
-import Navbar from "@/components/Navbar";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -600,7 +599,7 @@ const Study = () => {
                   backgroundColor="transparent"
                   hoverBackgroundColor="transparent"
                   textColor={colors.black}
-                  hoverTextColor={colors.white}
+                  hoverTextColor={colors.primary}
                   onClick={handleEditClicked}
                   padding="4px"
                   bold
@@ -611,7 +610,7 @@ const Study = () => {
                   backgroundColor="transparent"
                   hoverBackgroundColor="transparent"
                   textColor={colors.black}
-                  hoverTextColor={colors.white}
+                  hoverTextColor={colors.primary}
                   onClick={() => setIsDiscardEditsDialogOpen(true)}
                   padding="4px"
                   bold
@@ -663,15 +662,18 @@ const Study = () => {
           </MenuTriggerArea>
         </HeaderSection>
         <OutputSection>
-          <StudyGuideTopics
-            topics={Object.keys(studyGuide.extractedData)}
-            editMode={editMode}
-            onDragEnd={handleDragEnd}
-            setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
-            activeTopic={activeTopic}
-            isTopicsShown={isTopicsShown}
-            flex={isTopicsShown ? "0.5" : "0"}
-          />
+          {isTopicsShown && (
+            <StudyGuideTopicsContainer>
+              <StudyGuideTopics
+                topics={Object.keys(studyGuide.extractedData)}
+                editMode={editMode}
+                onDragEnd={handleDragEnd}
+                setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
+                activeTopic={activeTopic}
+                flex={isTopicsShown ? "0.5" : "0"}
+              />
+            </StudyGuideTopicsContainer>
+          )}
           <InfoContainer id="infoContainer">
             {studyGuide.extractedData &&
               Object.keys(studyGuide.extractedData).map((key) => (
@@ -1338,4 +1340,12 @@ const ChatbotContainer = styled.div`
   overscroll-behavior: contain;
   height: 100%;
   position: relative;
+`;
+
+const StudyGuideTopicsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0.5;
+  overflow-y: scroll;
+  padding: 16px;
 `;
