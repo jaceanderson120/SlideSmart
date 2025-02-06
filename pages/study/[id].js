@@ -561,7 +561,7 @@ const Study = () => {
   };
 
   return (
-    <PageContainer>
+    <StudyGuideContainer>
       <Section>
         <HeaderSection>
           <BackToDashboardContainer>
@@ -1126,13 +1126,13 @@ const Study = () => {
         }}
         onConfirm={handleAddTopic}
       />
-    </PageContainer>
+    </StudyGuideContainer>
   );
 };
 
 export default Study;
 
-const PageContainer = styled.div`
+const StudyGuideContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1226,6 +1226,7 @@ const InfoContainer = styled.div`
   width: 100%;
   gap: 32px;
   overflow: scroll;
+  padding-left: 16px;
   padding-right: 16px;
   padding-bottom: 16px;
 `;
@@ -1347,5 +1348,5 @@ const StudyGuideTopicsContainer = styled.div`
   flex-direction: column;
   flex: 0.5;
   overflow-y: scroll;
-  padding: 16px;
+  padding-left: 16px;
 `;

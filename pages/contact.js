@@ -2,7 +2,6 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import styled from "styled-components";
 import { useStateContext } from "@/context/StateContext";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
@@ -12,6 +11,7 @@ import "react-activity/dist/library.css";
 // import useAuthRedirect from "@/hooks/useAuthRedirect";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -85,7 +85,6 @@ const Contact = () => {
       {!checkingAuth && (
         <>
           <PageContainer>
-            <Navbar />
             <Section>
               <LeftSection>
                 <PageTitle>CONTACT US</PageTitle>
@@ -176,17 +175,12 @@ const Contact = () => {
 
 export default Contact;
 
-const PageContainer = styled.div`
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-  background-color: ${colors.lightGray};
-`;
-
 const Section = styled.div`
   display: flex;
   height: 100%;
-  flex-direction: row;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
   align-items: flex-start;
   text-align: center;
   padding: 32px;
@@ -195,6 +189,9 @@ const Section = styled.div`
 const LeftSection = styled.div`
   display: flex;
   width: 40%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
@@ -205,6 +202,9 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   display: flex;
   width: 60%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
   height: 100%;
   flex-direction: column;
   align-items: center;

@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { auth } from "@/firebase/firebase";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  fetchSignInMethodsForEmail,
-  linkWithCredential,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
@@ -31,6 +24,7 @@ import GoogleButton from "@/components/GoogleButton";
 import OrLine from "@/components/OrLine";
 import Agreement from "@/components/Agreement";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -66,7 +60,6 @@ export default function Login() {
         <link rel="canonical" href="https://www.slidesmartai.com/login" />
       </Head>
       <PageContainer>
-        <Navbar />
         <Section>
           <CredentialsForm>
             <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
@@ -104,13 +97,6 @@ export default function Login() {
     </>
   );
 }
-
-const PageContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: ${colors.lightGray};
-`;
 
 const Section = styled.div`
   display: flex;

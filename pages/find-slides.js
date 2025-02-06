@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Navbar from "@/components/Navbar";
 import TextField from "@mui/material/TextField";
 import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
@@ -11,6 +10,7 @@ import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -63,11 +63,10 @@ const FindSlides = () => {
       {!checkingAuth && (
         <>
           <PageContainer>
-            <Navbar />
             <Section>
-              <TopContainer>
+              <LeftSection>
                 <PageTitle>Search for Public Slides</PageTitle>
-              </TopContainer>
+              </LeftSection>
               <SearchContainer>
                 <TextField
                   id="outlined-basic"
@@ -91,21 +90,13 @@ const FindSlides = () => {
 
 export default FindSlides;
 
-const PageContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: ${colors.lightGray};
-`;
-
 const Section = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   text-align: center;
 `;
 
-const TopContainer = styled.div`
+const LeftSection = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;

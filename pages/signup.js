@@ -3,7 +3,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { storeUserInfo } from "@/firebase/database";
@@ -25,6 +24,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 const Signup = () => {
@@ -89,7 +89,6 @@ const Signup = () => {
         <link rel="canonical" href="https://www.slidesmartai.com/signup" />
       </Head>
       <PageContainer>
-        <Navbar />
         <Section>
           <CredentialsForm>
             <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
@@ -145,13 +144,6 @@ const Signup = () => {
     </>
   );
 };
-
-const PageContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: ${colors.lightGray};
-`;
 
 const Section = styled.div`
   display: flex;
