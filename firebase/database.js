@@ -164,6 +164,7 @@ const updateStudyGuideFileName = async (id, fileName) => {
 // Output: None
 const updateStudyGuideExtractedData = async (id, extractedData) => {
   // Ensure extracted data is a string
+  let topics = Object.keys(extractedData);
   if (typeof extractedData !== "string") {
     extractedData = JSON.stringify(extractedData);
   }
@@ -171,7 +172,7 @@ const updateStudyGuideExtractedData = async (id, extractedData) => {
   await updateDoc(studyGuideDocRef, { extractedData });
 
   // Update the topics of the study guide
-  await updateStudyGuideTopics(id, Object.keys(extractedData));
+  await updateStudyGuideTopics(id, topics);
 };
 
 // Updates the hidden explanations of a study guide in Firestore
