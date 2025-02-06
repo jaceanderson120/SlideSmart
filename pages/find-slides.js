@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import TextField from "@mui/material/TextField";
 import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
@@ -11,11 +10,13 @@ import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 import PageContainer from "@/components/PageContainer";
+import { toast } from "react-toastify";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [studyGuides, setStudyGuides] = useState([]); // store fetched guides
+  const [studyGuides, setStudyGuides] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   // State to determine if useAuthRedirect has finished
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -30,6 +31,14 @@ const FindSlides = () => {
 
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
+    setSearching(true);
+
+    // If the user tries to search without entering a keyword, show an error message
+    if (inputText === "") {
+      toast.error("Please enter a keyword to search for.");
+      return;
+    }
+
     // Extract the keywords from the search bar
     let keyWords = keywordExtractor.extract(inputText, {
       language: "english",
@@ -41,6 +50,7 @@ const FindSlides = () => {
     // When we decide on how to move foward with a more advanced search swap out the inputText for keyWords array and then handle that on the backend
     const guides = await getPublicStudyGuides(inputText);
     setStudyGuides(guides);
+    setSearching(false);
   };
 
   // If user presses 'Enter', run the same search function
@@ -88,7 +98,9 @@ const FindSlides = () => {
                 </SearchContainer>
               </LeftSection>
               <RightSection>
-                {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+                {hasSearched && !searching && (
+                  <StudyGuideList guides={studyGuides} />
+                )}
               </RightSection>
             </Section>
           </PageContainer>
