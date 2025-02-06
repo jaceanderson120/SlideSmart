@@ -41,6 +41,7 @@ const Dashboard = () => {
   const [displayNames, setDisplayNames] = useState({});
   const [displayNamesLoaded, setDisplayNamesLoaded] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [sorting, setSorting] = useState("A-Z");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
@@ -103,24 +104,40 @@ const Dashboard = () => {
     }
   }, [studyGuides]);
 
-  // Filter study guides based on the selected filter
+  // Filter and sort study guides based on selected options
   useEffect(() => {
+    // First filter the guides
+    let filtered = [];
     if (filter === "all") {
-      setFilteredStudyGuides(studyGuides);
+      filtered = studyGuides;
     } else if (filter === "owned") {
-      setFilteredStudyGuides(
-        studyGuides.filter((guide) => guide.createdBy === currentUser?.uid)
+      filtered = studyGuides.filter(
+        (guide) => guide.createdBy === currentUser?.uid
       );
     } else if (filter === "shared") {
-      setFilteredStudyGuides(
-        studyGuides.filter((guide) => guide.createdBy !== currentUser?.uid)
+      filtered = studyGuides.filter(
+        (guide) => guide.createdBy !== currentUser?.uid
       );
     } else if (filter === "public") {
-      setFilteredStudyGuides(
-        studyGuides.filter((guide) => guide.gotFromPublic)
+      filtered = studyGuides.filter((guide) => guide.gotFromPublic === true);
+    }
+
+    // Then sort the filtered guides
+    let sorted = [...filtered];
+    if (sorting === "A-Z") {
+      sorted.sort((a, b) => a.fileName.localeCompare(b.fileName));
+    } else if (sorting === "Z-A") {
+      sorted.sort((a, b) => b.fileName.localeCompare(a.fileName));
+    } else if (sorting === "Date Created") {
+      sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sorting === "Date Modified") {
+      sorted.sort(
+        (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
       );
     }
-  }, [filter, studyGuides, currentUser]);
+
+    setFilteredStudyGuides(sorted);
+  }, [filter, sorting, studyGuides, currentUser]);
 
   // Set filter to "all"
   const setFilterAll = () => {
@@ -137,8 +154,29 @@ const Dashboard = () => {
     setFilter("shared");
   };
 
+  // Set filter to "public"
   const setFilterPublic = () => {
     setFilter("public");
+  };
+
+  // Set sorting to "A-Z"
+  const setSortAtoZ = () => {
+    setSorting("A-Z");
+  };
+
+  // Set sorting to "Z-A"
+  const setSortZtoA = () => {
+    setSorting("Z-A");
+  };
+
+  // Set sorting to "Date Created"
+  const setSortDateCreated = () => {
+    setSorting("Date Created");
+  };
+
+  // Set sorting to "Date Modified"
+  const setSortDateModified = () => {
+    setSorting("Date Modified");
   };
 
   // Handle the view button click
@@ -268,29 +306,57 @@ const Dashboard = () => {
               ></CreateModal>
             </TopContainer>
             <TableContainer>
-              <FilterContainer>
-                <FilterLabel>Filter:</FilterLabel>
-                <CustomMenu
-                  triggerElement={
-                    <MenuTrigger>
-                      {filter === "all"
-                        ? "All"
-                        : filter === "owned"
-                        ? "Owned by Me"
-                        : filter === "shared"
-                        ? "Shared with Me"
-                        : "Downloaded Publically"}
-                    </MenuTrigger>
-                  }
-                  menuItems={[
-                    { name: "All", onClick: setFilterAll },
-                    { name: "Owned by Me", onClick: setFilterOwned },
-                    { name: "Shared with Me", onClick: setFilterShared },
-                    { name: "Downloaded Publically", onClick: setFilterPublic },
-                  ]}
-                  arrow={true}
-                />
-              </FilterContainer>
+              <FilterSortContainer>
+                <FilterContainer>
+                  <FilterLabel>Filter:</FilterLabel>
+                  <CustomMenu
+                    triggerElement={
+                      <MenuTrigger>
+                        {filter === "all"
+                          ? "All"
+                          : filter === "owned"
+                          ? "Owned by Me"
+                          : filter === "shared"
+                          ? "Shared with Me"
+                          : "Downloaded Publically"}
+                      </MenuTrigger>
+                    }
+                    menuItems={[
+                      { name: "All", onClick: setFilterAll },
+                      { name: "Owned by Me", onClick: setFilterOwned },
+                      { name: "Shared with Me", onClick: setFilterShared },
+                      {
+                        name: "Downloaded Publically",
+                        onClick: setFilterPublic,
+                      },
+                    ]}
+                    arrow={true}
+                  />
+                </FilterContainer>
+                <FilterContainer>
+                  <FilterLabel>Sort:</FilterLabel>
+                  <CustomMenu
+                    triggerElement={
+                      <MenuTrigger>
+                        {sorting === "A-Z"
+                          ? "A-Z"
+                          : sorting === "Z-A"
+                          ? "Z-A"
+                          : sorting === "Date Created"
+                          ? "Date Created"
+                          : "Date Modified"}
+                      </MenuTrigger>
+                    }
+                    menuItems={[
+                      { name: "A-Z", onClick: setSortAtoZ },
+                      { name: "Z-A", onClick: setSortZtoA },
+                      { name: "Date Created", onClick: setSortDateCreated },
+                      { name: "Date Modified", onClick: setSortDateModified },
+                    ]}
+                    arrow={true}
+                  />
+                </FilterContainer>
+              </FilterSortContainer>
               <ColumnNamesContainer>
                 <ColumnName $flex={2}>Name</ColumnName>
                 <ColumnName $flex={1}>Created</ColumnName>
@@ -600,4 +666,9 @@ const ProgressWrapper = styled.div`
 const StudyGuidesInfoText = styled.p`
   font-size: ${fontSize.default};
   margin: 16px;
+`;
+
+const FilterSortContainer = styled.div`
+  display: flex;
+  gap: 16px;
 `;
