@@ -1,6 +1,7 @@
 {
   "name": "slidesmart",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -22,6 +23,7 @@
     "@mui/material": "^6.4.1",
     "dotenv": "^16.4.5",
     "firebase": "^11.2.0",
+    "firebase-admin": "^13.0.2",
     "formidable": "^3.5.1",
     "fs": "^0.0.1-security",
     "googleapis": "^144.0.0",
