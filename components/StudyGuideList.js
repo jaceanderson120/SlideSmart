@@ -21,43 +21,45 @@ const StudyGuideList = ({ guides }) => {
     setSelectedGuide(guide);
   };
 
-  if (!guides || guides.length === 0) {
-    return <NoResults>No study guides found.</NoResults>;
-  }
-
   return (
     <Container>
-      {guides.map((guide) => (
-        <ListItem key={guide.id} onClick={() => handleGuideSelect(guide)}>
-          <FileName>{guide.fileName}</FileName>
-          <TopicsList>
-            {selectedGuide !== guide &&
-              guide.topics
-                ?.slice(0, 3)
-                .map((topic, index) => <Topic key={index}>{topic}</Topic>)}
-            {selectedGuide !== guide && guide.topics?.length > 3 && (
-              <Topic>+ {guide.topics.length - 3} more</Topic>
-            )}
-            {selectedGuide === guide && (
-              <PanelContent>
-                <AllTopicsList>
-                  {selectedGuide.topics?.map((topic, index) => (
-                    <Topic key={index}>{topic}</Topic>
-                  ))}
-                </AllTopicsList>
-                <Button
-                  onClick={() => handleClick(selectedGuide.id)}
-                  backgroundColor="transparent"
-                  hoverBackgroundColor="transparent"
-                  textColor={colors.primary}
-                >
-                  View Study Guide
-                </Button>
-              </PanelContent>
-            )}
-          </TopicsList>
-        </ListItem>
-      ))}
+      {guides.length > 0 ? (
+        guides.map((guide) => (
+          <ListItem key={guide.id} onClick={() => handleGuideSelect(guide)}>
+            <FileName>{guide.fileName}</FileName>
+            <TopicsList>
+              {selectedGuide !== guide &&
+                guide.topics
+                  ?.slice(0, 3)
+                  .map((topic, index) => <Topic key={index}>{topic}</Topic>)}
+              {selectedGuide !== guide && guide.topics?.length > 3 && (
+                <Topic>+ {guide.topics.length - 3} more</Topic>
+              )}
+              {selectedGuide === guide && (
+                <PanelContent>
+                  <AllTopicsList>
+                    {selectedGuide.topics?.map((topic, index) => (
+                      <Topic key={index}>{topic}</Topic>
+                    ))}
+                  </AllTopicsList>
+                  <Button
+                    onClick={() => handleClick(selectedGuide.id)}
+                    backgroundColor="transparent"
+                    hoverBackgroundColor="transparent"
+                    textColor={colors.primary}
+                  >
+                    View Study Guide
+                  </Button>
+                </PanelContent>
+              )}
+            </TopicsList>
+          </ListItem>
+        ))
+      ) : (
+        <NoResults>
+          No study guides found. Please try searching for something else.
+        </NoResults>
+      )}
     </Container>
   );
 };
@@ -101,7 +103,6 @@ const ListItem = styled.div`
 `;
 
 const NoResults = styled.div`
-  margin-top: 16px;
   color: ${colors.black};
 `;
 
