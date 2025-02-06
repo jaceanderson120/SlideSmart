@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Navbar from "@/components/Navbar";
 import TextField from "@mui/material/TextField";
 import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
@@ -11,6 +10,7 @@ import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -63,23 +63,33 @@ const FindSlides = () => {
       {!checkingAuth && (
         <>
           <PageContainer>
-            <Navbar />
             <Section>
-              <TopContainer>
-                <PageTitle>Search for Public Slides</PageTitle>
-              </TopContainer>
-              <SearchContainer>
-                <TextField
-                  id="outlined-basic"
-                  variant="outlined"
-                  placeholder="Enter a keyword..."
-                  value={inputText}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                />
-                <Button onClick={handleSearch}>Search</Button>
-              </SearchContainer>
-              {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+              <LeftSection>
+                <PageTitle>FIND SLIDES</PageTitle>
+                <Subtitle>
+                  Browse any and all<br></br>{" "}
+                  <SubtitleSpan>public study guides</SubtitleSpan>
+                </Subtitle>
+                <Subtext>
+                  Guess what? With the Spark Plan, you can save any public study
+                  guides as your own!
+                </Subtext>
+                <Subtext>
+                  Enter a keyword below and we will do the rest for you.
+                </Subtext>
+                <SearchContainer>
+                  <Input
+                    placeholder="What are you looking for?"
+                    value={inputText}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Button onClick={handleSearch}>Search</Button>
+                </SearchContainer>
+              </LeftSection>
+              <RightSection>
+                {hasSearched ? <StudyGuideList guides={studyGuides} /> : ""}
+              </RightSection>
             </Section>
           </PageContainer>
           <Footer />
@@ -91,35 +101,82 @@ const FindSlides = () => {
 
 export default FindSlides;
 
-const PageContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: ${colors.lightGray};
-`;
-
 const Section = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+  align-items: flex-start;
+  text-align: center;
+  padding: 32px;
+`;
+
+const LeftSection = styled.div`
+  display: flex;
+  width: 40%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
+  padding: 48px;
+`;
+
+const RightSection = styled.div`
+  display: flex;
+  width: 60%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
-
-const TopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 32px;
+  padding: 48px;
 `;
 
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
-  flex: 1;
+`;
+
+const Subtitle = styled.p`
+  font-size: ${fontSize.xlheading};
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+const SubtitleSpan = styled.span`
+  color: ${colors.primary};
+  font-weight: bold;
+`;
+
+const Subtext = styled.p`
+  font-size: ${fontSize.default};
+  color: ${colors.gray};
+  line-height: 1.3;
 `;
 
 const SearchContainer = styled.div`
+  margin-top: 64px;
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+`;
+
+const Input = styled.input`
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid ${colors.gray};
+  border-radius: 5px;
+  font-size: ${fontSize.secondary};
+  color: green;
+  width: 100%;
+
+  &:focus {
+    border-color: ${colors.primary70};
+    outline: none;
+  }
 `;

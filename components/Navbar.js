@@ -83,50 +83,52 @@ function Navbar() {
           <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
           SlideSmart
         </LogoContainer>
-        {isLoggedIn && (
-          <>
-            <Button
-              onClick={() => router.push("/find-slides")}
-              padding="8px"
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
-            >
-              Find Slides
-            </Button>
-            <Button
-              onClick={() => router.push("/contact")}
-              padding="8px"
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
-            >
-              Contact Us
-            </Button>
-            <Button
-              onClick={() => router.push("/pricing")}
-              padding="8px"
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
-            >
-              Pricing
-            </Button>
-          </>
-        )}
-        <Button
-          onClick={() => router.push("/how-it-works")}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={colors.black}
-          hoverTextColor={colors.primary}
-        >
-          How it Works
-        </Button>
+        <LinksContainer>
+          {isLoggedIn && (
+            <>
+              <Button
+                onClick={() => router.push("/find-slides")}
+                padding="8px"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                textColor={colors.black}
+                hoverTextColor={colors.primary}
+              >
+                Find Slides
+              </Button>
+              <Button
+                onClick={() => router.push("/contact")}
+                padding="8px"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                textColor={colors.black}
+                hoverTextColor={colors.primary}
+              >
+                Contact Us
+              </Button>
+              <Button
+                onClick={() => router.push("/pricing")}
+                padding="8px"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                textColor={colors.black}
+                hoverTextColor={colors.primary}
+              >
+                Pricing
+              </Button>
+            </>
+          )}
+          <Button
+            onClick={() => router.push("/how-it-works")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            How it Works
+          </Button>
+        </LinksContainer>
       </LeftButtonSection>
       <RightButtonSection>
         {isLoggedIn ? (
@@ -178,6 +180,14 @@ const NavbarSection = styled.div`
   border-bottom: 1px solid ${colors.gray};
   background-color: ${colors.white};
   z-index: 100;
+`;
+
+const LinksContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const LeftButtonSection = styled.div`

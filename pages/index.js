@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
 import "react-circular-progressbar/dist/styles.css";
@@ -16,6 +15,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { colors } from "@/constants/colors";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 export default function Home() {
   const router = useRouter();
@@ -42,7 +42,6 @@ export default function Home() {
         <link rel="canonical" href="https://www.slidesmartai.com/" />
       </Head>
       <PageContainer>
-        <Navbar />
         <Section>
           <SloganContainer>
             <Slogan>
@@ -103,12 +102,6 @@ export default function Home() {
     </>
   );
 }
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
 
 const Section = styled.div`
   width: 100%;

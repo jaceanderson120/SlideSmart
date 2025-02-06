@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
 import { getCheckoutUrl, getPortalUrl } from "@/utils/stripePayment";
 import app from "@/firebase/firebase";
 import { useRouter } from "next/navigation"; // must be from next/navigation not next/router
@@ -21,6 +20,7 @@ import { colors } from "@/constants/colors";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Footer from "@/components/Footer";
 import Head from "next/head";
+import PageContainer from "@/components/PageContainer";
 
 const Pricing = () => {
   const { hasSpark } = useStateContext();
@@ -79,7 +79,6 @@ const Pricing = () => {
       {!checkingAuth && (
         <>
           <PageContainer>
-            <Navbar />
             <PricingContainer>
               <TopSection>
                 <PageTitle>PRICING</PageTitle>
@@ -170,12 +169,6 @@ const Pricing = () => {
 
 export default Pricing;
 
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
-
 const PricingContainer = styled.div`
   width: 100%;
   flex-grow: 1;
@@ -209,6 +202,12 @@ const BottomSection = styled.div`
   width: 100%;
   gap: 48px;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
 `;
 
 const PageTitle = styled.p`

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { colors } from "@/constants/colors";
+import { fontSize } from "@/constants/fontSize";
+import Button from "./Button";
 
 const StudyGuideList = ({ guides }) => {
   const router = useRouter();
@@ -12,6 +14,10 @@ const StudyGuideList = ({ guides }) => {
   };
 
   const handleGuideSelect = (guide) => {
+    if (selectedGuide === guide) {
+      setSelectedGuide(null);
+      return;
+    }
     setSelectedGuide(guide);
   };
 
@@ -21,70 +27,76 @@ const StudyGuideList = ({ guides }) => {
 
   return (
     <Container>
-      <ListContainer>
-        {guides.map((guide) => (
-          <ListItem key={guide.id} onClick={() => handleGuideSelect(guide)}>
-            <FileName>{guide.fileName}</FileName>
-            <TopicsList>
-              {guide.topics?.slice(0, 3).map((topic, index) => (
-                <Topic key={index}>{topic}</Topic>
-              ))}
-              {guide.topics?.length > 3 && (
-                <Topic>+{guide.topics.length - 3} more</Topic>
-              )}
-            </TopicsList>
-          </ListItem>
-        ))}
-      </ListContainer>
-
-      {selectedGuide && (
-        <TopicsPanel>
-          <PanelHeader>
-            <h3>{selectedGuide.fileName}</h3>
-            <CloseButton onClick={() => setSelectedGuide(null)}>×</CloseButton>
-          </PanelHeader>
-          <PanelContent>
-            <AllTopicsList>
-              {selectedGuide.topics?.map((topic, index) => (
-                <Topic key={index}>{topic}</Topic>
-              ))}
-            </AllTopicsList>
-            <ViewButton onClick={() => handleClick(selectedGuide.id)}>
-              View Study Guide
-            </ViewButton>
-          </PanelContent>
-        </TopicsPanel>
-      )}
+      {guides.map((guide) => (
+        <ListItem key={guide.id} onClick={() => handleGuideSelect(guide)}>
+          <FileName>{guide.fileName}</FileName>
+          <TopicsList>
+            {selectedGuide !== guide &&
+              guide.topics
+                ?.slice(0, 3)
+                .map((topic, index) => <Topic key={index}>{topic}</Topic>)}
+            {selectedGuide !== guide && guide.topics?.length > 3 && (
+              <Topic>+ {guide.topics.length - 3} more</Topic>
+            )}
+            {selectedGuide === guide && (
+              <PanelContent>
+                <AllTopicsList>
+                  {selectedGuide.topics?.map((topic, index) => (
+                    <Topic key={index}>{topic}</Topic>
+                  ))}
+                </AllTopicsList>
+                <Button
+                  onClick={() => handleClick(selectedGuide.id)}
+                  backgroundColor="transparent"
+                  hoverBackgroundColor="transparent"
+                  textColor={colors.primary}
+                >
+                  View Study Guide
+                </Button>
+              </PanelContent>
+            )}
+          </TopicsList>
+        </ListItem>
+      ))}
     </Container>
   );
 };
 
 export default StudyGuideList;
 
-/* --- Styled components --- */
 const Container = styled.div`
   display: flex;
-  gap: 24px;
+  gap: 12px;
+  max-height: 600px;
   width: 100%;
-  justify-content: center;
-`;
-
-const ListContainer = styled.div`
-  margin-top: 16px;
-  width: 100%;
-  max-width: 600px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+  border-left: 4px solid ${colors.primary33};
+  border-top: 4px solid ${colors.primary33};
+  padding: 16px;
+  background: ${colors.white};
+  overflow-y: auto;
+  overscroll-behavior: contain;
 `;
 
 const ListItem = styled.div`
-  background: ${colors.white};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: ${colors.lightGray};
   margin-bottom: 8px;
   padding: 12px;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
+  transition: scale 0.3s;
   text-align: left;
+  word-break: break-word;
 
   &:hover {
-    background: ${colors.lightGray};
+    scale: 1.02;
   }
 `;
 
@@ -100,54 +112,18 @@ const TopicsList = styled.div`
   margin-top: 8px;
 `;
 
-const Topic = styled.span`
-  background: ${colors.lightGray};
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 14px;
+const Topic = styled.div`
+  display: flex;
+  background: ${colors.white};
+  padding: 8px;
+  border-radius: 12px;
+  font-size: ${fontSize.secondary};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const FileName = styled.div`
-  font-size: 18px;
+  font-size: ${fontSize.default};
   font-weight: bold;
-  text-align: center;
-`;
-
-const TopicsPanel = styled.div`
-  position: sticky;
-  top: 16px;
-  background: ${colors.white};
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  height: fit-content;
-`;
-
-const PanelHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-
-  h3 {
-    margin: 0;
-    font-size: 20px;
-  }
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  color: ${colors.black};
-
-  &:hover {
-    color: ${colors.primary};
-  }
 `;
 
 const PanelContent = styled.div`
@@ -160,21 +136,4 @@ const AllTopicsList = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-`;
-
-const ViewButton = styled.button`
-  background: ${colors.primary};
-  color: ${colors.white};
-  border: none;
-  padding: 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-
-  &:hover {
-    background: ${colors.primaryDark};
-  }
 `;
