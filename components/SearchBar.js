@@ -20,9 +20,12 @@ const SearchBar = () => {
 
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
-    setHasSearched(true);
-    const guides = await getPublicStudyGuides(inputText);
-    setStudyGuides(guides);
+    const trimmedInput = inputText.trim();
+    if (trimmedInput.length > 0) {
+      setHasSearched(true);
+      const guides = await getPublicStudyGuides(trimmedInput);
+      setStudyGuides(guides);
+    }
   };
 
   // If user presses 'Enter', run the same search function
