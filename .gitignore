@@ -41,3 +41,6 @@ next-env.d.ts
 
 # pycache
 __pycache__/
+
+# Ignore Firebase Admin folder
+firebase/admin/
