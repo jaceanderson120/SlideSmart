@@ -29,28 +29,110 @@ const FindSlides = () => {
     setInputText(e.target.value);
   };
 
+  const levenshteinDistance = (str1, str2) => {
+    const m = str1.length;
+    const n = str2.length;
+    const dp = Array(m + 1)
+      .fill()
+      .map(() => Array(n + 1).fill(0));
+
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        if (str1[i - 1] === str2[j - 1]) {
+          dp[i][j] = dp[i - 1][j - 1];
+        } else {
+          dp[i][j] = Math.min(
+            dp[i - 1][j - 1] + 1,
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1
+          );
+        }
+      }
+    }
+    return dp[m][n];
+  };
+
+  const calculateSimilarity = (str1, str2) => {
+    const maxLength = Math.max(str1.length, str2.length);
+    if (maxLength === 0) return 1.0;
+    const distance = levenshteinDistance(str1, str2);
+    return 1 - distance / maxLength;
+  };
+
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
-    setSearching(true);
+    let similarityThreshold = 0.75;
+    try {
+      setSearching(true);
 
-    // If the user tries to search without entering a keyword, show an error message
-    if (inputText === "") {
-      toast.error("Please enter a keyword to search for.");
-      return;
+      if (!inputText.trim()) {
+        toast.error("Please enter a keyword to search for.");
+        setSearching(false);
+        return;
+      }
+
+      // Extract keywords
+      const keywords = keywordExtractor.extract(inputText, {
+        language: "english",
+        remove_digits: true,
+        return_changed_case: true,
+        remove_duplicates: true,
+      });
+
+      setHasSearched(true);
+
+      // Get all study guides
+      const guides = await getPublicStudyGuides();
+
+      // Score each guide based on keyword matches
+      const scoredGuides = guides.map((guide) => {
+        let relevanceScore = 0;
+        const guideText = (
+          guide.fileName +
+          " " +
+          guide.topics.join(" ")
+        ).toLowerCase();
+
+        keywords.forEach((keyword) => {
+          // Check for exact matches
+          if (guideText.includes(keyword.toLowerCase())) {
+            relevanceScore += 2;
+          } else {
+            // Check each word in the guide text for fuzzy matches
+            const words = guideText.split(/\s+/);
+            words.forEach((word) => {
+              const similarity = calculateSimilarity(
+                keyword.toLowerCase(),
+                word
+              );
+              if (similarity >= similarityThreshold) {
+                relevanceScore += 1;
+              }
+            });
+          }
+        });
+
+        return {
+          ...guide,
+          relevanceScore,
+        };
+      });
+
+      // Filter and sort results
+      const filteredGuides = scoredGuides
+        .filter((guide) => guide.relevanceScore > 0)
+        .sort((a, b) => b.relevanceScore - a.relevanceScore);
+
+      setStudyGuides(filteredGuides);
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("An error occurred while searching.");
+    } finally {
+      setSearching(false);
     }
-
-    // Extract the keywords from the search bar
-    let keyWords = keywordExtractor.extract(inputText, {
-      language: "english",
-      remove_digits: true,
-      return_changed_case: true,
-      remove_duplicates: true,
-    });
-    setHasSearched(true);
-    // When we decide on how to move foward with a more advanced search swap out the inputText for keyWords array and then handle that on the backend
-    const guides = await getPublicStudyGuides(inputText);
-    setStudyGuides(guides);
-    setSearching(false);
   };
 
   // If user presses 'Enter', run the same search function

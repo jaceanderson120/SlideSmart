@@ -122,14 +122,7 @@ const getPublicStudyGuides = async (search_input) => {
     ...doc.data(),
   }));
 
-  // 3. Filter locally for filenames containing the search string
-  const filtered = allGuides.filter(
-    (guide) =>
-      guide.fileName?.toLowerCase().includes(search_input.toLowerCase()) &&
-      guide.isPublic
-  );
-
-  return filtered;
+  return allGuides;
 };
 
 // Fetches a specific study guide from Firestore
