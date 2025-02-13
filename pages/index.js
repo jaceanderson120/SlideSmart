@@ -32,9 +32,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>
-          SlideSmart - The AI Application Made to Make Slides Make Sense
-        </title>
+        <title>SlideSmart - The AI Application to Make Slides Make Sense</title>
         <meta
           name="description"
           content="We turn your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
@@ -45,9 +43,9 @@ export default function Home() {
         <Section>
           <SloganContainer>
             <Slogan>
-              The AI Application Made
+              The AI Application to
               <br />
-              to Make
+              Make
               <span style={{ color: colors.primary, fontWeight: "bold" }}>
                 {" "}
                 Slides
