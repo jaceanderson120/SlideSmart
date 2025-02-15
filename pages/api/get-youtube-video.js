@@ -77,7 +77,7 @@ export default async function getYoutubeVideo(req, res) {
 
     // Fetch additional video details to filter by like/dislike ratio and embed status
     const videoDetailsResponse = await youtube.videos.list({
-      part: "statistics,player",
+      part: "statistics,player,status",
       id: videoIds.join(","),
     });
 
@@ -85,7 +85,8 @@ export default async function getYoutubeVideo(req, res) {
     const filteredVideos = videoDetailsResponse.data.items.filter(
       (item) =>
         parseInt(item.statistics.viewCount, 10) >= 10000 &&
-        item.player.embedHtml !== undefined // Check if the video allows embedding
+        item.player.embedHtml !== undefined && // Check if the video allows embedding
+        item.status.embeddable === true
     );
 
     // Calculate scores for the remaining videos
