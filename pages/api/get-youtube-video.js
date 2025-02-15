@@ -75,15 +75,17 @@ export default async function getYoutubeVideo(req, res) {
 
     const videoIds = combinedVideos.map((item) => item.id.videoId);
 
-    // Fetch additional video details to filter by like/dislike ratio
+    // Fetch additional video details to filter by like/dislike ratio and embed status
     const videoDetailsResponse = await youtube.videos.list({
-      part: "statistics",
+      part: "statistics,player",
       id: videoIds.join(","),
     });
 
-    // Filter out videos with less than 10,000 views
+    // Filter out videos with less than 10,000 views and that allow embedding
     const filteredVideos = videoDetailsResponse.data.items.filter(
-      (item) => parseInt(item.statistics.viewCount, 10) >= 10000
+      (item) =>
+        parseInt(item.statistics.viewCount, 10) >= 10000 &&
+        item.player.embedHtml !== undefined // Check if the video allows embedding
     );
 
     // Calculate scores for the remaining videos
