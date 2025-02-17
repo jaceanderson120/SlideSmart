@@ -25,6 +25,9 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
 import PageContainer from "@/components/PageContainer";
+import VerifyDialog from "@/components/VerifyDialog";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 const Signup = () => {
@@ -33,10 +36,13 @@ const Signup = () => {
   const [retypePassword, setRetypePassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [continueDisabled, setContinueDisabled] = useState(false);
+  const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false);
   const router = useRouter();
 
-  const signup = (e) => {
+  const signup = async (e) => {
     e.preventDefault(); // Prevent page reload
+    setContinueDisabled(true); // Disable the continue button
 
     // Check if all fields are filled
     if (!email || !password || !firstName || !lastName || !retypePassword) {
@@ -60,6 +66,11 @@ const Signup = () => {
       return;
     }
 
+    setIsVerifyDialogOpen(true);
+    setContinueDisabled(false); // Re-enable the continue button
+  };
+
+  const completeSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
@@ -126,13 +137,18 @@ const Signup = () => {
               onChange={(e) => setRetypePassword(e.target.value)}
             />
             <Agreement type="signup" />
-            <Button
-              marginTop="10px"
-              onClick={signup}
-              style={{ fontWeight: "bold" }}
-            >
-              Continue with email <FontAwesomeIcon icon={faArrowRight} />
-            </Button>
+            {!continueDisabled ? (
+              <Button
+                marginTop="10px"
+                onClick={signup}
+                style={{ fontWeight: "bold" }}
+                disabled={continueDisabled}
+              >
+                Continue with email <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+            ) : (
+              <Dots />
+            )}
             <Login>
               Already have an account?{" "}
               <LoginLink href="/login">Login</LoginLink>
@@ -141,6 +157,14 @@ const Signup = () => {
         </Section>
       </PageContainer>
       <Footer />
+      <VerifyDialog
+        isOpen={isVerifyDialogOpen}
+        onClose={() => {
+          setIsVerifyDialogOpen(false);
+        }}
+        onConfirm={completeSignup}
+        email={email}
+      />
     </>
   );
 };
