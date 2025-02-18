@@ -1,20 +1,16 @@
 import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import Button from "./Button";
-import React from "react";
+import Button from "../Button";
+import { useState } from "react";
 import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
-const ConfirmationDialog = ({
-  isOpen,
-  title,
-  text,
-  onClose,
-  onConfirm,
-  icon,
-}) => {
+const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
+  const [topicName, setTopicName] = useState("");
+  const [topicExplanation, setTopicExplanation] = useState("");
+
   return (
     <>
       <Modal
@@ -24,19 +20,28 @@ const ConfirmationDialog = ({
         style={customStyles}
       >
         <ModalContent>
-          {icon}
-          <ModalTitle>{title}</ModalTitle>
+          <ModalTitle>Create a Study Guide Topic</ModalTitle>
+          <ModalInput
+            placeholder="Enter a topic name..."
+            value={topicName}
+            onChange={(event) => setTopicName(event.target.value)}
+          />
+          <ModalTextArea
+            placeholder="Enter a topic explanation..."
+            value={topicExplanation}
+            onChange={(event) => setTopicExplanation(event.target.value)}
+          />
           <ModalText>
-            {text.split("\n").map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                <br />
-              </React.Fragment>
-            ))}
+            Please enter a topic name and explanation above. For the best
+            experience, explain the topic clearly.
           </ModalText>
           <ButtonSection>
             <Button
-              onClick={onClose}
+              onClick={() => {
+                setTopicName("");
+                setTopicExplanation("");
+                onClose();
+              }}
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
               padding="12px"
@@ -49,7 +54,9 @@ const ConfirmationDialog = ({
             </Button>
             <Button
               onClick={() => {
-                onConfirm();
+                onConfirm(topicName, topicExplanation);
+                setTopicName("");
+                setTopicExplanation("");
                 onClose();
               }}
               backgroundColor={colors.primary}
@@ -117,4 +124,24 @@ const ModalText = styled.p`
   max-width: 100%;
 `;
 
-export default ConfirmationDialog;
+const ModalInput = styled.input`
+  font-size: ${fontSize.secondary};
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  width: 100%;
+`;
+
+const ModalTextArea = styled.textarea`
+  font-size: ${fontSize.secondary};
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  resize: none;
+  height: 100px;
+`;
+
+export default AddTopicModal;

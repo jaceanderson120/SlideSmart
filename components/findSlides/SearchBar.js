@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/page/Navbar";
 import TextField from "@mui/material/TextField";
-import Button from "./Button";
+import Button from "../Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "./StudyGuideList";

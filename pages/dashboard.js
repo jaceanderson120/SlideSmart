@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase";
 import styled from "styled-components";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/page/Navbar";
 import {
   getUserStudyGuides,
   deleteStudyGuide,
@@ -24,10 +24,10 @@ import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
-import CreateModal from "@/components/CreateModal";
+import CreateModal from "@/components/modals/CreateModal";
 import { colors } from "@/constants/colors";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
@@ -453,7 +453,7 @@ const Dashboard = () => {
               </StudyGuideListContainer>
             </TableContainer>
           </Section>
-          <ConfirmationDialog
+          <ConfirmationModal
             isOpen={isDeleteDialogOpen}
             onClose={() => setIsDeleteDialogOpen(false)}
             title="Are you sure you want to delete this study guide?"

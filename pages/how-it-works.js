@@ -1,6 +1,6 @@
-import InfoCircle from "@/components/InfoCircle";
-import Navbar from "@/components/Navbar";
-import PictureFrame from "@/components/PictureFrame";
+import InfoCircle from "@/components/howItWorks/InfoCircle";
+import Navbar from "@/components/page/Navbar";
+import PictureFrame from "@/components/howItWorks/PictureFrame";
 import styled from "styled-components";
 import dashboard from "@/images/dashboard.png";
 import studyGuide from "@/images/studyGuide.png";
@@ -9,7 +9,7 @@ import editMode from "@/images/editMode.png";
 import register from "@/images/register.png";
 import share from "@/images/share.png";
 import showFile from "@/images/showFile.png";
-import DecorationCircle from "@/components/DecorationCircle";
+import DecorationCircle from "@/components/howItWorks/DecorationCircle";
 import { colors } from "@/constants/colors";
 import { useEffect, useState } from "react";
 import Head from "next/head";

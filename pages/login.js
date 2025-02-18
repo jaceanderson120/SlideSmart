@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
-import Footer from "../components/Footer";
+import Footer from "../components/page/Footer";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
@@ -19,12 +19,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import CredentialsForm from "@/components/CredentialsForm";
-import GoogleButton from "@/components/GoogleButton";
-import OrLine from "@/components/OrLine";
-import Agreement from "@/components/Agreement";
+import CredentialsForm from "@/components/auth/CredentialsForm";
+import GoogleButton from "@/components/auth/GoogleButton";
+import OrLine from "@/components/auth/OrLine";
+import Agreement from "@/components/auth/Agreement";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 
 export default function Login() {
   const [email, setEmail] = useState("");
