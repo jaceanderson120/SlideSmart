@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"; // must be from next/navigation not
 import { useStateContext } from "@/context/StateContext";
 import { useState } from "react";
 import { fontSize } from "@/constants/fontSize";
-import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -17,21 +17,14 @@ import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import Button from "@/components/Button";
 import { colors } from "@/constants/colors";
-import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Footer from "@/components/page/Footer";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
 
 const Pricing = () => {
-  const { hasSpark } = useStateContext();
+  const { hasSpark, isLoggedIn } = useStateContext();
   const [redirectLoading, setRedirectLoading] = useState(false);
   const router = useRouter();
-
-  // State to determine if useAuthRedirect has finished
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  useAuthRedirect(() => {
-    setCheckingAuth(false);
-  });
 
   // Direct user to checkout page
   const handleUpgradeClick = async () => {
@@ -76,93 +69,97 @@ const Pricing = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/pricing" />
       </Head>
-      {!checkingAuth && (
-        <>
-          <PageContainer>
-            <PricingContainer>
-              <TopSection>
-                <PageTitle>PRICING</PageTitle>
-                <Subtitle>
-                  Get <SubtitleSpan>better grades</SubtitleSpan> with SlideSmart
-                </Subtitle>
-              </TopSection>
-              <BottomSection>
-                <PricingCard>
-                  <PricingCardTitle>Basic Plan</PricingCardTitle>
-                  <PricingCardPrice>FREE</PricingCardPrice>
-                  {!hasSpark ? (
-                    <PricingCardInfo>
-                      * This is your current plan. Upgrade to the Spark Plan for
-                      more!
-                    </PricingCardInfo>
+      <PageContainer>
+        <PricingContainer>
+          <TopSection>
+            <PageTitle>PRICING</PageTitle>
+            <Subtitle>
+              Get <SubtitleSpan>better grades</SubtitleSpan> with SlideSmart
+            </Subtitle>
+          </TopSection>
+          <BottomSection>
+            <PricingCard>
+              <PricingCardTitle>Basic Plan</PricingCardTitle>
+              <PricingCardPrice>FREE</PricingCardPrice>
+              {isLoggedIn && !hasSpark ? (
+                <PricingCardInfo>
+                  * This is your current plan. Upgrade to the Spark Plan for
+                  more!
+                </PricingCardInfo>
+              ) : isLoggedIn ? (
+                <PricingCardInfo>
+                  * Cancel your Spark subscription if you are content with using
+                  the Basic Plan.
+                </PricingCardInfo>
+              ) : (
+                <Button onClick={() => router.push("/signup")}>
+                  Get Started <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+              )}
+              <PricingCardLabel>Included with Basic:</PricingCardLabel>
+              <Underline />
+              {basicPlanDesc.map((item, index) => (
+                <PricingCardDescription key={index}>
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    color={
+                      item.icon === faX ? colors.primary70 : colors.primary
+                    }
+                    size="2x"
+                  />
+                  {item.text}
+                </PricingCardDescription>
+              ))}
+            </PricingCard>
+            <PricingCard>
+              <PricingCardTitle>Spark Plan</PricingCardTitle>
+              <PricingCardPrice>$9.99/month</PricingCardPrice>
+              {isLoggedIn && !hasSpark ? (
+                <Button
+                  onClick={handleUpgradeClick}
+                  disabled={redirectLoading}
+                  loading={redirectLoading}
+                >
+                  {redirectLoading ? (
+                    <Dots color={colors.white} />
                   ) : (
-                    <PricingCardInfo>
-                      * Cancel your Spark subscription if you are content with
-                      using the Basic Plan.
-                    </PricingCardInfo>
+                    "Upgrade Now!"
                   )}
-                  <PricingCardLabel>Included with Basic:</PricingCardLabel>
-                  <Underline />
-                  {basicPlanDesc.map((item, index) => (
-                    <PricingCardDescription key={index}>
-                      <FontAwesomeIcon
-                        icon={item.icon}
-                        color={
-                          item.icon === faX ? colors.primary70 : colors.primary
-                        }
-                        size="2x"
-                      />
-                      {item.text}
-                    </PricingCardDescription>
-                  ))}
-                </PricingCard>
-                <PricingCard>
-                  <PricingCardTitle>Spark Plan</PricingCardTitle>
-                  <PricingCardPrice>$9.99/month</PricingCardPrice>
-                  {!hasSpark ? (
-                    <Button
-                      onClick={handleUpgradeClick}
-                      disabled={redirectLoading}
-                      loading={redirectLoading}
-                    >
-                      {redirectLoading ? (
-                        <Dots color={colors.white} />
-                      ) : (
-                        "Upgrade Now!"
-                      )}
-                    </Button>
+                </Button>
+              ) : isLoggedIn ? (
+                <Button
+                  onClick={handleManageClick}
+                  disabled={redirectLoading}
+                  loading={redirectLoading}
+                >
+                  {redirectLoading ? (
+                    <Dots color={colors.white} />
                   ) : (
-                    <Button
-                      onClick={handleManageClick}
-                      disabled={redirectLoading}
-                      loading={redirectLoading}
-                    >
-                      {redirectLoading ? (
-                        <Dots color={colors.white} />
-                      ) : (
-                        "Manage Subscription"
-                      )}
-                    </Button>
+                    "Manage Subscription"
                   )}
-                  <PricingCardLabel>Included with Spark:</PricingCardLabel>
-                  <Underline />
-                  {sparkPlanDesc.map((desc, index) => (
-                    <PricingCardDescription key={index}>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        color={colors.primary}
-                        size="2x"
-                      />
-                      {desc}
-                    </PricingCardDescription>
-                  ))}
-                </PricingCard>
-              </BottomSection>
-            </PricingContainer>
-          </PageContainer>
-          <Footer />
-        </>
-      )}
+                </Button>
+              ) : (
+                <Button onClick={() => router.push("/signup")}>
+                  Get Started <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+              )}
+              <PricingCardLabel>Included with Spark:</PricingCardLabel>
+              <Underline />
+              {sparkPlanDesc.map((desc, index) => (
+                <PricingCardDescription key={index}>
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    color={colors.primary}
+                    size="2x"
+                  />
+                  {desc}
+                </PricingCardDescription>
+              ))}
+            </PricingCard>
+          </BottomSection>
+        </PricingContainer>
+      </PageContainer>
+      <Footer />
     </>
   );
 };

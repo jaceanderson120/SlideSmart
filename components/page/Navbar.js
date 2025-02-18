@@ -85,38 +85,16 @@ function Navbar() {
         </LogoContainer>
         <LinksContainer>
           {isLoggedIn && (
-            <>
-              <Button
-                onClick={() => router.push("/find-slides")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Find Slides
-              </Button>
-              <Button
-                onClick={() => router.push("/contact")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Contact Us
-              </Button>
-              <Button
-                onClick={() => router.push("/pricing")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Pricing
-              </Button>
-            </>
+            <Button
+              onClick={() => router.push("/find-slides")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Find Slides
+            </Button>
           )}
           <Button
             onClick={() => router.push("/how-it-works")}
@@ -127,6 +105,26 @@ function Navbar() {
             hoverTextColor={colors.primary}
           >
             How it Works
+          </Button>
+          <Button
+            onClick={() => router.push("/pricing")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            Pricing
+          </Button>
+          <Button
+            onClick={() => router.push("/contact")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            Contact Us
           </Button>
         </LinksContainer>
       </LeftButtonSection>
