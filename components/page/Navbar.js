@@ -126,6 +126,16 @@ function Navbar() {
           >
             Contact Us
           </Button>
+          <Button
+            onClick={() => router.push("/compare")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            Compare
+          </Button>
         </LinksContainer>
       </LeftButtonSection>
       <RightButtonSection>
