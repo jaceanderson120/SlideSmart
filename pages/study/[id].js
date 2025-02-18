@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import Link from "next/link";
-import ShareModal from "@/components/ShareModal";
+import ShareModal from "@/components/modals/ShareModal";
 import {
   fetchStudyGuide,
   updateStudyGuideFileName,
@@ -34,15 +34,15 @@ import {
   faMessage,
 } from "@fortawesome/free-regular-svg-icons";
 import { useStateContext } from "@/context/StateContext";
-import Chatbot from "@/components/Chatbot";
-import AutoResizeTextArea from "@/components/AutoResizeTextArea";
+import Chatbot from "@/components/studyGuide/Chatbot";
+import AutoResizeTextArea from "@/components/studyGuide/AutoResizeTextArea";
 import { toast } from "react-toastify";
 import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
-import AddSectionsContainer from "@/components/AddSectionsContainer";
-import AddTopicDialog from "@/components/AddTopicDialog";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import AddSectionsContainer from "@/components/studyGuide/AddSectionsContainer";
+import AddTopicModal from "@/components/modals/AddTopicModal";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { colors } from "@/constants/colors";
@@ -51,7 +51,7 @@ import {
   generateExplanation,
   generateQuestionAnswer,
 } from "@/utils/generateStudyGuideSections";
-import StudyGuideTopics from "@/components/StudyGuideTopics";
+import StudyGuideTopics from "@/components/studyGuide/StudyGuideTopics";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -80,7 +80,7 @@ const Study = () => {
   const [isDeleteSubSectionDialogOpen, setIsDeleteSubSectionDialogOpen] =
     useState(false);
   const [subSectionToDelete, setSubSectionToDelete] = useState(null);
-  const [isAddTopicDialogOpen, setIsAddTopicDialogOpen] = useState(false);
+  const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false);
   const [isNewYoutubeVideoDialogOpen, setIsNewYoutubeVideoDialogOpen] =
     useState(false);
   const [topicForNewYoutubeVideo, setTopicForNewYoutubeVideo] = useState(null);
@@ -462,10 +462,31 @@ const Study = () => {
       },
       body: JSON.stringify({ query }), // Sending the topic as JSON
     });
-    const videoId = await res2.json();
+    let videoIds = await res2.json();
+
+    // There may be dupicate video IDs somewhere in the study guide, so we need to check if the video ID is already in the array
+    // Get all the video IDs from the study guide
+    if (videoIds != null) {
+      let allVideoIds = [];
+      Object.keys(studyGuide.extractedData).forEach((key) => {
+        allVideoIds = allVideoIds.concat(
+          studyGuide.extractedData[key]["youtubeIds"]
+        );
+      });
+
+      // Check if the video ID is already in the array
+      let filteredVideoIds = [];
+      for (const video of videoIds) {
+        if (!allVideoIds.includes(video)) {
+          filteredVideoIds.push(video);
+        }
+      }
+
+      videoIds = filteredVideoIds;
+    }
 
     // Update the study guide object with the new YouTube video ID
-    updateStudyGuideObject(topic, "youtubeIds", videoId);
+    updateStudyGuideObject(topic, "youtubeIds", videoIds);
     setfindingNewYoutubeVideo(false);
   };
 
@@ -668,7 +689,7 @@ const Study = () => {
                 topics={Object.keys(studyGuide.extractedData)}
                 editMode={editMode}
                 onDragEnd={handleDragEnd}
-                setIsAddTopicDialogOpen={setIsAddTopicDialogOpen}
+                setIsAddTopicModalOpen={setIsAddTopicModalOpen}
                 activeTopic={activeTopic}
                 flex={isTopicsShown ? "0.5" : "0"}
               />
@@ -1018,7 +1039,7 @@ const Study = () => {
           />
         }
       />
-      <ConfirmationDialog
+      <ConfirmationModal
         isOpen={isDiscardEditsDialogOpen}
         onClose={() => setIsDiscardEditsDialogOpen(false)}
         title="Discard Edits"
@@ -1028,7 +1049,7 @@ const Study = () => {
           discardEdits();
         }}
       />
-      <ConfirmationDialog
+      <ConfirmationModal
         isOpen={isDeleteTopicDialogOpen}
         onClose={() => setIsDeleteTopicDialogOpen(false)}
         title="Delete Study Guide Topic"
@@ -1042,7 +1063,7 @@ const Study = () => {
           <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
         }
       />
-      <ConfirmationDialog
+      <ConfirmationModal
         isOpen={isDeleteSubSectionDialogOpen}
         onClose={() => setIsDeleteSubSectionDialogOpen(false)}
         title={`Delete ${
@@ -1064,7 +1085,7 @@ const Study = () => {
           <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
         }
       />
-      <ConfirmationDialog
+      <ConfirmationModal
         isOpen={isNewYoutubeVideoDialogOpen}
         onClose={() => {
           setIsNewYoutubeVideoDialogOpen(false);
@@ -1085,7 +1106,7 @@ const Study = () => {
           );
         }}
       />
-      <ConfirmationDialog
+      <ConfirmationModal
         isOpen={isAutoGenerateDialogOpen}
         onClose={() => {
           setIsAutoGenerateDialogOpen(false);
@@ -1119,10 +1140,10 @@ const Study = () => {
           />
         }
       />
-      <AddTopicDialog
-        isOpen={isAddTopicDialogOpen}
+      <AddTopicModal
+        isOpen={isAddTopicModalOpen}
         onClose={() => {
-          setIsAddTopicDialogOpen(false);
+          setIsAddTopicModalOpen(false);
         }}
         onConfirm={handleAddTopic}
       />

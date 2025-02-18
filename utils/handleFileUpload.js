@@ -162,6 +162,20 @@ const handleFileUpload = async (
         youtubeResponses = await Promise.all(youtubePromises);
       }
 
+      // At this point, YouTube responses should be an array of arrays
+      // Filter out any duplicates
+      const seen = new Set();
+      youtubeResponses = youtubeResponses.map((sublist) => {
+        const filteredSublist = [];
+        sublist.forEach((num) => {
+          if (!seen.has(num)) {
+            filteredSublist.push(num);
+            seen.add(num);
+          }
+        });
+        return filteredSublist;
+      });
+
       // Only resolve createExamplesPromise if includeExamples is true
       let examplesResponse;
       if (includeExamples) {

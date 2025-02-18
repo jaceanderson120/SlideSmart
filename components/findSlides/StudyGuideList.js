@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
-import Button from "./Button";
+import Button from "../Button";
 
 const StudyGuideList = ({ guides }) => {
   const router = useRouter();

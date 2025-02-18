@@ -3,13 +3,13 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
-import StudyGuideList from "@/components/StudyGuideList";
-import Footer from "@/components/Footer";
+import StudyGuideList from "@/components/findSlides/StudyGuideList";
+import Footer from "@/components/page/Footer";
 import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 import { toast } from "react-toastify";
 
 const FindSlides = () => {

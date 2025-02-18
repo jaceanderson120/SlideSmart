@@ -11,7 +11,7 @@ const StudyGuideTopics = ({
   topics,
   editMode,
   onDragEnd,
-  setIsAddTopicDialogOpen,
+  setIsAddTopicModalOpen,
   activeTopic,
 }) => {
   return (
@@ -53,7 +53,7 @@ const StudyGuideTopics = ({
                 marginTop="16px"
                 fontSize={fontSize.label}
                 onClick={() => {
-                  setIsAddTopicDialogOpen(true);
+                  setIsAddTopicModalOpen(true);
                 }}
               >
                 <FontAwesomeIcon icon={faPlus} /> Add Topic

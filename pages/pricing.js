@@ -18,9 +18,9 @@ import "react-activity/dist/library.css";
 import Button from "@/components/Button";
 import { colors } from "@/constants/colors";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
-import Footer from "@/components/Footer";
+import Footer from "@/components/page/Footer";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 
 const Pricing = () => {
   const { hasSpark } = useStateContext();

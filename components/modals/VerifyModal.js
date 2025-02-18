@@ -1,14 +1,14 @@
 import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import Button from "./Button";
+import Button from "../Button";
 import { useEffect, useState } from "react";
 import { colors } from "@/constants/colors";
 import { toast } from "react-toastify";
 
 Modal.setAppElement("#__next");
 
-const VerifyDialog = ({ isOpen, onClose, onConfirm, email }) => {
+const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
   const [enteredCode, setEnteredCode] = useState("");
   const [code, setCode] = useState(null);
   const [resendDisabled, setResendDisabled] = useState(false);
@@ -48,7 +48,7 @@ const VerifyDialog = ({ isOpen, onClose, onConfirm, email }) => {
     // Re-enable the button after 30 seconds
     setTimeout(() => {
       setResendDisabled(false);
-    }, 30000);
+    }, 15000);
   };
 
   // On opening the dialog, send a verification code
@@ -187,4 +187,4 @@ const ModalInput = styled.input`
   width: 100%;
 `;
 
-export default VerifyDialog;
+export default VerifyModal;

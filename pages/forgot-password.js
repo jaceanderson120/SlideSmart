@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Footer from "../components/Footer";
+import Footer from "../components/page/Footer";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
@@ -17,10 +17,10 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import CredentialsForm from "@/components/CredentialsForm";
-import OrLine from "@/components/OrLine";
+import CredentialsForm from "@/components/auth/CredentialsForm";
+import OrLine from "@/components/auth/OrLine";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 import sendForgotPasswordEmail from "@/firebase/forgotPassword";
 
 export default function ForgotPassword() {

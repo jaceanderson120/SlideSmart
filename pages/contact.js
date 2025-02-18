@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import styled from "styled-components";
 import { useStateContext } from "@/context/StateContext";
-import Footer from "@/components/Footer";
+import Footer from "@/components/page/Footer";
 import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import "react-activity/dist/library.css";
 // import useAuthRedirect from "@/hooks/useAuthRedirect";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
