@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { auth } from "@/firebase/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
@@ -18,81 +16,85 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import CredentialsForm from "@/components/CredentialsForm";
-import GoogleButton from "@/components/GoogleButton";
 import OrLine from "@/components/OrLine";
-import Agreement from "@/components/Agreement";
 import Head from "next/head";
 import PageContainer from "@/components/PageContainer";
+import sendForgotPasswordEmail from "@/firebase/forgotPassword";
 
-export default function Login() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
   const router = useRouter();
 
-  const login = async (e) => {
+  // Function to handle the email reset button click
+  const handleEmailResetClicked = async (e) => {
     e.preventDefault(); // prevent page reload (automatic behavior from form submission)
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Error logging in", error);
-      if (error.code === "auth/invalid-credential") {
-        toast.error(
-          "Invalid credentials. This email may be linked to a Google account, if so, please continue with Google. Otherwise, please try again."
-        );
-      } else if (error.code === "auth/invalid-email") {
-        toast.error("User not found. Please try again.");
-      }
+    if (!email) {
+      toast.error("Please enter an email address.");
+      return;
+    }
+    const res = await sendForgotPasswordEmail(email.trim());
+    if (res.success) {
+      setEmailSent(true);
+      toast.success(
+        "If an account with that email exists, we have sent you an email with instructions to reset your password."
+      );
+      setTimeout(() => {
+        setEmailSent(false);
+      }, 15000);
+    } else {
+      toast.error(
+        "Error sending email. Please double-check your email try again."
+      );
     }
   };
 
   return (
     <>
       <Head>
-        <title>SlideSmart - Login</title>
+        <title>SlideSmart - Forgot Password</title>
         <meta
           name="description"
-          content="Login to SlideSmart to access your study guides and resources."
+          content="Forgot your password? Reset it here."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/login" />
+        <link
+          rel="canonical"
+          href="https://www.slidesmartai.com/forgot-password"
+        />
       </Head>
       <PageContainer>
         <Section>
           <CredentialsForm>
             <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-            <Title>Welcome back</Title>
-            <GoogleButton />
-            <OrLine />
+            <Title>Forgot your password?</Title>
             <Input
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            {!emailSent && (
+              <Button
+                onClick={handleEmailResetClicked}
+                marginTop="10px"
+                style={{ fontWeight: "bold" }}
+              >
+                Email me a reset link
+              </Button>
+            )}
+            <OrLine />
             <Button
-              onClick={login}
+              onClick={() => router.push("/login")}
               marginTop="10px"
               style={{ fontWeight: "bold" }}
             >
-              Login with email <FontAwesomeIcon icon={faArrowRight} />
+              <FontAwesomeIcon icon={faArrowLeft} /> Go back to login
             </Button>
-            <Agreement type="login" />
             <StyledText>
-              Don't have an account?{" "}
-              <TextLink href="/signup">Register</TextLink>
-            </StyledText>
-            <StyledText>
-              Forgot your password?{" "}
-              <TextLink href="/forgot-password">Reset it here</TextLink>
+              Want to create a new account?{" "}
+              <RegisterLink href="/signup">Create one here</RegisterLink>
             </StyledText>
           </CredentialsForm>
         </Section>
@@ -139,7 +141,7 @@ const StyledText = styled.div`
   font-size: ${fontSize.secondary};
 `;
 
-const TextLink = styled(Link)`
+const RegisterLink = styled(Link)`
   font-size: ${fontSize.secondary};
   text-decoration: none;
   color: ${colors.primary};
