@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { colors } from "@/constants/colors";
 import { toast } from "react-toastify";
 
