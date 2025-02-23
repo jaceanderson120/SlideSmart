@@ -4,12 +4,14 @@ import styled from "styled-components";
 import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import Button from "./Button";
+import { trackClickThrough } from "@/firebase/database";
 
 const StudyGuideList = ({ guides }) => {
   const router = useRouter();
   const [selectedGuide, setSelectedGuide] = useState(null);
 
-  const handleClick = (guideId) => {
+  const handleClick = async (guideId) => {
+    await trackClickThrough();
     router.push(`/study/${guideId}`);
   };
 

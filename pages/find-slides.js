@@ -29,42 +29,8 @@ const FindSlides = () => {
     setInputText(e.target.value);
   };
 
-  const levenshteinDistance = (str1, str2) => {
-    const m = str1.length;
-    const n = str2.length;
-    const dp = Array(m + 1)
-      .fill()
-      .map(() => Array(n + 1).fill(0));
-
-    for (let i = 0; i <= m; i++) dp[i][0] = i;
-    for (let j = 0; j <= n; j++) dp[0][j] = j;
-
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        if (str1[i - 1] === str2[j - 1]) {
-          dp[i][j] = dp[i - 1][j - 1];
-        } else {
-          dp[i][j] = Math.min(
-            dp[i - 1][j - 1] + 1,
-            dp[i - 1][j] + 1,
-            dp[i][j - 1] + 1
-          );
-        }
-      }
-    }
-    return dp[m][n];
-  };
-
-  const calculateSimilarity = (str1, str2) => {
-    const maxLength = Math.max(str1.length, str2.length);
-    if (maxLength === 0) return 1.0;
-    const distance = levenshteinDistance(str1, str2);
-    return 1 - distance / maxLength;
-  };
-
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
-    let similarityThreshold = 0.75;
     try {
       setSearching(true);
 
@@ -85,46 +51,7 @@ const FindSlides = () => {
       setHasSearched(true);
 
       // Get all study guides
-      const guides = await getPublicStudyGuides();
-
-      // Score each guide based on keyword matches
-      const scoredGuides = guides.map((guide) => {
-        let relevanceScore = 0;
-        const guideText = (
-          guide.fileName +
-          " " +
-          guide.topics.join(" ")
-        ).toLowerCase();
-
-        keywords.forEach((keyword) => {
-          // Check for exact matches
-          if (guideText.includes(keyword.toLowerCase())) {
-            relevanceScore += 2;
-          } else {
-            // Check each word in the guide text for fuzzy matches
-            const words = guideText.split(/\s+/);
-            words.forEach((word) => {
-              const similarity = calculateSimilarity(
-                keyword.toLowerCase(),
-                word
-              );
-              if (similarity >= similarityThreshold) {
-                relevanceScore += 1;
-              }
-            });
-          }
-        });
-
-        return {
-          ...guide,
-          relevanceScore,
-        };
-      });
-
-      // Filter and sort results
-      const filteredGuides = scoredGuides
-        .filter((guide) => guide.relevanceScore > 0)
-        .sort((a, b) => b.relevanceScore - a.relevanceScore);
+      const filteredGuides = await getPublicStudyGuides(keywords);
 
       setStudyGuides(filteredGuides);
     } catch (error) {
