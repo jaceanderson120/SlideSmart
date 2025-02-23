@@ -31,26 +31,35 @@ const FindSlides = () => {
 
   // Trigger the search and update studyGuides state
   const handleSearch = async () => {
-    setSearching(true);
+    try {
+      setSearching(true);
 
-    // If the user tries to search without entering a keyword, show an error message
-    if (inputText === "") {
-      toast.error("Please enter a keyword to search for.");
-      return;
+      if (!inputText.trim()) {
+        toast.error("Please enter a keyword to search for.");
+        setSearching(false);
+        return;
+      }
+
+      // Extract keywords
+      const keywords = keywordExtractor.extract(inputText, {
+        language: "english",
+        remove_digits: true,
+        return_changed_case: true,
+        remove_duplicates: true,
+      });
+
+      setHasSearched(true);
+
+      // Get all study guides
+      const filteredGuides = await getPublicStudyGuides(keywords);
+
+      setStudyGuides(filteredGuides);
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("An error occurred while searching.");
+    } finally {
+      setSearching(false);
     }
-
-    // Extract the keywords from the search bar
-    let keyWords = keywordExtractor.extract(inputText, {
-      language: "english",
-      remove_digits: true,
-      return_changed_case: true,
-      remove_duplicates: true,
-    });
-    setHasSearched(true);
-    // When we decide on how to move foward with a more advanced search swap out the inputText for keyWords array and then handle that on the backend
-    const guides = await getPublicStudyGuides(inputText);
-    setStudyGuides(guides);
-    setSearching(false);
   };
 
   // If user presses 'Enter', run the same search function

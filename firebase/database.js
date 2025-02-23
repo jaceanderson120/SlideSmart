@@ -7,6 +7,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  increment,
   query,
   runTransaction,
   setDoc,
@@ -114,8 +115,84 @@ const getUserStudyGuides = async (user) => {
   }
 };
 
-const getPublicStudyGuides = async (search_input) => {
+// Function to track search stats
+async function trackSearchHit(hits, numHits) {
+  const searchRef = doc(db, "searchMetrics", "slideSearch");
+
+  let updateData = {
+    searchCount: increment(1),
+    numHits: increment(numHits),
+  };
+
+  if (hits !== 0) {
+    updateData.hits = increment(hits);
+    updateData.hadResultsToClickThrough = increment(1);
+  }
+
+  try {
+    await updateDoc(searchRef, updateData);
+  } catch (error) {
+    console.error("Error updating search metrics:", error);
+  }
+}
+
+// Function to track click-throughs
+async function trackClickThrough() {
+  const searchRef = doc(db, "searchMetrics", "slideSearch");
+
+  // Increment click-through count
+  await updateDoc(searchRef, {
+    clickThroughs: increment(1),
+  });
+}
+
+// Used to calculate the similarity between a keyword and the slide topic/filename
+// Takes in two strings and calculates how many insertions, deletions, or substitutions it takes for them to be equal
+const levenshteinDistance = (str1, str2) => {
+  const m = str1.length;
+  const n = str2.length;
+  const dp = Array(m + 1)
+    .fill()
+    .map(() => Array(n + 1).fill(0));
+
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (str1[i - 1] === str2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.min(
+          dp[i - 1][j - 1] + 1,
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1
+        );
+      }
+    }
+  }
+  return dp[m][n];
+};
+
+// Used to calculate the similarity between a word in the keyword search and a word in the filename/topics of slides
+// Normalizes the LevenshteinDistance - ie. if a word has 9 letters and it only takes 2 operations to match it will be penalized less
+// than a word that has 5 letters with 2 operations to match
+const calculateSimilarity = (str1, str2) => {
+  const maxLength = Math.max(str1.length, str2.length);
+  if (maxLength === 0) return 1.0;
+  const distance = levenshteinDistance(str1, str2);
+  return 1 - distance / maxLength;
+};
+
+// Fetches study guides from Firestore and returns the ones most closely associated with a search
+// In the long term this logic will not holdup, this is more so a functional stopgap to hold us over until the challenge is over
+// or more data is gathered
+// Input: the key words of a global study guide search
+// Output: the study guides most closley associated with said key words (based on filename and topic names)
+const getPublicStudyGuides = async (keywords) => {
   const snapshot = await getDocs(collection(db, "studyGuides"));
+
+  let similarityThreshold = 0.75;
 
   // 2. Convert docs to an array of objects
   const allGuides = snapshot.docs.map((doc) => ({
@@ -123,14 +200,48 @@ const getPublicStudyGuides = async (search_input) => {
     ...doc.data(),
   }));
 
-  // 3. Filter locally for filenames containing the search string
-  const filtered = allGuides.filter(
-    (guide) =>
-      guide.fileName?.toLowerCase().includes(search_input.toLowerCase()) &&
-      guide.isPublic
-  );
+  // Score each guide based on keyword matches
+  const scoredGuides = allGuides.map((guide) => {
+    let relevanceScore = 0;
+    const guideText = (
+      guide.fileName +
+      " " +
+      guide.topics.join(" ")
+    ).toLowerCase();
 
-  return filtered;
+    keywords.forEach((keyword) => {
+      // Check for exact matches
+      if (guideText.includes(keyword.toLowerCase())) {
+        relevanceScore += 2;
+      } else {
+        // Check each word in the guide text for fuzzy matches
+        const words = guideText.split(/\s+/);
+        words.forEach((word) => {
+          const similarity = calculateSimilarity(keyword.toLowerCase(), word);
+          if (similarity >= similarityThreshold) {
+            relevanceScore += 1;
+          }
+        });
+      }
+    });
+
+    return {
+      ...guide,
+      relevanceScore,
+    };
+  });
+
+  // Filter and sort results
+  const filteredGuides = scoredGuides
+    .filter((guide) => guide.relevanceScore > 0)
+    .sort((a, b) => b.relevanceScore - a.relevanceScore);
+
+  if (filteredGuides.length) {
+    await trackSearchHit(1, filteredGuides.length);
+  } else {
+    await trackSearchHit(0, 0);
+  }
+  return filteredGuides;
 };
 
 // Fetches a specific study guide from Firestore
@@ -349,4 +460,5 @@ export {
   hasAccessToStudyGuide,
   uploadFileToFirebase,
   getPublicStudyGuides,
+  trackClickThrough,
 };
