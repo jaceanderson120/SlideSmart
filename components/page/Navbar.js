@@ -6,11 +6,11 @@ import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
 import { useRouter } from "next/router";
-import CustomMenu from "./CustomMenu";
-import UserIcon from "./UserIcon";
+import CustomMenu from "../CustomMenu";
+import UserIcon from "../UserIcon";
 import { useState, useEffect } from "react";
 import { colors } from "@/constants/colors";
-import Button from "./Button";
+import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -85,38 +85,16 @@ function Navbar() {
         </LogoContainer>
         <LinksContainer>
           {isLoggedIn && (
-            <>
-              <Button
-                onClick={() => router.push("/find-slides")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Find Slides
-              </Button>
-              <Button
-                onClick={() => router.push("/contact")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Contact Us
-              </Button>
-              <Button
-                onClick={() => router.push("/pricing")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
-              >
-                Pricing
-              </Button>
-            </>
+            <Button
+              onClick={() => router.push("/find-slides")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Find Slides
+            </Button>
           )}
           <Button
             onClick={() => router.push("/how-it-works")}
@@ -127,6 +105,26 @@ function Navbar() {
             hoverTextColor={colors.primary}
           >
             How it Works
+          </Button>
+          <Button
+            onClick={() => router.push("/pricing")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            Pricing
+          </Button>
+          <Button
+            onClick={() => router.push("/contact")}
+            padding="8px"
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            textColor={colors.black}
+            hoverTextColor={colors.primary}
+          >
+            Contact Us
           </Button>
         </LinksContainer>
       </LeftButtonSection>

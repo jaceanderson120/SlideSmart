@@ -7,7 +7,7 @@ import { useStateContext } from "@/context/StateContext";
 import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "./Button";
+import Button from "../Button";
 import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");

@@ -88,7 +88,6 @@ export default async function chatbotGPT(req, res) {
         const response = await openai.completions.create({
           model: deployment,
           messages: formattedMessages,
-          max_tokens: 1000,
         });
 
         const gptOutput = response.choices[0].message.content;

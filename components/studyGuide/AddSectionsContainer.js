@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "../Button";
 import { colors } from "@/constants/colors";
 
 const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {

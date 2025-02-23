@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
-import Footer from "../components/Footer";
+import Footer from "../components/page/Footer";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { storeUserInfo } from "@/firebase/database";
@@ -10,12 +10,12 @@ import { fontSize } from "@/constants/fontSize";
 import Link from "next/link";
 import Button from "@/components/Button";
 import { colors } from "@/constants/colors";
-import CredentialsForm from "@/components/CredentialsForm";
+import CredentialsForm from "@/components/auth/CredentialsForm";
 import Image from "next/image";
 import logo from "@/images/logo.png";
-import GoogleButton from "@/components/GoogleButton";
-import OrLine from "@/components/OrLine";
-import Agreement from "@/components/Agreement";
+import GoogleButton from "@/components/auth/GoogleButton";
+import OrLine from "@/components/auth/OrLine";
+import Agreement from "@/components/auth/Agreement";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -24,7 +24,10 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
+import VerifyModal from "@/components/modals/VerifyModal";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 const Signup = () => {
@@ -33,33 +36,38 @@ const Signup = () => {
   const [retypePassword, setRetypePassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [continueDisabled, setContinueDisabled] = useState(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const router = useRouter();
 
-  const signup = (e) => {
+  const signup = async (e) => {
     e.preventDefault(); // Prevent page reload
+    setContinueDisabled(true); // Disable the continue button
 
     // Check if all fields are filled
     if (!email || !password || !firstName || !lastName || !retypePassword) {
-      const notify = () =>
-        toast.error("Please fill out all fields before signing up.");
-      notify();
+      toast.error("Please fill out all fields before signing up.");
+      setContinueDisabled(false); // Re-enable the continue button
       return;
     }
 
     if (password.length < 6) {
-      const notify = () =>
-        toast.error("Passwords must be more than 6 characters.");
-      notify();
+      toast.error("Passwords must be more than 6 characters.");
+      setContinueDisabled(false); // Re-enable the continue button
       return;
     }
 
     if (retypePassword != password) {
-      const notify = () =>
-        toast.error("Your passwords do not match. Please try again.");
-      notify();
+      toast.error("Your passwords do not match. Please try again.");
+      setContinueDisabled(false); // Re-enable the continue button
       return;
     }
 
+    setIsVerifyModalOpen(true);
+    setContinueDisabled(false); // Re-enable the continue button
+  };
+
+  const completeSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
@@ -126,13 +134,18 @@ const Signup = () => {
               onChange={(e) => setRetypePassword(e.target.value)}
             />
             <Agreement type="signup" />
-            <Button
-              marginTop="10px"
-              onClick={signup}
-              style={{ fontWeight: "bold" }}
-            >
-              Continue with email <FontAwesomeIcon icon={faArrowRight} />
-            </Button>
+            {!continueDisabled ? (
+              <Button
+                marginTop="10px"
+                onClick={signup}
+                style={{ fontWeight: "bold" }}
+                disabled={continueDisabled}
+              >
+                Continue with email <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+            ) : (
+              <Dots />
+            )}
             <Login>
               Already have an account?{" "}
               <LoginLink href="/login">Login</LoginLink>
@@ -141,6 +154,14 @@ const Signup = () => {
         </Section>
       </PageContainer>
       <Footer />
+      <VerifyModal
+        isOpen={isVerifyModalOpen}
+        onClose={() => {
+          setIsVerifyModalOpen(false);
+        }}
+        onConfirm={completeSignup}
+        email={email}
+      />
     </>
   );
 };

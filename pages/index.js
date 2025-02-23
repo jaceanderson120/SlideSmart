@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Footer from "../components/Footer";
+import Footer from "../components/page/Footer";
 import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
 import "react-circular-progressbar/dist/styles.css";
@@ -15,7 +15,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { colors } from "@/constants/colors";
 import Head from "next/head";
-import PageContainer from "@/components/PageContainer";
+import PageContainer from "@/components/page/PageContainer";
 
 export default function Home() {
   const router = useRouter();
@@ -32,9 +32,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>
-          SlideSmart - The AI Application Made to Make Slides Make Sense
-        </title>
+        <title>SlideSmart - The AI Application to Make Slides Make Sense</title>
         <meta
           name="description"
           content="We turn your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
@@ -45,9 +43,9 @@ export default function Home() {
         <Section>
           <SloganContainer>
             <Slogan>
-              The AI Application Made
+              The AI Application to
               <br />
-              to Make
+              Make
               <span style={{ color: colors.primary, fontWeight: "bold" }}>
                 {" "}
                 Slides
