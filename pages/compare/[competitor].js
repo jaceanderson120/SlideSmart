@@ -61,16 +61,29 @@ const Competitor = () => {
   };
 
   const compareCriteria = [
-    "Highly-rated YouTube videos",
-    "Auto-generation tools",
-    "Chatbot tailored to slide content",
-    "Collaboration with others",
-    "View other study guides",
-    "Divided by important topics for your understanding",
-    "View your original file",
+    "Highly-Rated YouTube Videos",
+    "Auto-Generation Tools",
+    "Tailored Chatbot",
+    "Collaborate with Friends",
+    "View Other User Content",
+    "Divided by Important Topics",
+    "View the Original File",
   ];
 
+  // Criteria data for each competitor, ordered by the criteria above
+  const criteriaData = {
+    Quizlet: [false, true, false, false, true, false, false],
+    ChatGPT: [false, false, false, false, false, true, false],
+    Chegg: [false, false, false, true, true, false, true],
+    "AI Tutor": [false, false, true, false, false, true, false],
+    NoteGPT: [false, true, true, false, false, false, true],
+    Studocu: [false, false, false, false, true, true, false],
+    Knowt: [false, true, true, false, true, false, true],
+    SlideSpeak: [false, false, true, false, false, false, true],
+  };
+
   const competitorInfo = information[competitor];
+  const competitorData = criteriaData[competitor];
 
   return (
     <>
@@ -82,22 +95,25 @@ const Competitor = () => {
             <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
             <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
           </TitleContainer>
-        </Section>
-        <Section>
           <ComparisonTable>
             <thead>
               <tr>
-                <th>Criteria</th>
-                <th>SlideSmart</th>
-                <th>{competitor}</th>
+                <TableCompareHeader>Compare Features</TableCompareHeader>
+                <TableHeader>SlideSmart</TableHeader>
+                <TableHeader>{competitor}</TableHeader>
               </tr>
             </thead>
             <tbody>
               {compareCriteria.map((criteria, index) => (
                 <tr key={index}>
-                  <td>{criteria}</td>
-                  <td>✔️</td>
-                  <td>❌</td>
+                  <CriteriaTd>{criteria}</CriteriaTd>
+                  <CheckmarkTd>✔️</CheckmarkTd>
+                  {competitorData &&
+                    (competitorData[index] ? (
+                      <CheckmarkTd>✔️</CheckmarkTd>
+                    ) : (
+                      <XTd>❌</XTd>
+                    ))}
                 </tr>
               ))}
             </tbody>
@@ -115,8 +131,8 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
   padding: 32px;
+  gap: 32px;
 `;
 
 const TitleContainer = styled.div`
@@ -146,24 +162,82 @@ const Subtext = styled.p`
 `;
 
 const ComparisonTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin: 32px 0;
+  width: 60%;
+  border-spacing: 0;
+  border: 1px solid ${colors.gray}; // Outer border of the table
+  border-radius: 16px; // Outer border curve of the table
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 
   th,
   td {
     border: 1px solid ${colors.gray};
-    padding: 16px;
-    text-align: center;
+    padding: 32px;
   }
 
-  th {
-    background-color: ${colors.primary};
-    color: ${colors.white};
-    font-size: ${fontSize.subheading};
+  // The bottom borders of table cells will be used as the borders between rows
+  tr + tr th,
+  tr + tr td {
+    border-top: 0;
   }
 
-  td {
-    font-size: ${fontSize.default};
+  // The right borders of table cells will be used as the borders between columns
+  th + th,
+  th + td,
+  td + th,
+  td + td {
+    border-left: 0;
   }
+
+  // Remove the outer edge borders from the table cells, as the <table> element will have the border property set for the outside
+  th:first-child,
+  td:first-child {
+    border-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: 0;
+  }
+
+  tr:first-child th {
+    border-top: 0;
+  }
+
+  tr:last-child th,
+  tr:last-child td {
+    border-bottom: 0;
+  }
+`;
+
+const TableCompareHeader = styled.th`
+  background-color: ${colors.white};
+  text-align: left;
+  font-size: ${fontSize.label};
+  font-weight: bold;
+  color: ${colors.gray};
+`;
+
+const TableHeader = styled.th`
+  background-color: ${colors.white};
+  color: ${colors.black};
+  font-size: ${fontSize.subheading};
+  font-weight: bold;
+  width: 25%;
+`;
+
+const CriteriaTd = styled.td`
+  background-color: ${colors.white};
+  font-size: ${fontSize.label};
+  font-weight: bold;
+`;
+
+const CheckmarkTd = styled.td`
+  text-align: center;
+  background-color: #d2e8d6;
+`;
+
+const XTd = styled.td`
+  text-align: center;
+  background-color: #f7cece;
 `;
