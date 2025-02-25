@@ -21,16 +21,32 @@ export default async function getTopics(req, res) {
       slidesData
     )}
     Please analyze the text and develop a comprehensive learning plan for students. Based off of the comprehensive learning plan you develop, create the following:
-    1. **Explanations for Each Topic**: Create detailed explanations for each topic in the comprehensive learning plan. Include relevant details from the PowerPoint and ensure the explanations are thorough.
-    2. **Number of Topics**: Try to limit the number of topics to a maximum of 8 unless you really need to generate more than that. You may combine topics if it makes sense to as needed.
-    3. **Transitional Topics**: Feel free to introduce additional topics that connect the existing ones in a cohesive manner.
-    4. **Relevant Content**: Avoid including non-informational items such as homework, exam dates, slide outlines, or lecture summaries in your explanations.
+    1. **Identifying Topics**:
+      - Identify and list the most important topics for the slides.
+      - Aim for no more than 8 topics unless more topics are absolutely necessary.
+      - Combine or omit minor or duplicate topics.
+      - Keep the topics relevant to info that is strictly in the slides.
+
+    2. **Explanation of Topics**:
+      - For each topic, develop a detailed explanation.
+      - If there is sufficient text in the slides relating to a topic, focus on and mirror that information.
+      - If there is insufficient text, you may supplement the explanation with necessary context, but keep it concise, accurate, and clearly related to the topic.
+      - When adding additional information, ensure each explanation is easy to understand, accurate, and focused on the slides.
+
+    3. **Relevant Content**:
+      - Avoid including non-informational items such as homework, exam dates, slide outlines, or lecture summaries in your explanations.
+
+    4. **Match the Complexity**:
+      - If the slides discuss advanced or specialized topics (e.g., graduate-level physics), your supplemental details should reflect that depth and use appropriate terminology.
+      - If the slides are more basic or introductory (e.g., elementary algebra), keep your supplemental details simple and concise.
+      
     Finally, return the data in JSON format as follows: 
     {
       'topicName1': 'explanation1', 
       'topicName2': 'explanation2',
     ...
     }
+    Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two.
 `;
 
   try {
@@ -40,7 +56,7 @@ export default async function getTopics(req, res) {
         {
           role: "system",
           content:
-            "You are a prefessor reviewing PowerPoints created by fellow professors. Make the PowerPoint easy for a student to understand. Respond in JSON format.",
+            "You are an academic tutor with an expertise in creating study guides. Make the PowerPoint easy for a student to understand. Respond in valid JSON format with no additional commentary.",
         },
         { role: "user", content: userMessage1 },
       ],

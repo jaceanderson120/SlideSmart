@@ -166,6 +166,9 @@ const handleFileUpload = async (
       // Filter out any duplicates
       const seen = new Set();
       youtubeResponses = youtubeResponses.map((sublist) => {
+        if (!sublist || !Array.isArray(sublist)) {
+          return [];
+        }
         const filteredSublist = [];
         sublist.forEach((num) => {
           if (!seen.has(num)) {

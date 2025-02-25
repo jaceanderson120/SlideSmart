@@ -84,18 +84,16 @@ const FindSlides = () => {
           <PageContainer>
             <Section>
               <LeftSection>
-                <PageTitle>FIND SLIDES</PageTitle>
+                <PageTitle>FIND STUDY GUIDES</PageTitle>
                 <Subtitle>
-                  Browse any and all<br></br>{" "}
-                  <SubtitleSpan>public study guides</SubtitleSpan>
+                  Seach and Find<br></br>{" "}
+                  <SubtitleSpan>Public Study Guides</SubtitleSpan>
                 </Subtitle>
                 <Subtext>
-                  Guess what? With the Spark Plan, you can save any public study
-                  guides as your own!
+                  With the Spark Plan, you can find and save study guides from
+                  other users as your own!
                 </Subtext>
-                <Subtext>
-                  Enter a keyword below and we will do the rest for you.
-                </Subtext>
+                <Subtext>Enter a keyword below to start your search.</Subtext>
                 <SearchContainer>
                   <Input
                     placeholder="What are you looking for?"

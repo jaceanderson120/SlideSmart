@@ -93,7 +93,7 @@ function Navbar() {
               textColor={colors.black}
               hoverTextColor={colors.primary}
             >
-              Find Slides
+              Find Study Guides
             </Button>
           )}
           <Button
