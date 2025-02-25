@@ -27,7 +27,6 @@ import {
   faArrowLeft,
   faMagicWandSparkles,
   faTrashCan,
-  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
