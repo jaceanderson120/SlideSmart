@@ -16,6 +16,7 @@ config.autoAddCss = false; /* eslint-disable import/first */
 import { colors } from "@/constants/colors";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
+import React from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -68,17 +69,20 @@ export default function Home() {
               <FontAwesomeIcon icon={faArrowRight} />
             </Button>
           </SloganContainer>
-          <InstructionContainer>
-            {!isLoggedIn && (
-              <>
-                Register/Login <FontAwesomeIcon icon={faArrowRight} />
-              </>
-            )}
-            Navigate to Your Dashboard <FontAwesomeIcon icon={faArrowRight} />
-            Upload Your Course Slides/Notes{" "}
-            <FontAwesomeIcon icon={faArrowRight} />
-            Watch the Magic Happen!
-          </InstructionContainer>
+          {!isLoggedIn ? (
+            <InstructionContainer>
+              <Instruction>1. Register/Login</Instruction>
+              <Instruction>2. Navigate to Your Dashboard</Instruction>
+              <Instruction>3. Upload Your Course Slides/Notes </Instruction>
+              <Instruction>4. Watch the Magic Happen!</Instruction>
+            </InstructionContainer>
+          ) : (
+            <InstructionContainer>
+              <Instruction>1. Navigate to Your Dashboard</Instruction>
+              <Instruction>2. Upload Your Course Slides/Notes </Instruction>
+              <Instruction>3. Watch the Magic Happen!</Instruction>
+            </InstructionContainer>
+          )}
           <MoreContainer>
             <Button
               textColor={colors.primary}
@@ -147,6 +151,9 @@ const InstructionContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 32px;
+`;
+
+const Instruction = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
   color: ${colors.black};
