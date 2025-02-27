@@ -91,6 +91,9 @@ function Navbar() {
       setDeviceWidth(window.innerWidth);
     };
 
+    // Set the initial device width
+    handleResize();
+
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -117,12 +120,12 @@ function Navbar() {
 
   return (
     <NavbarSection>
-      <LogoContainer onClick={() => router.push("/")}>
-        <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
-        SlideSmart
-      </LogoContainer>
       <LeftButtonSection>
-        {deviceWidth > 768 ? (
+        <LogoContainer onClick={() => router.push("/")}>
+          <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
+          SlideSmart
+        </LogoContainer>
+        {deviceWidth > 768 && (
           <LinksContainer>
             {isLoggedIn && (
               <Button
@@ -177,13 +180,14 @@ function Navbar() {
               Compare
             </Button>
           </LinksContainer>
-        ) : (
-          <CustomMenu
-            triggerElement={<Hamburger icon={faBars} size="xl" />}
-            menuItems={hamburgerMenuItems}
-          />
         )}
       </LeftButtonSection>
+      {deviceWidth < 768 && (
+        <CustomMenu
+          triggerElement={<Hamburger icon={faBars} size="xl" />}
+          menuItems={hamburgerMenuItems}
+        />
+      )}
       <RightButtonSection>
         {isLoggedIn ? (
           <>
