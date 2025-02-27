@@ -22,6 +22,21 @@ const StudyGuideTopics = ({
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
+            {editMode && (
+              <Button
+                backgroundColor="transparent"
+                textColor={colors.black}
+                hoverBackgroundColor={colors.primary70}
+                padding="8px"
+                marginTop="16px"
+                fontSize={fontSize.label}
+                onClick={() => {
+                  setIsAddTopicModalOpen(true);
+                }}
+              >
+                <FontAwesomeIcon icon={faPlus} /> Add Topic
+              </Button>
+            )}
             {topics.map((topic, index) => (
               <Draggable
                 key={topic}
@@ -44,21 +59,6 @@ const StudyGuideTopics = ({
               </Draggable>
             ))}
             {provided.placeholder}
-            {editMode && (
-              <Button
-                backgroundColor="transparent"
-                textColor={colors.black}
-                hoverBackgroundColor={colors.primary70}
-                padding="8px"
-                marginTop="16px"
-                fontSize={fontSize.label}
-                onClick={() => {
-                  setIsAddTopicModalOpen(true);
-                }}
-              >
-                <FontAwesomeIcon icon={faPlus} /> Add Topic
-              </Button>
-            )}
           </ContentContainer>
         )}
       </Droppable>
@@ -72,6 +72,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-bottom: 16px;
 `;
 
 const TopicName = styled.a`
@@ -81,6 +82,7 @@ const TopicName = styled.a`
   padding: 16px;
   font-size: ${fontSize.label};
   text-decoration: none;
+  text-align: left;
   color: ${colors.black};
   background-color: ${colors.primary33};
   transition: background-color 0.3s;
