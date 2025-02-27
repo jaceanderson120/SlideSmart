@@ -18,12 +18,13 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
+  const [deviceWidth, setDeviceWidth] = useState(0);
 
   const handleLogout = () => {
     signOut(auth);
@@ -38,6 +39,7 @@ function Navbar() {
     router.push("/pricing");
   };
 
+  // Define menu items for the user icon in the upper right
   const menuItems = [
     <MenuItemContainer>
       <HorizontalContainer>
@@ -59,6 +61,44 @@ function Navbar() {
     { name: "Logout", onClick: handleLogout },
   ];
 
+  // Define items for the hamburger menu
+  const hamburgerMenuItems = [
+    {
+      name: "Find Study Guides",
+      onClick: () => router.push("/find-slides"),
+    },
+    {
+      name: "How it Works",
+      onClick: () => router.push("/how-it-works"),
+    },
+    {
+      name: "Pricing",
+      onClick: () => router.push("/pricing"),
+    },
+    {
+      name: "Contact Us",
+      onClick: () => router.push("/contact"),
+    },
+    {
+      name: "Compare",
+      onClick: () => router.push("/compare"),
+    },
+  ];
+
+  // Get the device width
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceWidth(window.innerWidth);
+      console.log("Device width: ", window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   // Get the current user's initials
   useEffect(() => {
     const user = auth.currentUser;
@@ -78,65 +118,72 @@ function Navbar() {
 
   return (
     <NavbarSection>
+      <LogoContainer onClick={() => router.push("/")}>
+        <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
+        SlideSmart
+      </LogoContainer>
       <LeftButtonSection>
-        <LogoContainer onClick={() => router.push("/")}>
-          <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
-          SlideSmart
-        </LogoContainer>
-        <LinksContainer>
-          {isLoggedIn && (
+        {deviceWidth > 768 ? (
+          <LinksContainer>
+            {isLoggedIn && (
+              <Button
+                onClick={() => router.push("/find-slides")}
+                padding="8px"
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                textColor={colors.black}
+                hoverTextColor={colors.primary}
+              >
+                Find Study Guides
+              </Button>
+            )}
             <Button
-              onClick={() => router.push("/find-slides")}
+              onClick={() => router.push("/how-it-works")}
               padding="8px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
               textColor={colors.black}
               hoverTextColor={colors.primary}
             >
-              Find Study Guides
+              How it Works
             </Button>
-          )}
-          <Button
-            onClick={() => router.push("/how-it-works")}
-            padding="8px"
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            textColor={colors.black}
-            hoverTextColor={colors.primary}
-          >
-            How it Works
-          </Button>
-          <Button
-            onClick={() => router.push("/pricing")}
-            padding="8px"
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            textColor={colors.black}
-            hoverTextColor={colors.primary}
-          >
-            Pricing
-          </Button>
-          <Button
-            onClick={() => router.push("/contact")}
-            padding="8px"
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            textColor={colors.black}
-            hoverTextColor={colors.primary}
-          >
-            Contact Us
-          </Button>
-          <Button
-            onClick={() => router.push("/compare")}
-            padding="8px"
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            textColor={colors.black}
-            hoverTextColor={colors.primary}
-          >
-            Compare
-          </Button>
-        </LinksContainer>
+            <Button
+              onClick={() => router.push("/pricing")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Pricing
+            </Button>
+            <Button
+              onClick={() => router.push("/contact")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Contact Us
+            </Button>
+            <Button
+              onClick={() => router.push("/compare")}
+              padding="8px"
+              backgroundColor="transparent"
+              hoverBackgroundColor="transparent"
+              textColor={colors.black}
+              hoverTextColor={colors.primary}
+            >
+              Compare
+            </Button>
+          </LinksContainer>
+        ) : (
+          <CustomMenu
+            triggerElement={<Hamburger icon={faBars} size="xl" />}
+            menuItems={hamburgerMenuItems}
+          />
+        )}
       </LeftButtonSection>
       <RightButtonSection>
         {isLoggedIn ? (
@@ -254,6 +301,14 @@ const HorizontalContainer = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+`;
+
+const Hamburger = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  &:hover {
+    transition: color 0.3s;
+    color: ${colors.primary};
+  }
 `;
 
 export default Navbar;
