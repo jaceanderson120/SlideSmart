@@ -89,7 +89,6 @@ function Navbar() {
   useEffect(() => {
     const handleResize = () => {
       setDeviceWidth(window.innerWidth);
-      console.log("Device width: ", window.innerWidth);
     };
 
     window.addEventListener("resize", handleResize);
