@@ -168,6 +168,7 @@ const customStyles = {
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
+  color: ${colors.gray};
   &:hover {
     transition: color 0.3s;
     color: ${colors.primary};
@@ -195,12 +196,13 @@ const ModalContent = styled.div`
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
+  color: ${colors.black};
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-  color: ${colors.gray}
+  color: ${colors.gray};
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;

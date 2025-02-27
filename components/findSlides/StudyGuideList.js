@@ -118,6 +118,7 @@ const TopicsList = styled.div`
 const Topic = styled.div`
   display: flex;
   background: ${colors.white};
+  color: ${colors.black};
   padding: 8px;
   border-radius: 12px;
   font-size: ${fontSize.secondary};
@@ -127,6 +128,7 @@ const Topic = styled.div`
 const FileName = styled.div`
   font-size: ${fontSize.default};
   font-weight: bold;
+  color: ${colors.black};
 `;
 
 const PanelContent = styled.div`

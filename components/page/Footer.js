@@ -39,7 +39,7 @@ const FooterSection = styled.div`
   justify-content: center;
   align-items: center;
   border-top: 1px solid ${colors.black};
-  background-color: white;
+  background-color: ${colors.white};
   color: white;
   text-align: center;
   padding: 16px;
@@ -83,7 +83,7 @@ const ResourceItem = styled.div`
   a {
     text-decoration: none;
     font-size: ${fontSize.default};
-    color: black;
+    color: ${colors.black};
   }
 
   a:hover {

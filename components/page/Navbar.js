@@ -21,7 +21,7 @@ config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
-  const { isLoggedIn, hasSpark } = useStateContext();
+  const { isLoggedIn, hasSpark, darkMode, setDarkMode } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
   const [deviceWidth, setDeviceWidth] = useState(0);

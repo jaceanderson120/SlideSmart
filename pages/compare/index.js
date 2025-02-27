@@ -97,6 +97,7 @@ const Competitor = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
+  color: ${colors.black};
 `;
 
 const Subtitle = styled.p`
@@ -104,6 +105,7 @@ const Subtitle = styled.p`
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
+  color: ${colors.black};
 `;
 
 const SubtitleSpan = styled.span`

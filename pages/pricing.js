@@ -210,12 +210,14 @@ const BottomSection = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
+  color: ${colors.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: ${colors.black};
 `;
 
 const SubtitleSpan = styled.span`
@@ -244,12 +246,14 @@ const PricingCardTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
   margin-bottom: 32px;
+  color: ${colors.black};
 `;
 
 const PricingCardPrice = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
   margin-bottom: 32px;
+  color: ${colors.black};
 `;
 
 const PricingCardInfo = styled.p`

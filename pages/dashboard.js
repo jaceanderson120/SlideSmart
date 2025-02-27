@@ -428,7 +428,11 @@ const Dashboard = () => {
                                 setGuideToDelete(guide);
                               }}
                             >
-                              <FontAwesomeIcon icon={faTrashCan} size="2x" />
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                size="2x"
+                                color={colors.black}
+                              />
                             </StudyGuideDeleteButton>
                           ) : (
                             <OptionsPadding />

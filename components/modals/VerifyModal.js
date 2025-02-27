@@ -167,6 +167,7 @@ const ModalContent = styled.div`
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
+  color: ${colors.black};
 `;
 
 const ModalText = styled.p`

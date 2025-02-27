@@ -1196,6 +1196,7 @@ const Title = styled.input`
   max-width: 40%;
   border: none;
   border-radius: 10px;
+  color: ${colors.black};
 `;
 
 const HeaderSection = styled.div`

@@ -215,24 +215,25 @@ const Container = styled.div`
   padding: 20px;
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  background-color: ${colors.white};
 `;
 
 const Title = styled.h1`
   font-size: ${fontSize.heading};
   margin-bottom: 10px;
-  color: #333;
+  color: ${colors.black};
 `;
 
 const SectionTitle = styled.h2`
   font-size: ${fontSize.subheading};
   margin-top: 20px;
-  color: #555;
+  color: ${colors.black};
 `;
 
 const Text = styled.p`
   font-size: ${fontSize.default};
   margin-bottom: 15px;
-  color: #666;
+  color: ${colors.black};
 `;
 
 const List = styled.ul`
@@ -241,7 +242,7 @@ const List = styled.ul`
 
 const ListItem = styled.li`
   margin-bottom: 10px;
-  color: #666;
+  color: ${colors.black};
 `;
 
 const Link = styled.a`
