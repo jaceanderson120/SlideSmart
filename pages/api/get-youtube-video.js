@@ -89,6 +89,22 @@ export default async function getYoutubeVideo(req, res) {
         item.status.embeddable === true
     );
 
+    // Sometimes all videos are filtered out, just return the video with the most views as a fallback
+    if (filteredVideos.length === 0) {
+      let mostViewedVideo;
+      for (const video of videoDetailsResponse.data.items) {
+        if (
+          !mostViewedVideo ||
+          video.statistics.viewCount > mostViewedVideo.statistics.viewCount
+        ) {
+          mostViewedVideo = video;
+        }
+      }
+      if (mostViewedVideo) {
+        res.json([mostViewedVideo.id]);
+      }
+    }
+
     // Calculate scores for the remaining videos
     const scoredVideos = filteredVideos
       .map((item) => ({

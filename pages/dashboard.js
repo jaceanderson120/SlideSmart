@@ -41,7 +41,7 @@ const Dashboard = () => {
   const [displayNames, setDisplayNames] = useState({});
   const [displayNamesLoaded, setDisplayNamesLoaded] = useState(false);
   const [filter, setFilter] = useState("all");
-  const [sorting, setSorting] = useState("A-Z");
+  const [sorting, setSorting] = useState("Last Modified");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
