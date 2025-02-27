@@ -351,7 +351,7 @@ const Study = () => {
           ...prev.extractedData,
           [topicName]: {
             explanation: explanation,
-            youtubeIds: "None",
+            youtubeIds: [],
             example: "Fill in the example here...",
             question: "Fill in the question here...",
             answer: "Fill in the answer here...",
@@ -461,11 +461,11 @@ const Study = () => {
       },
       body: JSON.stringify({ query }), // Sending the topic as JSON
     });
-    let videoIds = await res2.json();
+    let videoIds = (await res2.json()) || [];
 
     // There may be dupicate video IDs somewhere in the study guide, so we need to check if the video ID is already in the array
     // Get all the video IDs from the study guide
-    if (videoIds != null) {
+    if (videoIds.length > 0) {
       let allVideoIds = [];
       Object.keys(studyGuide.extractedData).forEach((key) => {
         allVideoIds = allVideoIds.concat(
@@ -482,6 +482,10 @@ const Study = () => {
       }
 
       videoIds = filteredVideoIds;
+    } else {
+      toast.error(
+        "Sorry, couldn't find a new YouTube video for you. Please try again."
+      );
     }
 
     // Update the study guide object with the new YouTube video ID
@@ -796,8 +800,8 @@ const Study = () => {
                       {topicForNewYoutubeVideo === key &&
                       findingNewYoutubeVideo ? (
                         <Dots />
-                      ) : studyGuide.extractedData[key]["youtubeIds"] !==
-                        "None" ? (
+                      ) : studyGuide.extractedData[key]["youtubeIds"].length >
+                        0 ? (
                         <VideoContainer>
                           <iframe
                             width="560"
@@ -870,8 +874,8 @@ const Study = () => {
                       ) : (
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <NoVideoText>
-                            No video available. Please fill in the topic
-                            explanation and then generate a video.
+                            No video available. If you have the Spark Plan,
+                            enable edit mode and find new videos!
                           </NoVideoText>
                           {editMode && (
                             <>
@@ -988,7 +992,7 @@ const Study = () => {
                           key,
                           section,
                           section === "youtubeIds"
-                            ? "None"
+                            ? []
                             : `Fill in the ${section} here or click the magic wand above to auto-generate one...`
                         );
                       }}
