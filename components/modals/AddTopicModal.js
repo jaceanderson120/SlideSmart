@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
+import { useStateContext } from "@/context/StateContext";
+import { toast } from "react-toastify";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 Modal.setAppElement("#__next");
@@ -19,6 +21,7 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
   const [topicExplanation, setTopicExplanation] = useState("");
   const [autoToggle, setAutoToggle] = useState(false);
   const theme = useTheme();
+  const { hasSpark } = useStateContext();
 
   const customStyles = {
     content: {
@@ -35,6 +38,14 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
       padding: "24px",
       borderRadius: "16px",
     },
+  };
+
+  const handleAutoToggleClick = () => {
+    if (hasSpark) {
+      setAutoToggle(!autoToggle);
+    } else {
+      toast.error("Auto-Generation Tools are only available with Spark!");
+    }
   };
 
   return (
@@ -66,7 +77,7 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
             <StyledFontAwesomeIcon
               icon={autoToggle ? faToggleOn : faToggleOff}
               size="xl"
-              onClick={() => setAutoToggle(!autoToggle)}
+              onClick={handleAutoToggleClick}
             />
           </ToggleArea>
           <ButtonSection>
@@ -88,7 +99,7 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
             </Button>
             <Button
               onClick={() => {
-                onConfirm(topicName, topicExplanation);
+                onConfirm(topicName, topicExplanation, autoToggle);
                 setTopicName("");
                 setTopicExplanation("");
                 onClose();

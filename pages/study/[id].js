@@ -104,8 +104,6 @@ const Study = () => {
     const handlePopState = (event) => {
       if (fromSearch) {
         router.push(`/find-slides?searchQuery=${searchQuery}`);
-      } else {
-        router.push("/dashboard");
       }
     };
 
@@ -357,7 +355,7 @@ const Study = () => {
   };
 
   // Function to add a new topic to the study guide
-  const handleAddTopic = (topicName, explanation) => {
+  const handleAddTopic = (topicName, explanation, autoToggle) => {
     if (studyGuide.extractedData[topicName]) {
       toast.error("Topic already exists. Please choose a different name.");
       return;
@@ -366,6 +364,12 @@ const Study = () => {
       return;
     }
 
+    const hiddenExplanations = {
+      ...studyGuide.hiddenExplanations,
+      [topicName]: explanation,
+    };
+
+    // Update the study guide with the new topic
     setStudyGuide((prev) => {
       const updatedData = {
         ...prev,
@@ -386,6 +390,13 @@ const Study = () => {
       };
       return updatedData;
     });
+
+    // If autoToggle option is selected, generate the explanation, video, example, and question/answer
+    if (autoToggle) {
+      handleGenerateExplanation(topicName, hiddenExplanations);
+      handleGenerateExample(topicName, hiddenExplanations);
+      handleGenerateQuestionAnswer(topicName, hiddenExplanations);
+    }
   };
 
   // Function to reorder the keys of studyGuide.extractedData
@@ -580,25 +591,28 @@ const Study = () => {
   };
 
   // Generate a new explanation for a topic
-  const handleGenerateExplanation = async (topic) => {
+  const handleGenerateExplanation = async (topic, hiddenExplanations) => {
     const text = await generateExplanation(
       topic,
-      studyGuide.hiddenExplanations
+      hiddenExplanations ? hiddenExplanations : studyGuide.hiddenExplanations
     );
     updateStudyGuideObject(topic, "explanation", text);
   };
 
   // Generate a new example for a topic
-  const handleGenerateExample = async (topic) => {
-    const text = await generateExample(topic, studyGuide.hiddenExplanations);
+  const handleGenerateExample = async (topic, hiddenExplanations) => {
+    const text = await generateExample(
+      topic,
+      hiddenExplanations ? hiddenExplanations : studyGuide.hiddenExplanations
+    );
     updateStudyGuideObject(topic, "example", text);
   };
 
   // Generate a new question and answer for a topic
-  const handleGenerateQuestionAnswer = async (topic) => {
+  const handleGenerateQuestionAnswer = async (topic, hiddenExplanations) => {
     const text = await generateQuestionAnswer(
       topic,
-      studyGuide.hiddenExplanations
+      hiddenExplanations ? hiddenExplanations : studyGuide.hiddenExplanations
     );
     const question = text["question"];
     const answer = text["answer"];
