@@ -3,12 +3,21 @@ import styled, { useTheme } from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { useState } from "react";
+import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// The following import prevents a Font Awesome icon server-side rendering bug,
+// where the icons flash from a very large icon down to a properly sized one:
+import "@fortawesome/fontawesome-svg-core/styles.css";
+// Prevent fontawesome from adding its CSS since we did it manually above:
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false; /* eslint-disable import/first */
 
 Modal.setAppElement("#__next");
 
 const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
   const [topicName, setTopicName] = useState("");
   const [topicExplanation, setTopicExplanation] = useState("");
+  const [autoToggle, setAutoToggle] = useState(false);
   const theme = useTheme();
 
   const customStyles = {
@@ -52,6 +61,14 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
             Please enter a topic name and explanation above. For the best
             experience, explain the topic clearly.
           </ModalText>
+          <ToggleArea>
+            <ModalText>Auto-Generate Topic Sections</ModalText>
+            <StyledFontAwesomeIcon
+              icon={autoToggle ? faToggleOn : faToggleOff}
+              size="xl"
+              onClick={() => setAutoToggle(!autoToggle)}
+            />
+          </ToggleArea>
           <ButtonSection>
             <Button
               onClick={() => {
@@ -143,6 +160,23 @@ const ModalTextArea = styled.textarea`
   width: 100%;
   resize: none;
   height: 100px;
+`;
+
+const ToggleArea = styled.div`
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  color: ${({ theme }) => theme.gray};
+  &:hover {
+    transition: color 0.3s;
+    color: ${({ theme }) => theme.primary};
+  }
 `;
 
 export default AddTopicModal;

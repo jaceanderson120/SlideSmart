@@ -177,7 +177,6 @@ const PricingContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  overflow-x: scroll;
 `;
 
 const TopSection = styled.div`

@@ -569,7 +569,8 @@ const StudyGuideListContainer = styled.div`
   flex-grow: 1;
   width: 100%;
   background-color: ${({ theme }) => theme.white};
-  overflow-y: auto;
+  overflow: scroll;
+  scrollbar-color: ${({ theme }) => theme.primary70} transparent;
   border-radius: 10px;
   box-shadow: 0px 2px 10px ${({ theme }) => theme.shadow};
 `;

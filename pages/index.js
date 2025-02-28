@@ -119,7 +119,6 @@ const Section = styled.div`
   align-items: center;
   text-align: center;
   gap: 100px;
-  overflow-x: scroll;
 `;
 
 const SloganContainer = styled.div`
