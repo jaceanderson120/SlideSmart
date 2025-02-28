@@ -131,7 +131,7 @@ const Pricing = () => {
                   loading={redirectLoading}
                 >
                   {redirectLoading ? (
-                    <Dots color={({ theme }) => theme.white} />
+                    <Dots color={theme.white} />
                   ) : (
                     "Manage Subscription"
                   )}
@@ -147,7 +147,7 @@ const Pricing = () => {
                 <PricingCardDescription key={index}>
                   <FontAwesomeIcon
                     icon={faCheck}
-                    color={({ theme }) => theme.primary}
+                    color={theme.primary}
                     size="2x"
                   />
                   {desc}
@@ -177,7 +177,6 @@ const PricingContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  overflow-x: scroll;
 `;
 
 const TopSection = styled.div`

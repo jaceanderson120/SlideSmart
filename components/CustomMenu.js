@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import Menu from "@mui/material/Menu";
 import { MenuItem } from "@mui/material";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from "@mui/material/styles";
 
 const CustomMenu = ({ triggerElement, menuItems, arrow }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -16,8 +20,22 @@ const CustomMenu = ({ triggerElement, menuItems, arrow }) => {
     setAnchorEl(null);
   };
 
+  const theme = useTheme();
+
+  const menuTheme = createTheme({
+    components: {
+      MuiList: {
+        styleOverrides: {
+          root: {
+            backgroundColor: theme.white,
+          },
+        },
+      },
+    },
+  });
+
   return (
-    <>
+    <MuiThemeProvider theme={menuTheme}>
       <TriggerContainer onClick={handleMenuOpen}>
         {React.cloneElement(triggerElement)}
         {arrow && <StyledFontAwesomeIcon icon={faAngleDown} />}
@@ -43,7 +61,7 @@ const CustomMenu = ({ triggerElement, menuItems, arrow }) => {
           </StyledMenuItem>
         ))}
       </Menu>
-    </>
+    </MuiThemeProvider>
   );
 };
 
@@ -63,7 +81,7 @@ const StyledMenuItem = styled(MenuItem)`
 
   &:hover {
     color: ${({ theme }) => theme.primary} !important;
-    background-color: ${({ theme }) => theme.white} !important;
+    background-color: ${({ theme }) => theme.shadow} !important;
   }
 `;
 

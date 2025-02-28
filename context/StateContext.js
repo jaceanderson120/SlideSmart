@@ -36,16 +36,18 @@ export const StateContext = ({ children }) => {
   }, [app, auth.currentUser?.uid]);
 
   return (
-    <Context.Provider
-      value={{
-        isLoggedIn,
-        currentUser,
-        loadingUser,
-        hasSpark,
-      }}
-    >
-      {children}
-    </Context.Provider>
+    currentUser !== undefined && (
+      <Context.Provider
+        value={{
+          isLoggedIn,
+          currentUser,
+          loadingUser,
+          hasSpark,
+        }}
+      >
+        {children}
+      </Context.Provider>
+    )
   );
 };
 

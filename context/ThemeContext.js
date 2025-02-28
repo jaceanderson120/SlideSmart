@@ -7,7 +7,7 @@ import { useStateContext } from "./StateContext";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(undefined);
   const { currentUser } = useStateContext();
 
   // Get the user's dark mode preference from the database
@@ -29,9 +29,11 @@ export const ThemeProvider = ({ children }) => {
   const theme = darkMode ? darkTheme : lightTheme;
 
   return (
-    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>
-    </ThemeContext.Provider>
+    darkMode !== undefined && (
+      <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
+        <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>
+      </ThemeContext.Provider>
+    )
   );
 };
 

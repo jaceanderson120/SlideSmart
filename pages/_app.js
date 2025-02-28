@@ -12,6 +12,20 @@ export const GlobalStyles = createGlobalStyle`
   margin: 0;
   padding: 0;
   line-height: 1;
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: white;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color:#f04a3770;
+    border-radius: 10px;
+    border: 3px solid white;
+  }
 }
 `;
 

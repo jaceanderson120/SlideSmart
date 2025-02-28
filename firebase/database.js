@@ -195,10 +195,12 @@ const getPublicStudyGuides = async (keywords) => {
   let similarityThreshold = 0.75;
 
   // 2. Convert docs to an array of objects
-  const allGuides = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  const allGuides = snapshot.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .filter((guide) => guide.isPublic);
 
   // Score each guide based on keyword matches
   const scoredGuides = allGuides.map((guide) => {

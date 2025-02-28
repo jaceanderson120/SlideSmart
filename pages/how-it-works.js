@@ -179,6 +179,7 @@ const PageContainer = styled.div`
   height: 100vh;
   overflow-x: hidden;
   overflow-y: scroll;
+  scrollbar-color: ${({ theme }) => theme.primary70} transparent;
   position: relative;
   background-color: ${({ theme }) => theme.lightGray};
   z-index: 0;
