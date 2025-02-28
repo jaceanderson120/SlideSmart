@@ -20,7 +20,7 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: "4px 4px 4px ${({ theme }) => theme.black}",
+      boxShadow: `4px 4px 4px ${({ theme }) => theme.shadow}`,
       maxWidth: "30%",
       height: "auto",
       padding: "24px",
@@ -130,7 +130,7 @@ const ModalInput = styled.input`
   padding: 8px;
   border: none;
   border-radius: 8px;
-  box-shadow: 0px 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0px 2px 2px ${({ theme }) => theme.shadow};
   width: 100%;
 `;
 
@@ -139,7 +139,7 @@ const ModalTextArea = styled.textarea`
   padding: 8px;
   border: none;
   border-radius: 8px;
-  box-shadow: 0px 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0px 2px 2px ${({ theme }) => theme.shadow};
   width: 100%;
   resize: none;
   height: 100px;

@@ -26,7 +26,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: "4px 4px 4px ${({ theme }) => theme.black}",
+      boxShadow: `4px 4px 4px ${({ theme }) => theme.shadow}`,
       maxWidth: "30%",
       height: "auto",
       padding: "24px",
