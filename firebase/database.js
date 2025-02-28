@@ -353,7 +353,32 @@ const deleteStudyGuide = async (id, storageUrl, userId) => {
 // Output: None
 const storeUserInfo = async (uid, name, email) => {
   const userDocRef = doc(db, "users", uid);
-  await setDoc(userDocRef, { displayName: name, email: email });
+  await setDoc(userDocRef, {
+    displayName: name,
+    email: email,
+    darkMode: false,
+  });
+};
+
+// Update the user's dark mode preference
+// Input: user uid and dark mode preference
+// Output: None
+const updateUserDarkMode = async (uid, darkMode) => {
+  const userDocRef = doc(db, "users", uid);
+  await updateDoc(userDocRef, {
+    darkMode: darkMode,
+  });
+};
+
+// Get the user's dark mode preference
+// Input: user uid
+// Output: dark mode preference
+const getUserDarkMode = async (uid) => {
+  const userDocRef = doc(db, "users", uid);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    return userDoc.data().darkMode;
+  }
 };
 
 // Get the display name of a user
@@ -461,4 +486,6 @@ export {
   uploadFileToFirebase,
   getPublicStudyGuides,
   trackClickThrough,
+  updateUserDarkMode,
+  getUserDarkMode,
 };
