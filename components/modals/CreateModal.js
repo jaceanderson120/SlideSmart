@@ -6,6 +6,8 @@ import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../Button";
+import OrLine from "../auth/OrLine";
+import { useStateContext } from "@/context/StateContext";
 
 Modal.setAppElement("#__next");
 
@@ -16,8 +18,10 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
   const [includeExamples, setIncludeExamples] = useState(true);
   const [includeQuestions, setIncludeQuestions] = useState(true);
   const [includeResources, setIncludeResources] = useState(true);
+  const [topic, setTopic] = useState("");
   const fileInputRef = useRef(null);
   const theme = useTheme();
+  const { hasSpark } = useStateContext();
 
   const customStyles = {
     content: {
@@ -49,13 +53,25 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setTopic("");
   };
 
   const handleUploadClick = async () => {
-    if (!file) {
-      toast.error("Please select a file to upload.");
+    if (!file && !topic) {
+      toast.error(
+        "Please select a file to upload or enter a topic to learn about."
+      );
       return;
     }
+
+    // If the user does not have spark, do not allow creating study guide without a file
+    if (!hasSpark && !file) {
+      toast.error(
+        "Please upgrade to Spark Plan to create study guides without a file!"
+      );
+      return;
+    }
+
     // Call the parent callback
     onUpload(
       file,
@@ -63,7 +79,8 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
       includeVideos,
       includeExamples,
       includeQuestions,
-      includeResources
+      includeResources,
+      topic
     );
 
     // Close modal afterwards
@@ -84,22 +101,32 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
           include in the study guide.
         </ModalText>
         <FileInput type="file" onChange={handleFileChange} ref={fileInputRef} />
-        <Button
-          onClick={handleFileInputClick}
-          style={{
-            maxWidth: "60%",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-          }}
-        >
-          {file ? file.name : "Select File"}
-        </Button>
+        {!topic && (
+          <Button
+            onClick={handleFileInputClick}
+            style={{
+              maxWidth: "60%",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {file ? file.name : "Select File"}
+          </Button>
+        )}
+        {!file && !topic && <OrLine />}
+        {!file && (
+          <ModalInput
+            placeholder="Enter a topic that you want to learn about..."
+            value={topic}
+            onChange={(event) => setTopic(event.target.value)}
+          />
+        )}
         <ToggleSection>
           <ToggleArea>
             <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
             <StyledFontAwesomeIcon
               icon={isPublic ? faToggleOn : faToggleOff}
-              size="lg"
+              size="xl"
               onClick={() => setIsPublic(!isPublic)}
             />
           </ToggleArea>
@@ -107,7 +134,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             <ModalText>Include Videos</ModalText>
             <StyledFontAwesomeIcon
               icon={includeVideos ? faToggleOn : faToggleOff}
-              size="lg"
+              size="xl"
               onClick={() => setIncludeVideos(!includeVideos)}
             />
           </ToggleArea>
@@ -115,7 +142,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             <ModalText>Include Examples</ModalText>
             <StyledFontAwesomeIcon
               icon={includeExamples ? faToggleOn : faToggleOff}
-              size="lg"
+              size="xl"
               onClick={() => setIncludeExamples(!includeExamples)}
             />
           </ToggleArea>
@@ -123,7 +150,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             <ModalText>Include Q/A</ModalText>
             <StyledFontAwesomeIcon
               icon={includeQuestions ? faToggleOn : faToggleOff}
-              size="lg"
+              size="xl"
               onClick={() => setIncludeQuestions(!includeQuestions)}
             />
           </ToggleArea>
@@ -131,7 +158,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             <ModalText>Include Resources</ModalText>
             <StyledFontAwesomeIcon
               icon={includeResources ? faToggleOn : faToggleOff}
-              size="lg"
+              size="xl"
               onClick={() => setIncludeResources(!includeResources)}
             />
           </ToggleArea>
@@ -184,6 +211,15 @@ const ButtonSection = styled.div`
   gap: 32px;
 `;
 
+const ModalInput = styled.input`
+  font-size: ${fontSize.secondary};
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px ${({ theme }) => theme.shadow};
+  width: 100%;
+`;
+
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -215,6 +251,7 @@ const FileInput = styled.input`
 const ToggleSection = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   width: 100%;
 `;
@@ -223,7 +260,7 @@ const ToggleArea = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  width: 50%;
 `;
 
 export default CreateModal;

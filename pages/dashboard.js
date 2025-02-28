@@ -206,7 +206,8 @@ const Dashboard = () => {
     includeVideos,
     includeExamples,
     includeQuestions,
-    includeResources
+    includeResources,
+    topic
   ) => {
     setIsLoading(true);
     // Simulate loading progress
@@ -217,18 +218,21 @@ const Dashboard = () => {
       });
     }, 1000);
 
-    const fileExtension = file.name.split(".").pop();
+    if (!topic) {
+      const fileExtension = file.name.split(".").pop();
 
-    if (fileExtension !== "pdf" && fileExtension !== "pptx") {
-      clearInterval(interval);
-      setIsLoading(false);
-      toast.error("Invalid file type. Please upload a PDF or PPTX file.");
-      // Reset the file input element
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      if (fileExtension !== "pdf" && fileExtension !== "pptx") {
+        clearInterval(interval);
+        setIsLoading(false);
+        toast.error("Invalid file type. Please upload a PDF or PPTX file.");
+        // Reset the file input element
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
       }
-      return;
     }
+
     const studyGuideId = await handleFileUpload(
       file,
       isPublic,
@@ -236,7 +240,8 @@ const Dashboard = () => {
       includeExamples,
       includeQuestions,
       includeResources,
-      currentUser
+      currentUser,
+      topic
     );
     clearInterval(interval);
     setIsLoading(false);
@@ -431,7 +436,7 @@ const Dashboard = () => {
                               <FontAwesomeIcon
                                 icon={faTrashCan}
                                 size="2x"
-                                color={({ theme }) => theme.black}
+                                color={theme.black}
                               />
                             </StudyGuideDeleteButton>
                           ) : (
@@ -471,7 +476,7 @@ const Dashboard = () => {
               <FontAwesomeIcon
                 icon={faTrashCan}
                 size="3x"
-                color={({ theme }) => theme.primary}
+                color={theme.primary}
               />
             }
           />
@@ -658,7 +663,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.black};
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;

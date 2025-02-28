@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import Link from "next/link";
 import ShareModal from "@/components/modals/ShareModal";
 import {
@@ -93,6 +93,7 @@ const Study = () => {
     useState(false);
   const [autoGenerateSection, setAutoGenerateSection] = useState(null);
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
+  const theme = useTheme();
 
   // Check URL to see if the user came from the find study guides page
   const searchParams = useSearchParams();
@@ -1076,7 +1077,7 @@ const Study = () => {
           <FontAwesomeIcon
             icon={faShareFromSquare}
             size="3x"
-            color={({ theme }) => theme.primary}
+            color={theme.primary}
           />
         }
       />
@@ -1101,11 +1102,7 @@ const Study = () => {
           toast.success("Topic has been deleted successfully.");
         }}
         icon={
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            size="3x"
-            color={({ theme }) => theme.primary}
-          />
+          <FontAwesomeIcon icon={faTrashCan} size="3x" color={theme.primary} />
         }
       />
       <ConfirmationModal
@@ -1127,11 +1124,7 @@ const Study = () => {
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
         }}
         icon={
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            size="3x"
-            color={({ theme }) => theme.primary}
-          />
+          <FontAwesomeIcon icon={faTrashCan} size="3x" color={theme.primary} />
         }
       />
       <ConfirmationModal
@@ -1185,7 +1178,7 @@ const Study = () => {
           <FontAwesomeIcon
             icon={faMagicWandSparkles}
             size="3x"
-            color={({ theme }) => theme.primary}
+            color={theme.primary}
           />
         }
       />
