@@ -5,13 +5,14 @@ import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { trackClickThrough } from "@/firebase/database";
 
-const StudyGuideList = ({ guides }) => {
+const StudyGuideList = ({ guides, searchQuery }) => {
   const router = useRouter();
   const [selectedGuide, setSelectedGuide] = useState(null);
 
   const handleClick = async (guideId) => {
     await trackClickThrough();
-    router.push(`/study/${guideId}`);
+    // Redirect to the study guide page with the guide ID and a flag indicating that the user came from the search page
+    router.push(`/study/${guideId}?fromSearch=true&searchQuery=${searchQuery}`);
   };
 
   const handleGuideSelect = (guide) => {

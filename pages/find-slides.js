@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import { fontSize } from "@/constants/fontSize";
@@ -10,12 +10,41 @@ import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
 import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 const FindSlides = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [inputText, setInputText] = useState("");
   const [studyGuides, setStudyGuides] = useState([]);
   const [searching, setSearching] = useState(false);
+  const searchParams = useSearchParams();
+  let searchQuery = searchParams.get("searchQuery");
+
+  // Check URL to see if the user came back from a study guide
+  useEffect(() => {
+    const rerunSearch = async () => {
+      if (searchQuery) {
+        setInputText(searchQuery);
+
+        // Rerun the search
+        const keywords = keywordExtractor.extract(searchQuery, {
+          language: "english",
+          remove_digits: true,
+          return_changed_case: true,
+          remove_duplicates: true,
+        });
+
+        setHasSearched(true);
+
+        // Get all study guides
+        const filteredGuides = await getPublicStudyGuides(keywords);
+
+        setStudyGuides(filteredGuides);
+      }
+    };
+
+    rerunSearch();
+  }, []);
 
   // State to determine if useAuthRedirect has finished
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -85,7 +114,7 @@ const FindSlides = () => {
               <LeftSection>
                 <PageTitle>FIND STUDY GUIDES</PageTitle>
                 <Subtitle>
-                  Seach and Find<br></br>{" "}
+                  Search and Find<br></br>{" "}
                   <SubtitleSpan>Public Study Guides</SubtitleSpan>
                 </Subtitle>
                 <Subtext>
@@ -105,7 +134,10 @@ const FindSlides = () => {
               </LeftSection>
               <RightSection>
                 {hasSearched && !searching && (
-                  <StudyGuideList guides={studyGuides} />
+                  <StudyGuideList
+                    guides={studyGuides}
+                    searchQuery={inputText}
+                  />
                 )}
               </RightSection>
             </Section>

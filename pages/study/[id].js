@@ -50,6 +50,7 @@ import {
   generateQuestionAnswer,
 } from "@/utils/generateStudyGuideSections";
 import StudyGuideTopics from "@/components/studyGuide/StudyGuideTopics";
+import { useSearchParams } from "next/navigation";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -92,6 +93,28 @@ const Study = () => {
     useState(false);
   const [autoGenerateSection, setAutoGenerateSection] = useState(null);
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
+
+  // Check URL to see if the user came from the find study guides page
+  const searchParams = useSearchParams();
+  const fromSearch = searchParams.get("fromSearch");
+  const searchQuery = searchParams.get("searchQuery");
+
+  // Handle the browser back button
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (fromSearch) {
+        router.push(`/find-slides?searchQuery=${searchQuery}`);
+      } else {
+        router.push("/dashboard");
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [fromSearch, searchQuery, router]);
 
   // When navigating to the study guide page (on mount), clear the chatbot messages
   useEffect(() => {
@@ -587,10 +610,14 @@ const Study = () => {
     <StudyGuideContainer>
       <Section>
         <HeaderSection>
-          <BackToDashboardContainer>
+          <BackToContainer>
             <Button
               onClick={() => {
-                router.push("/dashboard");
+                if (fromSearch) {
+                  router.push(`/find-slides?searchQuery=${searchQuery}`);
+                } else {
+                  router.push("/dashboard");
+                }
               }}
               padding="0px"
               backgroundColor="transparent"
@@ -598,9 +625,10 @@ const Study = () => {
               textColor={({ theme }) => theme.black}
               hoverTextColor={({ theme }) => theme.primary}
             >
-              <FontAwesomeIcon icon={faArrowLeft} size="lg" /> Back to Dashboard
+              <FontAwesomeIcon icon={faArrowLeft} size="lg" />{" "}
+              {fromSearch ? "Back to Search" : "Back to Dashboard"}
             </Button>
-          </BackToDashboardContainer>
+          </BackToContainer>
           <Title
             type="text"
             value={fileName}
@@ -1221,7 +1249,7 @@ const HeaderSection = styled.div`
   padding-bottom: 4px;
 `;
 
-const BackToDashboardContainer = styled.div`
+const BackToContainer = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
