@@ -74,7 +74,7 @@ const handleFileUpload = async (
           },
           body: JSON.stringify({
             topic: topic,
-            data: topicsAndExplanations[topic],
+            explanation: topicsAndExplanations[topic],
           }),
         }).then((res) => {
           if (!res.ok) {
