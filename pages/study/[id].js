@@ -517,6 +517,12 @@ const Study = () => {
       }
 
       videoIds = filteredVideoIds;
+
+      // Update video indices
+      setVideoIndices((prev) => ({
+        ...prev,
+        [topic]: 0,
+      }));
     } else {
       toast.error(
         "Sorry, couldn't find a new YouTube video for you. Please try again."
