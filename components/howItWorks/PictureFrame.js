@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import Image from "next/image";
-import { colors } from "@/constants/colors";
 
 const PictureFrame = ({ src, alt, align }) => {
   return (
@@ -14,23 +13,23 @@ export default PictureFrame;
 
 const Frame = styled.div`
   border-radius: 8px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 4px ${({ theme }) => theme.black};
   padding: 16px;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
 
   ${({ align }) =>
     align === "left"
       ? css`
-          border-left: 24px solid ${colors.primary70};
-          border-top: 24px solid ${colors.primary70};
+          border-left: 24px solid ${({ theme }) => theme.lightGray};
+          border-top: 24px solid ${({ theme }) => theme.lightGray};
         `
       : align === "right"
       ? css`
-          border-right: 24px solid ${colors.primary70};
-          border-top: 24px solid ${colors.primary70};
+          border-right: 24px solid ${({ theme }) => theme.lightGray};
+          border-top: 24px solid ${({ theme }) => theme.lightGray};
         `
       : css`
-          border-top: 24px solid ${colors.primary70};
+          border-top: 24px solid ${({ theme }) => theme.lightGray};
         `}
 `;
 

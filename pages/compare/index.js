@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 import PageContainer from "@/components/page/PageContainer";
 import Head from "next/head";
 import Footer from "@/components/page/Footer";
@@ -97,16 +96,18 @@ const Competitor = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
   text-align: center;
+  color: ${({ theme }) => theme.black};
 `;
 
 const SubtitleSpan = styled.span`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: bold;
 `;

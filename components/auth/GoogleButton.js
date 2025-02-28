@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 import googleLogo from "@/images/googleLogo.png";
 import Image from "next/image";
 import {
@@ -56,17 +55,17 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: ${colors.lightGray};
-  color: ${colors.gray};
+  background-color: ${({ theme }) => theme.lightGray};
+  color: ${({ theme }) => theme.gray};
   font-weight: bold;
-  border: 1px solid ${colors.gray};
+  border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
   cursor: pointer;
   font-size: ${fontSize.default};
   transition: color 0.3s, background-color 0.3s, transform 0.3s;
   &:hover {
-    color: ${colors.black};
-    background-color: ${colors.primary70};
+    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.primary70};
     transform: scale(0.98);
   }
 `;

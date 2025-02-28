@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 import Head from "next/head";
 
 const TOS = () => {
@@ -215,24 +214,25 @@ const Container = styled.div`
   padding: 20px;
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  background-color: ${({ theme }) => theme.white};
 `;
 
 const Title = styled.h1`
   font-size: ${fontSize.heading};
   margin-bottom: 10px;
-  color: #333;
+  color: ${({ theme }) => theme.black};
 `;
 
 const SectionTitle = styled.h2`
   font-size: ${fontSize.subheading};
   margin-top: 20px;
-  color: #555;
+  color: ${({ theme }) => theme.black};
 `;
 
 const Text = styled.p`
   font-size: ${fontSize.default};
   margin-bottom: 15px;
-  color: #666;
+  color: ${({ theme }) => theme.black};
 `;
 
 const List = styled.ul`
@@ -241,7 +241,7 @@ const List = styled.ul`
 
 const ListItem = styled.li`
   margin-bottom: 10px;
-  color: #666;
+  color: ${({ theme }) => theme.black};
 `;
 
 const Link = styled.a`
@@ -253,5 +253,5 @@ const Link = styled.a`
 `;
 
 const Strong = styled.strong`
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;

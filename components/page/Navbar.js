@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import CustomMenu from "../CustomMenu";
 import UserIcon from "../UserIcon";
 import { useState, useEffect } from "react";
-import { colors } from "@/constants/colors";
 import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -19,12 +18,14 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "@/context/ThemeContext";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
   const [deviceWidth, setDeviceWidth] = useState(0);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   const handleLogout = () => {
     signOut(auth);
@@ -46,7 +47,7 @@ function Navbar() {
         <UserIcon
           initials={initials}
           size={48}
-          hoverBackgroundColor={colors.gray}
+          hoverBackgroundColor={({ theme }) => theme.gray}
         />
         <MenuTextContainer>
           <p>{auth.currentUser?.displayName}</p>
@@ -54,6 +55,7 @@ function Navbar() {
         </MenuTextContainer>
       </HorizontalContainer>
     </MenuItemContainer>,
+    { name: darkMode ? "Light Mode" : "Dark Mode", onClick: toggleDarkMode },
     {
       name: hasSpark ? "Manage Subscription" : "Upgrade",
       onClick: handleUpgradeManageClick,
@@ -133,8 +135,8 @@ function Navbar() {
                 padding="8px"
                 backgroundColor="transparent"
                 hoverBackgroundColor="transparent"
-                textColor={colors.black}
-                hoverTextColor={colors.primary}
+                textColor={({ theme }) => theme.black}
+                hoverTextColor={({ theme }) => theme.primary}
               >
                 Find Study Guides
               </Button>
@@ -144,8 +146,8 @@ function Navbar() {
               padding="8px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               How it Works
             </Button>
@@ -154,8 +156,8 @@ function Navbar() {
               padding="8px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               Pricing
             </Button>
@@ -164,8 +166,8 @@ function Navbar() {
               padding="8px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               Contact Us
             </Button>
@@ -174,8 +176,8 @@ function Navbar() {
               padding="8px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               Compare
             </Button>
@@ -200,8 +202,8 @@ function Navbar() {
               triggerElement={
                 <UserIcon
                   initials={initials}
-                  backgroundColor={colors.primary}
-                  hoverColor={colors.black}
+                  backgroundColor={({ theme }) => theme.primary}
+                  hoverColor={({ theme }) => theme.black}
                 />
               }
               menuItems={menuItems}
@@ -214,8 +216,8 @@ function Navbar() {
               bold
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               Login
             </Button>
@@ -235,8 +237,8 @@ const NavbarSection = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 6px 12px;
-  border-bottom: 1px solid ${colors.gray};
-  background-color: ${colors.white};
+  border-bottom: 1px solid ${({ theme }) => theme.gray};
+  background-color: ${({ theme }) => theme.white};
   z-index: 100;
 `;
 
@@ -266,12 +268,12 @@ const LogoContainer = styled.div`
   gap: 8px;
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
 
   a {
     text-decoration: none;
     font-size: ${fontSize.subheading};
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.gray};
     font-weight: bold;
   }
 
@@ -285,6 +287,7 @@ const MenuTextContainer = styled.div`
   flex-direction: column;
   margin-left: 8px;
   gap: 8px;
+  color: ${({ theme }) => theme.black};
 `;
 
 const MenuItemContainer = styled.div`
@@ -294,7 +297,7 @@ const MenuItemContainer = styled.div`
     display: block;
     width: 100%;
     height: 1px;
-    background-color: ${colors.black};
+    background-color: ${({ theme }) => theme.black};
     margin-top: 18px;
   }
 `;
@@ -310,7 +313,7 @@ const Hamburger = styled(FontAwesomeIcon)`
   cursor: pointer;
   &:hover {
     transition: color 0.3s;
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
   }
 `;
 

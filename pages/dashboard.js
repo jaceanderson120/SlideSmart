@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import Navbar from "@/components/page/Navbar";
 import {
   getUserStudyGuides,
@@ -28,7 +28,6 @@ import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import UserIcon from "@/components/UserIcon";
 import Button from "@/components/Button";
 import CreateModal from "@/components/modals/CreateModal";
-import { colors } from "@/constants/colors";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 
@@ -46,8 +45,9 @@ const Dashboard = () => {
   const [guideToDelete, setGuideToDelete] = useState(null);
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { isLoggedIn, currentUser, hasSpark } = useStateContext();
+  const { isLoggedIn, currentUser } = useStateContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const theme = useTheme();
 
   // State to determine if useAuthRedirect has finished
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -277,8 +277,8 @@ const Dashboard = () => {
                   value={loadingPercentage}
                   text={`${loadingPercentage}%`}
                   styles={buildStyles({
-                    pathColor: colors.primary,
-                    textColor: colors.black,
+                    pathColor: theme.primary,
+                    textColor: theme.black,
                   })}
                 />
               </ProgressWrapper>
@@ -409,7 +409,7 @@ const Dashboard = () => {
                                     id={`contributor-tooltip-${contributor}`}
                                     // Doesn't work with styled-components
                                     style={{
-                                      backgroundColor: colors.primary,
+                                      backgroundColor: theme.primary,
                                       fontSize: `${fontSize.secondary}`,
                                       padding: "8px",
                                     }}
@@ -428,7 +428,11 @@ const Dashboard = () => {
                                 setGuideToDelete(guide);
                               }}
                             >
-                              <FontAwesomeIcon icon={faTrashCan} size="2x" />
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                size="2x"
+                                color={({ theme }) => theme.black}
+                              />
                             </StudyGuideDeleteButton>
                           ) : (
                             <OptionsPadding />
@@ -467,7 +471,7 @@ const Dashboard = () => {
               <FontAwesomeIcon
                 icon={faTrashCan}
                 size="3x"
-                color={colors.primary}
+                color={({ theme }) => theme.primary}
               />
             }
           />
@@ -483,7 +487,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: ${colors.lightGray};
+  background-color: ${({ theme }) => theme.lightGray};
 `;
 
 const Section = styled.div`
@@ -492,7 +496,7 @@ const Section = styled.div`
   align-items: center;
   text-align: center;
   flex-grow: 1;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   overflow-y: hidden;
   margin-bottom: 32px;
 `;
@@ -564,16 +568,16 @@ const StudyGuideListContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 10px ${({ theme }) => theme.black};
 `;
 
 const StudyGuideListItem = styled.div`
   display: flex;
   padding: 8px;
-  border-bottom: 1px solid ${colors.gray};
+  border-bottom: 1px solid ${({ theme }) => theme.gray};
   align-items: center;
   width: 100%;
   gap: 16px;
@@ -597,7 +601,7 @@ const StudyGuideLink = styled.div`
   min-width: 0;
 
   &:hover {
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
     transform: scale(1.02);
   }
 `;
@@ -605,27 +609,27 @@ const StudyGuideLink = styled.div`
 const StudyGuideCreated = styled.div`
   display: flex;
   flex: 1;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   font-size: ${fontSize.default};
 `;
 
 const StudyGuidePermission = styled.div`
   display: flex;
   flex: 1;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   font-size: ${fontSize.default};
 `;
 
 const StudyGuideContributors = styled.div`
   display: flex;
   flex: 1;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
 `;
 
 const StudyGuideVisibility = styled.div`
   display: flex;
   flex: 1;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   font-size: ${fontSize.default};
 `;
 
@@ -642,7 +646,7 @@ const StudyGuideDeleteButton = styled.button`
   cursor: pointer;
 
   &:hover svg {
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
     transition: color 0.3s;
   }
 `;
@@ -653,7 +657,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: center;
   align-items: center;

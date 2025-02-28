@@ -1,4 +1,4 @@
-export const colors = {
+export const lightTheme = {
   primary: "#f04a37",
   primary70: "#f04a3770",
   primary33: "#f04a3733",
@@ -6,4 +6,14 @@ export const colors = {
   white: "#ffffff",
   lightGray: "#fff5f6",
   gray: "#5c5c5c",
+};
+
+export const darkTheme = {
+  primary: "#f04a37",
+  primary70: "#f04a3770",
+  primary33: "#f04a3733",
+  black: "#ffffff",
+  white: "#1a1a1a",
+  lightGray: "#3a3a3a",
+  gray: "#a9a9a9",
 };

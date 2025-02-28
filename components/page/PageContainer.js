@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
 import Navbar from "./Navbar";
 
 const PageContainer = ({ children }) => {
@@ -15,7 +14,7 @@ const Container = styled.div`
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: ${colors.lightGray};
+  background-color: ${({ theme }) => theme.lightGray};
 `;
 
 export default PageContainer;

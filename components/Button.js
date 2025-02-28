@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { fontSize as defaultFontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 
 const Button = ({
-  textColor = colors.white,
-  hoverTextColor = colors.black,
-  backgroundColor = colors.primary,
-  hoverBackgroundColor = colors.primary,
+  textColor,
+  hoverTextColor,
+  backgroundColor,
+  hoverBackgroundColor,
   fontSize = defaultFontSize.default,
   padding = "10px 20px",
   marginTop = "0px",
@@ -30,6 +29,7 @@ const Button = ({
       $underline={underline}
       $bold={bold}
       style={style}
+      disabled={disabled}
     >
       {children}
     </StyledButton>
@@ -40,8 +40,8 @@ export default Button;
 
 const StyledButton = styled.button`
   padding: ${(props) => props.$padding};
-  background-color: ${(props) => props.$backgroundColor};
-  color: ${(props) => props.$textColor};
+  background-color: ${(props) => props.$backgroundColor || props.theme.primary};
+  color: ${(props) => props.$textColor || props.theme.white};
   font-weight: ${(props) => (props.$bold ? "bold" : "normal")};
   border: none;
   border-radius: 5px;
@@ -51,8 +51,9 @@ const StyledButton = styled.button`
   transition: color 0.3s, background-color 0.3s, transform 0.3s;
 
   &:hover {
-    color: ${(props) => props.$hoverTextColor};
-    background-color: ${(props) => props.$hoverBackgroundColor};
+    color: ${(props) => props.$hoverTextColor || props.theme.black};
+    background-color: ${(props) =>
+      props.$hoverBackgroundColor || props.theme.primary};
     transform: scale(0.98);
   }
 
@@ -64,7 +65,7 @@ const StyledButton = styled.button`
       display: block;
       width: 100%;
       height: 1px;
-      background-color: ${props.$textColor};
+      background-color: ${props.$textColor || props.theme.white};
       margin-top: 10px;
     }
   `}

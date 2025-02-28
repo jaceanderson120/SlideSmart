@@ -1,6 +1,5 @@
-import { colors } from "@/constants/colors";
-import React from "react";
-import styled from "styled-components";
+import React, { use } from "react";
+import styled, { useTheme } from "styled-components";
 
 // Function to handle automatic font sizing
 const calculateFontSize = (radius) => {
@@ -41,6 +40,7 @@ const wrapText = (text, width, fontSize) => {
 };
 
 const InfoCircle = ({ title, subtitle, align }) => {
+  const theme = useTheme();
   return (
     <CircleContainer>
       <svg
@@ -49,7 +49,7 @@ const InfoCircle = ({ title, subtitle, align }) => {
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid meet"
       >
-        <circle cx="50" cy="50" r="50" fill={colors.primary33} />
+        <circle cx="50" cy="50" r="50" fill={theme.primary33} />
         {renderText(title, subtitle, align)}
       </svg>
     </CircleContainer>
@@ -79,9 +79,9 @@ const renderText = (title, subtitle, align) => {
           fontSize={fontSizeTitle}
           style={{
             fontWeight: "bold",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+            textShadow: "1px 1px 2px ${({ theme }) => theme.black}",
           }}
-          fill={colors.black}
+          fill={({ theme }) => theme.black}
         >
           {line}
         </text>
@@ -94,7 +94,7 @@ const renderText = (title, subtitle, align) => {
           textAnchor={align}
           dominantBaseline="middle"
           fontSize={fontSizeSubtitle}
-          fill={colors.black}
+          fill={({ theme }) => theme.black}
         >
           {line}
         </text>

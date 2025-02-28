@@ -1,20 +1,12 @@
 import { createGlobalStyle } from "styled-components";
+import { ThemeProvider } from "@/context/ThemeContext";
 import Head from "next/head";
 import { StateContext } from "@/context/StateContext";
-import "@fontsource/public-sans/100.css";
-import "@fontsource/public-sans/200.css";
-import "@fontsource/public-sans/300.css";
-import "@fontsource/public-sans/400.css";
-import "@fontsource/public-sans/500.css";
-import "@fontsource/public-sans/600.css";
-import "@fontsource/public-sans/700.css";
-import "@fontsource/public-sans/800.css";
-import "@fontsource/public-sans/900.css";
 import { ToastContainer } from "react-toastify";
 
 export const GlobalStyles = createGlobalStyle`
 * {
-  font-family: "Public Sans";
+  font-family: "Arial", sans-serif;
   box-sizing: border-box;
   font-weight: 400;
   margin: 0;
@@ -37,7 +29,9 @@ export default function App({ Component, pageProps }) {
 
       <GlobalStyles />
       <StateContext>
-        <Component {...pageProps} />
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </StateContext>
       <ToastContainer position="top-right" autoClose={8000} />
     </>

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import { useRouter } from "next/router";
 
@@ -29,7 +28,7 @@ const Label = styled.p`
 `;
 
 const LabelSpan = styled.span`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: bold;
   cursor: pointer;
   transition: text-decoration 0.3s;

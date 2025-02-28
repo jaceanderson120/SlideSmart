@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { trackClickThrough } from "@/firebase/database";
@@ -48,7 +47,7 @@ const StudyGuideList = ({ guides }) => {
                     onClick={() => handleClick(selectedGuide.id)}
                     backgroundColor="transparent"
                     hoverBackgroundColor="transparent"
-                    textColor={colors.primary}
+                    textColor={({ theme }) => theme.primary}
                   >
                     View Study Guide
                   </Button>
@@ -77,11 +76,11 @@ const Container = styled.div`
   align-items: flex-start;
   flex-direction: column;
   border-radius: 12px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
-  border-left: 4px solid ${colors.primary33};
-  border-top: 4px solid ${colors.primary33};
+  box-shadow: 10px 10px 10px ${({ theme }) => theme.black};
+  border-left: 4px solid ${({ theme }) => theme.primary33};
+  border-top: 4px solid ${({ theme }) => theme.primary33};
   padding: 16px;
-  background: ${colors.white};
+  background: ${({ theme }) => theme.white};
   overflow-y: auto;
   overscroll-behavior: contain;
 `;
@@ -90,7 +89,7 @@ const ListItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: ${colors.lightGray};
+  background: ${({ theme }) => theme.lightGray};
   margin-bottom: 8px;
   padding: 12px;
   border-radius: 12px;
@@ -105,7 +104,7 @@ const ListItem = styled.div`
 `;
 
 const NoResults = styled.div`
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const TopicsList = styled.div`
@@ -117,16 +116,18 @@ const TopicsList = styled.div`
 
 const Topic = styled.div`
   display: flex;
-  background: ${colors.white};
+  background: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   padding: 8px;
   border-radius: 12px;
   font-size: ${fontSize.secondary};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px ${({ theme }) => theme.black};
 `;
 
 const FileName = styled.div`
   font-size: ${fontSize.default};
   font-weight: bold;
+  color: ${({ theme }) => theme.black};
 `;
 
 const PanelContent = styled.div`

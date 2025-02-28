@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 
 const OrLine = () => {
@@ -23,7 +22,7 @@ const HorizontalLine = styled.div`
   &::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid ${colors.gray};
+    border-bottom: 1px solid ${({ theme }) => theme.gray};
   }
 
   &::before {
@@ -37,5 +36,5 @@ const HorizontalLine = styled.div`
 
 const OrText = styled.span`
   font-size: ${fontSize.secondary};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
 `;

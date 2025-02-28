@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { getCheckoutUrl, getPortalUrl } from "@/utils/stripePayment";
 import app from "@/firebase/firebase";
 import { useRouter } from "next/navigation"; // must be from next/navigation not next/router
@@ -16,7 +16,6 @@ config.autoAddCss = false; /* eslint-disable import/first */
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import Button from "@/components/Button";
-import { colors } from "@/constants/colors";
 import Footer from "@/components/page/Footer";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
@@ -25,6 +24,7 @@ const Pricing = () => {
   const { hasSpark, isLoggedIn } = useStateContext();
   const [redirectLoading, setRedirectLoading] = useState(false);
   const router = useRouter();
+  const theme = useTheme();
 
   // Direct user to checkout page
   const handleUpgradeClick = async () => {
@@ -102,9 +102,7 @@ const Pricing = () => {
                 <PricingCardDescription key={index}>
                   <FontAwesomeIcon
                     icon={item.icon}
-                    color={
-                      item.icon === faX ? colors.primary70 : colors.primary
-                    }
+                    color={item.icon === faX ? theme.primary70 : theme.primary}
                     size="2x"
                   />
                   {item.text}
@@ -121,7 +119,7 @@ const Pricing = () => {
                   loading={redirectLoading}
                 >
                   {redirectLoading ? (
-                    <Dots color={colors.white} />
+                    <Dots color={theme.white} />
                   ) : (
                     "Upgrade Now!"
                   )}
@@ -133,7 +131,7 @@ const Pricing = () => {
                   loading={redirectLoading}
                 >
                   {redirectLoading ? (
-                    <Dots color={colors.white} />
+                    <Dots color={({ theme }) => theme.white} />
                   ) : (
                     "Manage Subscription"
                   )}
@@ -149,7 +147,7 @@ const Pricing = () => {
                 <PricingCardDescription key={index}>
                   <FontAwesomeIcon
                     icon={faCheck}
-                    color={colors.primary}
+                    color={({ theme }) => theme.primary}
                     size="2x"
                   />
                   {desc}
@@ -171,8 +169,8 @@ const PricingContainer = styled.div`
   flex-grow: 1;
   background: linear-gradient(
     to bottom,
-    ${colors.primary70},
-    ${colors.primary33}
+    ${({ theme }) => theme.primary70},
+    ${({ theme }) => theme.primary33}
   );
   display: flex;
   flex-direction: column;
@@ -210,16 +208,18 @@ const BottomSection = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const SubtitleSpan = styled.span`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: bold;
 `;
 
@@ -228,11 +228,11 @@ const PricingCard = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   border-radius: 16px;
   padding: 32px;
   width: 30%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px ${({ theme }) => theme.black};
   word-wrap: break-word;
 
   @media (max-width: 768px) {
@@ -244,23 +244,25 @@ const PricingCardTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
   margin-bottom: 32px;
+  color: ${({ theme }) => theme.black};
 `;
 
 const PricingCardPrice = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
   margin-bottom: 32px;
+  color: ${({ theme }) => theme.black};
 `;
 
 const PricingCardInfo = styled.p`
   font-size: ${fontSize.default};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   text-align: left;
 `;
 
 const PricingCardLabel = styled.p`
   font-size: ${fontSize.label};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   margin-top: 32px;
   margin-bottom: 16px;
 `;
@@ -268,7 +270,7 @@ const PricingCardLabel = styled.p`
 const Underline = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.primary};
   margin-bottom: 16px;
 `;
 
@@ -277,7 +279,7 @@ const PricingCardDescription = styled.div`
   flex-direction: row;
   align-items: center;
   font-size: ${fontSize.default};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   gap: 16px;
   text-align: left;
   line-height: 1.3;

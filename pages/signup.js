@@ -9,7 +9,6 @@ import { storeUserInfo } from "@/firebase/database";
 import { fontSize } from "@/constants/fontSize";
 import Link from "next/link";
 import Button from "@/components/Button";
-import { colors } from "@/constants/colors";
 import CredentialsForm from "@/components/auth/CredentialsForm";
 import Image from "next/image";
 import logo from "@/images/logo.png";
@@ -173,7 +172,7 @@ const Section = styled.div`
   height: 100%;
   padding: 32px;
   text-align: center;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   flex-direction: column;
 `;
 
@@ -186,14 +185,14 @@ const Title = styled.p`
 const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid ${colors.gray};
+  border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
   font-size: ${fontSize.secondary};
   color: green;
   width: 100%;
 
   &:focus {
-    border-color: ${colors.primary70};
+    border-color: ${({ theme }) => theme.primary70};
     outline: none;
   }
 `;
@@ -206,7 +205,7 @@ const Login = styled.p`
 const LoginLink = styled(Link)`
   font-size: ${fontSize.secondary};
   text-decoration: none;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   transition: text-decoration 0.3s;
   font-weight: bold;
 

@@ -44,7 +44,6 @@ import AddSectionsContainer from "@/components/studyGuide/AddSectionsContainer";
 import AddTopicModal from "@/components/modals/AddTopicModal";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
-import { colors } from "@/constants/colors";
 import {
   generateExample,
   generateExplanation,
@@ -596,8 +595,8 @@ const Study = () => {
               padding="0px"
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
-              textColor={colors.black}
-              hoverTextColor={colors.primary}
+              textColor={({ theme }) => theme.black}
+              hoverTextColor={({ theme }) => theme.primary}
             >
               <FontAwesomeIcon icon={faArrowLeft} size="lg" /> Back to Dashboard
             </Button>
@@ -622,8 +621,8 @@ const Study = () => {
                 <Button
                   backgroundColor="transparent"
                   hoverBackgroundColor="transparent"
-                  textColor={colors.black}
-                  hoverTextColor={colors.primary}
+                  textColor={({ theme }) => theme.black}
+                  hoverTextColor={({ theme }) => theme.primary}
                   onClick={handleEditClicked}
                   padding="4px"
                   bold
@@ -633,8 +632,8 @@ const Study = () => {
                 <Button
                   backgroundColor="transparent"
                   hoverBackgroundColor="transparent"
-                  textColor={colors.black}
-                  hoverTextColor={colors.primary}
+                  textColor={({ theme }) => theme.black}
+                  hoverTextColor={({ theme }) => theme.primary}
                   onClick={() => setIsDiscardEditsDialogOpen(true)}
                   padding="4px"
                   bold
@@ -951,10 +950,12 @@ const Study = () => {
                               onClick={() => toggleAnswer(key)}
                               padding="8px"
                               fontSize={fontSize.label}
-                              backgroundColor={colors.primary70}
-                              hoverBackgroundColor={colors.primary70}
-                              textColor={colors.black}
-                              hoverTextColor={colors.white}
+                              backgroundColor={({ theme }) => theme.primary70}
+                              hoverBackgroundColor={({ theme }) =>
+                                theme.primary70
+                              }
+                              textColor={({ theme }) => theme.black}
+                              hoverTextColor={({ theme }) => theme.white}
                             >
                               {!collapsedAnswers[key] ? "SHOW" : "HIDE"}
                             </Button>
@@ -1038,7 +1039,7 @@ const Study = () => {
           <FontAwesomeIcon
             icon={faShareFromSquare}
             size="3x"
-            color={colors.primary}
+            color={({ theme }) => theme.primary}
           />
         }
       />
@@ -1063,7 +1064,11 @@ const Study = () => {
           toast.success("Topic has been deleted successfully.");
         }}
         icon={
-          <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            size="3x"
+            color={({ theme }) => theme.primary}
+          />
         }
       />
       <ConfirmationModal
@@ -1085,7 +1090,11 @@ const Study = () => {
           handleDeleteSubSection(topicToDelete, subSectionToDelete);
         }}
         icon={
-          <FontAwesomeIcon icon={faTrashCan} size="3x" color={colors.primary} />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            size="3x"
+            color={({ theme }) => theme.primary}
+          />
         }
       />
       <ConfirmationModal
@@ -1139,7 +1148,7 @@ const Study = () => {
           <FontAwesomeIcon
             icon={faMagicWandSparkles}
             size="3x"
-            color={colors.primary}
+            color={({ theme }) => theme.primary}
           />
         }
       />
@@ -1170,8 +1179,8 @@ const Section = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   text-align: center;
-  color: ${colors.black};
-  background-color: ${colors.lightGray};
+  color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.lightGray};
   overflow: hidden;
 `;
 
@@ -1179,7 +1188,7 @@ const Title = styled.input`
   ${({ $editMode }) =>
     $editMode
       ? css`
-          background-color: ${colors.white};
+          background-color: ${({ theme }) => theme.white};
         `
       : css`
           background-color: transparent;
@@ -1196,6 +1205,7 @@ const Title = styled.input`
   max-width: 40%;
   border: none;
   border-radius: 10px;
+  color: ${({ theme }) => theme.black};
 `;
 
 const HeaderSection = styled.div`
@@ -1204,8 +1214,8 @@ const HeaderSection = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: ${colors.lightGray};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: ${({ theme }) => theme.lightGray};
+  box-shadow: 0px 2px 5px ${({ theme }) => theme.black};
   margin-bottom: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1232,7 +1242,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding-right: 10px;
   &:hover {
     transition: color 0.3s;
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
     cursor: pointer;
   }
 `;
@@ -1273,11 +1283,11 @@ const InfoSubContainer = styled.div`
   padding-bottom: 16px;
   gap: 16px;
   width: 100%;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   border-radius: 12px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
-  border-left: 4px solid ${colors.primary33};
-  border-top: 4px solid ${colors.primary33};
+  box-shadow: 10px 10px 10px ${({ theme }) => theme.black};
+  border-left: 4px solid ${({ theme }) => theme.primary33};
+  border-top: 4px solid ${({ theme }) => theme.primary33};
 `;
 
 const TopicHeaderContainer = styled.div`
@@ -1291,7 +1301,7 @@ const TopicHeaderContainer = styled.div`
 const TopicHeaderTitle = styled.div`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  background-color: ${colors.primary70};
+  background-color: ${({ theme }) => theme.primary70};
   padding: 8px;
   border-radius: 10px;
 `;
@@ -1337,7 +1347,7 @@ const TopicSubVideoContainer = styled.div`
 const NoVideoText = styled.p`
   font-size: ${fontSize.default};
   font-style: italic;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   padding: 8px;
 `;
 

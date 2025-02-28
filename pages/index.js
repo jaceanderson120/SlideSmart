@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import Footer from "../components/page/Footer";
 import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
@@ -13,7 +13,6 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-import { colors } from "@/constants/colors";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
 import React from "react";
@@ -21,6 +20,7 @@ import React from "react";
 export default function Home() {
   const router = useRouter();
   const { isLoggedIn } = useStateContext();
+  const theme = useTheme();
 
   const handleMainButtonClick = () => {
     if (isLoggedIn) {
@@ -47,7 +47,7 @@ export default function Home() {
               The AI Application to
               <br />
               Make
-              <span style={{ color: colors.primary, fontWeight: "bold" }}>
+              <span style={{ color: theme.primary, fontWeight: "bold" }}>
                 {" "}
                 Slides
               </span>{" "}
@@ -85,10 +85,10 @@ export default function Home() {
           )}
           <MoreContainer>
             <Button
-              textColor={colors.primary}
-              hoverTextColor={colors.white}
+              textColor={theme.primary}
+              hoverTextColor={theme.white}
               backgroundColor="transparent"
-              hoverBackgroundColor={colors.primary}
+              hoverBackgroundColor={theme.primary}
               onClick={() => router.push("/how-it-works")}
             >
               Still confused? Learn more about how SlideSmart works!
@@ -110,8 +110,8 @@ const Section = styled.div`
   flex-grow: 1;
   background: linear-gradient(
     to bottom,
-    ${colors.primary70},
-    ${colors.primary33}
+    ${({ theme }) => theme.primary70},
+    ${({ theme }) => theme.primary33}
   );
   display: flex;
   flex-direction: column;
@@ -133,15 +133,15 @@ const SloganContainer = styled.div`
 
 const Slogan = styled.p`
   font-size: ${fontSize.xlheading};
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   font-weight: bold;
   line-height: 1.3;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
 `;
 
 const SubSlogan = styled.p`
   font-size: ${fontSize.default};
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   line-height: 1.3;
 `;
 
@@ -156,7 +156,7 @@ const InstructionContainer = styled.div`
 const Instruction = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const MoreContainer = styled.div`

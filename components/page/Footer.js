@@ -4,7 +4,6 @@ import Image from "next/image";
 import logo from "@/images/logo.png";
 import Link from "next/link";
 import { fontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 
 const Footer = () => {
   return (
@@ -38,8 +37,8 @@ const FooterSection = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid ${colors.black};
-  background-color: white;
+  border-top: 1px solid ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.white};
   color: white;
   text-align: center;
   padding: 16px;
@@ -62,7 +61,7 @@ const SlideSmart = styled.div`
   a {
     text-decoration: none;
     font-size: ${fontSize.heading};
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
     font-weight: bold;
     margin-left: 16px;
   }
@@ -72,7 +71,7 @@ const Resources = styled.div`
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const ResourceItem = styled.div`
@@ -83,7 +82,7 @@ const ResourceItem = styled.div`
   a {
     text-decoration: none;
     font-size: ${fontSize.default};
-    color: black;
+    color: ${({ theme }) => theme.black};
   }
 
   a:hover {
@@ -93,7 +92,7 @@ const ResourceItem = styled.div`
 
 const SlideSmartCopyRight = styled.div`
   font-size: ${fontSize.secondary};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   padding: 16px;
   text-align: center;
 `;
@@ -101,7 +100,7 @@ const SlideSmartCopyRight = styled.div`
 const Line = styled.div`
   width: 80%;
   height: 0.5px;
-  background-color: ${colors.gray};
+  background-color: ${({ theme }) => theme.gray};
   display: flex;
 `;
 

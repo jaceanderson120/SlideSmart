@@ -10,7 +10,6 @@ import register from "@/images/register.png";
 import share from "@/images/share.png";
 import showFile from "@/images/showFile.png";
 import DecorationCircle from "@/components/howItWorks/DecorationCircle";
-import { colors } from "@/constants/colors";
 import { useEffect, useState } from "react";
 import Head from "next/head";
 
@@ -181,7 +180,7 @@ const PageContainer = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   position: relative;
-  background-color: ${colors.lightGray};
+  background-color: ${({ theme }) => theme.lightGray};
   z-index: 0;
 `;
 
