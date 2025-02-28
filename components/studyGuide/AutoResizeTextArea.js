@@ -76,5 +76,5 @@ const TextArea = styled.textarea`
   background-color: ${(props) =>
     props.$editMode ? props.theme.lightGray : "transparent"};
   box-shadow: ${(props) =>
-    props.$editMode ? "0px 2px 2px rgba(0, 0, 0, 0.05)" : "none"};
+    props.$editMode ? "0px 2px 2px ${({ theme }) => theme.black}" : "none"};
 `;

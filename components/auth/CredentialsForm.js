@@ -14,7 +14,7 @@ const Form = styled.div`
   background-color: ${({ theme }) => theme.white};
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px ${({ theme }) => theme.black};
 
   @media (max-width: 768px) {
     width: 80%;

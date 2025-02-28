@@ -209,7 +209,7 @@ const PageTitle = styled.p`
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
 `;
 
@@ -234,7 +234,7 @@ const FormBox = styled.div`
   padding: 48px;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.white};
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px ${({ theme }) => theme.black};
 `;
 
 const InputContainer = styled.div`

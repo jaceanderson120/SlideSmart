@@ -79,7 +79,7 @@ const renderText = (title, subtitle, align) => {
           fontSize={fontSizeTitle}
           style={{
             fontWeight: "bold",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+            textShadow: "1px 1px 2px ${({ theme }) => theme.black}",
           }}
           fill={({ theme }) => theme.black}
         >

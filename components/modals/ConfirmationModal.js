@@ -24,7 +24,7 @@ const ConfirmationModal = ({
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+      boxShadow: "4px 4px 4px ${({ theme }) => theme.black}",
       maxWidth: "30%",
       height: "auto",
       padding: "24px",

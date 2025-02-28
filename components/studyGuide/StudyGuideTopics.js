@@ -85,7 +85,7 @@ const TopicName = styled.a`
   color: ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.primary33};
   transition: background-color 0.3s;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px ${({ theme }) => theme.black};
   border-radius: 16px;
   white-space: normal;
   word-wrap: break-word;

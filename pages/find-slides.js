@@ -163,7 +163,7 @@ const PageTitle = styled.p`
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
 `;
 

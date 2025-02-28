@@ -136,7 +136,7 @@ const Slogan = styled.p`
   color: ${({ theme }) => theme.black};
   font-weight: bold;
   line-height: 1.3;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
 `;
 
 const SubSlogan = styled.p`

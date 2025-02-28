@@ -214,7 +214,7 @@ const PageTitle = styled.p`
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
 `;
 
@@ -232,7 +232,7 @@ const PricingCard = styled.div`
   border-radius: 16px;
   padding: 32px;
   width: 30%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px ${({ theme }) => theme.black};
   word-wrap: break-word;
 
   @media (max-width: 768px) {

@@ -76,7 +76,7 @@ const Container = styled.div`
   align-items: flex-start;
   flex-direction: column;
   border-radius: 12px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 10px 10px ${({ theme }) => theme.black};
   border-left: 4px solid ${({ theme }) => theme.primary33};
   border-top: 4px solid ${({ theme }) => theme.primary33};
   padding: 16px;
@@ -121,7 +121,7 @@ const Topic = styled.div`
   padding: 8px;
   border-radius: 12px;
   font-size: ${fontSize.secondary};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px ${({ theme }) => theme.black};
 `;
 
 const FileName = styled.div`

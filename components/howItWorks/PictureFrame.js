@@ -13,7 +13,7 @@ export default PictureFrame;
 
 const Frame = styled.div`
   border-radius: 8px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 4px ${({ theme }) => theme.black};
   padding: 16px;
   background-color: ${({ theme }) => theme.white};
 

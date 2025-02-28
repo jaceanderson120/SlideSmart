@@ -44,7 +44,6 @@ import AddSectionsContainer from "@/components/studyGuide/AddSectionsContainer";
 import AddTopicModal from "@/components/modals/AddTopicModal";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
-import { colors } from "@/constants/colors";
 import {
   generateExample,
   generateExplanation,
@@ -1216,7 +1215,7 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
   background-color: ${({ theme }) => theme.lightGray};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px ${({ theme }) => theme.black};
   margin-bottom: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1286,7 +1285,7 @@ const InfoSubContainer = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.white};
   border-radius: 12px;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 10px 10px ${({ theme }) => theme.black};
   border-left: 4px solid ${({ theme }) => theme.primary33};
   border-top: 4px solid ${({ theme }) => theme.primary33};
 `;

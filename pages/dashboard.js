@@ -571,7 +571,7 @@ const StudyGuideListContainer = styled.div`
   background-color: ${({ theme }) => theme.white};
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 10px ${({ theme }) => theme.black};
 `;
 
 const StudyGuideListItem = styled.div`
@@ -657,7 +657,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: center;
   align-items: center;
