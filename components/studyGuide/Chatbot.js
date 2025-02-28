@@ -225,7 +225,7 @@ const ChatbotContainer = styled.div`
   justify-content: space-between;
   border-radius: 16px;
   background-color: ${({ theme }) => theme.white};
-  box-shadow: 0 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.shadow};
   overflow: hidden;
   height: 100%;
   max-height: 100%;
@@ -238,7 +238,7 @@ const ChatbotHeader = styled.div`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  box-shadow: 0 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.shadow};
   border-radius: 16px;
   background-color: ${({ theme }) => theme.primary33};
   margin-top: 8px;
@@ -305,7 +305,7 @@ const UserMessage = styled.div`
   color: ${({ theme }) => theme.black};
   max-width: 90%;
   line-height: 1.3;
-  box-shadow: 0 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.shadow};
 `;
 
 const BotMessage = styled.div`
@@ -317,7 +317,7 @@ const BotMessage = styled.div`
   color: ${({ theme }) => theme.black};
   max-width: 90%;
   line-height: 1.3;
-  box-shadow: 0 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.shadow};
 `;
 
 const InputArea = styled.div`
@@ -326,7 +326,7 @@ const InputArea = styled.div`
   padding: 8px;
   border-radius: 16px;
   background-color: ${({ theme }) => theme.white};
-  box-shadow: 2px 2px 2px 2px ${({ theme }) => theme.black};
+  box-shadow: 2px 2px 2px 2px ${({ theme }) => theme.shadow};
   margin-bottom: 8px;
   margin-left: 8px;
   margin-right: 8px;

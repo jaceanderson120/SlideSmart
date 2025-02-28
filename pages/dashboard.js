@@ -571,7 +571,7 @@ const StudyGuideListContainer = styled.div`
   background-color: ${({ theme }) => theme.white};
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0px 2px 10px ${({ theme }) => theme.black};
+  box-shadow: 0px 2px 10px ${({ theme }) => theme.shadow};
 `;
 
 const StudyGuideListItem = styled.div`
