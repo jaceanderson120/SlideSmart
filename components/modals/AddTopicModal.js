@@ -1,15 +1,32 @@
 import Modal from "react-modal";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { useState } from "react";
-import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
 const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
   const [topicName, setTopicName] = useState("");
   const [topicExplanation, setTopicExplanation] = useState("");
+  const theme = useTheme();
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: theme.lightGray,
+      border: "none",
+      boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+      maxWidth: "30%",
+      height: "auto",
+      padding: "24px",
+      borderRadius: "16px",
+    },
+  };
 
   return (
     <>
@@ -46,9 +63,9 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
               hoverBackgroundColor="transparent"
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor={colors.gray}
-              hoverTextColor={colors.primary}
-              style={{ border: `1px solid ${colors.gray}` }}
+              textColor={({ theme }) => theme.gray}
+              hoverTextColor={({ theme }) => theme.primary}
+              style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
             >
               Cancel
             </Button>
@@ -59,12 +76,12 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
                 setTopicExplanation("");
                 onClose();
               }}
-              backgroundColor={colors.primary}
-              hoverBackgroundColor={colors.primary}
+              backgroundColor={({ theme }) => theme.primary}
+              hoverBackgroundColor={({ theme }) => theme.primary}
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor={colors.white}
-              hoverTextColor={colors.black}
+              textColor={({ theme }) => theme.white}
+              hoverTextColor={({ theme }) => theme.black}
             >
               Confirm
             </Button>
@@ -73,23 +90,6 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
       </Modal>
     </>
   );
-};
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: colors.lightGray,
-    border: "none",
-    boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
-    maxWidth: "30%",
-    height: "auto",
-    padding: "24px",
-    borderRadius: "16px",
-  },
 };
 
 const ButtonSection = styled.div`
@@ -113,13 +113,13 @@ const ModalContent = styled.div`
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;

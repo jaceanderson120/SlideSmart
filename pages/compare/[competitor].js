@@ -3,7 +3,6 @@ import PageContainer from "@/components/page/PageContainer";
 import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 
 const Competitor = () => {
@@ -147,33 +146,33 @@ const TitleContainer = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtext = styled.p`
   font-size: ${fontSize.default};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
 
 const ComparisonTable = styled.table`
   width: 60%;
   border-spacing: 0;
-  border: 1px solid ${colors.gray}; // Outer border of the table
+  border: 1px solid ${({ theme }) => theme.gray}; // Outer border of the table
   border-radius: 16px; // Outer border curve of the table
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 
   th,
   td {
-    border: 1px solid ${colors.gray};
+    border: 1px solid ${({ theme }) => theme.gray};
     padding: 32px;
   }
 
@@ -213,26 +212,26 @@ const ComparisonTable = styled.table`
 `;
 
 const TableCompareHeader = styled.th`
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   text-align: left;
   font-size: ${fontSize.label};
   font-weight: bold;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
 `;
 
 const TableHeader = styled.th`
-  background-color: ${colors.white};
-  color: ${colors.black};
+  background-color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.black};
   font-size: ${fontSize.subheading};
   font-weight: bold;
   width: 25%;
 `;
 
 const CriteriaTd = styled.td`
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   font-size: ${fontSize.label};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const CheckmarkTd = styled.td`

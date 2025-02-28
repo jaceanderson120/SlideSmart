@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { getUserUidFromEmail, shareStudyGuide } from "@/firebase/database";
 import { toast } from "react-toastify";
 import { useStateContext } from "@/context/StateContext";
@@ -8,7 +8,6 @@ import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../Button";
-import { colors } from "@/constants/colors";
 
 Modal.setAppElement("#__next");
 
@@ -16,6 +15,24 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
   const [shareEmail, setShareEmail] = useState("");
   const [allowEditing, setAllowEditing] = useState(false);
   const { currentUser } = useStateContext();
+  const theme = useTheme();
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: theme.lightGray,
+      border: "none",
+      boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
+      maxWidth: "30%",
+      height: "auto",
+      padding: "24px",
+      borderRadius: "16px",
+    },
+  };
 
   // Share the study guide with the entered email
   const onShareClicked = async () => {
@@ -83,20 +100,20 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
               hoverBackgroundColor="transparent"
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor={colors.gray}
-              hoverTextColor={colors.primary}
-              style={{ border: `1px solid ${colors.gray}` }}
+              textColor={({ theme }) => theme.gray}
+              hoverTextColor={({ theme }) => theme.primary}
+              style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
             >
               Close
             </Button>
             <Button
               onClick={onShareClicked}
-              backgroundColor={colors.primary}
-              hoverBackgroundColor={colors.primary}
+              backgroundColor={({ theme }) => theme.primary}
+              hoverBackgroundColor={({ theme }) => theme.primary}
               padding="12px"
               fontSize={fontSize.secondary}
-              textColor={colors.white}
-              hoverTextColor={colors.black}
+              textColor={({ theme }) => theme.white}
+              hoverTextColor={({ theme }) => theme.black}
             >
               Share
             </Button>
@@ -107,29 +124,12 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
   );
 };
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: colors.lightGray,
-    border: "none",
-    boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.4)",
-    maxWidth: "30%",
-    height: "auto",
-    padding: "24px",
-    borderRadius: "16px",
-  },
-};
-
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   &:hover {
     transition: color 0.3s;
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
   }
 `;
 
@@ -154,13 +154,13 @@ const ModalContent = styled.div`
 const ModalTitle = styled.p`
   font-size: ${fontSize.subheading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const ModalText = styled.p`
   font-size: ${fontSize.secondary};
   line-height: 1.3;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;

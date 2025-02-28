@@ -3,7 +3,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useStateContext } from "@/context/StateContext";
 import Footer from "@/components/page/Footer";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
@@ -204,24 +203,24 @@ const RightSection = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const SubtitleSpan = styled.span`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: bold;
 `;
 
 const Subtext = styled.p`
   font-size: ${fontSize.default};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
 
@@ -234,7 +233,7 @@ const FormBox = styled.div`
   margin: 16px;
   padding: 48px;
   border-radius: 8px;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
@@ -248,20 +247,20 @@ const InputContainer = styled.div`
 const Input = styled.input`
   font-size: ${fontSize.default};
   padding: 8px;
-  border: 1px solid ${colors.gray};
+  border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;
   width: 100%;
 `;
 
 const InputLabel = styled.label`
   font-size: ${fontSize.secondary};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
 `;
 
 const TextArea = styled.textarea`
   font-size: ${fontSize.default};
   padding: 8px;
-  border: 1px solid ${colors.gray};
+  border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;
   width: 100%;
   height: 100px;

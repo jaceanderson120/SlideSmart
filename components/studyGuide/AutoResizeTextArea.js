@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
-import { colors } from "@/constants/colors";
 
 const AutoResizeTextArea = ({ value, onChange, editMode, label }) => {
   const textAreaRef = useRef(null);
@@ -65,7 +64,7 @@ const Label = styled.label`
 const TextArea = styled.textarea`
   border: none;
   width: 100%;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   height: auto;
   font-size: ${fontSize.default};
   line-height: 1.3;
@@ -75,7 +74,7 @@ const TextArea = styled.textarea`
   overflow: hidden;
   outline: none;
   background-color: ${(props) =>
-    props.$editMode ? colors.lightGray : "transparent"};
+    props.$editMode ? props.theme.lightGray : "transparent"};
   box-shadow: ${(props) =>
     props.$editMode ? "0px 2px 2px rgba(0, 0, 0, 0.05)" : "none"};
 `;

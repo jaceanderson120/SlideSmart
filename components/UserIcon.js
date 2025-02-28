@@ -1,15 +1,12 @@
 import { fontSize } from "@/constants/fontSize";
 import styled from "styled-components";
-import { colors } from "@/constants/colors";
-
-// The $ before the prop name is a convention to indicate that the prop is a styled component prop
 
 const UserIcon = ({
   initials = "?", // Default to "?" if no initials are provided
-  color = colors.white, // Default black color
-  hoverColor = colors.white, // Default white hover color
-  backgroundColor = colors.gray, // Default light gray background
-  hoverBackgroundColor = colors.primary, // Default darker gray on hover
+  color, // Default black color
+  hoverColor, // Default white hover color
+  backgroundColor, // Default light gray background
+  hoverBackgroundColor, // Default darker gray on hover
   size = 32, // Default size in pixels
   ...props
 }) => {
@@ -37,11 +34,12 @@ const CircleIcon = styled.div`
   width: ${(props) => props.$size}px;
   height: ${(props) => props.$size}px;
   border-radius: 50%;
-  background-color: ${(props) => props.$backgroundColor};
-  color: ${(props) => props.$color};
+  background-color: ${(props) => props.$backgroundColor || props.theme.gray};
+  color: ${(props) => props.$color || props.theme.white};
   transition: background-color 0.3s, color 0.3s;
   &:hover {
-    background-color: ${(props) => props.$hoverBackgroundColor};
-    color: ${(props) => props.$hoverColor};
+    background-color: ${(props) =>
+      props.$hoverBackgroundColor || props.theme.primary};
+    color: ${(props) => props.$hoverColor || props.theme.white};
   }
 `;

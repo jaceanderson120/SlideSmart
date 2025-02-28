@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Button from "../Button";
-import { colors } from "@/constants/colors";
 
 const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
   return (
@@ -8,10 +7,10 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
       {!topicInfo["explanation"] && topicInfo["explanation"] !== "" && (
         <Button
           padding="8px"
-          backgroundColor={colors.primary70}
-          hoverBackgroundColor={colors.primary70}
-          textColor={colors.black}
-          hoverTextColor={colors.white}
+          backgroundColor={({ theme }) => theme.primary70}
+          hoverBackgroundColor={({ theme }) => theme.primary70}
+          textColor={({ theme }) => theme.black}
+          hoverTextColor={({ theme }) => theme.white}
           onClick={() => handleAddSection("explanation")}
         >
           Add Explanation
@@ -20,10 +19,10 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
       {!topicInfo["youtubeIds"] && (
         <Button
           padding="8px"
-          backgroundColor={colors.primary70}
-          hoverBackgroundColor={colors.primary70}
-          textColor={colors.black}
-          hoverTextColor={colors.white}
+          backgroundColor={({ theme }) => theme.primary70}
+          hoverBackgroundColor={({ theme }) => theme.primary70}
+          textColor={({ theme }) => theme.black}
+          hoverTextColor={({ theme }) => theme.white}
           onClick={() => handleAddSection("youtubeIds")}
         >
           Add Video
@@ -32,10 +31,10 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
       {!topicInfo["example"] && topicInfo["example"] !== "" && (
         <Button
           padding="8px"
-          backgroundColor={colors.primary70}
-          hoverBackgroundColor={colors.primary70}
-          textColor={colors.black}
-          hoverTextColor={colors.white}
+          backgroundColor={({ theme }) => theme.primary70}
+          hoverBackgroundColor={({ theme }) => theme.primary70}
+          textColor={({ theme }) => theme.black}
+          hoverTextColor={({ theme }) => theme.white}
           onClick={() => handleAddSection("example")}
         >
           Add Example
@@ -44,10 +43,10 @@ const AddSectionsContainer = ({ topicInfo, handleAddSection }) => {
       {!topicInfo["question"] && topicInfo["question"] !== "" && (
         <Button
           padding="8px"
-          backgroundColor={colors.primary70}
-          hoverBackgroundColor={colors.primary70}
-          textColor={colors.black}
-          hoverTextColor={colors.white}
+          backgroundColor={({ theme }) => theme.primary70}
+          hoverBackgroundColor={({ theme }) => theme.primary70}
+          textColor={({ theme }) => theme.black}
+          hoverTextColor={({ theme }) => theme.white}
           onClick={() => {
             handleAddSection("question");
             handleAddSection("answer");

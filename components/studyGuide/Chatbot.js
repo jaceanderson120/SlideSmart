@@ -8,7 +8,6 @@ import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
-import { colors } from "@/constants/colors";
 
 const Chatbot = (props) => {
   const { hasSpark } = useStateContext();
@@ -225,7 +224,7 @@ const ChatbotContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   border-radius: 16px;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   height: 100%;
@@ -241,7 +240,7 @@ const ChatbotHeader = styled.div`
   padding: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
-  background-color: ${colors.primary33};
+  background-color: ${({ theme }) => theme.primary33};
   margin-top: 8px;
   margin-left: 8px;
   margin-right: 8px;
@@ -258,9 +257,9 @@ const IconContainer = styled.div`
 
 const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
   &:hover {
-    color: ${colors.white};
+    color: ${({ theme }) => theme.white};
     transition: color 0.3s;
   }
 `;
@@ -302,8 +301,8 @@ const UserMessage = styled.div`
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 8px 0px 8px 8px;
-  background-color: ${colors.primary33};
-  color: ${colors.black};
+  background-color: ${({ theme }) => theme.primary33};
+  color: ${({ theme }) => theme.black};
   max-width: 90%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -314,8 +313,8 @@ const BotMessage = styled.div`
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 0px 8px 8px 8px;
-  background-color: ${colors.lightGray};
-  color: ${colors.black};
+  background-color: ${({ theme }) => theme.lightGray};
+  color: ${({ theme }) => theme.black};
   max-width: 90%;
   line-height: 1.3;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -326,7 +325,7 @@ const InputArea = styled.div`
   align-items: center;
   padding: 8px;
   border-radius: 16px;
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.white};
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 8px;
   margin-left: 8px;
@@ -341,18 +340,18 @@ const Input = styled.input`
   margin-right: 8px;
   background-color: transparent;
   font-size: ${fontSize.default};
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   cursor: pointer;
 
   &:hover {
-    color: ${colors.primary};
+    color: ${({ theme }) => theme.primary};
     transition: color 0.3s;
   }
 `;

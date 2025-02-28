@@ -5,7 +5,6 @@ import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "@/components/findSlides/StudyGuideList";
 import Footer from "@/components/page/Footer";
-import { colors } from "@/constants/colors";
 import keywordExtractor from "keyword-extractor";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
@@ -158,24 +157,24 @@ const RightSection = styled.div`
 const PageTitle = styled.p`
   font-size: ${fontSize.heading};
   font-weight: bold;
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const Subtitle = styled.p`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  color: ${colors.black};
+  color: ${({ theme }) => theme.black};
 `;
 
 const SubtitleSpan = styled.span`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: bold;
 `;
 
 const Subtext = styled.p`
   font-size: ${fontSize.default};
-  color: ${colors.gray};
+  color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
 
@@ -190,14 +189,14 @@ const SearchContainer = styled.div`
 const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid ${colors.gray};
+  border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
   font-size: ${fontSize.secondary};
   color: green;
   width: 100%;
 
   &:focus {
-    border-color: ${colors.primary70};
+    border-color: ${({ theme }) => theme.primary70};
     outline: none;
   }
 `;

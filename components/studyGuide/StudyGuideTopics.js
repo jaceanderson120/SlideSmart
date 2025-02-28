@@ -3,7 +3,6 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGrip, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
-import { colors } from "@/constants/colors";
 import { fontSize } from "@/constants/fontSize";
 import styled from "styled-components";
 
@@ -25,8 +24,8 @@ const StudyGuideTopics = ({
             {editMode && (
               <Button
                 backgroundColor="transparent"
-                textColor={colors.black}
-                hoverBackgroundColor={colors.primary70}
+                textColor={({ theme }) => theme.black}
+                hoverBackgroundColor={({ theme }) => theme.primary70}
                 padding="8px"
                 marginTop="16px"
                 fontSize={fontSize.label}
@@ -83,8 +82,8 @@ const TopicName = styled.a`
   font-size: ${fontSize.label};
   text-decoration: none;
   text-align: left;
-  color: ${colors.black};
-  background-color: ${colors.primary33};
+  color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.primary33};
   transition: background-color 0.3s;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
@@ -92,11 +91,11 @@ const TopicName = styled.a`
   word-wrap: break-word;
 
   &:hover {
-    background-color: ${colors.primary70};
+    background-color: ${({ theme }) => theme.primary70};
   }
 
   &.active {
-    background-color: ${colors.primary70};
+    background-color: ${({ theme }) => theme.primary70};
     font-weight: bold;
     transition: font-weight 0.3s ease, color 0.3s ease;
   }

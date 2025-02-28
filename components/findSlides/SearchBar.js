@@ -6,7 +6,6 @@ import Button from "../Button";
 import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "./StudyGuideList";
-import { colors } from "@/constants/colors";
 
 const SearchBar = () => {
   const [hasSearched, setHasSearched] = useState(false);
@@ -69,7 +68,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: ${colors.lightGray};
+  background-color: ${({ theme }) => theme.lightGray};
 `;
 
 const Section = styled.div`

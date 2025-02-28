@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth, app } from "@/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getSparkStatus } from "@/utils/getSparkStatus";
-import { darkColors, lightColors } from "@/constants/colors";
 
 const Context = createContext();
 
@@ -11,7 +10,6 @@ export const StateContext = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(undefined); // Start in an undefined state to know when user status is UNKNOWN
   const [loadingUser, setLoadingUser] = useState(true);
   const [hasSpark, setHasSpark] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -37,12 +35,6 @@ export const StateContext = ({ children }) => {
     checkSpark();
   }, [app, auth.currentUser?.uid]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
-  const colors = darkMode ? darkColors : lightColors;
-
   return (
     <Context.Provider
       value={{
@@ -50,8 +42,6 @@ export const StateContext = ({ children }) => {
         currentUser,
         loadingUser,
         hasSpark,
-        toggleDarkMode,
-        colors,
       }}
     >
       {children}
