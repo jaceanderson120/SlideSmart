@@ -103,7 +103,8 @@ const Study = () => {
   // Handle the browser back button
   useEffect(() => {
     const handlePopState = (event) => {
-      if (fromSearch) {
+      // Only if the back button is clicked trigger the redirect
+      if (event.state !== null && fromSearch) {
         router.push(`/find-slides?searchQuery=${searchQuery}`);
       }
     };
