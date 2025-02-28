@@ -14,8 +14,9 @@ export default async function createYouTubeQuery(req, res) {
   const data = req.body;
 
   // Creating the user prompt
-  const prompt = `Here is the explanation of ${data.topic}: ${data.explanation}
-  Please generate a YouTube search query that would help a student learn more about this topic.
+  const prompt = `I am trying to find a YouTube video about ${data.topic}: ${data.explanation}
+  Please generate a YouTube search query.
+  Be sure to make the query specifically related to the explanation provided.
   Make sure the query is clear and concise.
   Please don't use any language like "tutorial" or "how to" or "explained" in the query.`;
 
@@ -33,7 +34,6 @@ export default async function createYouTubeQuery(req, res) {
     });
 
     const query = completion.choices[0].message.content;
-
     res.status(200).json(query);
   } catch (error) {
     console.error("Error creating a YouTube search query:", error);
