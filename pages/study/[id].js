@@ -1404,6 +1404,7 @@ const ChatbotContainer = styled.div`
   overscroll-behavior: contain;
   height: 100%;
   position: relative;
+  margin-right: 16px;
 `;
 
 const StudyGuideTopicsContainer = styled.div`

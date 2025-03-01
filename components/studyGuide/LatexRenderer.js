@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import Latex from "react-latex-next";
 import "katex/dist/katex.min.css";
 
@@ -10,38 +9,19 @@ const delimiters = [
 ];
 
 export const LatexRenderer = ({ children }) => {
-  // Replace LaTeX delimiters with MathJax-compatible ones
-  const replaced = children.replaceAll("\\[\n", "$$").replaceAll("\n\\]", "$$");
+  // Normalize LaTeX block formatting
+  let replaced = children
+    .replace(/\$\$[\s\n]*([\s\S]*?)[\s\n]*\$\$/g, "$$$$ $1 $$$$") // Normalize block math
+    .replace(/\\\[[\s\n]*([\s\S]*?)[\s\n]*\\\]/g, "$$$$ $1 $$$$") // Convert \[...\] to $$
+    .replace(/\\\([\s\n]*([\s\S]*?)[\s\n]*\\\)/g, "$ $1 $") // Convert \(...\) to inline math
+    .replace(/\n+/g, " ") // Normalize newlines
+    .trim();
 
-  const splitContent = replaced.split("\n").filter((str) => str.trim() !== "");
-  const withBold = splitContent.map((str) =>
-    str
-      // First handle bullet points at start of lines (before any other * processing)
-      .replace(/^\* /gm, "• ")
-      // Then handle bold text
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      // Finally handle italics, but not if it's part of a LaTeX expression
-      .replace(/(?<![\\$])\*([^*]+)\*(?![\\$])/g, "<em>$1</em>")
-      .replace(/`([^`]+)`/g, "$1")
-  );
-  // Replace numbered list markers with line breaks
-  const finalContent = withBold.map((str) =>
-    str.replace(/\n(\d+\. )/g, "<br /> <br />$1")
-  );
+  // Process Markdown-like formatting
+  const formatted = replaced
+    .replace(/(`[^`]+`)/g, "<code>$1</code>")
+    .replace(/\*\*([^*$]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(?<!\\)\*([^*$]+)\*/g, "<em>$1</em>");
 
-  return (
-    <>
-      {finalContent.map((str, index, arr) => (
-        <Fragment key={index}>
-          <Latex delimiters={delimiters}>{str}</Latex>
-          {index !== arr.length - 1 && (
-            <>
-              <br />
-              <br />
-            </>
-          )}
-        </Fragment>
-      ))}
-    </>
-  );
+  return <Latex delimiters={delimiters}>{formatted}</Latex>;
 };
