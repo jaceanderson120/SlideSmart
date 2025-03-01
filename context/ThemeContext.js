@@ -16,6 +16,9 @@ export const ThemeProvider = ({ children }) => {
       getUserDarkMode(currentUser.uid).then((darkMode) => {
         setDarkMode(darkMode);
       });
+    } else {
+      // Make sure to set to false or it will never render the site
+      setDarkMode(false);
     }
   }, [currentUser]);
 
