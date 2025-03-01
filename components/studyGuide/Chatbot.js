@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faImage, faX } from "@fortawesome/free-solid-svg-icons";
 import { fontSize } from "@/constants/fontSize";
-import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
@@ -29,6 +28,7 @@ const Chatbot = (props) => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedImageURL, setUploadedImageURL] = useState(null);
   const [loadingResponse, setLoadingResponse] = useState(false);
+  const [messageInProgress, setMessageInProgress] = useState("");
 
   // Get study guide which is passed down from the parent component
   const { studyGuide } = props;
@@ -51,7 +51,7 @@ const Chatbot = (props) => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollIntoView({ block: "end" });
     }
-  }, [messages]);
+  }, [messages, messageInProgress]);
 
   const handleSend = async () => {
     if (!hasSpark) {
@@ -77,8 +77,8 @@ const Chatbot = (props) => {
       setMessages(newMessages);
       setInput("");
 
-      // Get the last 5 messages to send to the API
-      const messagesToSend = newMessages.slice(-5);
+      // Get the last 10 messages to send to the API
+      const messagesToSend = newMessages.slice(-10);
 
       // Use FormData to send the image file along with the messages
       const formData = new FormData();
@@ -89,20 +89,31 @@ const Chatbot = (props) => {
       }
 
       // Fetch the response from API endpoint
-      const chatbotResponse = await fetch("/api/chatbot-gpt", {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const chatbotResponse = await fetch("/api/chatbot-gpt", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (chatbotResponse.ok) {
-        // Add the bot's response to the messages
-        const responseText = await chatbotResponse.json();
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: responseText.output, sender: "bot" },
-        ]);
-      } else {
-        // Add an error message if the response is not ok
+        if (chatbotResponse.body) {
+          const reader = chatbotResponse.body.getReader();
+          const decoder = new TextDecoder();
+          let done = false;
+          let chunk = "";
+
+          while (!done) {
+            const { value, done: doneReading } = await reader.read();
+            done = doneReading;
+            chunk += decoder.decode(value, { stream: true });
+            setMessageInProgress(chunk);
+          }
+          // Set the final message once the stream is done
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: chunk, sender: "bot" },
+          ]);
+        }
+      } catch (error) {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -111,6 +122,8 @@ const Chatbot = (props) => {
           },
         ]);
       }
+
+      setMessageInProgress("");
       setLoadingResponse(false);
     }
   };
@@ -123,10 +136,16 @@ const Chatbot = (props) => {
   // Function to handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    const supportedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
     if (file) {
       // Only allow image file types
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please upload an image file.");
+      if (!supportedTypes.includes(file.type)) {
+        toast.error("Please upload a valid image file.");
         return;
       }
       setUploadedImage(file);
@@ -161,10 +180,10 @@ const Chatbot = (props) => {
             )}
           </React.Fragment>
         ))}
-        {loadingResponse && (
+        {messageInProgress !== "" && (
           <BotMessageContainer>
             <BotMessage>
-              <Dots />
+              <LatexRenderer>{messageInProgress}</LatexRenderer>
             </BotMessage>
           </BotMessageContainer>
         )}
@@ -280,6 +299,7 @@ const MessagesContainer = styled.div`
   padding: 16px;
   overflow-y: auto;
   overflow-anchor: none;
+  scrollbar-color: ${({ theme }) => theme.primary70} transparent;
 `;
 
 const UserMessageContainer = styled.div`
