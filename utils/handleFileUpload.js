@@ -2,7 +2,7 @@ import {
   uploadStudyGuideToFirebase,
   uploadFileToFirebase,
 } from "@/firebase/database";
-import * as tiktoken from "tiktoken";
+import * as tiktoken from "js-tiktoken";
 
 const handleFileUpload = async (
   file,
@@ -40,10 +40,10 @@ const handleFileUpload = async (
       const extractedData = await response.json();
 
       // Count the number of tokens in the extractedData (limit on current gpt is 128k input and output combined so setting it to 115k so there is room for response)
-      const encoding = tiktoken.get_encoding("cl100k_base"); // the input of .get_encoding() will need to be changed when we switch to one of the gpt-o models to "o200k_base"
+      const encoding = tiktoken.getEncoding("cl100k_base"); // the input of .get_encoding() will need to be changed when we switch to one of the gpt-o models to "o200k_base"
       const tokenCheck = encoding.encode(extractedData);
       if (tokenCheck.length > 115000) {
-        throw new Error(`Error: Too many tokens`);
+        throw new Error(`Too many tokens`);
       }
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
