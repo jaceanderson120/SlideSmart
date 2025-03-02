@@ -494,7 +494,11 @@ const Study = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ query }), // Sending the topic as JSON
+      body: JSON.stringify({
+        query,
+        topic: topic,
+        explanation: data?.explanation,
+      }), // Sending the topic as JSON
     });
     let videoIds = (await res2.json()) || [];
 
@@ -919,8 +923,10 @@ const Study = () => {
                     ) : (
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <NoVideoText>
-                          No video available. If you have the Spark Plan, enable
-                          edit mode and find new videos!
+                          We found the best videos for you, but they are already
+                          in this study guide. If you believe there are better
+                          videos, feel free to try to generate new ones. If not,
+                          you can delete this section in edit mode!
                         </NoVideoText>
                         {editMode && (
                           <>

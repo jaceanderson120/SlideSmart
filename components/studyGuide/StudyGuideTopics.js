@@ -89,6 +89,10 @@ const TopicName = styled.a`
   border-radius: 16px;
   white-space: normal;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  hyphens: auto;
 
   &:hover {
     background-color: ${({ theme }) => theme.primary70};

@@ -87,6 +87,15 @@ const handleFileUpload = async (
       // Resolve all YouTube video queries
       const youtubeQueries = await Promise.all(queries);
 
+      // Create a dictionary mapping query to topic, explanation
+      const youtubeQueriesDict = {};
+      topics.forEach((topic, index) => {
+        youtubeQueriesDict[youtubeQueries[index]] = {
+          topic: topic,
+          explanation: topicsAndExplanations[topic],
+        };
+      });
+
       // Prepare an array of fetch promises for YouTube videos
       youtubePromises = youtubeQueries.map((query) =>
         fetch("/api/get-youtube-video", {
@@ -94,7 +103,11 @@ const handleFileUpload = async (
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ query }), // Sending the topic as JSON
+          body: JSON.stringify({
+            query,
+            topic: youtubeQueriesDict[query].topic,
+            explanation: youtubeQueriesDict[query].explanation,
+          }),
         }).then((res) => {
           if (!res.ok) {
             throw new Error("Failed to fetch video");
