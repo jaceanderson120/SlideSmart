@@ -32,7 +32,6 @@ const calculateVideoScore = (video) => {
 };
 
 export default async function getYoutubeVideo(req, res) {
-  const apiServiceName = "youtube";
   const apiVersion = "v3";
   const DEVELOPER_KEY = process.env.YOUTUBE_API_KEY;
 
@@ -49,29 +48,17 @@ export default async function getYoutubeVideo(req, res) {
   });
 
   try {
-    // Search for short videos
-    const shortVideosResponse = await youtube.search.list({
-      part: "snippet",
-      q: query,
-      type: "video",
-      maxResults: 10,
-      videoDuration: "short", // less than 4 minutes
-    });
-
     // Search for medium videos (4 to 20 minutes)
-    const mediumVideosResponse = await youtube.search.list({
+    const videosResponse = await youtube.search.list({
       part: "snippet",
       q: query,
       type: "video",
-      maxResults: 10,
+      maxResults: 7,
       videoDuration: "medium", // between 4 to 20 minutes
     });
 
-    // Combine the results from both searches
-    const combinedVideos = [
-      ...shortVideosResponse.data.items,
-      ...mediumVideosResponse.data.items,
-    ];
+    // Combine the results from the search
+    const combinedVideos = [...videosResponse.data.items];
 
     const videoIds = combinedVideos.map((item) => item.id.videoId);
 
@@ -116,7 +103,7 @@ export default async function getYoutubeVideo(req, res) {
     // Get the video IDs of the videos with the top 5 best scores
     const bestVideos =
       scoredVideos.length > 0
-        ? scoredVideos.slice(0, 5).map((video) => video.id)
+        ? scoredVideos.slice(0, 3).map((video) => video.id)
         : null;
 
     // Send the best video ID back to the client
