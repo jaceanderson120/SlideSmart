@@ -168,7 +168,6 @@ export default async function getYoutubeVideo(req, res) {
         : null;
 
     // Send the best video ID back to the client
-    console.log("Best videos:", bestVideos);
     res.json(bestVideos);
   } catch (error) {
     console.error("Error fetching YouTube video:", error);
