@@ -14,11 +14,19 @@ export default async function createYouTubeQuery(req, res) {
   const data = req.body;
 
   // Creating the user prompt
-  const prompt = `I am trying to find a YouTube video about ${data.topic}: ${data.explanation}
-  Please generate a YouTube search query.
-  Be sure to make the query specifically related to the explanation provided.
-  Make sure the query is clear and concise.
-  Please don't use any language like "tutorial" or "how to" or "explained" in the query.`;
+  const prompt = `Generate a natural YouTube search query based on the topic and explanation below.
+
+  Topic: ${data.topic}  
+  Explanation: ${data.explanation}  
+
+  The query should:
+  - Sound **natural and conversational** (like something a real person would type).  
+  - Be **concise** (under 8 words).  
+  - **Avoid copying** the topic/explanation exactly—focus on what someone would actually search for.  
+  - **Exclude lesson numbers** (e.g., "Unit 5.1") and platform names (e.g., "Canvas").  
+  - If needed, use **actionable phrasing** (e.g., "tips for," "best way to," "how to").
+
+  Return **only** the search query, nothing else.`;
 
   try {
     const completion = await openai.completions.create({
