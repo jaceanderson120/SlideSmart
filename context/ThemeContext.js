@@ -14,6 +14,9 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     if (currentUser) {
       getUserDarkMode(currentUser.uid).then((darkMode) => {
+        if (!darkMode) {
+          darkMode = false;
+        }
         setDarkMode(darkMode);
       });
     } else {
