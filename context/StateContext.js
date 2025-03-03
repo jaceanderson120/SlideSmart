@@ -24,15 +24,10 @@ export const StateContext = ({ children }) => {
 
   // Check if user has spark subscription
   useEffect(() => {
-    // Check if user has spark subscription
-    const checkSpark = async () => {
-      const newSparkStatus = auth.currentUser
-        ? await getSparkStatus(app)
-        : false;
-      setHasSpark(newSparkStatus);
-    };
-
-    checkSpark();
+    if (auth.currentUser) {
+      const unsubscribe = getSparkStatus(app, setHasSpark);
+      return () => unsubscribe();
+    }
   }, [app, auth.currentUser?.uid]);
 
   return (
