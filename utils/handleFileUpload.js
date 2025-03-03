@@ -43,7 +43,7 @@ const handleFileUpload = async (
       const encoding = tiktoken.getEncoding("cl100k_base"); // the input of .get_encoding() will need to be changed when we switch to one of the gpt-o models to "o200k_base"
       const tokenCheck = encoding.encode(extractedData);
       if (tokenCheck.length > 115000) {
-        throw new Error(`Too many tokens`);
+        throw new Error(`TOKEN_ERROR`);
       }
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
@@ -294,8 +294,8 @@ const handleFileUpload = async (
     return studyGuideId;
   } catch (error) {
     console.error("Error uploading file:", error);
-    if (error == `Error: Too many tokens`) {
-      return "Too many tokens";
+    if (error == `Error: TOKEN_ERROR`) {
+      return "TOKEN_ERROR";
     }
   }
 };

@@ -247,9 +247,9 @@ const Dashboard = () => {
     setIsLoading(false);
     // fileUpload response is either an object with studyGuideId and an error
     // Give the user a message if the error was too many tokens
-    if (studyGuideId == "Too many tokens") {
+    if (studyGuideId == "TOKEN_ERROR") {
       toast(
-        "The file you uploaded is too large for SlideSmart to process. Please try again with a smaller file. (Note: File size does not always equate to input size)"
+        "The file you uploaded is too large for SlideSmart to handle. Please try again with a smaller file. (Keep in mind that file size doesn't always match the amount of content inside.)"
       );
     } else if (studyGuideId !== null) {
       router.push(`/study/${studyGuideId}`);
