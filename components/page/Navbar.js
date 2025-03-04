@@ -125,7 +125,7 @@ function Navbar() {
       <LeftButtonSection>
         <LogoContainer onClick={() => router.push("/")}>
           <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
-          SlideSmart
+          <LogoText>SlideSmart</LogoText>
         </LogoContainer>
         {deviceWidth > 768 && (
           <LinksContainer>
@@ -266,9 +266,6 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: ${fontSize.subheading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.primary};
 
   a {
     text-decoration: none;
@@ -280,6 +277,12 @@ const LogoContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const LogoText = styled.h1`
+  font-size: ${fontSize.subheading};
+  font-weight: bold;
+  color: ${({ theme }) => theme.primary};
 `;
 
 const MenuTextContainer = styled.div`

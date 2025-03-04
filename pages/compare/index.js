@@ -6,6 +6,7 @@ import Head from "next/head";
 import Footer from "@/components/page/Footer";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
+import PageTitle from "@/components/page/PageTitle";
 
 const Compare = () => {
   const router = useRouter();
@@ -93,13 +94,7 @@ const Competitor = styled.div`
   height: 100%;
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};

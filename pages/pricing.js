@@ -19,6 +19,7 @@ import Button from "@/components/Button";
 import Footer from "@/components/page/Footer";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
+import PageTitle from "@/components/page/PageTitle";
 
 const Pricing = () => {
   const { hasSpark, isLoggedIn } = useStateContext();
@@ -204,13 +205,7 @@ const BottomSection = styled.div`
   }
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};

@@ -30,6 +30,7 @@ import Button from "@/components/Button";
 import CreateModal from "@/components/modals/CreateModal";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
+import PageTitle from "@/components/page/PageTitle";
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -298,7 +299,7 @@ const Dashboard = () => {
           )}
           <Section>
             <TopContainer>
-              <PageTitle>Dashboard</PageTitle>
+              <PageTitle>DASHBOARD</PageTitle>
               {isLoggedIn && (
                 <ButtonContainer>
                   <Button
@@ -533,13 +534,6 @@ const FilterLabel = styled.label`
 const MenuTrigger = styled.p`
   cursor: pointer;
   font-size: ${fontSize.default};
-`;
-
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  display: flex;
-  flex: 1;
 `;
 
 const ButtonContainer = styled.div`

@@ -10,6 +10,7 @@ import "react-activity/dist/library.css";
 // import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
+import PageTitle from "@/components/page/PageTitle";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -200,13 +201,7 @@ const RightSection = styled.div`
   text-align: center;
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
@@ -218,7 +213,7 @@ const SubtitleSpan = styled.span`
   font-weight: bold;
 `;
 
-const Subtext = styled.p`
+const Subtext = styled.h2`
   font-size: ${fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;

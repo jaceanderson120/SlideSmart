@@ -36,71 +36,77 @@ export default function Home() {
         <title>SlideSmart - The AI Application to Make Slides Make Sense</title>
         <meta
           name="description"
-          content="We turn your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
+          content="SlideSmart turns your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
         />
         <link rel="canonical" href="https://www.slidesmartai.com/" />
       </Head>
-      <PageContainer>
-        <Section>
-          <SloganContainer>
-            <Slogan>
-              The AI Application to
-              <br />
-              Make
-              <span style={{ color: theme.primary, fontWeight: "bold" }}>
-                {" "}
-                Slides
-              </span>{" "}
-              Make Sense
-            </Slogan>
-            <SubSlogan>
-              We turn your course slides into comprehensive + interactive study
-              guides <br></br>equipped with plenty of useful resources to help
-              you succeed in the classroom.
-            </SubSlogan>
-            <Button
-              onClick={handleMainButtonClick}
-              padding="16px"
-              bold
-              fontSize={fontSize.subheading}
-              marginTop="10px"
-            >
-              {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
-              <FontAwesomeIcon icon={faArrowRight} />
-            </Button>
-          </SloganContainer>
-          {!isLoggedIn ? (
-            <InstructionContainer>
-              <Instruction>1. Register/Login</Instruction>
-              <Instruction>2. Navigate to Your Dashboard</Instruction>
-              <Instruction>3. Upload Your Course Slides/Notes </Instruction>
-              <Instruction>4. Watch the Magic Happen!</Instruction>
-            </InstructionContainer>
-          ) : (
-            <InstructionContainer>
-              <Instruction>1. Navigate to Your Dashboard</Instruction>
-              <Instruction>2. Upload Your Course Slides/Notes </Instruction>
-              <Instruction>3. Watch the Magic Happen!</Instruction>
-            </InstructionContainer>
-          )}
-          <MoreContainer>
-            <Button
-              textColor={theme.primary}
-              hoverTextColor={theme.white}
-              backgroundColor="transparent"
-              hoverBackgroundColor={theme.primary}
-              onClick={() => router.push("/how-it-works")}
-            >
-              Still confused? Learn more about how SlideSmart works!
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                style={{ marginLeft: "10px" }}
-              />
-            </Button>
-          </MoreContainer>
-        </Section>
-      </PageContainer>
-      <Footer />
+      <body>
+        <main>
+          <PageContainer>
+            <Section>
+              <SloganContainer>
+                <Slogan>
+                  <span style={{ color: theme.primary, fontWeight: "bold" }}>
+                    Slide
+                  </span>{" "}
+                  Into Success,
+                  <br />
+                  Stay Sharp & Study
+                  <span style={{ color: theme.primary, fontWeight: "bold" }}>
+                    {" "}
+                    Smart
+                  </span>
+                </Slogan>
+                <SubSlogan>
+                  SlideSmart AI turns your course slides into comprehensive +
+                  interactive study guides <br></br>equipped with plenty of
+                  useful resources to help you succeed in the classroom
+                </SubSlogan>
+                <Button
+                  onClick={handleMainButtonClick}
+                  padding="16px"
+                  bold
+                  fontSize={fontSize.subheading}
+                  marginTop="10px"
+                >
+                  {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+              </SloganContainer>
+              {!isLoggedIn ? (
+                <InstructionContainer>
+                  <Instruction>1. Register/Login</Instruction>
+                  <Instruction>2. Navigate to Your Dashboard</Instruction>
+                  <Instruction>3. Upload Your Course Slides/Notes </Instruction>
+                  <Instruction>4. Watch the Magic Happen!</Instruction>
+                </InstructionContainer>
+              ) : (
+                <InstructionContainer>
+                  <Instruction>1. Navigate to Your Dashboard</Instruction>
+                  <Instruction>2. Upload Your Course Slides/Notes </Instruction>
+                  <Instruction>3. Watch the Magic Happen!</Instruction>
+                </InstructionContainer>
+              )}
+              <MoreContainer>
+                <Button
+                  textColor={theme.primary}
+                  hoverTextColor={theme.white}
+                  backgroundColor="transparent"
+                  hoverBackgroundColor={theme.primary}
+                  onClick={() => router.push("/how-it-works")}
+                >
+                  Still confused? Learn more about how SlideSmart works!
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    style={{ marginLeft: "10px" }}
+                  />
+                </Button>
+              </MoreContainer>
+            </Section>
+          </PageContainer>
+          <Footer />
+        </main>
+      </body>
     </>
   );
 }
@@ -130,7 +136,7 @@ const SloganContainer = styled.div`
   gap: 20px;
 `;
 
-const Slogan = styled.p`
+const Slogan = styled.h1`
   font-size: ${fontSize.xlheading};
   color: ${({ theme }) => theme.black};
   font-weight: bold;
@@ -138,7 +144,7 @@ const Slogan = styled.p`
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
 `;
 
-const SubSlogan = styled.p`
+const SubSlogan = styled.h2`
   font-size: ${fontSize.default};
   color: ${({ theme }) => theme.black};
   line-height: 1.3;
