@@ -6,6 +6,7 @@ import Head from "next/head";
 import Footer from "@/components/page/Footer";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
+import PageTitle from "@/components/page/PageTitle";
 
 const Compare = () => {
   const router = useRouter();
@@ -30,31 +31,35 @@ const Compare = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/compare" />
       </Head>
-      <PageContainer>
-        <TopSection>
-          <PageTitle>COMPARE</PageTitle>
-          <Subtitle>
-            Discover why <SubtitleSpan>SlideSmart</SubtitleSpan> beats the
-            competition
-          </Subtitle>
-        </TopSection>
-        <BottomSection>
-          {competitors.map((competitor) => (
-            <Competitor key={competitor}>
-              <Button
-                style={{ width: "100%", height: "100%" }}
-                padding="16px"
-                bold
-                fontSize={fontSize.subheading}
-                onClick={() => router.push(`/compare/${competitor}`)}
-              >
-                vs. {competitor}
-              </Button>
-            </Competitor>
-          ))}
-        </BottomSection>
-      </PageContainer>
-      <Footer />
+      <body>
+        <main>
+          <PageContainer>
+            <TopSection>
+              <PageTitle>COMPARE</PageTitle>
+              <Subtitle>
+                Discover why <SubtitleSpan>SlideSmart</SubtitleSpan> beats the
+                competition
+              </Subtitle>
+            </TopSection>
+            <BottomSection>
+              {competitors.map((competitor) => (
+                <Competitor key={competitor}>
+                  <Button
+                    style={{ width: "100%", height: "100%" }}
+                    padding="16px"
+                    bold
+                    fontSize={fontSize.subheading}
+                    onClick={() => router.push(`/compare/${competitor}`)}
+                  >
+                    vs. {competitor}
+                  </Button>
+                </Competitor>
+              ))}
+            </BottomSection>
+          </PageContainer>
+          <Footer />
+        </main>
+      </body>
     </>
   );
 };
@@ -93,13 +98,7 @@ const Competitor = styled.div`
   height: 100%;
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};

@@ -10,6 +10,7 @@ import "react-activity/dist/library.css";
 // import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 import PageContainer from "@/components/page/PageContainer";
+import PageTitle from "@/components/page/PageTitle";
 
 const Contact = () => {
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -74,90 +75,94 @@ const Contact = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/contact" />
       </Head>
-      <PageContainer>
-        <Section>
-          <LeftSection>
-            <PageTitle>CONTACT US</PageTitle>
-            <Subtitle>
-              SlideSmart is here <br></br>{" "}
-              <SubtitleSpan>to help you</SubtitleSpan>
-            </Subtitle>
-            <Subtext>
-              Feel free to contact our support team if you have any inquiries
-              relating to the application.
-            </Subtext>
-            <Subtext>
-              Your form sends us an email. Once we receive your email, we will
-              respond to you as soon as possible. Please be sure to enter a
-              valid email address so we can get back to you.
-            </Subtext>
-          </LeftSection>
-          <RightSection>
-            <FormBox>
-              <InputContainer>
-                <InputLabel>First name</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter your first name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Last name</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter your last name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Email</InputLabel>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Subject</InputLabel>
-                <Input
-                  type="text"
-                  placeholder="Enter the subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>Message</InputLabel>
-                <TextArea
-                  type="text"
-                  placeholder="Enter your message"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  disabled={sendingEmail}
-                />
-              </InputContainer>
-              <ButtonContainer>
-                {!sendingEmail ? (
-                  <Button onClick={sendEmail} padding="16px">
-                    Submit
-                  </Button>
-                ) : (
-                  <Dots />
-                )}
-              </ButtonContainer>
-            </FormBox>
-          </RightSection>
-        </Section>
-      </PageContainer>
-      <Footer />
+      <body>
+        <main>
+          <PageContainer>
+            <Section>
+              <LeftSection>
+                <PageTitle>CONTACT US</PageTitle>
+                <Subtitle>
+                  SlideSmart is here <br></br>{" "}
+                  <SubtitleSpan>to help you</SubtitleSpan>
+                </Subtitle>
+                <Subtext>
+                  Feel free to contact our support team if you have any
+                  inquiries relating to the application.
+                </Subtext>
+                <Subtext>
+                  Your form sends us an email. Once we receive your email, we
+                  will respond to you as soon as possible. Please be sure to
+                  enter a valid email address so we can get back to you.
+                </Subtext>
+              </LeftSection>
+              <RightSection>
+                <FormBox>
+                  <InputContainer>
+                    <InputLabel>First name</InputLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter your first name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      disabled={sendingEmail}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <InputLabel>Last name</InputLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter your last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      disabled={sendingEmail}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <InputLabel>Email</InputLabel>
+                    <Input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={sendingEmail}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <InputLabel>Subject</InputLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter the subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      disabled={sendingEmail}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <InputLabel>Message</InputLabel>
+                    <TextArea
+                      type="text"
+                      placeholder="Enter your message"
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      disabled={sendingEmail}
+                    />
+                  </InputContainer>
+                  <ButtonContainer>
+                    {!sendingEmail ? (
+                      <Button onClick={sendEmail} padding="16px">
+                        Submit
+                      </Button>
+                    ) : (
+                      <Dots />
+                    )}
+                  </ButtonContainer>
+                </FormBox>
+              </RightSection>
+            </Section>
+          </PageContainer>
+          <Footer />
+        </main>
+      </body>
     </>
   );
 };
@@ -200,13 +205,7 @@ const RightSection = styled.div`
   text-align: center;
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
@@ -218,7 +217,7 @@ const SubtitleSpan = styled.span`
   font-weight: bold;
 `;
 
-const Subtext = styled.p`
+const Subtext = styled.h2`
   font-size: ${fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;

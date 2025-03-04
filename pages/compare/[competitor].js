@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 import { fontSize } from "@/constants/fontSize";
+import PageTitle from "@/components/page/PageTitle";
 
 const Competitor = () => {
   const router = useRouter();
@@ -85,42 +86,44 @@ const Competitor = () => {
   const competitorData = criteriaData[competitor];
 
   return (
-    <>
-      <PageContainer>
-        <Section>
-          <TitleContainer>
-            <PageTitle>SlideSmart vs. {competitor}</PageTitle>
-            <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
-            <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
-            <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
-          </TitleContainer>
-          <ComparisonTable>
-            <thead>
-              <tr>
-                <TableCompareHeader>Compare Features</TableCompareHeader>
-                <TableHeader>SlideSmart</TableHeader>
-                <TableHeader>{competitor}</TableHeader>
-              </tr>
-            </thead>
-            <tbody>
-              {compareCriteria.map((criteria, index) => (
-                <tr key={index}>
-                  <CriteriaTd>{criteria}</CriteriaTd>
-                  <CheckmarkTd>✔️</CheckmarkTd>
-                  {competitorData &&
-                    (competitorData[index] ? (
-                      <CheckmarkTd>✔️</CheckmarkTd>
-                    ) : (
-                      <XTd>❌</XTd>
-                    ))}
+    <body>
+      <main>
+        <PageContainer>
+          <Section>
+            <TitleContainer>
+              <PageTitle>SlideSmart vs. {competitor}</PageTitle>
+              <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
+              <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
+              <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
+            </TitleContainer>
+            <ComparisonTable>
+              <thead>
+                <tr>
+                  <TableCompareHeader>Compare Features</TableCompareHeader>
+                  <TableHeader>SlideSmart</TableHeader>
+                  <TableHeader>{competitor}</TableHeader>
                 </tr>
-              ))}
-            </tbody>
-          </ComparisonTable>
-        </Section>
-      </PageContainer>
-      <Footer />
-    </>
+              </thead>
+              <tbody>
+                {compareCriteria.map((criteria, index) => (
+                  <tr key={index}>
+                    <CriteriaTd>{criteria}</CriteriaTd>
+                    <CheckmarkTd>✔️</CheckmarkTd>
+                    {competitorData &&
+                      (competitorData[index] ? (
+                        <CheckmarkTd>✔️</CheckmarkTd>
+                      ) : (
+                        <XTd>❌</XTd>
+                      ))}
+                  </tr>
+                ))}
+              </tbody>
+            </ComparisonTable>
+          </Section>
+        </PageContainer>
+        <Footer />
+      </main>
+    </body>
   );
 };
 
@@ -143,20 +146,14 @@ const TitleContainer = styled.div`
   text-align: center;
 `;
 
-const PageTitle = styled.p`
-  font-size: ${fontSize.heading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Subtitle = styled.p`
+const Subtitle = styled.h1`
   font-size: ${fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
 `;
 
-const Subtext = styled.p`
+const Subtext = styled.h2`
   font-size: ${fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;
