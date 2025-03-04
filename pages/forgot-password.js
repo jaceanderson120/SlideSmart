@@ -63,42 +63,51 @@ export default function ForgotPassword() {
           href="https://www.slidesmartai.com/forgot-password"
         />
       </Head>
-      <PageContainer>
-        <Section>
-          <CredentialsForm>
-            <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-            <Title>Forgot your password?</Title>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {!emailSent && (
-              <Button
-                onClick={handleEmailResetClicked}
-                marginTop="10px"
-                style={{ fontWeight: "bold" }}
-              >
-                Email me a reset link
-              </Button>
-            )}
-            <OrLine />
-            <Button
-              onClick={() => router.push("/login")}
-              marginTop="10px"
-              style={{ fontWeight: "bold" }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} /> Go back to login
-            </Button>
-            <StyledText>
-              Want to create a new account?{" "}
-              <RegisterLink href="/signup">Create one here</RegisterLink>
-            </StyledText>
-          </CredentialsForm>
-        </Section>
-      </PageContainer>
-      <Footer />
+      <body>
+        <main>
+          <PageContainer>
+            <Section>
+              <CredentialsForm>
+                <Image
+                  src={logo}
+                  alt="SlideSmart Logo"
+                  width={48}
+                  height={48}
+                />
+                <Title>Forgot your password?</Title>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {!emailSent && (
+                  <Button
+                    onClick={handleEmailResetClicked}
+                    marginTop="10px"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    Email me a reset link
+                  </Button>
+                )}
+                <OrLine />
+                <Button
+                  onClick={() => router.push("/login")}
+                  marginTop="10px"
+                  style={{ fontWeight: "bold" }}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} /> Go back to login
+                </Button>
+                <StyledText>
+                  Want to create a new account?{" "}
+                  <RegisterLink href="/signup">Create one here</RegisterLink>
+                </StyledText>
+              </CredentialsForm>
+            </Section>
+          </PageContainer>
+          <Footer />
+        </main>
+      </body>
     </>
   );
 }

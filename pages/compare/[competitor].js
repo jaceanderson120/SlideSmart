@@ -86,42 +86,44 @@ const Competitor = () => {
   const competitorData = criteriaData[competitor];
 
   return (
-    <>
-      <PageContainer>
-        <Section>
-          <TitleContainer>
-            <PageTitle>SlideSmart vs. {competitor}</PageTitle>
-            <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
-            <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
-            <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
-          </TitleContainer>
-          <ComparisonTable>
-            <thead>
-              <tr>
-                <TableCompareHeader>Compare Features</TableCompareHeader>
-                <TableHeader>SlideSmart</TableHeader>
-                <TableHeader>{competitor}</TableHeader>
-              </tr>
-            </thead>
-            <tbody>
-              {compareCriteria.map((criteria, index) => (
-                <tr key={index}>
-                  <CriteriaTd>{criteria}</CriteriaTd>
-                  <CheckmarkTd>✔️</CheckmarkTd>
-                  {competitorData &&
-                    (competitorData[index] ? (
-                      <CheckmarkTd>✔️</CheckmarkTd>
-                    ) : (
-                      <XTd>❌</XTd>
-                    ))}
+    <body>
+      <main>
+        <PageContainer>
+          <Section>
+            <TitleContainer>
+              <PageTitle>SlideSmart vs. {competitor}</PageTitle>
+              <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
+              <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
+              <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
+            </TitleContainer>
+            <ComparisonTable>
+              <thead>
+                <tr>
+                  <TableCompareHeader>Compare Features</TableCompareHeader>
+                  <TableHeader>SlideSmart</TableHeader>
+                  <TableHeader>{competitor}</TableHeader>
                 </tr>
-              ))}
-            </tbody>
-          </ComparisonTable>
-        </Section>
-      </PageContainer>
-      <Footer />
-    </>
+              </thead>
+              <tbody>
+                {compareCriteria.map((criteria, index) => (
+                  <tr key={index}>
+                    <CriteriaTd>{criteria}</CriteriaTd>
+                    <CheckmarkTd>✔️</CheckmarkTd>
+                    {competitorData &&
+                      (competitorData[index] ? (
+                        <CheckmarkTd>✔️</CheckmarkTd>
+                      ) : (
+                        <XTd>❌</XTd>
+                      ))}
+                  </tr>
+                ))}
+              </tbody>
+            </ComparisonTable>
+          </Section>
+        </PageContainer>
+        <Footer />
+      </main>
+    </body>
   );
 };
 

@@ -31,31 +31,35 @@ const Compare = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/compare" />
       </Head>
-      <PageContainer>
-        <TopSection>
-          <PageTitle>COMPARE</PageTitle>
-          <Subtitle>
-            Discover why <SubtitleSpan>SlideSmart</SubtitleSpan> beats the
-            competition
-          </Subtitle>
-        </TopSection>
-        <BottomSection>
-          {competitors.map((competitor) => (
-            <Competitor key={competitor}>
-              <Button
-                style={{ width: "100%", height: "100%" }}
-                padding="16px"
-                bold
-                fontSize={fontSize.subheading}
-                onClick={() => router.push(`/compare/${competitor}`)}
-              >
-                vs. {competitor}
-              </Button>
-            </Competitor>
-          ))}
-        </BottomSection>
-      </PageContainer>
-      <Footer />
+      <body>
+        <main>
+          <PageContainer>
+            <TopSection>
+              <PageTitle>COMPARE</PageTitle>
+              <Subtitle>
+                Discover why <SubtitleSpan>SlideSmart</SubtitleSpan> beats the
+                competition
+              </Subtitle>
+            </TopSection>
+            <BottomSection>
+              {competitors.map((competitor) => (
+                <Competitor key={competitor}>
+                  <Button
+                    style={{ width: "100%", height: "100%" }}
+                    padding="16px"
+                    bold
+                    fontSize={fontSize.subheading}
+                    onClick={() => router.push(`/compare/${competitor}`)}
+                  >
+                    vs. {competitor}
+                  </Button>
+                </Competitor>
+              ))}
+            </BottomSection>
+          </PageContainer>
+          <Footer />
+        </main>
+      </body>
     </>
   );
 };

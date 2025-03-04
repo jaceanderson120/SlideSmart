@@ -108,44 +108,50 @@ const FindSlides = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/find-slides" />
       </Head>
-      {!checkingAuth && (
-        <>
-          <PageContainer>
-            <Section>
-              <LeftSection>
-                <PageTitle>FIND STUDY GUIDES</PageTitle>
-                <Subtitle>
-                  Search and Find<br></br>{" "}
-                  <SubtitleSpan>Public Study Guides</SubtitleSpan>
-                </Subtitle>
-                <Subtext>
-                  With the Spark Plan, you can find and save study guides from
-                  other users as your own!
-                </Subtext>
-                <Subtext>Enter a keyword below to start your search.</Subtext>
-                <SearchContainer>
-                  <Input
-                    placeholder="What are you looking for?"
-                    value={inputText}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <Button onClick={handleSearch}>Search</Button>
-                </SearchContainer>
-              </LeftSection>
-              <RightSection>
-                {hasSearched && !searching && (
-                  <StudyGuideList
-                    guides={studyGuides}
-                    searchQuery={inputText}
-                  />
-                )}
-              </RightSection>
-            </Section>
-          </PageContainer>
-          <Footer />
-        </>
-      )}
+      <body>
+        <main>
+          {!checkingAuth && (
+            <>
+              <PageContainer>
+                <Section>
+                  <LeftSection>
+                    <PageTitle>FIND STUDY GUIDES</PageTitle>
+                    <Subtitle>
+                      Search and Find<br></br>{" "}
+                      <SubtitleSpan>Public Study Guides</SubtitleSpan>
+                    </Subtitle>
+                    <Subtext>
+                      With the Spark Plan, you can find and save study guides
+                      from other users as your own!
+                    </Subtext>
+                    <Subtext>
+                      Enter a keyword below to start your search.
+                    </Subtext>
+                    <SearchContainer>
+                      <Input
+                        placeholder="What are you looking for?"
+                        value={inputText}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <Button onClick={handleSearch}>Search</Button>
+                    </SearchContainer>
+                  </LeftSection>
+                  <RightSection>
+                    {hasSearched && !searching && (
+                      <StudyGuideList
+                        guides={studyGuides}
+                        searchQuery={inputText}
+                      />
+                    )}
+                  </RightSection>
+                </Section>
+              </PageContainer>
+              <Footer />
+            </>
+          )}
+        </main>
+      </body>
     </>
   );
 };

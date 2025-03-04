@@ -95,72 +95,81 @@ const Signup = () => {
         />
         <link rel="canonical" href="https://www.slidesmartai.com/signup" />
       </Head>
-      <PageContainer>
-        <Section>
-          <CredentialsForm>
-            <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-            <Title>Ready to enhance your education?</Title>
-            <GoogleButton />
-            <OrLine />
-            <Input
-              type="text"
-              placeholder="First name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <Input
-              type="text"
-              placeholder="Last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Input
-              type="password"
-              placeholder="Re-Type Password"
-              value={retypePassword}
-              onChange={(e) => setRetypePassword(e.target.value)}
-            />
-            <Agreement type="signup" />
-            {!continueDisabled ? (
-              <Button
-                marginTop="10px"
-                onClick={signup}
-                style={{ fontWeight: "bold" }}
-                disabled={continueDisabled}
-              >
-                Continue with email <FontAwesomeIcon icon={faArrowRight} />
-              </Button>
-            ) : (
-              <Dots />
-            )}
-            <Login>
-              Already have an account?{" "}
-              <LoginLink href="/login">Login</LoginLink>
-            </Login>
-          </CredentialsForm>
-        </Section>
-      </PageContainer>
-      <Footer />
-      <VerifyModal
-        isOpen={isVerifyModalOpen}
-        onClose={() => {
-          setIsVerifyModalOpen(false);
-        }}
-        onConfirm={completeSignup}
-        email={email}
-      />
+      <body>
+        <main>
+          <PageContainer>
+            <Section>
+              <CredentialsForm>
+                <Image
+                  src={logo}
+                  alt="SlideSmart Logo"
+                  width={48}
+                  height={48}
+                />
+                <Title>Ready to enhance your education?</Title>
+                <GoogleButton />
+                <OrLine />
+                <Input
+                  type="text"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <Input
+                  type="text"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Input
+                  type="password"
+                  placeholder="Re-Type Password"
+                  value={retypePassword}
+                  onChange={(e) => setRetypePassword(e.target.value)}
+                />
+                <Agreement type="signup" />
+                {!continueDisabled ? (
+                  <Button
+                    marginTop="10px"
+                    onClick={signup}
+                    style={{ fontWeight: "bold" }}
+                    disabled={continueDisabled}
+                  >
+                    Continue with email <FontAwesomeIcon icon={faArrowRight} />
+                  </Button>
+                ) : (
+                  <Dots />
+                )}
+                <Login>
+                  Already have an account?{" "}
+                  <LoginLink href="/login">Login</LoginLink>
+                </Login>
+              </CredentialsForm>
+            </Section>
+          </PageContainer>
+          <Footer />
+          <VerifyModal
+            isOpen={isVerifyModalOpen}
+            onClose={() => {
+              setIsVerifyModalOpen(false);
+            }}
+            onConfirm={completeSignup}
+            email={email}
+          />
+        </main>
+      </body>
     </>
   );
 };
