@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase";
 import styled, { useTheme } from "styled-components";
@@ -526,6 +527,13 @@ const TopContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+  }
 `;
 
 const FilterContainer = styled.div`
@@ -556,6 +564,11 @@ const TableContainer = styled.div`
   flex-direction: column;
   width: 75%;
   overflow-y: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px;
+  }
 `;
 
 const ColumnNamesContainer = styled.div`
@@ -563,7 +576,7 @@ const ColumnNamesContainer = styled.div`
   gap: 16px;
 `;
 
-const ColumnName = styled.h2`
+const ColumnName = styled.h6`
   margin-bottom: 16px;
   display: flex;
   flex: ${(props) => props.$flex};
@@ -598,6 +611,13 @@ const StudyGuideListItem = styled.div`
 
   &:last-child {
     border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
   }
 `;
 

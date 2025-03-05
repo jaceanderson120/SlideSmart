@@ -159,12 +159,14 @@ export default FindSlides;
 
 const Section = styled.div`
   display: flex;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
   align-items: flex-start;
   text-align: center;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0px;
+  }
 `;
 
 const LeftSection = styled.div`
