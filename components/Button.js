@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { fontSize as defaultFontSize } from "@/constants/fontSize";
 
 const Button = ({
   textColor,
   hoverTextColor,
   backgroundColor,
   hoverBackgroundColor,
-  fontSize = defaultFontSize.default,
+  fontSize = "16px",
   padding = "10px 20px",
   marginTop = "0px",
   bold = false,
