@@ -313,6 +313,7 @@ const HorizontalContainer = styled.div`
 
 const Hamburger = styled(FontAwesomeIcon)`
   cursor: pointer;
+  color: ${({ theme }) => theme.black};
   &:hover {
     transition: color 0.3s;
     color: ${({ theme }) => theme.primary};
