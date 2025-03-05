@@ -65,6 +65,10 @@ function Navbar() {
   // Define items for the hamburger menu
   const hamburgerMenuItems = [
     {
+      name: "Dashboard",
+      onClick: () => router.push("/dashboard"),
+    },
+    {
       name: "Find Study Guides",
       onClick: () => router.push("/find-slides"),
     },
@@ -183,16 +187,10 @@ function Navbar() {
           </LinksContainer>
         )}
       </LeftButtonSection>
-      {deviceWidth < 768 && (
-        <CustomMenu
-          triggerElement={<Hamburger icon={faBars} size="xl" />}
-          menuItems={hamburgerMenuItems}
-        />
-      )}
       <RightButtonSection>
         {isLoggedIn ? (
           <>
-            {router.pathname !== "/dashboard" && (
+            {router.pathname !== "/dashboard" && deviceWidth > 768 && (
               <Button onClick={handleDashboardClick} padding="8px" bold>
                 Dashboard
               </Button>
@@ -207,6 +205,12 @@ function Navbar() {
               }
               menuItems={menuItems}
             />
+            {deviceWidth < 768 && (
+              <CustomMenu
+                triggerElement={<Hamburger icon={faBars} size="xl" />}
+                menuItems={hamburgerMenuItems}
+              />
+            )}
           </>
         ) : (
           <>

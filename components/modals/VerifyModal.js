@@ -103,7 +103,10 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
                 hoverBackgroundColor="transparent"
                 textColor={({ theme }) => theme.primary}
                 hoverTextColor={({ theme }) => theme.primary}
-                style={{ fontSize: fontSize.secondary, fontWeight: "bold" }}
+                style={{
+                  fontSize: theme.fontSize.secondary,
+                  fontWeight: "bold",
+                }}
                 onClick={handleSendCode}
               >
                 send another code
