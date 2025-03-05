@@ -4,7 +4,6 @@ import styled, { useTheme } from "styled-components";
 import { getUserUidFromEmail, shareStudyGuide } from "@/firebase/database";
 import { toast } from "react-toastify";
 import { useStateContext } from "@/context/StateContext";
-import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../Button";
@@ -26,8 +25,9 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: `4px 4px 4px ${({ theme }) => theme.shadow}`,
-      maxWidth: "30%",
+      boxShadow: `4px 4px 4px ${theme.shadow}`,
+      width: "90%",
+      maxWidth: "400px",
       height: "auto",
       padding: "24px",
       borderRadius: "16px",
@@ -99,7 +99,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
               padding="12px"
-              fontSize={fontSize.secondary}
+              fontSize={({ theme }) => theme.fontSize.secondary}
               textColor={({ theme }) => theme.gray}
               hoverTextColor={({ theme }) => theme.primary}
               style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
@@ -111,7 +111,7 @@ const ShareModal = ({ studyGuideId, isOpen, onRequestClose, icon }) => {
               backgroundColor={({ theme }) => theme.primary}
               hoverBackgroundColor={({ theme }) => theme.primary}
               padding="12px"
-              fontSize={fontSize.secondary}
+              fontSize={({ theme }) => theme.fontSize.secondary}
               textColor={({ theme }) => theme.white}
               hoverTextColor={({ theme }) => theme.black}
             >
@@ -152,13 +152,13 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;
 
 const ModalText = styled.p`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   line-height: 1.3;
   color: ${({ theme }) => theme.gray};
   word-wrap: break-word;
@@ -169,7 +169,7 @@ const ModalText = styled.p`
 const EmailField = styled.input`
   width: 100%;
   padding: 8px;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
 `;
 
 const AllowEditingSection = styled.div`

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { trackClickThrough } from "@/firebase/database";
 
@@ -121,12 +120,12 @@ const Topic = styled.div`
   color: ${({ theme }) => theme.black};
   padding: 8px;
   border-radius: 12px;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   box-shadow: 0 2px 4px ${({ theme }) => theme.shadow};
 `;
 
 const FileName = styled.div`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;

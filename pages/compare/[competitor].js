@@ -3,8 +3,9 @@ import PageContainer from "@/components/page/PageContainer";
 import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import PageTitle from "@/components/page/PageTitle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
 const Competitor = () => {
   const router = useRouter();
@@ -108,12 +109,18 @@ const Competitor = () => {
                 {compareCriteria.map((criteria, index) => (
                   <tr key={index}>
                     <CriteriaTd>{criteria}</CriteriaTd>
-                    <CheckmarkTd>✔️</CheckmarkTd>
+                    <CheckmarkTd>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </CheckmarkTd>
                     {competitorData &&
                       (competitorData[index] ? (
-                        <CheckmarkTd>✔️</CheckmarkTd>
+                        <CheckmarkTd>
+                          <FontAwesomeIcon icon={faCheck} />
+                        </CheckmarkTd>
                       ) : (
-                        <XTd>❌</XTd>
+                        <XTd>
+                          <FontAwesomeIcon icon={faX} />
+                        </XTd>
                       ))}
                   </tr>
                 ))}
@@ -144,17 +151,21 @@ const TitleContainer = styled.div`
   gap: 16px;
   width: 50%;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
 `;
 
 const Subtext = styled.h2`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
@@ -206,12 +217,19 @@ const ComparisonTable = styled.table`
   tr:last-child td {
     border-bottom: 0;
   }
+
+  @media (max-width: 768px) {
+    th,
+    td {
+      padding: 8px; // Further reduce padding for smaller screens
+    }
+  }
 `;
 
 const TableCompareHeader = styled.th`
   background-color: ${({ theme }) => theme.white};
   text-align: left;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   font-weight: bold;
   color: ${({ theme }) => theme.gray};
 `;
@@ -219,14 +237,14 @@ const TableCompareHeader = styled.th`
 const TableHeader = styled.th`
   background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.black};
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   width: 25%;
 `;
 
 const CriteriaTd = styled.td`
   background-color: ${({ theme }) => theme.white};
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;

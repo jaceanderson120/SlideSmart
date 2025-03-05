@@ -1,4 +1,3 @@
-import { fontSize } from "@/constants/fontSize";
 import styled from "styled-components";
 
 const UserIcon = ({
@@ -30,7 +29,7 @@ const CircleIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   width: ${(props) => props.$size}px;
   height: ${(props) => props.$size}px;
   border-radius: 50%;

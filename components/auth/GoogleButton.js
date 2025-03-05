@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import googleLogo from "@/images/googleLogo.png";
 import Image from "next/image";
 import {
@@ -37,6 +36,7 @@ const GoogleButton = () => {
         toast.error(
           "An error occurred while signing in with Google. Please try again."
         );
+        console.error(error);
         return;
       });
   };
@@ -61,7 +61,7 @@ const Button = styled.button`
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
   cursor: pointer;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   transition: color 0.3s, background-color 0.3s, transform 0.3s;
   &:hover {
     color: ${({ theme }) => theme.black};

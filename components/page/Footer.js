@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import Link from "next/link";
-import { fontSize } from "@/constants/fontSize";
 
 const Footer = () => {
   return (
@@ -60,7 +59,7 @@ const SlideSmart = styled.div`
 
   a {
     text-decoration: none;
-    font-size: ${fontSize.heading};
+    font-size: ${({ theme }) => theme.fontSize.heading};
     color: ${({ theme }) => theme.primary};
     font-weight: bold;
     margin-left: 16px;
@@ -76,12 +75,12 @@ const Resources = styled.div`
 
 const ResourceItem = styled.div`
   margin-bottom: 20px;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-weight: bold;
 
   a {
     text-decoration: none;
-    font-size: ${fontSize.default};
+    font-size: ${({ theme }) => theme.fontSize.default};
     color: ${({ theme }) => theme.black};
   }
 
@@ -91,7 +90,7 @@ const ResourceItem = styled.div`
 `;
 
 const SlideSmartCopyRight = styled.div`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: ${({ theme }) => theme.gray};
   padding: 16px;
   text-align: center;

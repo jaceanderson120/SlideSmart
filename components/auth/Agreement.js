@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import { useRouter } from "next/router";
 
 const Agreement = ({ type }) => {
@@ -22,7 +21,7 @@ export default Agreement;
 
 const Label = styled.p`
   margin: 10px 0;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   text-align: center;
   line-height: 1.3;
 `;

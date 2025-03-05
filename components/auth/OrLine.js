@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 
 const OrLine = () => {
   return (
@@ -35,6 +34,6 @@ const HorizontalLine = styled.div`
 `;
 
 const OrText = styled.span`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: ${({ theme }) => theme.gray};
 `;

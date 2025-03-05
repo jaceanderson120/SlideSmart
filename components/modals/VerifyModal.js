@@ -1,6 +1,5 @@
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import Button from "../Button";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,8 +21,9 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: `4px 4px 4px ${({ theme }) => theme.shadow}`,
-      maxWidth: "30%",
+      boxShadow: `4px 4px 4px ${theme.shadow}`,
+      width: "90%",
+      maxWidth: "400px",
       height: "auto",
       padding: "24px",
       borderRadius: "16px",
@@ -103,7 +103,10 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
                 hoverBackgroundColor="transparent"
                 textColor={({ theme }) => theme.primary}
                 hoverTextColor={({ theme }) => theme.primary}
-                style={{ fontSize: fontSize.secondary, fontWeight: "bold" }}
+                style={{
+                  fontSize: theme.fontSize.secondary,
+                  fontWeight: "bold",
+                }}
                 onClick={handleSendCode}
               >
                 send another code
@@ -120,7 +123,7 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
               backgroundColor="transparent"
               hoverBackgroundColor="transparent"
               padding="12px"
-              fontSize={fontSize.secondary}
+              fontSize={({ theme }) => theme.fontSize.secondary}
               textColor={({ theme }) => theme.gray}
               hoverTextColor={({ theme }) => theme.primary}
               style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
@@ -132,7 +135,7 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
               backgroundColor={({ theme }) => theme.primary}
               hoverBackgroundColor={({ theme }) => theme.primary}
               padding="12px"
-              fontSize={fontSize.secondary}
+              fontSize={({ theme }) => theme.fontSize.secondary}
               textColor={({ theme }) => theme.white}
               hoverTextColor={({ theme }) => theme.black}
               disabled={resendDisabled}
@@ -165,13 +168,13 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;
 
 const ModalText = styled.p`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   line-height: 1.3;
   color: ${({ theme }) => theme.gray};
   word-wrap: break-word;
@@ -180,7 +183,7 @@ const ModalText = styled.p`
 `;
 
 const ModalInput = styled.input`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   padding: 8px;
   border: none;
   border-radius: 8px;

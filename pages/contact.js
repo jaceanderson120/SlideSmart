@@ -3,7 +3,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useStateContext } from "@/context/StateContext";
 import Footer from "@/components/page/Footer";
-import { fontSize } from "@/constants/fontSize";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
@@ -172,12 +171,14 @@ export default Contact;
 const Section = styled.div`
   display: flex;
   height: 100%;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
   align-items: flex-start;
   text-align: center;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0px;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -196,17 +197,18 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   display: flex;
   width: 60%;
-  @media (max-width: 768px) {
-    width: 100%;
-  }
   height: 100%;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
@@ -218,7 +220,7 @@ const SubtitleSpan = styled.span`
 `;
 
 const Subtext = styled.h2`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
@@ -234,6 +236,10 @@ const FormBox = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.white};
   box-shadow: 0 0 10px ${({ theme }) => theme.shadow};
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -244,7 +250,7 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;
@@ -252,18 +258,22 @@ const Input = styled.input`
 `;
 
 const InputLabel = styled.label`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: ${({ theme }) => theme.gray};
 `;
 
 const TextArea = styled.textarea`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;
   width: 100%;
   height: 100px;
   resize: none;
+
+  @media (max-width: 768px) {
+    height: 200px;
+  }
 `;
 
 const ButtonContainer = styled.div`

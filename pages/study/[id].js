@@ -36,7 +36,6 @@ import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/studyGuide/Chatbot";
 import AutoResizeTextArea from "@/components/studyGuide/AutoResizeTextArea";
 import { toast } from "react-toastify";
-import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
@@ -94,6 +93,7 @@ const Study = () => {
   const [autoGenerateSection, setAutoGenerateSection] = useState(null);
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
   const theme = useTheme();
+  const [deviceWidth, setDeviceWidth] = useState(0);
 
   // Check URL to see if the user came from the find study guides page
   const searchParams = useSearchParams();
@@ -169,6 +169,22 @@ const Study = () => {
 
     checkAccessAndFetchData();
   }, [id, currentUser, router, loadingUser]);
+
+  // Get the device width
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceWidth(window.innerWidth);
+    };
+
+    // Set the initial device width
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Function to handle opening the share modal
   const handleShareClick = () => {
@@ -654,20 +670,22 @@ const Study = () => {
             {fromSearch ? "Back to Search" : "Back to Dashboard"}
           </Button>
         </BackToContainer>
-        <Title
-          type="text"
-          value={fileName}
-          onChange={handleFileNameChange}
-          onBlur={handleFileNameSave}
-          onKeyDown={handleKeyDown}
-          ref={titleInputRef}
-          readOnly={
-            editMode && studyGuide.editors.includes(currentUser?.uid)
-              ? false
-              : true
-          }
-          $editMode={editMode}
-        />
+        {deviceWidth > 768 && (
+          <Title
+            type="text"
+            value={fileName}
+            onChange={handleFileNameChange}
+            onBlur={handleFileNameSave}
+            onKeyDown={handleKeyDown}
+            ref={titleInputRef}
+            readOnly={
+              editMode && studyGuide.editors.includes(currentUser?.uid)
+                ? false
+                : true
+            }
+            $editMode={editMode}
+          />
+        )}
         <MenuTriggerArea>
           {editMode && (
             <>
@@ -719,26 +737,30 @@ const Study = () => {
             !studyGuide.contributors.includes(currentUser?.uid) && (
               <Button onClick={saveStudyGuide}>Save File</Button>
             )}
-          <StyledFontAwesomeIcon
-            icon={faMessage}
-            size="xl"
-            title="Sola"
-            onClick={handleChatbotToggle}
-          />
-          <CustomMenu
-            triggerElement={
-              <StyledFontAwesomeIcon
-                icon={faEllipsisVertical}
-                size="xl"
-                title="Menu"
-              />
-            }
-            menuItems={menuItems}
-          />
+          {deviceWidth > 768 && (
+            <StyledFontAwesomeIcon
+              icon={faMessage}
+              size="xl"
+              title="Sola"
+              onClick={handleChatbotToggle}
+            />
+          )}
+          {deviceWidth > 768 && (
+            <CustomMenu
+              triggerElement={
+                <StyledFontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  size="xl"
+                  title="Menu"
+                />
+              }
+              menuItems={menuItems}
+            />
+          )}
         </MenuTriggerArea>
       </HeaderSection>
       <OutputSection>
-        {isTopicsShown && (
+        {isTopicsShown && deviceWidth > 768 && (
           <StudyGuideTopicsContainer>
             <StudyGuideTopics
               topics={Object.keys(studyGuide.extractedData)}
@@ -855,24 +877,23 @@ const Study = () => {
                     ) : studyGuide.extractedData[key]["youtubeIds"].length >
                       0 ? (
                       <VideoContainer>
-                        <iframe
-                          width="560"
-                          height="315"
-                          src={`https://www.youtube.com/embed/${
-                            studyGuide.extractedData[key]["youtubeIds"][
-                              isNaN(videoIndices[key]) ||
-                              videoIndices[key] >=
-                                studyGuide.extractedData[key]["youtubeIds"]
-                                  .length
-                                ? 1
-                                : videoIndices[key]
-                            ]
-                          }`}
-                          title="YouTube video player"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
+                        <IframeContainer>
+                          <iframe
+                            src={`https://www.youtube.com/embed/${
+                              studyGuide.extractedData[key]["youtubeIds"][
+                                isNaN(videoIndices[key]) ||
+                                videoIndices[key] >=
+                                  studyGuide.extractedData[key]["youtubeIds"]
+                                    .length
+                                  ? 1
+                                  : videoIndices[key]
+                              ]
+                            }`}
+                            title="YouTube Video Player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </IframeContainer>
                         <SwitchVideoContainer>
                           <StyledFontAwesomeIcon
                             icon={faArrowLeft}
@@ -1001,7 +1022,7 @@ const Study = () => {
                           <Button
                             onClick={() => toggleAnswer(key)}
                             padding="8px"
-                            fontSize={fontSize.label}
+                            fontSize={({ theme }) => theme.fontSize.label}
                             backgroundColor={({ theme }) => theme.primary70}
                             hoverBackgroundColor={({ theme }) =>
                               theme.primary70
@@ -1226,7 +1247,7 @@ const Title = styled.input`
       : css`
           background-color: transparent;
         `}
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1247,11 +1268,16 @@ const HeaderSection = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  min-height: 48px;
   background-color: ${({ theme }) => theme.lightGray};
   box-shadow: 0px 2px 5px ${({ theme }) => theme.shadow};
   margin-bottom: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const BackToContainer = styled.div`
@@ -1334,7 +1360,7 @@ const TopicHeaderContainer = styled.div`
 `;
 
 const TopicHeaderTitle = styled.div`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   background-color: ${({ theme }) => theme.primary70};
   padding: 8px;
@@ -1358,7 +1384,7 @@ const TopicAnswerContainer = styled.div`
 
 const TopicSubContainer = styled.div`
   display: flex;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   text-align: left;
   flex-direction: column;
   border-radius: 12px;
@@ -1368,19 +1394,18 @@ const TopicSubContainer = styled.div`
 
 const TopicSubVideoContainer = styled.div`
   display: flex;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   text-align: left;
   margin-bottom: 16px;
   flex-direction: column;
   justify-content: center;
   border-radius: 12px;
   padding: 16px;
-  width: 50%;
-  min-width: 592px;
+  width: 100%;
 `;
 
 const NoVideoText = styled.p`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-style: italic;
   color: ${({ theme }) => theme.black};
   padding: 8px;
@@ -1400,7 +1425,7 @@ const SwitchVideoContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
 `;
 
 const ChatbotContainer = styled.div`
@@ -1420,4 +1445,17 @@ const StudyGuideTopicsContainer = styled.div`
   overflow-y: scroll;
   padding-left: 16px;
   scrollbar-color: ${({ theme }) => theme.primary70} transparent;
+`;
+
+const IframeContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
 `;

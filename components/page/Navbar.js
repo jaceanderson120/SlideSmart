@@ -4,7 +4,6 @@ import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
-import { fontSize } from "@/constants/fontSize";
 import { useRouter } from "next/router";
 import CustomMenu from "../CustomMenu";
 import UserIcon from "../UserIcon";
@@ -65,6 +64,10 @@ function Navbar() {
 
   // Define items for the hamburger menu
   const hamburgerMenuItems = [
+    {
+      name: "Dashboard",
+      onClick: () => router.push("/dashboard"),
+    },
     {
       name: "Find Study Guides",
       onClick: () => router.push("/find-slides"),
@@ -184,16 +187,10 @@ function Navbar() {
           </LinksContainer>
         )}
       </LeftButtonSection>
-      {deviceWidth < 768 && (
-        <CustomMenu
-          triggerElement={<Hamburger icon={faBars} size="xl" />}
-          menuItems={hamburgerMenuItems}
-        />
-      )}
       <RightButtonSection>
         {isLoggedIn ? (
           <>
-            {router.pathname !== "/dashboard" && (
+            {router.pathname !== "/dashboard" && deviceWidth > 768 && (
               <Button onClick={handleDashboardClick} padding="8px" bold>
                 Dashboard
               </Button>
@@ -208,6 +205,12 @@ function Navbar() {
               }
               menuItems={menuItems}
             />
+            {deviceWidth < 768 && (
+              <CustomMenu
+                triggerElement={<Hamburger icon={faBars} size="xl" />}
+                menuItems={hamburgerMenuItems}
+              />
+            )}
           </>
         ) : (
           <>
@@ -269,7 +272,7 @@ const LogoContainer = styled.div`
 
   a {
     text-decoration: none;
-    font-size: ${fontSize.subheading};
+    font-size: ${({ theme }) => theme.fontSize.subheading};
     color: ${({ theme }) => theme.gray};
     font-weight: bold;
   }
@@ -280,7 +283,7 @@ const LogoContainer = styled.div`
 `;
 
 const LogoText = styled.h1`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.primary};
 `;
@@ -314,6 +317,7 @@ const HorizontalContainer = styled.div`
 
 const Hamburger = styled(FontAwesomeIcon)`
   cursor: pointer;
+  color: ${({ theme }) => theme.black};
   &:hover {
     transition: color 0.3s;
     color: ${({ theme }) => theme.primary};

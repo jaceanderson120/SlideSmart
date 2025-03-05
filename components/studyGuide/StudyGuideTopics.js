@@ -3,7 +3,6 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGrip, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
-import { fontSize } from "@/constants/fontSize";
 import styled from "styled-components";
 
 const StudyGuideTopics = ({
@@ -28,7 +27,7 @@ const StudyGuideTopics = ({
                 hoverBackgroundColor={({ theme }) => theme.primary70}
                 padding="8px"
                 marginTop="16px"
-                fontSize={fontSize.label}
+                fontSize={({ theme }) => theme.fontSize.label}
                 onClick={() => {
                   setIsAddTopicModalOpen(true);
                 }}
@@ -79,7 +78,7 @@ const TopicName = styled.a`
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   text-decoration: none;
   text-align: left;
   color: ${({ theme }) => theme.black};

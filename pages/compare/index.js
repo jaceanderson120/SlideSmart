@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import PageContainer from "@/components/page/PageContainer";
 import Head from "next/head";
 import Footer from "@/components/page/Footer";
@@ -48,7 +47,7 @@ const Compare = () => {
                     style={{ width: "100%", height: "100%" }}
                     padding="16px"
                     bold
-                    fontSize={fontSize.subheading}
+                    fontSize={({ theme }) => theme.fontSize.subheading}
                     onClick={() => router.push(`/compare/${competitor}`)}
                   >
                     vs. {competitor}
@@ -99,7 +98,7 @@ const Competitor = styled.div`
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   text-align: center;
