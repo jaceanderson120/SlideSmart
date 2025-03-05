@@ -1,6 +1,5 @@
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
-ize } from "@/constants/fontSize";
 import Button from "../Button";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,8 +21,9 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: theme.lightGray,
       border: "none",
-      boxShadow: `4px 4px 4px ${({ theme }) => theme.shadow}`,
-      maxWidth: "30%",
+      boxShadow: `4px 4px 4px ${theme.shadow}`,
+      width: "90%",
+      maxWidth: "400px",
       height: "auto",
       padding: "24px",
       borderRadius: "16px",
