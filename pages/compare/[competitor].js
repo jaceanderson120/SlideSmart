@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 import PageTitle from "@/components/page/PageTitle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
 const Competitor = () => {
   const router = useRouter();
@@ -107,12 +109,18 @@ const Competitor = () => {
                 {compareCriteria.map((criteria, index) => (
                   <tr key={index}>
                     <CriteriaTd>{criteria}</CriteriaTd>
-                    <CheckmarkTd>✔️</CheckmarkTd>
+                    <CheckmarkTd>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </CheckmarkTd>
                     {competitorData &&
                       (competitorData[index] ? (
-                        <CheckmarkTd>✔️</CheckmarkTd>
+                        <CheckmarkTd>
+                          <FontAwesomeIcon icon={faCheck} />
+                        </CheckmarkTd>
                       ) : (
-                        <XTd>❌</XTd>
+                        <XTd>
+                          <FontAwesomeIcon icon={faX} />
+                        </XTd>
                       ))}
                   </tr>
                 ))}
@@ -143,6 +151,10 @@ const TitleContainer = styled.div`
   gap: 16px;
   width: 50%;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Subtitle = styled.h1`
@@ -204,6 +216,13 @@ const ComparisonTable = styled.table`
   tr:last-child th,
   tr:last-child td {
     border-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    th,
+    td {
+      padding: 8px; // Further reduce padding for smaller screens
+    }
   }
 `;
 
