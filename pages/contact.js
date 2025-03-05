@@ -3,7 +3,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useStateContext } from "@/context/StateContext";
 import Footer from "@/components/page/Footer";
-import { fontSize } from "@/constants/fontSize";
 import { toast } from "react-toastify";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
@@ -206,7 +205,7 @@ const RightSection = styled.div`
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
@@ -218,7 +217,7 @@ const SubtitleSpan = styled.span`
 `;
 
 const Subtext = styled.h2`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
@@ -244,7 +243,7 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;
@@ -252,12 +251,12 @@ const Input = styled.input`
 `;
 
 const InputLabel = styled.label`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: ${({ theme }) => theme.gray};
 `;
 
 const TextArea = styled.textarea`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 8px;

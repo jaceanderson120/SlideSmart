@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
 import { toast } from "react-toastify";
-import { fontSize } from "@/constants/fontSize";
 import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../Button";
@@ -169,7 +168,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             backgroundColor="transparent"
             hoverBackgroundColor="transparent"
             padding="12px"
-            fontSize={fontSize.secondary}
+            fontSize={({ theme }) => theme.fontSize.secondary}
             textColor={({ theme }) => theme.gray}
             hoverTextColor={({ theme }) => theme.primary}
             style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
@@ -181,7 +180,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
             backgroundColor={({ theme }) => theme.primary}
             hoverBackgroundColor={({ theme }) => theme.primary}
             padding="12px"
-            fontSize={fontSize.secondary}
+            fontSize={({ theme }) => theme.fontSize.secondary}
             textColor={({ theme }) => theme.white}
             hoverTextColor={({ theme }) => theme.black}
           >
@@ -212,7 +211,7 @@ const ButtonSection = styled.div`
 `;
 
 const ModalInput = styled.input`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   padding: 8px;
   border: none;
   border-radius: 8px;
@@ -230,13 +229,13 @@ const ModalContent = styled.div`
 `;
 
 const ModalTitle = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;
 
 const ModalText = styled.p`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   line-height: 1.3;
   color: ${({ theme }) => theme.gray};
   word-wrap: break-word;

@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import Footer from "../components/page/Footer";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
 import Image from "next/image";
 import logo from "@/images/logo.png";
@@ -124,7 +123,7 @@ const Section = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   margin: 16px 0;
 `;
@@ -134,7 +133,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: green;
   width: 100%;
 
@@ -146,11 +145,11 @@ const Input = styled.input`
 
 const StyledText = styled.div`
   padding: 20px;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
 `;
 
 const RegisterLink = styled(Link)`
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   text-decoration: none;
   color: ${({ theme }) => theme.primary};
   transition: text-decoration 0.3s;

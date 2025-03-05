@@ -22,7 +22,6 @@ import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
-import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import UserIcon from "@/components/UserIcon";
@@ -308,7 +307,7 @@ const Dashboard = () => {
                         onClick={handleCreateNewClick}
                         padding="16px"
                         bold
-                        fontSize={fontSize.subheading}
+                        fontSize={({ theme }) => theme.fontSize.subheading}
                       >
                         Create New
                       </Button>
@@ -429,7 +428,7 @@ const Dashboard = () => {
                                         // Doesn't work with styled-components
                                         style={{
                                           backgroundColor: theme.primary,
-                                          fontSize: `${fontSize.secondary}`,
+                                          fontSize: theme.fontSize.secondary,
                                           padding: "8px",
                                         }}
                                       />
@@ -536,14 +535,14 @@ const FilterContainer = styled.div`
 `;
 
 const FilterLabel = styled.label`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-weight: bold;
   margin-right: 8px;
 `;
 
 const MenuTrigger = styled.p`
   cursor: pointer;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const ButtonContainer = styled.div`
@@ -568,7 +567,7 @@ const ColumnName = styled.h2`
   margin-bottom: 16px;
   display: flex;
   flex: ${(props) => props.$flex};
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-weight: bold;
 `;
 
@@ -611,7 +610,7 @@ const StudyGuideLink = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   transition: color 0.3s, transform 0.3s;
   min-width: 0;
 
@@ -625,14 +624,14 @@ const StudyGuideCreated = styled.div`
   display: flex;
   flex: 1;
   color: ${({ theme }) => theme.gray};
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const StudyGuidePermission = styled.div`
   display: flex;
   flex: 1;
   color: ${({ theme }) => theme.gray};
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const StudyGuideContributors = styled.div`
@@ -645,12 +644,12 @@ const StudyGuideVisibility = styled.div`
   display: flex;
   flex: 1;
   color: ${({ theme }) => theme.gray};
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const Contributor = styled.div`
   margin-right: 8px;
-  font-size: ${fontSize.heading};
+  font-size: ${({ theme }) => theme.fontSize.heading};
 `;
 
 const StudyGuideDeleteButton = styled.button`
@@ -685,7 +684,7 @@ const ProgressWrapper = styled.div`
 `;
 
 const StudyGuidesInfoText = styled.p`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   margin: 16px;
 `;
 

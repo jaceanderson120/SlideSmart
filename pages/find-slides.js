@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "@/components/Button";
-import { fontSize } from "@/constants/fontSize";
 import { getPublicStudyGuides } from "@/firebase/database";
 import StudyGuideList from "@/components/findSlides/StudyGuideList";
 import Footer from "@/components/page/Footer";
@@ -194,7 +193,7 @@ const RightSection = styled.div`
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
@@ -206,7 +205,7 @@ const SubtitleSpan = styled.span`
 `;
 
 const Subtext = styled.h2`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.gray};
   line-height: 1.3;
 `;
@@ -224,7 +223,7 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;
-  font-size: ${fontSize.secondary};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   color: green;
   width: 100%;
 

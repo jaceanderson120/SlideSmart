@@ -36,7 +36,6 @@ import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/studyGuide/Chatbot";
 import AutoResizeTextArea from "@/components/studyGuide/AutoResizeTextArea";
 import { toast } from "react-toastify";
-import { fontSize } from "@/constants/fontSize";
 import CustomMenu from "@/components/CustomMenu";
 import Button from "@/components/Button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
@@ -1001,7 +1000,7 @@ const Study = () => {
                           <Button
                             onClick={() => toggleAnswer(key)}
                             padding="8px"
-                            fontSize={fontSize.label}
+                            fontSize={({ theme }) => theme.fontSize.label}
                             backgroundColor={({ theme }) => theme.primary70}
                             hoverBackgroundColor={({ theme }) =>
                               theme.primary70
@@ -1226,7 +1225,7 @@ const Title = styled.input`
       : css`
           background-color: transparent;
         `}
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1334,7 +1333,7 @@ const TopicHeaderContainer = styled.div`
 `;
 
 const TopicHeaderTitle = styled.div`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   background-color: ${({ theme }) => theme.primary70};
   padding: 8px;
@@ -1358,7 +1357,7 @@ const TopicAnswerContainer = styled.div`
 
 const TopicSubContainer = styled.div`
   display: flex;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   text-align: left;
   flex-direction: column;
   border-radius: 12px;
@@ -1368,7 +1367,7 @@ const TopicSubContainer = styled.div`
 
 const TopicSubVideoContainer = styled.div`
   display: flex;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   text-align: left;
   margin-bottom: 16px;
   flex-direction: column;
@@ -1380,7 +1379,7 @@ const TopicSubVideoContainer = styled.div`
 `;
 
 const NoVideoText = styled.p`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   font-style: italic;
   color: ${({ theme }) => theme.black};
   padding: 8px;
@@ -1400,7 +1399,7 @@ const SwitchVideoContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
 `;
 
 const ChatbotContainer = styled.div`

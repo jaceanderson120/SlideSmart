@@ -4,7 +4,6 @@ import logo from "@/images/logo.png";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
-import { fontSize } from "@/constants/fontSize";
 import { useRouter } from "next/router";
 import CustomMenu from "../CustomMenu";
 import UserIcon from "../UserIcon";
@@ -269,7 +268,7 @@ const LogoContainer = styled.div`
 
   a {
     text-decoration: none;
-    font-size: ${fontSize.subheading};
+    font-size: ${({ theme }) => theme.fontSize.subheading};
     color: ${({ theme }) => theme.gray};
     font-weight: bold;
   }
@@ -280,7 +279,7 @@ const LogoContainer = styled.div`
 `;
 
 const LogoText = styled.h1`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.primary};
 `;

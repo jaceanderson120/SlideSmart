@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faImage, faX } from "@fortawesome/free-solid-svg-icons";
-import { fontSize } from "@/constants/fontSize";
 import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
@@ -268,7 +267,7 @@ const ChatbotHeader = styled.div`
 const IconContainer = styled.div`
   position: absolute;
   left: 8px;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   display: flex;
   gap: 8px;
   padding: 8px;
@@ -287,7 +286,7 @@ const HeaderText = styled.p`
   flex-grow: 1;
   text-align: center;
   margin: 0;
-  font-size: ${fontSize.heading};
+  font-size: ${({ theme }) => theme.fontSize.heading};
 `;
 
 const MessagesContainer = styled.div`
@@ -317,7 +316,7 @@ const BotMessageContainer = styled.div`
 const UserMessage = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 8px 0px 8px 8px;
@@ -329,7 +328,7 @@ const UserMessage = styled.div`
 `;
 
 const BotMessage = styled.div`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 0px 8px 8px 8px;
@@ -359,7 +358,7 @@ const Input = styled.input`
   border-radius: 4px;
   margin-right: 8px;
   background-color: transparent;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.black};
 `;
 

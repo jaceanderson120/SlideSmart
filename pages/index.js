@@ -3,7 +3,6 @@ import Footer from "../components/page/Footer";
 import { useRouter } from "next/router";
 import { useStateContext } from "@/context/StateContext";
 import "react-circular-progressbar/dist/styles.css";
-import { fontSize } from "@/constants/fontSize";
 import Button from "@/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -66,7 +65,7 @@ export default function Home() {
                   onClick={handleMainButtonClick}
                   padding="16px"
                   bold
-                  fontSize={fontSize.subheading}
+                  fontSize={({ theme }) => theme.fontSize.subheading}
                   marginTop="10px"
                 >
                   {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
@@ -125,6 +124,7 @@ const Section = styled.div`
   align-items: center;
   text-align: center;
   gap: 100px;
+  padding: 8px;
 `;
 
 const SloganContainer = styled.div`
@@ -137,7 +137,7 @@ const SloganContainer = styled.div`
 `;
 
 const Slogan = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   color: ${({ theme }) => theme.black};
   font-weight: bold;
   line-height: 1.3;
@@ -145,7 +145,7 @@ const Slogan = styled.h1`
 `;
 
 const SubSlogan = styled.h2`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.black};
   line-height: 1.3;
 `;
@@ -156,10 +156,16 @@ const InstructionContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 32px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 `;
 
 const Instruction = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
 `;

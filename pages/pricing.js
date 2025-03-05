@@ -4,7 +4,6 @@ import app from "@/firebase/firebase";
 import { useRouter } from "next/navigation"; // must be from next/navigation not next/router
 import { useStateContext } from "@/context/StateContext";
 import { useState } from "react";
-import { fontSize } from "@/constants/fontSize";
 import { faArrowRight, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -212,7 +211,7 @@ const BottomSection = styled.div`
 `;
 
 const Subtitle = styled.h1`
-  font-size: ${fontSize.xlheading};
+  font-size: ${({ theme }) => theme.fontSize.xlheading};
   font-weight: bold;
   text-shadow: 2px 2px 4px ${({ theme }) => theme.shadow};
   color: ${({ theme }) => theme.black};
@@ -241,27 +240,27 @@ const PricingCard = styled.div`
 `;
 
 const PricingCardTitle = styled.p`
-  font-size: ${fontSize.heading};
+  font-size: ${({ theme }) => theme.fontSize.heading};
   font-weight: bold;
   margin-bottom: 32px;
   color: ${({ theme }) => theme.black};
 `;
 
 const PricingCardPrice = styled.p`
-  font-size: ${fontSize.subheading};
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   margin-bottom: 32px;
   color: ${({ theme }) => theme.black};
 `;
 
 const PricingCardInfo = styled.p`
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.primary};
   text-align: left;
 `;
 
 const PricingCardLabel = styled.p`
-  font-size: ${fontSize.label};
+  font-size: ${({ theme }) => theme.fontSize.label};
   color: ${({ theme }) => theme.gray};
   margin-top: 32px;
   margin-bottom: 16px;
@@ -278,7 +277,7 @@ const PricingCardDescription = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: ${fontSize.default};
+  font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.gray};
   gap: 16px;
   text-align: left;
