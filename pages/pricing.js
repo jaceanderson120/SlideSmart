@@ -207,6 +207,8 @@ const BottomSection = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 32px;
+    padding: 0px;
+    padding-bottom: 32px;
   }
 `;
 
