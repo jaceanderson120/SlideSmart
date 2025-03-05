@@ -171,12 +171,14 @@ export default Contact;
 const Section = styled.div`
   display: flex;
   height: 100%;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
   align-items: flex-start;
   text-align: center;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0px;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -195,13 +197,14 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   display: flex;
   width: 60%;
-  @media (max-width: 768px) {
-    width: 100%;
-  }
   height: 100%;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Subtitle = styled.h1`
@@ -233,6 +236,10 @@ const FormBox = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.white};
   box-shadow: 0 0 10px ${({ theme }) => theme.shadow};
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -263,6 +270,10 @@ const TextArea = styled.textarea`
   width: 100%;
   height: 100px;
   resize: none;
+
+  @media (max-width: 768px) {
+    height: 200px;
+  }
 `;
 
 const ButtonContainer = styled.div`
