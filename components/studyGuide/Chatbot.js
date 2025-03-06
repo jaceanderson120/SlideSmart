@@ -104,7 +104,7 @@ const Chatbot = (props) => {
             const { value, done: doneReading } = await reader.read();
             done = doneReading;
             chunk += decoder.decode(value, { stream: true });
-            setMessageInProgress(chunk);
+            setMessageInProgress((prev) => prev + chunk);
           }
           // Set the final message once the stream is done
           setMessages((prevMessages) => [
@@ -337,6 +337,7 @@ const BotMessage = styled.div`
   max-width: 90%;
   line-height: 1.3;
   box-shadow: 0 2px 2px ${({ theme }) => theme.shadow};
+  white-space: pre-wrap;
 `;
 
 const InputArea = styled.div`

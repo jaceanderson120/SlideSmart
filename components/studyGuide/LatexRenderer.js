@@ -14,7 +14,7 @@ export const LatexRenderer = ({ children }) => {
     .replace(/\$\$[\s\n]*([\s\S]*?)[\s\n]*\$\$/g, "$$$$ $1 $$$$") // Normalize block math
     .replace(/\\\[[\s\n]*([\s\S]*?)[\s\n]*\\\]/g, "$$$$ $1 $$$$") // Convert \[...\] to $$
     .replace(/\\\([\s\n]*([\s\S]*?)[\s\n]*\\\)/g, "$ $1 $") // Convert \(...\) to inline math
-    .replace(/\n+/g, " ") // Normalize newlines
+    .replace(/\n+/g, "<br /><br />") // Convert newlines to a double break
     .trim();
 
   // Process Markdown-like formatting
