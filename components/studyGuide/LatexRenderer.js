@@ -13,9 +13,15 @@ export const LatexRenderer = ({ children }) => {
   let replaced = children
     .replace(/\$\$[\s\n]*([\s\S]*?)[\s\n]*\$\$/g, "$$$$ $1 $$$$") // Normalize block math
     .replace(/\\\[[\s\n]*([\s\S]*?)[\s\n]*\\\]/g, "$$$$ $1 $$$$") // Convert \[...\] to $$
-    .replace(/\\\([\s\n]*([\s\S]*?)[\s\n]*\\\)/g, "$ $1 $") // Convert \(...\) to inline math
-    .replace(/\n+/g, "<br /><br />") // Convert newlines to a double break
-    .trim();
+    .replace(/\\\([\s\n]*([\s\S]*?)[\s\n]*\\\)/g, "$ $1 $"); // Convert \(...\) to inline math
+
+  // If replaced the same as children, do the following because there was no LaTeX:
+  if (replaced === children) {
+    replaced = replaced
+      .replace(/\n+/g, "<br /><br />") // Convert newlines to a double break
+      .replace(/\n/g, "<br />") // Convert single newlines to a single break
+      .trim();
+  }
 
   // Process Markdown-like formatting
   const formatted = replaced

@@ -28,6 +28,7 @@ const Chatbot = (props) => {
   const [uploadedImageURL, setUploadedImageURL] = useState(null);
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [messageInProgress, setMessageInProgress] = useState("");
+  const [startingNewMessage, setStartingNewMessage] = useState(false);
 
   // Get study guide which is passed down from the parent component
   const { studyGuide } = props;
@@ -47,9 +48,13 @@ const Chatbot = (props) => {
   // Scroll to the bottom of the messages container whenever messages change
   const messagesContainerRef = useRef(null);
   useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollIntoView({ block: "end" });
+    // Only scroll to the top of the new message, and then stop scrolling
+    if (startingNewMessage) {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollIntoView({ block: "end" });
+      }
     }
+    setStartingNewMessage(false);
   }, [messages, messageInProgress]);
 
   const handleSend = async () => {
@@ -74,6 +79,7 @@ const Chatbot = (props) => {
         newMessages = [...messages, { text: input, sender: "user" }];
       }
       setMessages(newMessages);
+      setStartingNewMessage(true); // scroll to user's new message
       setInput("");
 
       // Get the last 10 messages to send to the API
@@ -99,17 +105,21 @@ const Chatbot = (props) => {
           const decoder = new TextDecoder();
           let done = false;
           let chunk = "";
+          let finalMessage = "";
+
+          setStartingNewMessage(true); // scroll to the top of bot's new message
 
           while (!done) {
             const { value, done: doneReading } = await reader.read();
             done = doneReading;
-            chunk += decoder.decode(value, { stream: true });
+            finalMessage += decoder.decode(value, { stream: true });
+            chunk = decoder.decode(value, { stream: true });
             setMessageInProgress((prev) => prev + chunk);
           }
           // Set the final message once the stream is done
           setMessages((prevMessages) => [
             ...prevMessages,
-            { text: chunk, sender: "bot" },
+            { text: finalMessage, sender: "bot" },
           ]);
         }
       } catch (error) {
@@ -158,7 +168,7 @@ const Chatbot = (props) => {
         <IconContainer>
           <Icon icon={faX} onClick={handleMinimizeClick} />
         </IconContainer>
-        <HeaderText>Chat with Sola</HeaderText>
+        <HeaderText>Sola</HeaderText>
       </ChatbotHeader>
       <MessagesContainer>
         {messages.map((message, index) => (
