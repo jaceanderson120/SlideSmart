@@ -168,7 +168,7 @@ const Chatbot = (props) => {
         <IconContainer>
           <Icon icon={faX} onClick={handleMinimizeClick} />
         </IconContainer>
-        <HeaderText>Chat with Sola</HeaderText>
+        <HeaderText>Sola</HeaderText>
       </ChatbotHeader>
       <MessagesContainer>
         {messages.map((message, index) => (
