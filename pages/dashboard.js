@@ -246,14 +246,26 @@ const Dashboard = () => {
     );
     clearInterval(interval);
     setIsLoading(false);
-    // fileUpload response is either an object with studyGuideId and an error
-    // Give the user a message if the error was too many tokens
+
+    // Toast error messages if necessary
     if (studyGuideId == "TOKEN_ERROR") {
-      toast(
+      toast.error(
         "The file you uploaded is too large for SlideSmart to handle. Please try again with a smaller file. (Keep in mind that file size doesn't always match the amount of content inside.)"
+      );
+    } else if (studyGuideId == "EMPTY_DATA") {
+      toast.error(
+        "The file you uploaded appears to be empty. Unfortunately, SlideSmart cannot process this file."
+      );
+    } else if (studyGuideId == "UNKNOWN_ERROR") {
+      toast.error(
+        "An unknown error occurred while processing your file. Please try again."
       );
     } else if (studyGuideId !== null) {
       router.push(`/study/${studyGuideId}`);
+    } else {
+      toast.error(
+        "An error occurred while processing your file. Please try again."
+      );
     }
   };
 

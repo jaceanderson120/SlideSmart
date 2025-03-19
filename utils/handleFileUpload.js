@@ -32,8 +32,13 @@ const handleFileUpload = async (
 
       // Check if the response is OK
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error: ${response.status} ${errorText}`);
+        let error = await response.text();
+        error = await JSON.parse(error);
+        if (error.error === "EMPTY_DATA") {
+          throw new Error("EMPTY_DATA");
+        } else {
+          throw new Error(`Error: ${response.status} ${error}`);
+        }
       }
 
       // Get the extracted data as a string
@@ -43,7 +48,7 @@ const handleFileUpload = async (
       const encoding = tiktoken.getEncoding("cl100k_base"); // the input of .get_encoding() will need to be changed when we switch to one of the gpt-o models to "o200k_base"
       const tokenCheck = encoding.encode(extractedData);
       if (tokenCheck.length > 115000) {
-        throw new Error(`TOKEN_ERROR`);
+        throw new Error("TOKEN_ERROR");
       }
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
@@ -307,8 +312,12 @@ const handleFileUpload = async (
     return studyGuideId;
   } catch (error) {
     console.error("Error uploading file:", error);
-    if (error == `Error: TOKEN_ERROR`) {
+    if (error == "Error: TOKEN_ERROR") {
       return "TOKEN_ERROR";
+    } else if (error == "Error: EMPTY_DATA") {
+      return "EMPTY_DATA";
+    } else {
+      return "UNKNOWN_ERROR";
     }
   }
 };
