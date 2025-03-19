@@ -256,8 +256,16 @@ const Dashboard = () => {
       toast.error(
         "The file you uploaded appears to be empty. Unfortunately, SlideSmart cannot process this file."
       );
+    } else if (studyGuideId == "UNKNOWN_ERROR") {
+      toast.error(
+        "An unknown error occurred while processing your file. Please try again."
+      );
     } else if (studyGuideId !== null) {
       router.push(`/study/${studyGuideId}`);
+    } else {
+      toast.error(
+        "An error occurred while processing your file. Please try again."
+      );
     }
   };
 

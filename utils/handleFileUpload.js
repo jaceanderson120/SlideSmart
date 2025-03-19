@@ -314,9 +314,10 @@ const handleFileUpload = async (
     console.error("Error uploading file:", error);
     if (error == "Error: TOKEN_ERROR") {
       return "TOKEN_ERROR";
-    }
-    if (error == "Error: EMPTY_DATA") {
+    } else if (error == "Error: EMPTY_DATA") {
       return "EMPTY_DATA";
+    } else {
+      return "UNKNOWN_ERROR";
     }
   }
 };
