@@ -50,6 +50,7 @@ const uploadStudyGuideToFirebase = async (studyGuide) => {
         isPublic: studyGuide.isPublic,
         gotFromPublic: studyGuide.gotFromPublic,
         lastModified: new Date(),
+        hasFlashCards: false,
       });
 
       // Get the ID of the new document from the document reference
@@ -262,7 +263,8 @@ const fetchStudyGuide = async (id) => {
       hiddenExplanations: JSON.parse(data.hiddenExplanations || "{}"),
     };
     const fileName = data.fileName;
-    return { fetchedStudyGuide, fileName };
+    const hasFlashCards = data.hasFlashCards;
+    return { fetchedStudyGuide, fileName, hasFlashCards };
   }
 };
 
@@ -316,6 +318,14 @@ const updateStudyGuideHiddenExplanations = async (id, hiddenExplanations) => {
 const updateStudyGuideTopics = async (id, topics) => {
   const studyGuideDocRef = doc(db, "studyGuides", id);
   await updateDoc(studyGuideDocRef, { topics });
+};
+
+// Updates the hasFlashCards field of a study guide in Firestore
+// Input: study guide ID
+// Output: None
+const updateStudyGuideHasFlashcards = async (id) => {
+  const studyGuideDocRef = doc(db, "studyGuides", id);
+  await updateDoc(studyGuideDocRef, { hasFlashCards: true });
 };
 
 // Delete a study guide from Firestore
@@ -472,6 +482,56 @@ const uploadFileToFirebase = async (file) => {
   return firebaseFileUrl;
 };
 
+// Function for creating flashcards
+const createFlashcards = async (studyGuideId, flashcardsArray) => {
+  try {
+    await runTransaction(db, async (transaction) => {
+      // flashcardsArray is [{ question, answer }, { question, answer }, ... ]
+      for (const { question, answer } of flashcardsArray) {
+        const flashcardRef = doc(collection(db, "flashcards"));
+        transaction.set(flashcardRef, {
+          studyGuideId: studyGuideId,
+          question: question,
+          answer: answer,
+          createdAt: new Date(),
+        });
+      }
+    });
+
+    // Update the Study Guide doc to reflect that it has flashcards
+    await updateStudyGuideHasFlashcards(studyGuideId);
+  } catch (error) {
+    console.error("Error creating flashcards:", error);
+  }
+};
+
+// Function for fetching all of the flashcards (just question & answer) for a specific studyguide
+const fetchFlashcards = async (studyGuideId) => {
+  try {
+    const q = query(
+      collection(db, "flashcards"),
+      where("studyGuideId", "==", studyGuideId)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const flashcards = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      // Only push question and answer
+      flashcards.push({
+        question: data.question,
+        answer: data.answer,
+      });
+    });
+
+    return flashcards;
+  } catch (error) {
+    console.error("Error fetching flashcards:", error);
+    return [];
+  }
+};
+
 export {
   uploadStudyGuideToFirebase,
   getUserStudyGuides,
@@ -490,4 +550,6 @@ export {
   trackClickThrough,
   updateUserDarkMode,
   getUserDarkMode,
+  createFlashcards,
+  fetchFlashcards,
 };

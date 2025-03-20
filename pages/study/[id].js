@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import styled, { css, useTheme } from "styled-components";
 import Link from "next/link";
 import ShareModal from "@/components/modals/ShareModal";
+import CreateFlashcardModal from "@/components/modals/CreateFlashcardModal";
+import FlashcardViewer from "@/components/studyGuide/FlashcardViewer";
 import {
   fetchStudyGuide,
   updateStudyGuideFileName,
@@ -10,6 +12,7 @@ import {
   hasAccessToStudyGuide,
   uploadStudyGuideToFirebase,
   updateStudyGuideHiddenExplanations,
+  fetchFlashcards,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -27,6 +30,7 @@ import {
   faArrowLeft,
   faMagicWandSparkles,
   faTrashCan,
+  faNoteSticky,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faShareFromSquare,
@@ -68,6 +72,7 @@ const Study = () => {
   const [isTopicsShown, setIsTopicsShown] = useState(true);
   const [isFileShown, setIsFileShown] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isFlashcardModalOpen, setIsFlashcardModalOpen] = useState(false);
   const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [fileName, setFileName] = useState("");
   const [editMode, setEditMode] = useState(false);
@@ -94,6 +99,9 @@ const Study = () => {
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
   const theme = useTheme();
   const [deviceWidth, setDeviceWidth] = useState(0);
+  const [hasFlashCards, setHasFlashCards] = useState(false);
+  const [flashcards, setFlashcards] = useState(null);
+  const [showFlashcards, setShowFlashcards] = useState(false);
 
   // Check URL to see if the user came from the find study guides page
   const searchParams = useSearchParams();
@@ -139,7 +147,8 @@ const Study = () => {
         const hasAccess = await hasAccessToStudyGuide(id, currentUser.uid);
 
         // If the user has access to the study guide, fetch the study guide data
-        const { fetchedStudyGuide, fileName } = await fetchStudyGuide(id);
+        const { fetchedStudyGuide, fileName, hasFlashCards } =
+          await fetchStudyGuide(id);
 
         // If the user does not have access to the study guide AND the study guide is private, redirect them to their study guides page
         if (!hasAccess && !fetchedStudyGuide.isPublic) {
@@ -150,6 +159,12 @@ const Study = () => {
         // Set the study guide and file name
         setStudyGuide(fetchedStudyGuide);
         setFileName(fileName);
+
+        if (hasFlashCards) {
+          setHasFlashCards(true);
+        } else {
+          setHasFlashCards(false);
+        }
 
         // Check if fetchedStudyGuide has firebaseFileUrl
         if (fetchedStudyGuide.firebaseFileUrl) {
@@ -194,6 +209,28 @@ const Study = () => {
   // Function to close the share modal
   const closeShareModal = () => {
     setIsShareModalOpen(false);
+  };
+
+  // Function to handle flashcards click
+  const handleFlashcardClick = async () => {
+    if (!hasFlashCards) {
+      setIsFlashcardModalOpen(true);
+    } else {
+      // get flash cards and set the modal to open
+      let flashcards = await fetchFlashcards(id);
+      setFlashcards(flashcards);
+      setShowFlashcards(true);
+    }
+  };
+
+  // Function to handle closing flashcard modal
+  const closeFlashcardModal = () => {
+    setIsFlashcardModalOpen(false);
+  };
+
+  // Function to handle closing flashcards
+  const closeFlashcards = () => {
+    setShowFlashcards(false);
   };
 
   // Update the file name that is displayed at the top of the study guide
@@ -609,6 +646,7 @@ const Study = () => {
       editors: [currentUser.uid],
       isPublic: false,
       gotFromPublic: true,
+      hasFlashCards: false,
     };
 
     const studyGuideId = await uploadStudyGuideToFirebase(studyGuideClone);
@@ -731,6 +769,14 @@ const Study = () => {
               size="xl"
               title="Share"
               onClick={handleShareClick}
+            />
+          )}
+          {studyGuide.createdBy === currentUser?.uid && (
+            <StyledFontAwesomeIcon
+              icon={faNoteSticky}
+              size="xl"
+              title={hasFlashCards ? "View Flashcards" : "Create Flashcards"}
+              onClick={handleFlashcardClick}
             />
           )}
           {studyGuide.isPublic &&
@@ -1115,6 +1161,38 @@ const Study = () => {
           />
         }
       />
+      <CreateFlashcardModal
+        studyGuideId={id}
+        studyGuide={studyGuide.extractedData}
+        isOpen={isFlashcardModalOpen}
+        onRequestClose={closeFlashcardModal}
+        onFlashcardsCreated={(cards) => {
+          setFlashcards(cards);
+          setShowFlashcards(true);
+          setHasFlashCards(true);
+        }}
+        icon={
+          <FontAwesomeIcon
+            icon={faNoteSticky}
+            size="3x"
+            color={theme.primary}
+          />
+        }
+      />
+      {showFlashcards && flashcards && (
+        <FlashcardViewer
+          flashcards={flashcards}
+          isOpen={showFlashcards}
+          onRequestClose={closeFlashcards}
+          icon={
+            <FontAwesomeIcon
+              icon={faNoteSticky}
+              size="3x"
+              color={theme.primary}
+            />
+          }
+        />
+      )}
       <ConfirmationModal
         isOpen={isDiscardEditsDialogOpen}
         onClose={() => setIsDiscardEditsDialogOpen(false)}
