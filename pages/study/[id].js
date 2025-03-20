@@ -1163,11 +1163,13 @@ const Study = () => {
       />
       <CreateFlashcardModal
         studyGuideId={id}
+        studyGuide={studyGuide.extractedData}
         isOpen={isFlashcardModalOpen}
         onRequestClose={closeFlashcardModal}
         onFlashcardsCreated={(cards) => {
           setFlashcards(cards);
           setShowFlashcards(true);
+          setHasFlashCards(true);
         }}
         icon={
           <FontAwesomeIcon

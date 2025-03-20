@@ -49,61 +49,64 @@ const FlashcardViewer = ({ flashcards, isOpen, onRequestClose, icon }) => {
   const { question, answer } = flashcards[currentIndex];
 
   return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={onRequestClose}
-        contentLabel="Create Flashcards"
-        style={customStyles}
-      >
-        <ModalContent>
-          {icon}
-          <ModalTitle>Flashcards</ModalTitle>
-          <Flashcard question={question} answer={answer} />
-          <ButtonSection>
-            <Button
-              onClick={onCloseClicked}
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              padding="12px"
-              fontSize={({ theme }) => theme.fontSize.secondary}
-              textColor={({ theme }) => theme.gray}
-              hoverTextColor={({ theme }) => theme.primary}
-              style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
-            >
-              Close
-            </Button>
-            <Button
-              onClick={handlePrev}
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              padding="12px"
-              fontSize={({ theme }) => theme.fontSize.secondary}
-              textColor={({ theme }) => theme.gray}
-              hoverTextColor={({ theme }) => theme.primary}
-              style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
-            >
-              Previous
-            </Button>
-            <Button
-              onClick={handleNext}
-              backgroundColor="transparent"
-              hoverBackgroundColor="transparent"
-              padding="12px"
-              fontSize={({ theme }) => theme.fontSize.secondary}
-              textColor={({ theme }) => theme.gray}
-              hoverTextColor={({ theme }) => theme.primary}
-              style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
-            >
-              Next
-            </Button>
-            <p>
-              Card {currentIndex + 1} of {flashcards.length}{" "}
-            </p>
-          </ButtonSection>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Create Flashcards"
+      style={customStyles}
+    >
+      <ModalContent>
+        {icon}
+        <ModalTitle>Flashcards</ModalTitle>
+        {/* Pass currentIndex to reset answer state when card changes */}
+        <Flashcard
+          question={question}
+          answer={answer}
+          cardIndex={currentIndex}
+        />
+        <ButtonSection>
+          <Button
+            onClick={onCloseClicked}
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            padding="12px"
+            fontSize={({ theme }) => theme.fontSize.secondary}
+            textColor={({ theme }) => theme.gray}
+            hoverTextColor={({ theme }) => theme.primary}
+            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
+          >
+            Close
+          </Button>
+          <Button
+            onClick={handlePrev}
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            padding="12px"
+            fontSize={({ theme }) => theme.fontSize.secondary}
+            textColor={({ theme }) => theme.gray}
+            hoverTextColor={({ theme }) => theme.primary}
+            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={handleNext}
+            backgroundColor="transparent"
+            hoverBackgroundColor="transparent"
+            padding="12px"
+            fontSize={({ theme }) => theme.fontSize.secondary}
+            textColor={({ theme }) => theme.gray}
+            hoverTextColor={({ theme }) => theme.primary}
+            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
+          >
+            Next
+          </Button>
+          <CardNumber>
+            Card {currentIndex + 1} of {flashcards.length}
+          </CardNumber>
+        </ButtonSection>
+      </ModalContent>
+    </Modal>
   );
 };
 
@@ -129,6 +132,10 @@ const ModalTitle = styled.p`
   font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
+`;
+
+const CardNumber = styled.p`
+  color: ${({ theme }) => theme.gray};
 `;
 
 export default FlashcardViewer;

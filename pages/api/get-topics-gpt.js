@@ -17,9 +17,7 @@ export default async function getTopics(req, res) {
 
   const slidesData = req.body; // Get the slides data from the request body
   const userMessage1 = `
-    I am providing you with a string of text extracted from a PowerPoint presentation. Here is the string: ${JSON.stringify(
-      slidesData
-    )}
+    I am providing you with a string of text extracted from a PowerPoint presentation below.
     Please analyze the text and develop a comprehensive learning plan for students. Based off of the comprehensive learning plan you develop, create the following:
     1. **Identifying Topics**:
       - Identify and list the most important topics for the slides.
@@ -47,6 +45,8 @@ export default async function getTopics(req, res) {
     ...
     }
     Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two.
+    
+    Here is the powerpoint: ${JSON.stringify(slidesData)}
 `;
 
   try {

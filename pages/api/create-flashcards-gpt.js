@@ -19,12 +19,20 @@ export default async function createContent(req, res) {
 
   // Creating the user message for examples
   const userMessage = `
-    I am providing you with text from a PowerPoint. I want you to generate a set of Q&A flashcards 
-    that can be used for exam study. Please produce valid JSON in the form (no code fences, no extra text):
+    Below is the text extracted from a PowerPoint presentation.
+    Based on this text, please generate a set of Q&A flashcards for exam study and extract key terms with their definitions.
+    Please produce valid JSON in the form (no code fences, no extra text):
     {
       "question1": "answer1",
       "question2": "answer2",
+      "term1": "definition1",
+      "term2": "definition2"
       ...
+    }
+    For example, if the input text mentions 'Photosynthesis is the process by which plants convert sunlight into energy,' a valid output could be:
+    {
+      "What is photosynthesis?": "The process by which plants convert sunlight into energy.",
+      "Photosynthesis": "The process by which plants convert sunlight into energy."
     }
     Here is the text from the slideshow: ${JSON.stringify(data)}
   `;

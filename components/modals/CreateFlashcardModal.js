@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
-import { createFlashcards, fetchStudyGuide } from "@/firebase/database";
+import { createFlashcards } from "@/firebase/database";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { toast } from "react-toastify";
 import Button from "../Button";
 
@@ -9,12 +10,19 @@ Modal.setAppElement("#__next");
 
 const CreateFlashcardModal = ({
   studyGuideId,
+  studyGuide,
   isOpen,
   onRequestClose,
   onFlashcardsCreated,
   icon,
 }) => {
+  const [loadingPercentage, setLoadingPercentage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
+
+  const getRandomInRange = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   const customStyles = {
     content: {
@@ -36,7 +44,13 @@ const CreateFlashcardModal = ({
 
   // Create the flashcards for the associated study guide
   const onCreateClicked = async () => {
-    let studyGuide = await fetchStudyGuide(studyGuideId);
+    setIsLoading(true);
+    const interval = setInterval(() => {
+      setLoadingPercentage((prev) => {
+        const newPercentage = prev + getRandomInRange(3, 5);
+        return newPercentage > 100 ? 100 : newPercentage;
+      });
+    }, 1000);
 
     const response = await fetch("/api/create-flashcards-gpt", {
       method: "POST",
@@ -44,7 +58,7 @@ const CreateFlashcardModal = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        text: studyGuide.fetchedStudyGuide.extractedData,
+        text: studyGuide,
       }),
     });
 
@@ -56,6 +70,9 @@ const CreateFlashcardModal = ({
     }));
 
     await createFlashcards(studyGuideId, newFlashcards);
+
+    setIsLoading(false);
+    clearInterval(interval);
 
     toast.success("Flashcards Created Successfully");
 
@@ -79,6 +96,22 @@ const CreateFlashcardModal = ({
         <ModalContent>
           {icon}
           <ModalTitle>Create Flashcards</ModalTitle>
+          {isLoading ? (
+            <Overlay>
+              <ProgressWrapper>
+                <CircularProgressbar
+                  value={loadingPercentage}
+                  text={`${loadingPercentage}%`}
+                  styles={buildStyles({
+                    pathColor: theme.primary,
+                    textColor: theme.black,
+                  })}
+                />
+              </ProgressWrapper>
+            </Overlay>
+          ) : (
+            <></>
+          )}
           <ButtonSection>
             <Button
               onClick={onCloseClicked}
@@ -132,6 +165,24 @@ const ModalTitle = styled.p`
   font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+const ProgressWrapper = styled.div`
+  width: 100px;
+  height: 100px;
 `;
 
 export default CreateFlashcardModal;
