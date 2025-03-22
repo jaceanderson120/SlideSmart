@@ -33,7 +33,6 @@ import Head from "next/head";
 import PageTitle from "@/components/page/PageTitle";
 import IconButton from "@/components/IconButton";
 import { Trash2 } from "lucide-react";
-import { Tab } from "@mui/material";
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
