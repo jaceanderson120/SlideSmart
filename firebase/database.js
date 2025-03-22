@@ -8,6 +8,7 @@ import {
   getDoc,
   getDocs,
   increment,
+  limit,
   query,
   runTransaction,
   setDoc,
@@ -324,8 +325,23 @@ const updateStudyGuideTopics = async (id, topics) => {
 // Input: study guide ID
 // Output: None
 const updateStudyGuideHasFlashcards = async (id) => {
-  const studyGuideDocRef = doc(db, "studyGuides", id);
-  await updateDoc(studyGuideDocRef, { hasFlashCards: true });
+  try {
+    // Query to check if any flashcards exist for this study guide
+    const flashcardsQuery = query(
+      collection(db, "flashcards"),
+      where("studyGuideId", "==", id),
+      limit(1)
+    );
+
+    const querySnapshot = await getDocs(flashcardsQuery);
+    const hasFlashCards = !querySnapshot.empty;
+
+    // Update the study guide document
+    const studyGuideDocRef = doc(db, "studyGuides", id);
+    await updateDoc(studyGuideDocRef, { hasFlashCards: hasFlashCards });
+  } catch (error) {
+    console.error("Error updating study guide hasFlashCards flag:", error);
+  }
 };
 
 // Delete a study guide from Firestore
@@ -505,6 +521,22 @@ const createFlashcards = async (studyGuideId, flashcardsArray) => {
   }
 };
 
+const createIndividualFlashcard = async (studyGuideId, question, answer) => {
+  try {
+    await runTransaction(db, async (transaction) => {
+      const flashcardRef = doc(collection(db, "flashcards"));
+      transaction.set(flashcardRef, {
+        studyGuideId: studyGuideId,
+        question: question,
+        answer: answer,
+        createdAt: new Date(),
+      });
+    });
+  } catch (error) {
+    console.error("Error creating flashcard:", error);
+  }
+};
+
 // Function for fetching all of the flashcards (just question & answer) for a specific studyguide
 const fetchFlashcards = async (studyGuideId) => {
   try {
@@ -520,6 +552,7 @@ const fetchFlashcards = async (studyGuideId) => {
       const data = doc.data();
       // Only push question and answer
       flashcards.push({
+        id: doc.id,
         question: data.question,
         answer: data.answer,
       });
@@ -529,6 +562,29 @@ const fetchFlashcards = async (studyGuideId) => {
   } catch (error) {
     console.error("Error fetching flashcards:", error);
     return [];
+  }
+};
+
+const deleteFlashcard = async (flashCardId) => {
+  try {
+    // Get the flashcard document to retrieve its studyGuideId
+    const flashcardRef = doc(db, "flashcards", flashCardId);
+    const flashcardSnap = await getDoc(flashcardRef);
+
+    if (!flashcardSnap.exists()) {
+      console.error("Flashcard not found");
+      return;
+    }
+
+    const studyGuideId = flashcardSnap.data().studyGuideId;
+
+    // Delete the flashcard
+    await deleteDoc(flashcardRef);
+
+    // Check if this was the last flashcard for this study guide
+    await updateStudyGuideHasFlashcards(studyGuideId);
+  } catch (error) {
+    console.error("Error deleting flashcard:", error);
   }
 };
 
@@ -551,5 +607,8 @@ export {
   updateUserDarkMode,
   getUserDarkMode,
   createFlashcards,
+  createIndividualFlashcard,
   fetchFlashcards,
+  deleteFlashcard,
+  updateStudyGuideHasFlashcards,
 };

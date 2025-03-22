@@ -69,14 +69,17 @@ const CreateFlashcardModal = ({
       answer: a,
     }));
 
-    await createFlashcards(studyGuideId, newFlashcards);
+    const createdFlashcardsWithIds = await createFlashcards(
+      studyGuideId,
+      newFlashcards
+    );
 
     setIsLoading(false);
     clearInterval(interval);
 
     toast.success("Flashcards Created Successfully");
 
-    onFlashcardsCreated(newFlashcards);
+    onFlashcardsCreated(createdFlashcardsWithIds);
     onRequestClose();
   };
 

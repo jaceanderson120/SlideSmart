@@ -3,7 +3,8 @@ import styled, { useTheme } from "styled-components";
 import Button from "../Button";
 
 const Flashcard = ({ question, answer, cardIndex }) => {
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showFront, setShowFront] = useState(true);
+  const [showBack, setShowBack] = useState(false);
 
   const theme = useTheme();
   const customStyles = {
@@ -26,17 +27,19 @@ const Flashcard = ({ question, answer, cardIndex }) => {
 
   // Reset answer visibility when a new card is loaded
   useEffect(() => {
-    setShowAnswer(false);
+    setShowFront(true);
+    setShowBack(false);
   }, [cardIndex]);
 
   const toggleAnswer = () => {
-    setShowAnswer((prev) => !prev);
+    setShowFront((prev) => !prev);
+    setShowBack((prev) => !prev);
   };
 
   return (
     <>
-      <QuestionHolder>{question}</QuestionHolder>
-      {showAnswer && <AnswerHolder>{answer}</AnswerHolder>}
+      {showFront && <QuestionHolder>{question}</QuestionHolder>}
+      {showBack && <AnswerHolder>{answer}</AnswerHolder>}
       <Button
         onClick={toggleAnswer}
         backgroundColor="transparent"
@@ -47,7 +50,7 @@ const Flashcard = ({ question, answer, cardIndex }) => {
         hoverTextColor={({ theme }) => theme.primary}
         style={{ border: `1px solid ${({ theme }) => theme.white}` }}
       >
-        {showAnswer ? "Hide Answer" : "Show Answer"}
+        Flip
       </Button>
     </>
   );
