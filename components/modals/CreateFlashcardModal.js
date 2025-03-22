@@ -65,8 +65,8 @@ const CreateFlashcardModal = ({
     const rawData = await response.json();
 
     const newFlashcards = Object.entries(rawData).map(([q, a]) => ({
-      question: q,
-      answer: a,
+      front: q,
+      back: a,
     }));
 
     const createdFlashcardsWithIds = await createFlashcards(
