@@ -54,6 +54,7 @@ import {
 } from "@/utils/generateStudyGuideSections";
 import StudyGuideTopics from "@/components/studyGuide/StudyGuideTopics";
 import { useSearchParams } from "next/navigation";
+import ColorModeButton from "@/components/page/ColorModeButton";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -789,6 +790,7 @@ const Study = () => {
               onClick={handleChatbotToggle}
             />
           )}
+          <ColorModeButton />
           {deviceWidth > 768 && (
             <CustomMenu
               triggerElement={
