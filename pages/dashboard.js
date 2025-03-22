@@ -31,6 +31,9 @@ import CreateModal from "@/components/modals/CreateModal";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import Head from "next/head";
 import PageTitle from "@/components/page/PageTitle";
+import IconButton from "@/components/IconButton";
+import { Trash2 } from "lucide-react";
+import { Tab } from "@mui/material";
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -332,160 +335,154 @@ const Dashboard = () => {
                     onUpload={handleUploadSubmit}
                   ></CreateModal>
                 </TopContainer>
+                <FilterSortContainer>
+                  <FilterContainer>
+                    <FilterLabel>Filter:</FilterLabel>
+                    <CustomMenu
+                      triggerElement={
+                        <MenuTrigger>
+                          {filter === "all"
+                            ? "All"
+                            : filter === "owned"
+                            ? "Owned by Me"
+                            : filter === "shared"
+                            ? "Shared with Me"
+                            : "Downloaded Publically"}
+                        </MenuTrigger>
+                      }
+                      menuItems={[
+                        { name: "All", onClick: setFilterAll },
+                        { name: "Owned by Me", onClick: setFilterOwned },
+                        { name: "Shared with Me", onClick: setFilterShared },
+                        {
+                          name: "Downloaded Publically",
+                          onClick: setFilterPublic,
+                        },
+                      ]}
+                      arrow={true}
+                    />
+                  </FilterContainer>
+                  <FilterContainer>
+                    <FilterLabel>Sort:</FilterLabel>
+                    <CustomMenu
+                      triggerElement={
+                        <MenuTrigger>
+                          {sorting === "A-Z"
+                            ? "A-Z"
+                            : sorting === "Z-A"
+                            ? "Z-A"
+                            : sorting === "Date Created"
+                            ? "Date Created"
+                            : "Last Modified"}
+                        </MenuTrigger>
+                      }
+                      menuItems={[
+                        { name: "A-Z", onClick: setSortAtoZ },
+                        { name: "Z-A", onClick: setSortZtoA },
+                        { name: "Date Created", onClick: setSortDateCreated },
+                        {
+                          name: "Last Modified",
+                          onClick: setSortDateModified,
+                        },
+                      ]}
+                      arrow={true}
+                    />
+                  </FilterContainer>
+                </FilterSortContainer>
                 <TableContainer>
-                  <FilterSortContainer>
-                    <FilterContainer>
-                      <FilterLabel>Filter:</FilterLabel>
-                      <CustomMenu
-                        triggerElement={
-                          <MenuTrigger>
-                            {filter === "all"
-                              ? "All"
-                              : filter === "owned"
-                              ? "Owned by Me"
-                              : filter === "shared"
-                              ? "Shared with Me"
-                              : "Downloaded Publically"}
-                          </MenuTrigger>
-                        }
-                        menuItems={[
-                          { name: "All", onClick: setFilterAll },
-                          { name: "Owned by Me", onClick: setFilterOwned },
-                          { name: "Shared with Me", onClick: setFilterShared },
-                          {
-                            name: "Downloaded Publically",
-                            onClick: setFilterPublic,
-                          },
-                        ]}
-                        arrow={true}
-                      />
-                    </FilterContainer>
-                    <FilterContainer>
-                      <FilterLabel>Sort:</FilterLabel>
-                      <CustomMenu
-                        triggerElement={
-                          <MenuTrigger>
-                            {sorting === "A-Z"
-                              ? "A-Z"
-                              : sorting === "Z-A"
-                              ? "Z-A"
-                              : sorting === "Date Created"
-                              ? "Date Created"
-                              : "Last Modified"}
-                          </MenuTrigger>
-                        }
-                        menuItems={[
-                          { name: "A-Z", onClick: setSortAtoZ },
-                          { name: "Z-A", onClick: setSortZtoA },
-                          { name: "Date Created", onClick: setSortDateCreated },
-                          {
-                            name: "Last Modified",
-                            onClick: setSortDateModified,
-                          },
-                        ]}
-                        arrow={true}
-                      />
-                    </FilterContainer>
-                  </FilterSortContainer>
-                  <ColumnNamesContainer>
-                    <ColumnName $flex={2}>Name</ColumnName>
-                    <ColumnName $flex={1}>Created</ColumnName>
-                    <ColumnName $flex={1}>Permission</ColumnName>
-                    <ColumnName $flex={1}>Contributors</ColumnName>
-                    <ColumnName $flex={1}>Visibility</ColumnName>
-                    <OptionsPadding />
-                  </ColumnNamesContainer>
-                  <StudyGuideListContainer>
-                    {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
-                      <ul>
-                        {filteredStudyGuides.map((guide) => {
-                          return (
-                            <StudyGuideListItem key={guide.id}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <Th>Name</Th>
+                        <Th>Created</Th>
+                        <Th>Permission</Th>
+                        <Th>Contributors</Th>
+                        <Th>Visibility</Th>
+                        <Th>Options</Th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
+                        filteredStudyGuides.map((guide) => (
+                          <tr key={guide.id}>
+                            <Td>
                               <StudyGuideLink
                                 onClick={() => handleView(guide.id)}
                               >
                                 {guide.fileName}
                               </StudyGuideLink>
-                              <StudyGuideCreated>
-                                {guide.createdAt}
-                              </StudyGuideCreated>
-                              <StudyGuidePermission>
-                                {guide.createdBy === currentUser?.uid
-                                  ? "Owner"
-                                  : guide.editors.includes(currentUser?.uid)
-                                  ? "Editor"
-                                  : "Viewer"}
-                              </StudyGuidePermission>
-                              <StudyGuideContributors>
-                                {guide.contributors.map((contributor) => {
-                                  return (
-                                    <Contributor key={contributor}>
-                                      <UserIcon
-                                        initials={
-                                          displayNames[contributor]
-                                            ? displayNames[contributor]
-                                                .split(" ")
-                                                .map((name) => name[0])
-                                                .join("")
-                                            : "?"
-                                        }
-                                        data-tooltip-id={`contributor-tooltip-${contributor}`}
-                                        data-tooltip-content={
-                                          displayNames[contributor] ||
-                                          "Loading..."
-                                        }
-                                        data-tooltip-place="left"
-                                      />
-                                      <Tooltip
-                                        id={`contributor-tooltip-${contributor}`}
-                                        // Doesn't work with styled-components
-                                        style={{
-                                          backgroundColor: theme.primary,
-                                          fontSize: theme.fontSize.secondary,
-                                          padding: "8px",
-                                        }}
-                                      />
-                                    </Contributor>
-                                  );
-                                })}
-                              </StudyGuideContributors>
-                              <StudyGuideVisibility>
-                                {guide.isPublic ? "Public" : "Private"}
-                              </StudyGuideVisibility>
-                              {guide.createdBy === currentUser?.uid ? (
-                                <StudyGuideDeleteButton
+                            </Td>
+                            <Td>{guide.createdAt}</Td>
+                            <Td>
+                              {guide.createdBy === currentUser?.uid
+                                ? "Owner"
+                                : guide.editors.includes(currentUser?.uid)
+                                ? "Editor"
+                                : "Viewer"}
+                            </Td>
+                            <Td>
+                              <ContributorContainer>
+                                {guide.contributors.map((contributor) => (
+                                  <Contributor key={contributor}>
+                                    <UserIcon
+                                      initials={
+                                        displayNames[contributor]
+                                          ? displayNames[contributor]
+                                              .split(" ")
+                                              .map((name) => name[0])
+                                              .join("")
+                                          : "?"
+                                      }
+                                      data-tooltip-id={`contributor-tooltip-${contributor}`}
+                                      data-tooltip-content={
+                                        displayNames[contributor] ||
+                                        "Loading..."
+                                      }
+                                      data-tooltip-place="left"
+                                    />
+                                    <Tooltip
+                                      id={`contributor-tooltip-${contributor}`}
+                                      // Doesn't work with styled-components
+                                      style={{
+                                        backgroundColor: theme.primary,
+                                        fontSize: theme.fontSize.secondary,
+                                        padding: "8px",
+                                      }}
+                                    />
+                                  </Contributor>
+                                ))}
+                              </ContributorContainer>
+                            </Td>
+                            <Td>{guide.isPublic ? "Public" : "Private"}</Td>
+                            <Td>
+                              {guide.createdBy === currentUser?.uid && (
+                                <IconButton
                                   onClick={() => {
                                     setIsDeleteDialogOpen(true);
                                     setGuideToDelete(guide);
                                   }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrashCan}
-                                    size="2x"
-                                    color={theme.black}
-                                  />
-                                </StudyGuideDeleteButton>
-                              ) : (
-                                <OptionsPadding />
+                                  icon={<Trash2 />}
+                                  title="Delete Study Guide"
+                                />
                               )}
-                            </StudyGuideListItem>
-                          );
-                        })}
-                      </ul>
-                    ) : !studyGuidesLoaded ? (
-                      <StudyGuidesInfoText>
-                        Finding your study guides...
-                      </StudyGuidesInfoText>
-                    ) : displayNamesLoaded ? (
-                      <StudyGuidesInfoText>
-                        No study guides found.
-                      </StudyGuidesInfoText>
-                    ) : (
-                      <StudyGuidesInfoText>
-                        Loading contributors...
-                      </StudyGuidesInfoText>
-                    )}
-                  </StudyGuideListContainer>
+                            </Td>
+                          </tr>
+                        ))
+                      ) : !studyGuidesLoaded ? (
+                        <tr>
+                          <Td colSpan="6">Finding your study guides...</Td>
+                        </tr>
+                      ) : displayNamesLoaded ? (
+                        <tr>
+                          <Td colSpan="6">No study guides found.</Td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <Td colSpan="6">Loading contributors...</Td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
                 </TableContainer>
               </Section>
               <ConfirmationModal
@@ -515,6 +512,31 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid ${({ theme }) => theme.gray};
+`;
+
+const Th = styled.th`
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.gray};
+  text-align: left;
+  background-color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.black};
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+`;
+
+const Td = styled.td`
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.gray};
+  color: ${({ theme }) => theme.black};
+  text-align: left;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -574,7 +596,6 @@ const ButtonContainer = styled.div`
 const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 75%;
   overflow-y: auto;
 
   @media (max-width: 768px) {
@@ -583,118 +604,22 @@ const TableContainer = styled.div`
   }
 `;
 
-const ColumnNamesContainer = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const ColumnName = styled.h6`
-  margin-bottom: 16px;
-  display: flex;
-  flex: ${(props) => props.$flex};
-  font-size: ${({ theme }) => theme.fontSize.default};
-  font-weight: bold;
-`;
-
-const OptionsPadding = styled.div`
-  display: flex;
-  flex: 0.1;
-`;
-
-const StudyGuideListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  background-color: ${({ theme }) => theme.white};
-  overflow: scroll;
-  scrollbar-color: ${({ theme }) => theme.primary70} transparent;
-  border-radius: 10px;
-  box-shadow: 0px 2px 10px ${({ theme }) => theme.shadow};
-`;
-
-const StudyGuideListItem = styled.div`
-  display: flex;
-  padding: 8px;
-  border-bottom: 1px solid ${({ theme }) => theme.gray};
-  align-items: center;
-  width: 100%;
-  gap: 16px;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  @media (max-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 10px;
-  }
-`;
-
 const StudyGuideLink = styled.div`
-  display: block;
-  flex: 2;
   cursor: pointer;
-  transition: background-color 0.3s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
   font-size: ${({ theme }) => theme.fontSize.default};
-  transition: color 0.3s, transform 0.3s;
-  min-width: 0;
-
+  transition: color 0.3s;
   &:hover {
     color: ${({ theme }) => theme.primary};
-    transform: scale(1.02);
   }
 `;
 
-const StudyGuideCreated = styled.div`
+const ContributorContainer = styled.div`
   display: flex;
-  flex: 1;
-  color: ${({ theme }) => theme.gray};
-  font-size: ${({ theme }) => theme.fontSize.default};
-`;
-
-const StudyGuidePermission = styled.div`
-  display: flex;
-  flex: 1;
-  color: ${({ theme }) => theme.gray};
-  font-size: ${({ theme }) => theme.fontSize.default};
-`;
-
-const StudyGuideContributors = styled.div`
-  display: flex;
-  flex: 1;
-  color: ${({ theme }) => theme.gray};
-`;
-
-const StudyGuideVisibility = styled.div`
-  display: flex;
-  flex: 1;
-  color: ${({ theme }) => theme.gray};
-  font-size: ${({ theme }) => theme.fontSize.default};
+  gap: 8px;
 `;
 
 const Contributor = styled.div`
-  margin-right: 8px;
   font-size: ${({ theme }) => theme.fontSize.heading};
-`;
-
-const StudyGuideDeleteButton = styled.button`
-  display: flex;
-  flex: 0.1;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-
-  &:hover svg {
-    color: ${({ theme }) => theme.primary};
-    transition: color 0.3s;
-  }
 `;
 
 const Overlay = styled.div`
@@ -713,11 +638,6 @@ const Overlay = styled.div`
 const ProgressWrapper = styled.div`
   width: 100px;
   height: 100px;
-`;
-
-const StudyGuidesInfoText = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.default};
-  margin: 16px;
 `;
 
 const FilterSortContainer = styled.div`
