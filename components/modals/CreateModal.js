@@ -96,10 +96,7 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
     >
       <ModalContent>
         <ModalTitle>Create a New Study Guide</ModalTitle>
-        <ModalText>
-          Please select a file to upload and choose what you would like to
-          include in the study guide.
-        </ModalText>
+        <ModalText>Please select a file to upload.</ModalText>
         <FileInput type="file" onChange={handleFileChange} ref={fileInputRef} />
         {!topic && (
           <Button
@@ -122,45 +119,67 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
           />
         )}
         <ToggleSection>
+          <ModalText>
+            Please choose whether you would like to make this study guide public
+            or private.
+          </ModalText>
+          <ButtonArea>
+            <Button
+              onClick={() => setIsPublic(true)}
+              backgroundColor={isPublic ? theme.primary : theme.white}
+              textColor={isPublic ? theme.white : theme.black}
+            >
+              Public
+            </Button>
+            <ModalText>OR</ModalText>
+            <Button
+              onClick={() => setIsPublic(false)}
+              backgroundColor={!isPublic ? theme.primary : theme.white}
+              textColor={!isPublic ? theme.white : theme.black}
+            >
+              Private
+            </Button>
+          </ButtonArea>
+        </ToggleSection>
+        <ToggleSection>
+          <ModalText>
+            What would you like to include in the study guide?
+          </ModalText>
           <ToggleArea>
-            <ModalText>{isPublic ? "Public" : "Private"}</ModalText>
-            <StyledFontAwesomeIcon
-              icon={isPublic ? faToggleOn : faToggleOff}
-              size="xl"
-              onClick={() => setIsPublic(!isPublic)}
-            />
-          </ToggleArea>
-          <ToggleArea>
-            <ModalText>Include Videos</ModalText>
-            <StyledFontAwesomeIcon
+            <ToggleButton
               icon={includeVideos ? faToggleOn : faToggleOff}
-              size="xl"
+              style={{ color: includeVideos ? theme.primary : theme.gray }}
+              size="2xl"
               onClick={() => setIncludeVideos(!includeVideos)}
             />
+            <ModalText>Videos</ModalText>
           </ToggleArea>
           <ToggleArea>
-            <ModalText>Include Examples</ModalText>
-            <StyledFontAwesomeIcon
+            <ToggleButton
               icon={includeExamples ? faToggleOn : faToggleOff}
-              size="xl"
+              style={{ color: includeExamples ? theme.primary : theme.gray }}
+              size="2xl"
               onClick={() => setIncludeExamples(!includeExamples)}
             />
+            <ModalText>Examples</ModalText>
           </ToggleArea>
           <ToggleArea>
-            <ModalText>Include Q/A</ModalText>
-            <StyledFontAwesomeIcon
+            <ToggleButton
               icon={includeQuestions ? faToggleOn : faToggleOff}
-              size="xl"
+              style={{ color: includeQuestions ? theme.primary : theme.gray }}
+              size="2xl"
               onClick={() => setIncludeQuestions(!includeQuestions)}
             />
+            <ModalText>Practice Questions</ModalText>
           </ToggleArea>
           <ToggleArea>
-            <ModalText>Include Resources</ModalText>
-            <StyledFontAwesomeIcon
+            <ToggleButton
               icon={includeResources ? faToggleOn : faToggleOff}
-              size="xl"
+              style={{ color: includeResources ? theme.primary : theme.gray }}
+              size="2xl"
               onClick={() => setIncludeResources(!includeResources)}
             />
+            <ModalText>Extra Resources</ModalText>
           </ToggleArea>
         </ToggleSection>
         <ButtonSection>
@@ -193,13 +212,8 @@ const CreateModal = ({ isOpen, onRequestClose, onUpload }) => {
   );
 };
 
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+const ToggleButton = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: ${({ theme }) => theme.gray};
-  &:hover {
-    transition: color 0.3s;
-    color: ${({ theme }) => theme.primary};
-  }
 `;
 
 const ButtonSection = styled.div`
@@ -251,16 +265,28 @@ const FileInput = styled.input`
 const ToggleSection = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   width: 100%;
+`;
+
+const ButtonArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 16px;
+  margin-top: 8px;
 `;
 
 const ToggleArea = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 50%;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
 `;
 
 export default CreateModal;
