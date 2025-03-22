@@ -99,6 +99,10 @@ const CreateFlashcardModal = ({
         <ModalContent>
           {icon}
           <ModalTitle>Create Flashcards</ModalTitle>
+          <ModalText>
+            SlideSmart generates flashcards for you based on the content of your
+            study guide.
+          </ModalText>
           {isLoading ? (
             <Overlay>
               <ProgressWrapper>
@@ -168,6 +172,15 @@ const ModalTitle = styled.p`
   font-size: ${({ theme }) => theme.fontSize.subheading};
   font-weight: bold;
   color: ${({ theme }) => theme.black};
+`;
+
+const ModalText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.secondary};
+  line-height: 1.3;
+  color: ${({ theme }) => theme.gray};
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 `;
 
 const Overlay = styled.div`

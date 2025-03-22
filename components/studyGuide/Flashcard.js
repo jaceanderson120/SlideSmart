@@ -4,68 +4,40 @@ import Button from "../Button";
 
 const Flashcard = ({ front, back, cardIndex }) => {
   const [showFront, setShowFront] = useState(true);
-  const [showBack, setShowBack] = useState(false);
-
-  const theme = useTheme();
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: theme.lightGray,
-      border: "none",
-      boxShadow: `4px 4px 4px ${theme.shadow}`,
-      width: "90%",
-      maxWidth: "400px",
-      height: "auto",
-      padding: "24px",
-      borderRadius: "16px",
-    },
-  };
 
   // Reset front visibility when a new card is loaded
   useEffect(() => {
     setShowFront(true);
-    setShowBack(false);
   }, [cardIndex]);
 
   const toggleSide = () => {
     setShowFront((prev) => !prev);
-    setShowBack((prev) => !prev);
   };
 
   return (
-    <>
-      {showFront && <FrontHolder>{front}</FrontHolder>}
-      {showBack && <BackHolder>{back}</BackHolder>}
-      <Button
-        onClick={toggleSide}
-        backgroundColor="transparent"
-        hoverBackgroundColor="transparent"
-        padding="12px"
-        fontSize={({ theme }) => theme.fontSize.secondary}
-        textColor={({ theme }) => theme.gray}
-        hoverTextColor={({ theme }) => theme.primary}
-        style={{ border: `1px solid ${({ theme }) => theme.white}` }}
-      >
-        Flip
-      </Button>
-    </>
+    <FlashcardContainer onClick={toggleSide}>
+      <FlashcardText>{showFront ? front : back}</FlashcardText>
+    </FlashcardContainer>
   );
 };
 
-const FrontHolder = styled.div`
-  color: ${({ theme }) => theme.black};
-  font-weight: bold;
-  margin-bottom: 12px;
+const FlashcardContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 300px;
+  background-color: ${({ theme }) => theme.white};
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px ${({ theme }) => theme.shadow};
 `;
 
-const BackHolder = styled.div`
+const FlashcardText = styled.div`
   color: ${({ theme }) => theme.black};
-  font-weight: bold;
+  font-size: ${({ theme }) => theme.fontSize.subheading};
   margin-bottom: 12px;
+  cursor: pointer;
 `;
 
 export default Flashcard;
