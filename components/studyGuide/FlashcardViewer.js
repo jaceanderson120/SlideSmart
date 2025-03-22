@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Button";
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
+import {
+  createIndividualFlashcard,
+  deleteFlashcard,
+} from "../../firebase/database";
 import Flashcard from "./Flashcard";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 
-const FlashcardViewer = ({ flashcards, isOpen, onRequestClose, icon }) => {
+const FlashcardViewer = ({
+  studyGuideId,
+  flashcards,
+  isOpen,
+  onRequestClose,
+  onFlashcardsChanged,
+  icon,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [newAnswer, setNewAnswer] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localFlashcards, setLocalFlashcards] = useState(flashcards);
+
+  useEffect(() => {
+    setLocalFlashcards(flashcards);
+  }, [flashcards]);
 
   const theme = useTheme();
   const customStyles = {
@@ -38,6 +60,93 @@ const FlashcardViewer = ({ flashcards, isOpen, onRequestClose, icon }) => {
     );
   };
 
+  const handleAddFlashcard = async () => {
+    if (newQuestion.trim() === "" || newAnswer.trim() === "") {
+      toast("Please enter a question and answer.");
+      return;
+    }
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+
+      // create the flashcard
+      const newFlashcard = await createIndividualFlashcard(
+        studyGuideId,
+        newQuestion.trim(),
+        newAnswer.trim()
+      );
+
+      // Only update local state if we have a valid response with an ID
+      if (newFlashcard && newFlashcard.id) {
+        // Temporarily update local state before backend refresh completes
+        const updatedFlashcards = [...localFlashcards, newFlashcard];
+        setLocalFlashcards(updatedFlashcards);
+      }
+
+      // Reset form
+      setNewQuestion("");
+      setNewAnswer("");
+      setShowAddForm(false);
+
+      // Refresh flashcards list from backend
+      if (onFlashcardsChanged) {
+        onFlashcardsChanged(studyGuideId);
+      }
+    } catch (error) {
+      console.error("Error adding flashcard:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteFlashcard = async () => {
+    if (!localFlashcards || localFlashcards.length === 0) return;
+    if (isSubmitting) return;
+
+    if (localFlashcards.length <= 1) {
+      toast(
+        "You can't delete the last flashcard. Add another one first or delete the study guide."
+      );
+      return;
+    }
+
+    const currentFlashcard = localFlashcards[currentIndex];
+
+    // Make sure we have a valid flashcard with an id
+    if (!currentFlashcard || !currentFlashcard.id) {
+      console.error("Invalid flashcard or missing ID:", currentFlashcard);
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      // delete the flashcard
+      await deleteFlashcard(currentFlashcard.id);
+
+      // Temporarily update local state before backend refresh completes
+      const updatedFlashcards = localFlashcards.filter(
+        (card) => card.id !== currentFlashcard.id
+      );
+      setLocalFlashcards(updatedFlashcards);
+
+      // Adjust index if needed
+      if (currentIndex >= updatedFlashcards.length) {
+        setCurrentIndex(Math.max(0, updatedFlashcards.length - 1));
+      }
+
+      // Refresh flashcards list from backend
+      if (onFlashcardsChanged) {
+        onFlashcardsChanged(studyGuideId);
+      }
+    } catch (error) {
+      console.error("Error deleting flashcard:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const onCloseClicked = () => {
     onRequestClose();
   };
@@ -58,52 +167,115 @@ const FlashcardViewer = ({ flashcards, isOpen, onRequestClose, icon }) => {
       <ModalContent>
         {icon}
         <ModalTitle>Flashcards</ModalTitle>
-        {/* Pass currentIndex to reset answer state when card changes */}
-        <Flashcard
-          question={question}
-          answer={answer}
-          cardIndex={currentIndex}
-        />
+
+        {showAddForm ? (
+          <AddFlashcardForm>
+            <Input
+              placeholder="Question"
+              value={newQuestion}
+              onChange={(e) => setNewQuestion(e.target.value)}
+            />
+            <Textarea
+              placeholder="Answer"
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+              rows={4}
+            />
+            <ButtonRow>
+              <Button
+                onClick={() => setShowAddForm(false)}
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                padding="12px"
+                fontSize={theme.fontSize.secondary}
+                textColor={theme.gray}
+                hoverTextColor={theme.primary}
+                style={{ border: `1px solid ${theme.gray}` }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddFlashcard}
+                backgroundColor={theme.primary}
+                hoverBackgroundColor={theme.primaryDark}
+                padding="12px"
+                fontSize={theme.fontSize.secondary}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Adding..." : "Add Flashcard"}
+              </Button>
+            </ButtonRow>
+          </AddFlashcardForm>
+        ) : (
+          <>
+            <Flashcard
+              question={question}
+              answer={answer}
+              cardIndex={currentIndex}
+            />
+            <ManagementButtonRow>
+              <IconButton
+                onClick={() => setShowAddForm(true)}
+                title="Add Flashcard"
+              >
+                <PlusCircle size={20} color={theme.primary} />
+              </IconButton>
+              <IconButton
+                onClick={handleDeleteFlashcard}
+                title="Delete Flashcard"
+                disabled={isSubmitting}
+              >
+                <Trash2 size={20} color={theme.error || "red"} />
+              </IconButton>
+            </ManagementButtonRow>
+          </>
+        )}
+
         <ButtonSection>
           <Button
             onClick={onCloseClicked}
             backgroundColor="transparent"
             hoverBackgroundColor="transparent"
             padding="12px"
-            fontSize={({ theme }) => theme.fontSize.secondary}
-            textColor={({ theme }) => theme.gray}
-            hoverTextColor={({ theme }) => theme.primary}
-            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
+            fontSize={theme.fontSize.secondary}
+            textColor={theme.gray}
+            hoverTextColor={theme.primary}
+            style={{ border: `1px solid ${theme.gray}` }}
           >
             Close
           </Button>
-          <Button
-            onClick={handlePrev}
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            padding="12px"
-            fontSize={({ theme }) => theme.fontSize.secondary}
-            textColor={({ theme }) => theme.gray}
-            hoverTextColor={({ theme }) => theme.primary}
-            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            padding="12px"
-            fontSize={({ theme }) => theme.fontSize.secondary}
-            textColor={({ theme }) => theme.gray}
-            hoverTextColor={({ theme }) => theme.primary}
-            style={{ border: `1px solid ${({ theme }) => theme.gray}` }}
-          >
-            Next
-          </Button>
-          <CardNumber>
-            Card {currentIndex + 1} of {flashcards.length}
-          </CardNumber>
+
+          {!showAddForm && (
+            <>
+              <Button
+                onClick={handlePrev}
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                padding="12px"
+                fontSize={theme.fontSize.secondary}
+                textColor={theme.gray}
+                hoverTextColor={theme.primary}
+                style={{ border: `1px solid ${theme.gray}` }}
+              >
+                Previous
+              </Button>
+              <Button
+                onClick={handleNext}
+                backgroundColor="transparent"
+                hoverBackgroundColor="transparent"
+                padding="12px"
+                fontSize={theme.fontSize.secondary}
+                textColor={theme.gray}
+                hoverTextColor={theme.primary}
+                style={{ border: `1px solid ${theme.gray}` }}
+              >
+                Next
+              </Button>
+              <CardNumber>
+                Card {currentIndex + 1} of {flashcards.length}
+              </CardNumber>
+            </>
+          )}
         </ButtonSection>
       </ModalContent>
     </Modal>
@@ -136,6 +308,59 @@ const ModalTitle = styled.p`
 
 const CardNumber = styled.p`
   color: ${({ theme }) => theme.gray};
+`;
+
+const AddFlashcardForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+`;
+
+const Input = styled.input`
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.gray};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
+  width: 100%;
+`;
+
+const Textarea = styled.textarea`
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.gray};
+  font-size: ${({ theme }) => theme.fontSize.secondary};
+  width: 100%;
+  resize: vertical;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const ManagementButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: -16px 0;
+`;
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.lightGray};
+  }
 `;
 
 export default FlashcardViewer;

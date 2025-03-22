@@ -213,6 +213,12 @@ const Study = () => {
 
   // Function to handle flashcards click
   const handleFlashcardClick = async () => {
+    if (!hasSpark) {
+      toast.error(
+        "You need to upgrade to the Spark Plan to create flashcards."
+      );
+      return;
+    }
     if (!hasFlashCards) {
       setIsFlashcardModalOpen(true);
     } else {
@@ -393,6 +399,11 @@ const Study = () => {
     delete updatedData.hiddenExplanations[topic];
 
     setStudyGuide(updatedData);
+  };
+
+  const handleFlashcardChange = async (flashcardId) => {
+    let newFlashcards = await fetchFlashcards(flashcardId);
+    setFlashcards(newFlashcards);
   };
 
   // Function to delete a sub section of a topic in the study guide
@@ -1181,9 +1192,11 @@ const Study = () => {
       />
       {showFlashcards && flashcards && (
         <FlashcardViewer
+          studyGuideId={id}
           flashcards={flashcards}
           isOpen={showFlashcards}
           onRequestClose={closeFlashcards}
+          onFlashcardsChanged={handleFlashcardChange}
           icon={
             <FontAwesomeIcon
               icon={faNoteSticky}
