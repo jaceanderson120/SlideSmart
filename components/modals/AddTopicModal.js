@@ -44,7 +44,9 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
     if (hasSpark) {
       setAutoToggle(!autoToggle);
     } else {
-      toast.error("Auto-Generation Tools are only available with Spark!");
+      toast.error(
+        "Auto-Generation Tools are only available with Spark. Please upgrade to access this feature."
+      );
     }
   };
 
@@ -58,6 +60,10 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
       >
         <ModalContent>
           <ModalTitle>Create a Study Guide Topic</ModalTitle>
+          <ModalText>
+            Please enter a topic name and explanation below. For the best
+            experience, explain the topic clearly.
+          </ModalText>
           <ModalInput
             placeholder="Enter a topic name..."
             value={topicName}
@@ -68,18 +74,29 @@ const AddTopicModal = ({ isOpen, onClose, onConfirm }) => {
             value={topicExplanation}
             onChange={(event) => setTopicExplanation(event.target.value)}
           />
-          <ModalText>
-            Please enter a topic name and explanation above. For the best
-            experience, explain the topic clearly.
-          </ModalText>
-          <ToggleArea>
-            <ModalText>Auto-Generate Topic Sections</ModalText>
-            <StyledFontAwesomeIcon
-              icon={autoToggle ? faToggleOn : faToggleOff}
-              size="xl"
-              onClick={handleAutoToggleClick}
-            />
-          </ToggleArea>
+          <ToggleSection>
+            <ModalText>
+              Would you like to auto-generate study guide content for this
+              topic?
+            </ModalText>
+            <ButtonArea>
+              <Button
+                onClick={() => handleAutoToggleClick()}
+                backgroundColor={autoToggle ? theme.primary : theme.white}
+                textColor={autoToggle ? theme.white : theme.black}
+              >
+                Yes
+              </Button>
+              <ModalText>OR</ModalText>
+              <Button
+                onClick={() => handleAutoToggleClick()}
+                backgroundColor={!autoToggle ? theme.primary : theme.white}
+                textColor={!autoToggle ? theme.white : theme.black}
+              >
+                No
+              </Button>
+            </ButtonArea>
+          </ToggleSection>
           <ButtonSection>
             <Button
               onClick={() => {
@@ -173,6 +190,24 @@ const ModalTextArea = styled.textarea`
   height: 100px;
 `;
 
+const ToggleSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+`;
+
+const ButtonArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 16px;
+  margin-top: 8px;
+`;
+
 const ToggleArea = styled.div`
   display: flex;
   gap: 8px;
@@ -181,13 +216,8 @@ const ToggleArea = styled.div`
   align-items: center;
 `;
 
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+const ToggleButton = styled(FontAwesomeIcon)`
   cursor: pointer;
-  color: ${({ theme }) => theme.gray};
-  &:hover {
-    transition: color 0.3s;
-    color: ${({ theme }) => theme.primary};
-  }
 `;
 
 export default AddTopicModal;
