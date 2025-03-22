@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   } = req.body;
 
   const sender = process.env.MAIL_USER;
-  const recipients = "brayden@thepettigrews.org";
+  const recipients = "slidesmartai@gmail.com";
   const subject = `SlideSmart Contact Form`;
   const message = `From: ${accountName} <${accountEmail}>\n\nName: ${firstName} ${lastName}\nEmail: ${email}\n\nSubject: ${emailSubject}\nBody: ${body}`;
 

@@ -101,7 +101,7 @@ const TOS = () => {
             <SectionTitle>9. Contact Information</SectionTitle>
             <Text>
               If you have any questions about these Terms, please contact us by
-              email at brayden@thepettigrews.org.
+              email at slidesmartai@gmail.com.
             </Text>
           </Container>
 
@@ -205,7 +205,7 @@ const TOS = () => {
             <SectionTitle>8. Contact Information</SectionTitle>
             <Text>
               If you have any questions or concerns about this Privacy Policy,
-              please contact us by email at brayden@thepettigrews.org.
+              please contact us by email at slidesmartai@gmail.com.
             </Text>
 
             <SectionTitle>9. Changes to the Privacy Policy</SectionTitle>
