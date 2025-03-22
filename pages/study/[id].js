@@ -364,15 +364,13 @@ const Study = () => {
     if (editMode) {
       // Save the extracted data and hidden explanantions to Firestore when the user changes it
       updateStudyGuideOnFirestore();
-      toast.info(
-        "Edit Mode has been disabled. Your study guide has been saved successfully!"
-      );
+      toast.info("Your changes have been saved successfully!");
     } else {
       // Doing this ensures that initialStudyGuide and studyGuide point to different objects in memory
       // This is called a deep copy
       setInitialStudyGuide(JSON.parse(JSON.stringify(studyGuide)));
       toast.info(
-        "Edit Mode has been enabled. Make your changes and disable Edit Mode to save!"
+        "Edit mode enabled. You can now edit the study guide. Don't forget to save your changes!"
       );
     }
     setEditMode(!editMode);
