@@ -42,8 +42,10 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
   };
 
   // Handle sending another code
-  const handleSendCode = async () => {
-    setResendDisabled(true); // disable sending another code
+  const handleSendCode = async (firstTime) => {
+    if (!firstTime) {
+      setResendDisabled(true); // disable sending another code
+    }
     const res = await fetch("/api/send-verify-email", {
       method: "POST",
       headers: {
@@ -71,7 +73,7 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
   // On opening the dialog, send a verification code
   useEffect(() => {
     if (isOpen) {
-      handleSendCode();
+      handleSendCode(true);
     }
   }, [isOpen]);
 
@@ -107,7 +109,7 @@ const VerifyModal = ({ isOpen, onClose, onConfirm, email }) => {
                   fontSize: theme.fontSize.secondary,
                   fontWeight: "bold",
                 }}
-                onClick={handleSendCode}
+                onClick={() => handleSendCode(false)}
               >
                 send another code
               </Button>
