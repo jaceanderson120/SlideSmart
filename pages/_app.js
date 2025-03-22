@@ -18,13 +18,13 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: white;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     background-color:#f04a3770;
     border-radius: 10px;
-    border: 3px solid white;
+    border: 3px solid transparent;
   }
 }
 `;
