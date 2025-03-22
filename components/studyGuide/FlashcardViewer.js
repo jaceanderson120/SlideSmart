@@ -7,8 +7,9 @@ import {
   deleteFlashcard,
 } from "../../firebase/database";
 import Flashcard from "./Flashcard";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, PlusCircle, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
+import IconButton from "../IconButton";
 
 const FlashcardViewer = ({
   studyGuideId,
@@ -17,7 +18,6 @@ const FlashcardViewer = ({
   onRequestClose,
   onFlashcardsChanged,
   swapViews,
-  icon,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -63,7 +63,7 @@ const FlashcardViewer = ({
 
   const handleAddFlashcard = async () => {
     if (newFront.trim() === "" || newBack.trim() === "") {
-      toast("Please enter text for front and back.");
+      toast.error("Please enter text for the front and back of the flashcard.");
       return;
     }
     if (isSubmitting) return;
@@ -165,9 +165,6 @@ const FlashcardViewer = ({
       style={customStyles}
     >
       <ModalContent>
-        {icon}
-        <ModalTitle>Flashcards</ModalTitle>
-
         {showAddForm ? (
           <AddFlashcardForm>
             <Input
@@ -209,70 +206,48 @@ const FlashcardViewer = ({
         ) : (
           <>
             <Flashcard front={front} back={back} cardIndex={currentIndex} />
-            <ManagementButtonRow>
+            <ButtonArea>
               <IconButton
-                onClick={() => setShowAddForm(true)}
-                title="Add Flashcard"
-              >
-                <PlusCircle size={20} color={theme.primary} />
-              </IconButton>
+                onClick={handlePrev}
+                title="Previous Flashcard"
+                icon={<ArrowLeft />}
+              />
+              <CardNumber>
+                {currentIndex + 1} of {flashcards.length}
+              </CardNumber>
+              <IconButton
+                onClick={handleNext}
+                title="Next Flashcard"
+                icon={<ArrowRight />}
+              />
+            </ButtonArea>
+            <ButtonArea>
               <IconButton
                 onClick={handleDeleteFlashcard}
                 title="Delete Flashcard"
                 disabled={isSubmitting}
-              >
-                <Trash2 size={20} color={theme.error || "red"} />
-              </IconButton>
-            </ManagementButtonRow>
+                icon={<Trash2 />}
+              />
+              <IconButton
+                onClick={() => setShowAddForm(true)}
+                title="Add Flashcard"
+                icon={<PlusCircle />}
+              />
+            </ButtonArea>
           </>
         )}
-
-        <ButtonSection>
-          <Button
-            onClick={onCloseClicked}
-            backgroundColor="transparent"
-            hoverBackgroundColor="transparent"
-            padding="12px"
-            fontSize={theme.fontSize.secondary}
-            textColor={theme.gray}
-            hoverTextColor={theme.primary}
-            style={{ border: `1px solid ${theme.gray}` }}
-          >
-            Close
-          </Button>
-
-          {!showAddForm && (
-            <>
-              <Button
-                onClick={handlePrev}
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                padding="12px"
-                fontSize={theme.fontSize.secondary}
-                textColor={theme.gray}
-                hoverTextColor={theme.primary}
-                style={{ border: `1px solid ${theme.gray}` }}
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={handleNext}
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                padding="12px"
-                fontSize={theme.fontSize.secondary}
-                textColor={theme.gray}
-                hoverTextColor={theme.primary}
-                style={{ border: `1px solid ${theme.gray}` }}
-              >
-                Next
-              </Button>
-              <CardNumber>
-                Card {currentIndex + 1} of {flashcards.length}
-              </CardNumber>
-            </>
-          )}
-        </ButtonSection>
+        <Button
+          onClick={onCloseClicked}
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          padding="12px"
+          fontSize={theme.fontSize.secondary}
+          textColor={theme.gray}
+          hoverTextColor={theme.primary}
+          style={{ border: `1px solid ${theme.gray}` }}
+        >
+          Close
+        </Button>
       </ModalContent>
     </Modal>
   );
@@ -296,14 +271,8 @@ const ModalContent = styled.div`
   text-align: center;
 `;
 
-const ModalTitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.subheading};
-  font-weight: bold;
-  color: ${({ theme }) => theme.black};
-`;
-
 const CardNumber = styled.p`
-  color: ${({ theme }) => theme.gray};
+  color: ${({ theme }) => theme.black};
 `;
 
 const AddFlashcardForm = styled.div`
@@ -332,31 +301,16 @@ const Textarea = styled.textarea`
 
 const ButtonRow = styled.div`
   display: flex;
-  justify-content: space-between;
   width: 100%;
-`;
-
-const ManagementButtonRow = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin: -16px 0;
-`;
-
-const IconButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
+  justify-content: space-between;
+`;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.lightGray};
-  }
+const ButtonArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 `;
 
 export default FlashcardViewer;

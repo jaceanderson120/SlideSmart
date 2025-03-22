@@ -1206,13 +1206,6 @@ const Study = () => {
           onRequestClose={closeFlashcards}
           onFlashcardsChanged={handleFlashcardChange}
           swapViews={swapFlashcardViews}
-          icon={
-            <FontAwesomeIcon
-              icon={faNoteSticky}
-              size="3x"
-              color={theme.primary}
-            />
-          }
         />
       )}
       <ConfirmationModal
