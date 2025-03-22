@@ -1338,6 +1338,7 @@ const Title = styled.input`
   border: none;
   border-radius: 10px;
   color: ${({ theme }) => theme.black};
+  outline: none;
 `;
 
 const HeaderSection = styled.div`
