@@ -21,8 +21,8 @@ const FlashcardViewer = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newQuestion, setNewQuestion] = useState("");
-  const [newAnswer, setNewAnswer] = useState("");
+  const [newFront, setNewFront] = useState("");
+  const [newBack, setNewBack] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localFlashcards, setLocalFlashcards] = useState(flashcards);
 
@@ -62,8 +62,8 @@ const FlashcardViewer = ({
   };
 
   const handleAddFlashcard = async () => {
-    if (newQuestion.trim() === "" || newAnswer.trim() === "") {
-      toast("Please enter a question and answer.");
+    if (newFront.trim() === "" || newBack.trim() === "") {
+      toast("Please enter text for front and back.");
       return;
     }
     if (isSubmitting) return;
@@ -74,8 +74,8 @@ const FlashcardViewer = ({
       // create the flashcard
       const newFlashcard = await createIndividualFlashcard(
         studyGuideId,
-        newQuestion.trim(),
-        newAnswer.trim()
+        newFront.trim(),
+        newBack.trim()
       );
 
       // Only update local state if we have a valid response with an ID
@@ -86,8 +86,8 @@ const FlashcardViewer = ({
       }
 
       // Reset form
-      setNewQuestion("");
-      setNewAnswer("");
+      setNewFront("");
+      setNewBack("");
       setShowAddForm(false);
 
       // Refresh flashcards list from backend
@@ -155,7 +155,7 @@ const FlashcardViewer = ({
     return <div>No flashcards to show.</div>;
   }
 
-  const { question, answer } = flashcards[currentIndex];
+  const { front, back } = flashcards[currentIndex];
 
   return (
     <Modal
@@ -171,14 +171,14 @@ const FlashcardViewer = ({
         {showAddForm ? (
           <AddFlashcardForm>
             <Input
-              placeholder="Question"
-              value={newQuestion}
-              onChange={(e) => setNewQuestion(e.target.value)}
+              placeholder="Front"
+              value={newFront}
+              onChange={(e) => setNewFront(e.target.value)}
             />
             <Textarea
-              placeholder="Answer"
-              value={newAnswer}
-              onChange={(e) => setNewAnswer(e.target.value)}
+              placeholder="Back"
+              value={newBack}
+              onChange={(e) => setNewBack(e.target.value)}
               rows={4}
             />
             <ButtonRow>
@@ -208,11 +208,7 @@ const FlashcardViewer = ({
           </AddFlashcardForm>
         ) : (
           <>
-            <Flashcard
-              question={question}
-              answer={answer}
-              cardIndex={currentIndex}
-            />
+            <Flashcard front={front} back={back} cardIndex={currentIndex} />
             <ManagementButtonRow>
               <IconButton
                 onClick={() => setShowAddForm(true)}

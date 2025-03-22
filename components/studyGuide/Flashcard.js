@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 import Button from "../Button";
 
-const Flashcard = ({ question, answer, cardIndex }) => {
+const Flashcard = ({ front, back, cardIndex }) => {
   const [showFront, setShowFront] = useState(true);
   const [showBack, setShowBack] = useState(false);
 
@@ -25,23 +25,23 @@ const Flashcard = ({ question, answer, cardIndex }) => {
     },
   };
 
-  // Reset answer visibility when a new card is loaded
+  // Reset front visibility when a new card is loaded
   useEffect(() => {
     setShowFront(true);
     setShowBack(false);
   }, [cardIndex]);
 
-  const toggleAnswer = () => {
+  const toggleSide = () => {
     setShowFront((prev) => !prev);
     setShowBack((prev) => !prev);
   };
 
   return (
     <>
-      {showFront && <QuestionHolder>{question}</QuestionHolder>}
-      {showBack && <AnswerHolder>{answer}</AnswerHolder>}
+      {showFront && <FrontHolder>{front}</FrontHolder>}
+      {showBack && <BackHolder>{back}</BackHolder>}
       <Button
-        onClick={toggleAnswer}
+        onClick={toggleSide}
         backgroundColor="transparent"
         hoverBackgroundColor="transparent"
         padding="12px"
@@ -56,13 +56,13 @@ const Flashcard = ({ question, answer, cardIndex }) => {
   );
 };
 
-const QuestionHolder = styled.div`
+const FrontHolder = styled.div`
   color: ${({ theme }) => theme.black};
   font-weight: bold;
   margin-bottom: 12px;
 `;
 
-const AnswerHolder = styled.div`
+const BackHolder = styled.div`
   color: ${({ theme }) => theme.black};
   font-weight: bold;
   margin-bottom: 12px;

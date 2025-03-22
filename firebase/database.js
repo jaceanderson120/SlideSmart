@@ -502,13 +502,13 @@ const uploadFileToFirebase = async (file) => {
 const createFlashcards = async (studyGuideId, flashcardsArray) => {
   try {
     await runTransaction(db, async (transaction) => {
-      // flashcardsArray is [{ question, answer }, { question, answer }, ... ]
-      for (const { question, answer } of flashcardsArray) {
+      // flashcardsArray is [{ front, back }, { front, back }, ... ]
+      for (const { front, back } of flashcardsArray) {
         const flashcardRef = doc(collection(db, "flashcards"));
         transaction.set(flashcardRef, {
           studyGuideId: studyGuideId,
-          question: question,
-          answer: answer,
+          front: front,
+          back: back,
           createdAt: new Date(),
         });
       }
@@ -521,14 +521,14 @@ const createFlashcards = async (studyGuideId, flashcardsArray) => {
   }
 };
 
-const createIndividualFlashcard = async (studyGuideId, question, answer) => {
+const createIndividualFlashcard = async (studyGuideId, front, back) => {
   try {
     await runTransaction(db, async (transaction) => {
       const flashcardRef = doc(collection(db, "flashcards"));
       transaction.set(flashcardRef, {
         studyGuideId: studyGuideId,
-        question: question,
-        answer: answer,
+        front: front,
+        back: back,
         createdAt: new Date(),
       });
     });
@@ -537,7 +537,7 @@ const createIndividualFlashcard = async (studyGuideId, question, answer) => {
   }
 };
 
-// Function for fetching all of the flashcards (just question & answer) for a specific studyguide
+// Function for fetching all of the flashcards (just front, back, and id) for a specific studyguide
 const fetchFlashcards = async (studyGuideId) => {
   try {
     const q = query(
@@ -550,11 +550,11 @@ const fetchFlashcards = async (studyGuideId) => {
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      // Only push question and answer
+      // Only push front, back, and id
       flashcards.push({
         id: doc.id,
-        question: data.question,
-        answer: data.answer,
+        front: data.front,
+        back: data.back,
       });
     });
 
