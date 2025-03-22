@@ -610,4 +610,5 @@ export {
   createIndividualFlashcard,
   fetchFlashcards,
   deleteFlashcard,
+  updateStudyGuideHasFlashcards,
 };

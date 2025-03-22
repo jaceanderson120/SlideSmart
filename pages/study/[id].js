@@ -13,6 +13,7 @@ import {
   uploadStudyGuideToFirebase,
   updateStudyGuideHiddenExplanations,
   fetchFlashcards,
+  updateStudyGuideHasFlashcards,
 } from "@/firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -237,6 +238,13 @@ const Study = () => {
   // Function to handle closing flashcards
   const closeFlashcards = () => {
     setShowFlashcards(false);
+  };
+
+  const swapFlashcardViews = async () => {
+    setShowFlashcards(false);
+    setIsFlashcardModalOpen(true);
+    setHasFlashCards(false);
+    await updateStudyGuideHasFlashcards(id);
   };
 
   // Update the file name that is displayed at the top of the study guide
@@ -1197,6 +1205,7 @@ const Study = () => {
           isOpen={showFlashcards}
           onRequestClose={closeFlashcards}
           onFlashcardsChanged={handleFlashcardChange}
+          swapViews={swapFlashcardViews}
           icon={
             <FontAwesomeIcon
               icon={faNoteSticky}

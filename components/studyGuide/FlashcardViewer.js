@@ -16,6 +16,7 @@ const FlashcardViewer = ({
   isOpen,
   onRequestClose,
   onFlashcardsChanged,
+  swapViews,
   icon,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -104,13 +105,6 @@ const FlashcardViewer = ({
     if (!localFlashcards || localFlashcards.length === 0) return;
     if (isSubmitting) return;
 
-    if (localFlashcards.length <= 1) {
-      toast(
-        "You can't delete the last flashcard. Add another one first or delete the study guide."
-      );
-      return;
-    }
-
     const currentFlashcard = localFlashcards[currentIndex];
 
     // Make sure we have a valid flashcard with an id
@@ -123,17 +117,23 @@ const FlashcardViewer = ({
       setIsSubmitting(true);
 
       // delete the flashcard
-      await deleteFlashcard(currentFlashcard.id);
+      if (localFlashcards.length <= 1) {
+        await deleteFlashcard(currentFlashcard.id);
+        await swapViews();
+        return;
+      } else {
+        // delete the flashcard
+        await deleteFlashcard(currentFlashcard.id);
+      }
 
       // Temporarily update local state before backend refresh completes
-      const updatedFlashcards = localFlashcards.filter(
-        (card) => card.id !== currentFlashcard.id
+      setLocalFlashcards((prevFlashcards) =>
+        prevFlashcards.filter((card) => card.id !== currentFlashcard.id)
       );
-      setLocalFlashcards(updatedFlashcards);
 
       // Adjust index if needed
-      if (currentIndex >= updatedFlashcards.length) {
-        setCurrentIndex(Math.max(0, updatedFlashcards.length - 1));
+      if (currentIndex >= localFlashcards.length) {
+        setCurrentIndex(Math.max(0, localFlashcards.length - 1));
       }
 
       // Refresh flashcards list from backend
