@@ -17,14 +17,13 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "@/context/ThemeContext";
+import ColorModeButton from "./ColorModeButton";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
   const [deviceWidth, setDeviceWidth] = useState(0);
-  const { darkMode, toggleDarkMode } = useTheme();
 
   const handleLogout = () => {
     signOut(auth);
@@ -54,7 +53,6 @@ function Navbar() {
         </MenuTextContainer>
       </HorizontalContainer>
     </MenuItemContainer>,
-    { name: darkMode ? "Light Mode" : "Dark Mode", onClick: toggleDarkMode },
     {
       name: hasSpark ? "Manage Subscription" : "Upgrade",
       onClick: handleUpgradeManageClick,
@@ -190,6 +188,7 @@ function Navbar() {
       <RightButtonSection>
         {isLoggedIn ? (
           <>
+            <ColorModeButton />
             {router.pathname !== "/dashboard" && deviceWidth > 768 && (
               <Button onClick={handleDashboardClick} padding="8px" bold>
                 Dashboard

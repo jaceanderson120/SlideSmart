@@ -4,7 +4,7 @@ import app from "@/firebase/firebase";
 import { useRouter } from "next/navigation"; // must be from next/navigation not next/router
 import { useStateContext } from "@/context/StateContext";
 import { useState } from "react";
-import { faArrowRight, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -44,19 +44,19 @@ const Pricing = () => {
   };
 
   const basicPlanDesc = [
-    { text: "Unlimited Study Guides", icon: faCheck },
-    { text: "Edit + Share Study Guides", icon: faCheck },
-    { text: "No Access to Sola: Our GPT-4o Powered Tutor", icon: faX },
-    { text: "No Auto-Generation Tools", icon: faX },
-    { text: "No Public Study Guide Saves", icon: faX },
+    "Create Unlimited Study Guides",
+    "Edit Study Guides",
+    "Share Study Guides",
   ];
 
   const sparkPlanDesc = [
     "All Basic Plan Features",
-    "Unlimited Access to Sola: Our GPT-4o Powered Tutor",
+    "Generate Study Guides Without Uploading a File",
+    "Unlimited Access to Sola: Our AI Powered Tutor",
     "Edit Mode with Unlimited Access to our Auto-Generation Tools",
-    "Unlimited Public Study Guide Saves",
+    "Save Any Public Study Guide As Your Own",
     "Unlimited YouTube Video Generation",
+    "Create Flashcards",
   ];
 
   return (
@@ -100,16 +100,14 @@ const Pricing = () => {
                   )}
                   <PricingCardLabel>Included with Basic:</PricingCardLabel>
                   <Underline />
-                  {basicPlanDesc.map((item, index) => (
+                  {basicPlanDesc.map((desc, index) => (
                     <PricingCardDescription key={index}>
                       <FontAwesomeIcon
-                        icon={item.icon}
-                        color={
-                          item.icon === faX ? theme.primary70 : theme.primary
-                        }
+                        icon={faCheck}
+                        color={theme.primary}
                         size="2x"
                       />
-                      {item.text}
+                      {desc}
                     </PricingCardDescription>
                   ))}
                 </PricingCard>

@@ -35,7 +35,7 @@ export default function Home() {
         <title>SlideSmart - The AI Application to Make Slides Make Sense</title>
         <meta
           name="description"
-          content="SlideSmart turns your course slides into comprehensive + interactive study guides equipped with plenty of useful resources to help you succeed in the classroom."
+          content="SlideSmart turns your course slides into comprehensive + interactive study guides with plenty of useful resources to help you succeed in the classroom."
         />
         <link rel="canonical" href="https://www.slidesmartai.com/" />
       </Head>
@@ -58,8 +58,8 @@ export default function Home() {
                 </Slogan>
                 <SubSlogan>
                   SlideSmart AI turns your course slides into comprehensive +
-                  interactive study guides <br></br>equipped with plenty of
-                  useful resources to help you succeed in the classroom
+                  interactive study guides <br></br>with plenty of useful
+                  resources to help you succeed in the classroom
                 </SubSlogan>
                 <Button
                   onClick={handleMainButtonClick}
@@ -88,13 +88,13 @@ export default function Home() {
               )}
               <MoreContainer>
                 <Button
-                  textColor={theme.primary}
+                  textColor={theme.black}
                   hoverTextColor={theme.white}
                   backgroundColor="transparent"
                   hoverBackgroundColor={theme.primary}
                   onClick={() => router.push("/how-it-works")}
                 >
-                  Still confused? Learn more about how SlideSmart works!
+                  Confused? Learn more about how to use SlideSmart!
                   <FontAwesomeIcon
                     icon={faArrowRight}
                     style={{ marginLeft: "10px" }}
