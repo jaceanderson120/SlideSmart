@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGrip, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faGrip } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
 import styled from "styled-components";
 
@@ -26,13 +26,12 @@ const StudyGuideTopics = ({
                 textColor={({ theme }) => theme.black}
                 hoverBackgroundColor={({ theme }) => theme.primary70}
                 padding="8px"
-                marginTop="16px"
-                fontSize={({ theme }) => theme.fontSize.label}
+                fontSize={({ theme }) => theme.fontSize.default}
                 onClick={() => {
                   setIsAddTopicModalOpen(true);
                 }}
               >
-                <FontAwesomeIcon icon={faPlus} /> Add Topic
+                Add Topic
               </Button>
             )}
             {topics.map((topic, index) => (
@@ -50,7 +49,7 @@ const StudyGuideTopics = ({
                     className={activeTopic === topic ? "active" : ""}
                     href={`#${topic}`}
                   >
-                    {topic}
+                    {index + 1}. {topic}
                     {editMode && <FontAwesomeIcon icon={faGrip} />}
                   </TopicName>
                 )}
@@ -69,22 +68,18 @@ export default StudyGuideTopics;
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-bottom: 16px;
 `;
 
 const TopicName = styled.a`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  font-size: ${({ theme }) => theme.fontSize.label};
+  padding: 10px;
+  font-size: ${({ theme }) => theme.fontSize.secondary};
   text-decoration: none;
   text-align: left;
   color: ${({ theme }) => theme.black};
-  background-color: ${({ theme }) => theme.primary33};
   transition: background-color 0.3s;
-  box-shadow: 0px 2px 5px ${({ theme }) => theme.shadow};
   border-radius: 16px;
   white-space: normal;
   word-wrap: break-word;

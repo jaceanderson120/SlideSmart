@@ -48,6 +48,9 @@ const StyledButton = styled.button`
   font-size: ${(props) => props.$fontSize};
   margin-top: ${(props) => props.$marginTop};
   transition: color 0.3s, background-color 0.3s, transform 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
   &:hover {
     color: ${(props) => props.$hoverTextColor || props.theme.black};
