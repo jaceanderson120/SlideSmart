@@ -400,10 +400,6 @@ const deleteStudyGuideFlashcards = async (studyGuideId) => {
 
     // Wait for all deletions to complete
     await Promise.all(deletePromises);
-
-    console.log(
-      `Deleted ${flashcardsSnapshot.size} flashcards for study guide ${studyGuideId}`
-    );
   } catch (error) {
     console.error("Error deleting flashcards:", error);
   }
