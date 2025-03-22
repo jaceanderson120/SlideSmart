@@ -348,6 +348,9 @@ const updateStudyGuideHasFlashcards = async (id) => {
 // Input: study guide ID
 // Output: None
 const deleteStudyGuide = async (id, storageUrl, userId) => {
+  // Delete all associated flashcards first
+  await deleteStudyGuideFlashcards(id);
+
   // Get the list of contributors for the study guide
   const studyGuideDocRef = doc(db, "studyGuides", id);
   const studyGuideDoc = await getDoc(studyGuideDocRef);
@@ -373,6 +376,36 @@ const deleteStudyGuide = async (id, storageUrl, userId) => {
   if (storageUrl != null) {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
+  }
+};
+
+// Delete all flashcards associated with a study guide
+// Input: study guide ID
+// Output: None
+const deleteStudyGuideFlashcards = async (studyGuideId) => {
+  try {
+    // Query all flashcards with the given studyGuideId
+    const flashcardsQuery = query(
+      collection(db, "flashcards"),
+      where("studyGuideId", "==", studyGuideId)
+    );
+
+    // Get the flashcards
+    const flashcardsSnapshot = await getDocs(flashcardsQuery);
+
+    // Delete each flashcard
+    const deletePromises = flashcardsSnapshot.docs.map((doc) =>
+      deleteDoc(doc.ref)
+    );
+
+    // Wait for all deletions to complete
+    await Promise.all(deletePromises);
+
+    console.log(
+      `Deleted ${flashcardsSnapshot.size} flashcards for study guide ${studyGuideId}`
+    );
+  } catch (error) {
+    console.error("Error deleting flashcards:", error);
   }
 };
 
