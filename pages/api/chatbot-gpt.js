@@ -32,12 +32,24 @@ export const config = {
 };
 
 export default async function POST(request) {
-  const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  const endpoint = process.env.AZURE_OPENAI_ENDPOINT_O3;
   const apiKey = process.env.AZURE_OPENAI_API_KEY;
-  const apiVersion = "2024-08-01-preview";
-  const deployment = "gpt-4o";
+  const apiVersion = "2024-12-01-preview";
+  const deployment = "o3-mini";
 
   const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
+
+  // Endpoint for images
+  const endpoint_image = process.env.AZURE_OPENAI_ENDPOINT;
+  const apiVersion_image = "2024-08-01-preview";
+  const deployment_image = "gpt-4o";
+
+  const openai_image = new AzureOpenAI({
+    endpoint: endpoint_image,
+    apiKey,
+    apiVersion: apiVersion_image,
+    deployment: deployment_image,
+  });
 
   try {
     const { messages, extractedData, base64Image } = await parseFormData(
@@ -47,7 +59,7 @@ export default async function POST(request) {
     const formattedMessages = [
       {
         role: "system",
-        content: `You are a friendly mini golden doodle and a professor named Sola who answers questions from college students. You are a chatbot that is displayed on an HTML page that has the following content on it: ${JSON.stringify(
+        content: `You are a professor named Sola who answers questions from college students. You are a chatbot that is displayed on an HTML page that has the following content on it: ${JSON.stringify(
           extractedData
         )}.
     
@@ -66,8 +78,8 @@ export default async function POST(request) {
       })),
     ];
 
+    const lastMessage = messages[messages.length - 1];
     if (base64Image) {
-      const lastMessage = messages[messages.length - 1];
       formattedMessages.push({
         role: "user",
         content: [
@@ -82,7 +94,6 @@ export default async function POST(request) {
         ],
       });
     } else {
-      const lastMessage = messages[messages.length - 1];
       formattedMessages.push({
         role: lastMessage.sender === "user" ? "user" : "assistant",
         content: lastMessage.text,
@@ -93,12 +104,22 @@ export default async function POST(request) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // Changed from openai.completions.create to openai.chat.completions.create
-          const completion = await openai.chat.completions.create({
-            model: deployment,
-            messages: formattedMessages,
-            stream: true,
-          });
+          let completion;
+
+          // If there is an image, use the gpt-4o model. If not, use the o3-mini model
+          if (base64Image) {
+            completion = await openai_image.chat.completions.create({
+              model: deployment_image,
+              messages: formattedMessages,
+              stream: true,
+            });
+          } else {
+            completion = await openai.chat.completions.create({
+              model: deployment,
+              messages: formattedMessages,
+              stream: true,
+            });
+          }
 
           for await (const chunk of completion) {
             const content = chunk.choices[0]?.delta?.content;
