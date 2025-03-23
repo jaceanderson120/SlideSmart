@@ -525,7 +525,6 @@ const Th = styled.th`
   background-color: ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.black};
   font-weight: bold;
-  position: sticky;
   top: 0;
   z-index: 1;
 `;

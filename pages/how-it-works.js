@@ -146,7 +146,7 @@ const HowItWorks = () => {
               />
               <LeftCircleContainer>
                 <InfoCircle
-                  title="Chat with Sola, our GPT-4o AI Assistant"
+                  title="Chat with Sola, our AI Assistant"
                   subtitle="Click the chat icon on the top right of your study guide to ask Sola any questions you have! Also, if you upload an image to Sola, she can answer questions about it!"
                   align="start"
                 />

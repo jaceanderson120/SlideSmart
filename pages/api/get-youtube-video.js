@@ -4,10 +4,10 @@ import { AzureOpenAI } from "openai";
 
 dotenv.config();
 
-const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const endpoint = process.env.AZURE_OPENAI_ENDPOINT_O3;
 const apiKey = process.env.AZURE_OPENAI_API_KEY;
-const apiVersion = "2024-08-01-preview";
-const deployment = "gpt-4o";
+const apiVersion = "2024-12-01-preview";
+const deployment = "o3-mini";
 
 const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 
@@ -25,7 +25,7 @@ const filterRelevantVideos = async (videos, topic, explanation) => {
   The form of the JSON object should be: { "relevantVideos": ["videoId1", "videoId2", ...] }.`;
 
   try {
-    const completion = await openai.completions.create({
+    const completion = await openai.chat.completions.create({
       model: deployment,
       messages: [
         {

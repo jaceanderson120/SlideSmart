@@ -18,7 +18,7 @@ const Chatbot = (props) => {
           {
             text: hasSpark
               ? "Hello! How can I help you today?"
-              : "Hi, I'm Professor Sola, a chatbot powered by the powerful GPT-4o model, ready to answer any questions and analyze any images! To interact with me, you must purchase the Spark Plan.",
+              : "Hi, I'm Professor Sola, an AI powered chatbot, ready to answer any questions and analyze any images! To interact with me, you must purchase the Spark Plan.",
             sender: "bot",
           },
         ];
