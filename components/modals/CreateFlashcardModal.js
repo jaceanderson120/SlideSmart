@@ -5,6 +5,7 @@ import { createFlashcards } from "@/firebase/database";
 import { toast } from "react-toastify";
 import Button from "../Button";
 import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 
 Modal.setAppElement("#__next");
 
