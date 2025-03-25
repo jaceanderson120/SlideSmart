@@ -6,6 +6,7 @@ import "react-activity/dist/library.css";
 import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
+import CodeBlock from "./CodeBlock";
 
 const Chatbot = (props) => {
   const { hasSpark } = useStateContext();
@@ -162,6 +163,31 @@ const Chatbot = (props) => {
     }
   };
 
+  // Function to split message text into parts (plain text and code blocks)
+  const splitMessageText = (text) => {
+    const parts = [];
+    const codeRegex = /<pre><code>([\s\S]*?)<\/code><\/pre>/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = codeRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push({
+          type: "text",
+          content: text.slice(lastIndex, match.index),
+        });
+      }
+      parts.push({ type: "code", content: match[1] });
+      lastIndex = codeRegex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push({ type: "text", content: text.slice(lastIndex) });
+    }
+
+    return parts;
+  };
+
   return (
     <ChatbotContainer>
       <ChatbotHeader>
@@ -183,7 +209,13 @@ const Chatbot = (props) => {
             ) : (
               <BotMessageContainer>
                 <BotMessage>
-                  <LatexRenderer>{message.text}</LatexRenderer>
+                  {splitMessageText(message.text).map((part, i) =>
+                    part.type === "code" ? (
+                      <CodeBlock key={i} code={part.content} />
+                    ) : (
+                      <LatexRenderer key={i}>{part.content}</LatexRenderer>
+                    )
+                  )}
                 </BotMessage>
               </BotMessageContainer>
             )}
@@ -192,7 +224,13 @@ const Chatbot = (props) => {
         {messageInProgress !== "" && (
           <BotMessageContainer>
             <BotMessage>
-              <LatexRenderer>{messageInProgress}</LatexRenderer>
+              {splitMessageText(messageInProgress).map((part, i) =>
+                part.type === "code" ? (
+                  <CodeBlock key={i} code={part.content} />
+                ) : (
+                  <LatexRenderer key={i}>{part.content}</LatexRenderer>
+                )
+              )}
             </BotMessage>
           </BotMessageContainer>
         )}
