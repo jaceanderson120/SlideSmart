@@ -4,10 +4,11 @@ import { AzureOpenAI } from "openai";
 
 dotenv.config();
 
-const endpoint = process.env.AZURE_OPENAI_ENDPOINT_O3;
+// Use GPT-4o here, it is sufficient and o3-mini takes very long
+const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
 const apiKey = process.env.AZURE_OPENAI_API_KEY;
-const apiVersion = "2024-12-01-preview";
-const deployment = "o3-mini";
+const apiVersion = "2024-08-01-preview";
+const deployment = "gpt-4o";
 
 const openai = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
 

@@ -13,17 +13,18 @@ const handleFileUpload = async (
   includeResources,
   currentUser,
   topicToLearnAbout,
-  setLoadingPercentage,
+  setLoadingPercentage
 ) => {
   try {
+    setLoadingPercentage([1, "Thinking"]);
     let topicsAndExplanationsResponse;
     let firebaseFileUrl;
     if (file) {
-      setLoadingPercentage([0, "Uploading file..."]);
+      setLoadingPercentage([10, "Uploading file"]);
       // Upload the file to Firebase Storage
       firebaseFileUrl = await uploadFileToFirebase(file);
 
-      setLoadingPercentage([17, "Extracting text..."]);
+      setLoadingPercentage([20, "Extracting text"]);
 
       // Start with extracting data from the form
       const response = await fetch("/api/extract-text", {
@@ -56,7 +57,7 @@ const handleFileUpload = async (
         throw new Error("TOKEN_ERROR");
       }
 
-      setLoadingPercentage([34, "Generating topics..."]);
+      setLoadingPercentage([60, "Generating topics"]);
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
       topicsAndExplanationsResponse = await fetch("/api/get-topics-gpt", {
@@ -64,7 +65,7 @@ const handleFileUpload = async (
         body: extractedData,
       });
     } else {
-      setLoadingPercentage([20, "Generating topics..."]);
+      setLoadingPercentage([60, "Generating topics"]);
       // Send the topic to learn about to GPT to retrieve topics + explanations object from data
       topicsAndExplanationsResponse = await fetch("/api/generate-topics-gpt", {
         method: "POST",
@@ -84,32 +85,58 @@ const handleFileUpload = async (
     const topicsAndExplanations = await topicsAndExplanationsResponse.json();
     const topics = Object.keys(topicsAndExplanations); // Extracting topics
 
-    setLoadingPercentage([51, "Finding videos..."]);
+    setLoadingPercentage([80, "Finding videos and resources"]);
 
     let youtubePromises = [];
+    let googleResultsPromise = [];
+
+    const youtubeQueriesPromise = includeVideos
+      ? Promise.all(
+          topics.map((topic) =>
+            fetch("/api/create-youtube-query", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                topic: topic,
+                explanation: topicsAndExplanations[topic],
+              }),
+            }).then((res) => {
+              if (!res.ok) {
+                throw new Error("Failed to create YouTube query");
+              }
+              return res.json(); // Return the YouTube query
+            })
+          )
+        )
+      : Promise.resolve([]);
+
+    const googleSearchQueriesPromise = includeResources
+      ? Promise.all(
+          topics.map((topic) =>
+            fetch("/api/create-google-query", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(topicsAndExplanations[topic]),
+            }).then((res) => {
+              if (!res.ok) {
+                throw new Error("Failed to create Google query");
+              }
+              return res.json(); // Return the Google query
+            })
+          )
+        )
+      : Promise.resolve([]);
+
+    const [youtubeQueries, googleSearchQueriesResponse] = await Promise.all([
+      youtubeQueriesPromise,
+      googleSearchQueriesPromise,
+    ]);
+
     if (includeVideos) {
-      // Generate a promise to get a YouTube video query for each topic
-      const queries = topics.map((topic) =>
-        fetch("/api/create-youtube-query", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            topic: topic,
-            explanation: topicsAndExplanations[topic],
-          }),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to create YouTube query");
-          }
-          return res.json(); // Return the YouTube query
-        })
-      );
-
-      // Resolve all YouTube video queries
-      const youtubeQueries = await Promise.all(queries);
-
       // Create a dictionary mapping query to topic, explanation
       const youtubeQueriesDict = {};
       topics.forEach((topic, index) => {
@@ -140,6 +167,24 @@ const handleFileUpload = async (
       );
     }
 
+    if (includeResources) {
+      // Prepare the fetch for the Google search query
+      googleResultsPromise = googleSearchQueriesResponse.map((query) =>
+        fetch("/api/search-google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch Google search results");
+          }
+          return res.json(); // Return the google search results
+        })
+      );
+    }
+
     // Generate a practice question and answer for each topic
     let createQuestionAnswerPromise;
     if (includeQuestions) {
@@ -165,56 +210,29 @@ const handleFileUpload = async (
       });
     }
 
-    let googleResultsPromise;
-    if (includeResources) {
-      // Generate a Google search query for each topic
-      const googleSearchQueries = topics.map((topic) =>
-        fetch("/api/create-google-query", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(topicsAndExplanations[topic]),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to create Google query");
-          }
-          return res.json(); // Return the Google query
-        })
-      );
+    setLoadingPercentage([93, "Generating content"]);
 
-      // Resolve all Google search queries
-      const googleSearchQueriesResponse = await Promise.all(
-        googleSearchQueries
-      );
+    // Resolve all promises concurrently
+    const [
+      youtubeResponses,
+      examplesResponse,
+      questionAnswerResponse,
+      googleSearchResponse,
+    ] = await Promise.all([
+      includeVideos ? Promise.all(youtubePromises) : [],
+      includeExamples ? createExamplesPromise.then((res) => res.json()) : null,
+      includeQuestions
+        ? createQuestionAnswerPromise.then((res) => res.json())
+        : null,
+      includeResources ? Promise.all(googleResultsPromise) : [],
+    ]);
 
-      // Prepare the fetch for the Google search query
-      googleResultsPromise = googleSearchQueriesResponse.map((query) =>
-        fetch("/api/search-google", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query }),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch Google search results");
-          }
-          return res.json(); // Return the google search results
-        })
-      );
-    }
-
-    // Only resolve youtubePromises if includeVideos is true
-    let youtubeResponses = [];
-    if (includeVideos) {
-      youtubeResponses = await Promise.all(youtubePromises);
-    }
+    setLoadingPercentage([100, "Finishing up"]);
 
     // At this point, YouTube responses should be an array of arrays
     // Filter out any duplicates
     const seen = new Set();
-    youtubeResponses = youtubeResponses.map((sublist) => {
+    const filteredYoutubeResponses = youtubeResponses.map((sublist) => {
       if (!sublist || !Array.isArray(sublist)) {
         return [];
       }
@@ -228,31 +246,9 @@ const handleFileUpload = async (
       return filteredSublist;
     });
 
-    
-
-    // Only resolve createExamplesPromise if includeExamples is true
-    let examplesResponse;
-    if (includeExamples) {
-      examplesResponse = await createExamplesPromise;
-      // Convert the examplesResponse to JSON
-      examplesResponse = await examplesResponse.json();
-    }
-    
-    setLoadingPercentage([68, "Generating content..."]);
-
-    // Only resolve createQuestionAnswerPromise if includeQuestions is true
-    let questionAnswerResponse;
-    if (includeQuestions) {
-      questionAnswerResponse = await createQuestionAnswerPromise;
-      // Convert the createQuestionAnswerPromise to JSON
-      questionAnswerResponse = await questionAnswerResponse.json();
-    }
-
     // Wait for both the YouTube video and create content fetches to complete
     let filteredGoogleSearchResults;
     if (includeResources) {
-      const googleSearchResponse = await Promise.all(googleResultsPromise); // Resolve Google search query fetch
-
       // Create array of Google search results
       let googleSearchResults = googleSearchResponse.map((result) => {
         if (!result.error) {
@@ -272,14 +268,14 @@ const handleFileUpload = async (
       );
     }
 
-    setLoadingPercentage([85, "Finishing up..."]);
-
     // Combine the responses into one object
     const combinedResponse = {};
     topics.forEach((topic, index) => {
       combinedResponse[topic] = {
         explanation: topicsAndExplanations[topic],
-        youtubeIds: youtubeResponses ? youtubeResponses[index] : [],
+        youtubeIds: filteredYoutubeResponses
+          ? filteredYoutubeResponses[index]
+          : [],
       };
 
       // Conditionally add the example field if it exists
