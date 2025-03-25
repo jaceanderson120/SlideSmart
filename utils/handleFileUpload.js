@@ -23,7 +23,7 @@ const handleFileUpload = async (
       // Upload the file to Firebase Storage
       firebaseFileUrl = await uploadFileToFirebase(file);
 
-      setLoadingPercentage([10, "Extracting text..."]);
+      setLoadingPercentage([17, "Extracting text..."]);
 
       // Start with extracting data from the form
       const response = await fetch("/api/extract-text", {
@@ -56,7 +56,7 @@ const handleFileUpload = async (
         throw new Error("TOKEN_ERROR");
       }
 
-      setLoadingPercentage([20, "Generating topics..."]);
+      setLoadingPercentage([34, "Generating topics..."]);
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
       topicsAndExplanationsResponse = await fetch("/api/get-topics-gpt", {
@@ -83,7 +83,7 @@ const handleFileUpload = async (
     const topicsAndExplanations = await topicsAndExplanationsResponse.json();
     const topics = Object.keys(topicsAndExplanations); // Extracting topics
 
-    setLoadingPercentage([30, "Finding videos..."]);
+    setLoadingPercentage([51, "Finding videos..."]);
 
     let youtubePromises = [];
     if (includeVideos) {
@@ -139,8 +139,6 @@ const handleFileUpload = async (
       );
     }
 
-    setLoadingPercentage([40, "Generating practice problems..."]);
-
     // Generate a practice question and answer for each topic
     let createQuestionAnswerPromise;
     if (includeQuestions) {
@@ -154,8 +152,6 @@ const handleFileUpload = async (
       });
     }
 
-    setLoadingPercentage([50, "Creating examples..."]);
-
     let createExamplesPromise;
     if (includeExamples) {
       // Prepare the fetch for getting examples
@@ -167,8 +163,6 @@ const handleFileUpload = async (
         body: JSON.stringify(topicsAndExplanations),
       });
     }
-
-    setLoadingPercentage([60, "Searching for resources..."]);
 
     let googleResultsPromise;
     if (includeResources) {
@@ -210,8 +204,6 @@ const handleFileUpload = async (
       );
     }
 
-    setLoadingPercentage([70, "Refining videos..."]);
-
     // Only resolve youtubePromises if includeVideos is true
     let youtubeResponses = [];
     if (includeVideos) {
@@ -235,7 +227,7 @@ const handleFileUpload = async (
       return filteredSublist;
     });
 
-    setLoadingPercentage([80, "Finishing up..."]);
+    
 
     // Only resolve createExamplesPromise if includeExamples is true
     let examplesResponse;
@@ -244,6 +236,8 @@ const handleFileUpload = async (
       // Convert the examplesResponse to JSON
       examplesResponse = await examplesResponse.json();
     }
+    
+    setLoadingPercentage([68, "Generating content..."]);
 
     // Only resolve createQuestionAnswerPromise if includeQuestions is true
     let questionAnswerResponse;
@@ -277,7 +271,7 @@ const handleFileUpload = async (
       );
     }
 
-    setLoadingPercentage([90, "Uploading study guide..."]);
+    setLoadingPercentage([85, "Finishing up..."]);
 
     // Combine the responses into one object
     const combinedResponse = {};
