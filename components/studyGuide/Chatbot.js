@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faImage, faX } from "@fortawesome/free-solid-svg-icons";
 import "react-activity/dist/library.css";
@@ -7,6 +7,8 @@ import { LatexRenderer } from "./LatexRenderer";
 import { useStateContext } from "@/context/StateContext";
 import { toast } from "react-toastify";
 import CodeBlock from "./CodeBlock";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 
 const Chatbot = (props) => {
   const { hasSpark } = useStateContext();
@@ -30,6 +32,7 @@ const Chatbot = (props) => {
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [messageInProgress, setMessageInProgress] = useState("");
   const [startingNewMessage, setStartingNewMessage] = useState(false);
+  const theme = useTheme();
 
   // Get study guide which is passed down from the parent component
   const { studyGuide } = props;
@@ -240,18 +243,24 @@ const Chatbot = (props) => {
         {uploadedImageURL && (
           <Thumbnail src={uploadedImageURL} alt="Uploaded" />
         )}
-        <Input
-          type="text"
-          value={input}
-          placeholder={
-            hasSpark
-              ? "What can I help you with?"
-              : "Upgrade to Spark to chat with me!"
-          }
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          disabled={!hasSpark || loadingResponse}
-        />
+        <InputWrapper>
+          {loadingResponse ? (
+            <Dots color={theme.black} size={16} speed={1} />
+          ) : (
+            <Input
+              type="text"
+              value={input}
+              placeholder={
+                hasSpark
+                  ? "What can I help you with?"
+                  : "Upgrade to Spark to chat with me!"
+              }
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              disabled={!hasSpark || loadingResponse}
+            />
+          )}
+        </InputWrapper>
         <StyledFontAwesomeIcon
           icon={uploadedImage ? faX : faImage}
           onClick={() => {
@@ -400,9 +409,16 @@ const InputArea = styled.div`
   margin-right: 8px;
 `;
 
+const InputWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  background-color: transparent;
+  padding: 8px;
+`;
+
 const Input = styled.input`
   flex: 1;
-  padding: 8px;
   border: none;
   border-radius: 4px;
   margin-right: 8px;

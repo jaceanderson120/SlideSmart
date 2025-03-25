@@ -24,6 +24,7 @@ export default async function createContent(req, res) {
       data
     )}. For each topic, please show an example of the topic in practice.
     For topics where it in practice cannot be shown in a short sample then provide a real world example where it would be used.
+    If your answer contains any code, enclose it in <pre><code>...</code></pre> tags.
     Return the refined data as JSON in this format: { 'topicName1': 'example1', 'topicName2': 'example2' ... }.
   `;
 

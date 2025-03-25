@@ -28,5 +28,5 @@ const Code = styled.code`
   font-size: ${({ theme }) => theme.fontSize.default};
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px ${({ theme }) => theme.shadow};
+  margin: 8px 0;
 `;
