@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import styled, { useTheme } from "styled-components";
 import { createFlashcards } from "@/firebase/database";
-import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { toast } from "react-toastify";
 import Button from "../Button";
+import { Dots } from "react-activity";
 
 Modal.setAppElement("#__next");
 
@@ -103,22 +103,7 @@ const CreateFlashcardModal = ({
             SlideSmart generates flashcards for you based on the content of your
             study guide.
           </ModalText>
-          {isLoading ? (
-            <Overlay>
-              <ProgressWrapper>
-                <CircularProgressbar
-                  value={loadingPercentage}
-                  text={`${loadingPercentage}%`}
-                  styles={buildStyles({
-                    pathColor: theme.primary,
-                    textColor: theme.black,
-                  })}
-                />
-              </ProgressWrapper>
-            </Overlay>
-          ) : (
-            <></>
-          )}
+          {isLoading && <Dots color={theme.primary} size={32} speed={1} />}
           <ButtonSection>
             <Button
               onClick={onCloseClicked}
@@ -140,6 +125,7 @@ const CreateFlashcardModal = ({
               fontSize={({ theme }) => theme.fontSize.secondary}
               textColor={({ theme }) => theme.white}
               hoverTextColor={({ theme }) => theme.black}
+              disabled={isLoading}
             >
               Create
             </Button>
@@ -181,24 +167,6 @@ const ModalText = styled.p`
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`;
-
-const ProgressWrapper = styled.div`
-  width: 100px;
-  height: 100px;
 `;
 
 export default CreateFlashcardModal;
