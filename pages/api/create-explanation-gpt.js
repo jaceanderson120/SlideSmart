@@ -24,6 +24,7 @@ export default async function createContent(req, res) {
       data
     )}. Generate a new explanation for this topic and only return the explanation.
     If your answer contains any code, enclose it in <pre><code>...</code></pre> tags.
+    You may give an explanation in bullet points if you see fit.
   `;
 
   // Start the OpenAI completion for examples without waiting for YouTube API
