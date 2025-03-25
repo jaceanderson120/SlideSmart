@@ -17,8 +17,10 @@ import css from "highlight.js/lib/languages/css";
 import xml from "highlight.js/lib/languages/xml";
 import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
-import "highlight.js/styles/atom-one-dark.css";
+// import "highlight.js/styles/atom-one-dark.css";
+// import "highlight.js/styles/atom-one-light.css";
 import styled from "styled-components";
+import { useTheme } from "@/context/ThemeContext";
 
 // Register the languages
 hljs.registerLanguage("javascript", javascript);
@@ -41,6 +43,21 @@ hljs.registerLanguage("json", json);
 
 const CodeBlock = ({ code }) => {
   const codeRef = useRef(null);
+  const { darkMode } = useTheme();
+
+  useEffect(() => {
+    const linkElement = document.createElement("link");
+    linkElement.rel = "stylesheet";
+    linkElement.type = "text/css";
+    linkElement.href = darkMode
+      ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-dark.min.css"
+      : "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/atom-one-light.min.css";
+    document.head.appendChild(linkElement);
+
+    return () => {
+      document.head.removeChild(linkElement);
+    };
+  }, [darkMode]);
 
   useEffect(() => {
     if (codeRef.current) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import StudyGuideTopics from "./StudyGuideTopics";
 import Image from "next/image";
 import logo from "@/images/logo.png";
@@ -14,9 +14,11 @@ import {
   Forward,
   LayoutDashboard,
   MessageSquare,
+  MoonStar,
   Pencil,
   Save,
   Search,
+  Sun,
   Zap,
 } from "lucide-react";
 import { useStateContext } from "@/context/StateContext";
@@ -26,6 +28,7 @@ import {
   getUserStudyGuides,
   updateStudyGuideFileName,
 } from "@/firebase/database";
+import { useTheme } from "@/context/ThemeContext";
 
 const Sidebar = ({
   studyGuideId,
@@ -58,6 +61,7 @@ const Sidebar = ({
   const { currentUser } = useStateContext();
   const router = useRouter();
   const titleInputRef = useRef(null);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   // Function to toggle sidebar collapse
   const toggleSidebarCollapse = () => {
@@ -262,13 +266,13 @@ const Sidebar = ({
         {isChatbotShown ? "Hide" : "Chat with"} Sola
       </ToolContainer>
       {creator === currentUser.uid && hasFirebaseUrl && (
-      <ToolContainer
-        onClick={handleFileToggle}
-        $sidebarCollapsed={sidebarCollapsed}
-      >
-        <File />
-        {isFileShown ? "Hide" : "Show"} Original File
-      </ToolContainer>
+        <ToolContainer
+          onClick={handleFileToggle}
+          $sidebarCollapsed={sidebarCollapsed}
+        >
+          <File />
+          {isFileShown ? "Hide" : "Show"} Original File
+        </ToolContainer>
       )}
       {currentUser.uid == creator && (
         <ToolContainer
@@ -279,6 +283,13 @@ const Sidebar = ({
           Flashcards
         </ToolContainer>
       )}
+      <ToolContainer
+        onClick={toggleDarkMode}
+        $sidebarCollapsed={sidebarCollapsed}
+      >
+        {darkMode ? <Sun /> : <MoonStar />}
+        {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      </ToolContainer>
     </SidebarContainer>
   );
 };
