@@ -1,6 +1,6 @@
 import styled, { useTheme } from "styled-components";
 import { getCheckoutUrl, getPortalUrl } from "@/utils/stripePayment";
-import app from "@/firebase/firebase";
+import { app } from "@/firebase/firebase";
 import { useRouter } from "next/navigation"; // must be from next/navigation not next/router
 import { useStateContext } from "@/context/StateContext";
 import { useState } from "react";
