@@ -18,7 +18,10 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { Tooltip } from "react-tooltip";
-import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { handleFileUpload } from "@/utils/handleFileUpload";
 import { useStateContext } from "@/context/StateContext";
@@ -39,7 +42,7 @@ const Dashboard = () => {
   const [filteredStudyGuides, setFilteredStudyGuides] = useState([]);
   const [studyGuidesLoaded, setStudyGuidesLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingPercentage, setLoadingPercentage] = useState(0);
+  const [loadingStatus, setloadingStatus] = useState([0, ""]);
   const [displayNames, setDisplayNames] = useState({});
   const [displayNamesLoaded, setDisplayNamesLoaded] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -198,8 +201,9 @@ const Dashboard = () => {
     }
   };
 
-  const getRandomInRange = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  // Callback function for handleFileUpload to update loading progress
+  const updateLoadingProgress = (progress) => {
+    setloadingStatus(progress);
   };
 
   // Function to handle the file selection/upload
@@ -213,13 +217,6 @@ const Dashboard = () => {
     topic
   ) => {
     setIsLoading(true);
-    // Simulate loading progress
-    const interval = setInterval(() => {
-      setLoadingPercentage((prev) => {
-        const newPercentage = prev + getRandomInRange(3, 5);
-        return newPercentage > 100 ? 100 : newPercentage;
-      });
-    }, 1000);
 
     if (!topic) {
       const fileExtension = file.name.split(".").pop();
@@ -244,9 +241,9 @@ const Dashboard = () => {
       includeQuestions,
       includeResources,
       currentUser,
-      topic
+      topic,
+      updateLoadingProgress
     );
-    clearInterval(interval);
     setIsLoading(false);
 
     // Toast error messages if necessary
@@ -300,14 +297,20 @@ const Dashboard = () => {
               {isLoading ? (
                 <Overlay>
                   <ProgressWrapper>
-                    <CircularProgressbar
-                      value={loadingPercentage}
-                      text={`${loadingPercentage}%`}
+                    <CircularProgressbarWithChildren
+                      value={loadingStatus[0]}
                       styles={buildStyles({
                         pathColor: theme.primary,
                         textColor: theme.black,
+                        trailColor: theme.lightGray,
+                        backgroundColor: theme.white,
                       })}
-                    />
+                      background={true}
+                    >
+                      <ProgressTextContainer>
+                        {loadingStatus[1]}
+                      </ProgressTextContainer>
+                    </CircularProgressbarWithChildren>
                   </ProgressWrapper>
                 </Overlay>
               ) : (
@@ -634,8 +637,18 @@ const Overlay = styled.div`
 `;
 
 const ProgressWrapper = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
+`;
+
+const ProgressTextContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.default};
+  color: ${({ theme }) => theme.black};
+  padding: 16px;
 `;
 
 const FilterSortContainer = styled.div`
