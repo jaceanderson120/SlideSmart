@@ -36,6 +36,9 @@ import Head from "next/head";
 import PageTitle from "@/components/page/PageTitle";
 import IconButton from "@/components/IconButton";
 import { Trash2 } from "lucide-react";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
+
 
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
@@ -304,11 +307,12 @@ const Dashboard = () => {
                         textColor: theme.black,
                         trailColor: theme.lightGray,
                         backgroundColor: theme.white,
+                        pathTransitionDuration: 35,
                       })}
                       background={true}
                     >
                       <ProgressTextContainer>
-                        {loadingStatus[1]}
+                        {loadingStatus[1]}<Dots />
                       </ProgressTextContainer>
                     </CircularProgressbarWithChildren>
                   </ProgressWrapper>
@@ -643,12 +647,14 @@ const ProgressWrapper = styled.div`
 
 const ProgressTextContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   font-size: ${({ theme }) => theme.fontSize.default};
   color: ${({ theme }) => theme.black};
   padding: 16px;
+  gap: 8px;
 `;
 
 const FilterSortContainer = styled.div`
