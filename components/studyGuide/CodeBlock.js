@@ -29,4 +29,5 @@ const Code = styled.code`
   padding: 16px;
   border-radius: 8px;
   margin: 8px 0;
+  border: 1px solid ${({ theme }) => theme.black};
 `;
