@@ -23,6 +23,7 @@ export default async function createContent(req, res) {
     Here is the JSON object: ${JSON.stringify(
       data
     )}. Generate a new explanation for this topic and only return the explanation.
+    If your answer contains any code, enclose it in <pre><code>...</code></pre> tags.
   `;
 
   // Start the OpenAI completion for examples without waiting for YouTube API

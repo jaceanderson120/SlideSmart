@@ -64,6 +64,7 @@ const handleFileUpload = async (
         body: extractedData,
       });
     } else {
+      setLoadingPercentage([20, "Generating topics..."]);
       // Send the topic to learn about to GPT to retrieve topics + explanations object from data
       topicsAndExplanationsResponse = await fetch("/api/generate-topics-gpt", {
         method: "POST",

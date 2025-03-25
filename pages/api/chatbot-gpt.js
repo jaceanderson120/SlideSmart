@@ -68,7 +68,9 @@ export default async function POST(request) {
     - Use \(...\) or $...$ for inline math.
     - For multi-line equations, use \\[...\] to wrap the LaTeX.
     
-    If LaTeX is not necessary, respond as usual.
+    If your answer contains any code, enclose it in <pre><code>...</code></pre> tags.
+    
+    If LaTeX or code is not necessary, respond as usual.
     
     Please keep your responses concise and to the point unless the user asks for more details.`,
       },

@@ -22,6 +22,7 @@ export default async function createContent(req, res) {
     I am providing you with JSON in the following format: { 'topicName1': 'explanation1', 'topicName2': 'explanation2' ... }.
     Here is the JSON object: ${JSON.stringify(data)}.
     For each topic, please create a practice problem example. Please make sure that the practice problem answer can be found in and related back to the topic explanation.
+    If your answer contains any code, enclose it in <pre><code>...</code></pre> tags.
     Return the refined data as JSON in this format: { 'topicName1': { 'question': 'question', 'answer': 'answer' }, 'topicName2': { 'question': 'question', 'answer': 'answer' } ... }.
   `;
 
