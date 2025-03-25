@@ -261,14 +261,14 @@ const Sidebar = ({
         <MessageSquare />
         {isChatbotShown ? "Hide" : "Chat with"} Sola
       </ToolContainer>
-      {hasFirebaseUrl && (
-        <ToolContainer
-          onClick={handleFileToggle}
-          $sidebarCollapsed={sidebarCollapsed}
-        >
-          <File />
-          {isFileShown ? "Hide" : "Show"} Original File
-        </ToolContainer>
+      {creator === currentUser.uid && hasFirebaseUrl && (
+      <ToolContainer
+        onClick={handleFileToggle}
+        $sidebarCollapsed={sidebarCollapsed}
+      >
+        <File />
+        {isFileShown ? "Hide" : "Show"} Original File
+      </ToolContainer>
       )}
       {currentUser.uid == creator && (
         <ToolContainer
