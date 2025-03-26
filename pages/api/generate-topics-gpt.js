@@ -26,6 +26,7 @@ export default async function getTopics(req, res) {
       - Aim for no more than 8 topics unless more topics are absolutely necessary.
 
     2. **Explanation of Topics**:
+      - Consider breaking explanations up into bullet points for user readability.
       - For each topic, develop a detailed explanation.
       - Make sure each explanation is clear and easy to understand.
       
@@ -35,7 +36,7 @@ export default async function getTopics(req, res) {
       'topicName2': 'explanation2',
     ...
     }
-    Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two.
+    Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two with bullet points if necessary.
 `;
 
   try {

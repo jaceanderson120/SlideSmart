@@ -27,6 +27,7 @@ export default async function getTopics(req, res) {
 
     2. **Explanation of Topics**:
       - For each topic, develop a detailed explanation.
+      - Consider breaking explanations up into bullet points for user readability.
       - If there is sufficient text in the slides relating to a topic, focus on and mirror that information.
       - If there is insufficient text, you may supplement the explanation with necessary context, but keep it concise, accurate, and clearly related to the topic.
       - When adding additional information, ensure each explanation is easy to understand, accurate, and focused on the slides.
@@ -44,9 +45,9 @@ export default async function getTopics(req, res) {
       'topicName2': 'explanation2',
     ...
     }
-    Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two.
+    Make sure each "topicName" is concise yet descriptive, and each "explanation” is a thorough, coherent paragraph or two with bullet points if necessary.
     
-    Here is the powerpoint: ${JSON.stringify(slidesData)}
+    Here is the PowerPoint: ${JSON.stringify(slidesData)}
 `;
 
   try {
