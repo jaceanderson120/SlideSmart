@@ -20,11 +20,11 @@ const handleFileUpload = async (
     let topicsAndExplanationsResponse;
     let firebaseFileUrl;
     if (file) {
-      setLoadingPercentage([10, "Uploading file"]);
+      setLoadingPercentage([10, "Uploading File"]);
       // Upload the file to Firebase Storage
       firebaseFileUrl = await uploadFileToFirebase(file);
 
-      setLoadingPercentage([20, "Extracting text"]);
+      setLoadingPercentage([20, "Extracting Text"]);
 
       // Start with extracting data from the form
       const response = await fetch("/api/extract-text", {
@@ -57,7 +57,7 @@ const handleFileUpload = async (
         throw new Error("TOKEN_ERROR");
       }
 
-      setLoadingPercentage([60, "Generating topics"]);
+      setLoadingPercentage([60, "Generating Topics"]);
 
       // Send extracted data to GPT to retrieve topics + explanations object from data
       topicsAndExplanationsResponse = await fetch("/api/get-topics-gpt", {
@@ -85,7 +85,7 @@ const handleFileUpload = async (
     const topicsAndExplanations = await topicsAndExplanationsResponse.json();
     const topics = Object.keys(topicsAndExplanations); // Extracting topics
 
-    setLoadingPercentage([80, "Finding videos and resources"]);
+    setLoadingPercentage([80, "Finding Videos and Resources"]);
 
     let youtubePromises = [];
     let googleResultsPromise = [];
@@ -210,7 +210,7 @@ const handleFileUpload = async (
       });
     }
 
-    setLoadingPercentage([93, "Generating content"]);
+    setLoadingPercentage([93, "Generating Content"]);
 
     // Resolve all promises concurrently
     const [
@@ -227,7 +227,7 @@ const handleFileUpload = async (
       includeResources ? Promise.all(googleResultsPromise) : [],
     ]);
 
-    setLoadingPercentage([100, "Finishing up"]);
+    setLoadingPercentage([100, "Finishing Up"]);
 
     // At this point, YouTube responses should be an array of arrays
     // Filter out any duplicates
