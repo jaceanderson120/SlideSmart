@@ -77,10 +77,14 @@ const CodeBlock = ({ code }) => {
 export default CodeBlock;
 
 const Code = styled.code`
-  font-family: "Fira Code", monospace;
-  font-size: ${({ theme }) => theme.fontSize.default};
+  font-family: "Fira Code", monospace !important;
   padding: 16px;
   border-radius: 8px;
   margin: 8px 0;
   border: 1px solid ${({ theme }) => theme.black};
+
+  /* Apply Fira Code font to all descendants */
+  * {
+    font-family: "Fira Code", monospace !important;
+  }
 `;

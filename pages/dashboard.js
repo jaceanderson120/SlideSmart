@@ -224,10 +224,10 @@ const Dashboard = () => {
     if (!topic) {
       const fileExtension = file.name.split(".").pop();
 
-      if (fileExtension !== "pdf" && fileExtension !== "pptx") {
+      if (fileExtension !== "pdf" && fileExtension !== "pptx" && fileExtension !== "ppt") {
         clearInterval(interval);
         setIsLoading(false);
-        toast.error("Invalid file type. Please upload a PDF or PPTX file.");
+        toast.error("Invalid file type. Please upload a PDF, PPT, or PPTX file.");
         // Reset the file input element
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
