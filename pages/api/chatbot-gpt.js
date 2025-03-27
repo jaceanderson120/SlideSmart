@@ -63,16 +63,16 @@ export default async function POST(request) {
           extractedData
         )}.
     
-    When responding, if your answer contains any math, equations, or LaTeX-style expressions, enclose them in one of the following LaTeX delimiters:
-    - Use $$...$$ for block math.
-    - Use \(...\) or $...$ for inline math.
-    - For multi-line equations, use \\[...\] to wrap the LaTeX.
-    
-    If your answer contains any code, enclose it in <pre><code>...</code></pre> tags (this is very important).
-    
-    If LaTeX or code is not necessary, respond as usual.
-    
-    Please keep your responses concise and to the point unless the user asks for more details.`,
+    When answering questions, use the slide content as a reference to provide contextually relevant and original explanations. Do not copy the slides word-for-word unless you are providing a precise definition. Instead, synthesize the information and express it in your own words to help clarify and expand upon the topics presented.
+
+    When your answer contains math, equations, or LaTeX-style expressions, enclose them using:
+    - $$...$$ for block math,
+    - \(...\) or $...$ for inline math,
+    - \\[...\\] for multi-line equations.
+
+    If your answer includes code, enclose it in <pre><code>...</code></pre> tags.
+
+    Keep your responses concise and to the point unless the user asks for more details.`,
       },
       ...messages.slice(0, -1).map((msg) => ({
         role: msg.sender === "user" ? "user" : "assistant",
