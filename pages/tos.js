@@ -83,7 +83,10 @@ const TOS = () => {
               confidential or copyrighted. SlideSmart securely stores files that
               users upload and does not share them with anyone. The user is the
               only person who will ever have access to files they uploaded to
-              create study guides.
+              create study guides. Users are not permitted to upload material
+              they do not have the right to use, and SlideSmart does not
+              encourage or condone violations of academic integrity or the
+              misuse of its services.
             </Text>
 
             <SectionTitle>7. Data Usage and Privacy</SectionTitle>
@@ -248,7 +251,10 @@ const TOS = () => {
               confidential or copyrighted. SlideSmart securely stores files that
               users upload and does not share them with anyone. The user is the
               only person who will ever have access to files they uploaded to
-              create study guides.
+              create study guides. Users are not permitted to upload material
+              they do not have the right to use, and SlideSmart does not
+              encourage or condone violations of academic integrity or the
+              misuse of its services.
             </Text>
 
             <SectionTitle>9. Data Usage and Privacy</SectionTitle>
