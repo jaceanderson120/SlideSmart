@@ -23,12 +23,12 @@ const Compare = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Compare</title>
+        <title>SolaSlides - Compare</title>
         <meta
           name="description"
-          content="Compare SlideSmart with competitors to find out why we're the best platform for you!"
+          content="Compare SolaSlides with competitors to find out why we're the best platform for you!"
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/compare" />
+        <link rel="canonical" href="https://www.solaslides.com/compare" />
       </Head>
       <body>
         <main>
@@ -36,7 +36,7 @@ const Compare = () => {
             <TopSection>
               <PageTitle>COMPARE</PageTitle>
               <Subtitle>
-                Discover why <SubtitleSpan>SlideSmart</SubtitleSpan> beats the
+                Discover why <SubtitleSpan>SolaSlides</SubtitleSpan> beats the
                 competition
               </Subtitle>
             </TopSection>

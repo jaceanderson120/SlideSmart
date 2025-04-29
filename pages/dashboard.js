@@ -39,7 +39,6 @@ import { Trash2 } from "lucide-react";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 
-
 const Dashboard = () => {
   const [studyGuides, setStudyGuides] = useState([]);
   const [filteredStudyGuides, setFilteredStudyGuides] = useState([]);
@@ -224,10 +223,16 @@ const Dashboard = () => {
     if (!topic) {
       const fileExtension = file.name.split(".").pop();
 
-      if (fileExtension !== "pdf" && fileExtension !== "pptx" && fileExtension !== "ppt") {
+      if (
+        fileExtension !== "pdf" &&
+        fileExtension !== "pptx" &&
+        fileExtension !== "ppt"
+      ) {
         clearInterval(interval);
         setIsLoading(false);
-        toast.error("Invalid file type. Please upload a PDF, PPT, or PPTX file.");
+        toast.error(
+          "Invalid file type. Please upload a PDF, PPT, or PPTX file."
+        );
         // Reset the file input element
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -252,11 +257,11 @@ const Dashboard = () => {
     // Toast error messages if necessary
     if (studyGuideId == "TOKEN_ERROR") {
       toast.error(
-        "The file you uploaded is too large for SlideSmart to handle. Please try again with a smaller file. (Keep in mind that file size doesn't always match the amount of content inside.)"
+        "The file you uploaded is too large for SolaSlides to handle. Please try again with a smaller file. (Keep in mind that file size doesn't always match the amount of content inside.)"
       );
     } else if (studyGuideId == "EMPTY_DATA") {
       toast.error(
-        "The file you uploaded appears to be empty. Unfortunately, SlideSmart cannot process this file."
+        "The file you uploaded appears to be empty. Unfortunately, SolaSlides cannot process this file."
       );
     } else if (studyGuideId == "UNKNOWN_ERROR") {
       toast.error(
@@ -285,12 +290,12 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Dashboard</title>
+        <title>SolaSlides - Dashboard</title>
         <meta
           name="description"
           content="Access your dashboard to create, view, and manage your study guides."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/dashboard" />
+        <link rel="canonical" href="https://www.solaslides.com/dashboard" />
       </Head>
       <body>
         <main>
@@ -312,7 +317,8 @@ const Dashboard = () => {
                       background={true}
                     >
                       <ProgressTextContainer>
-                        {loadingStatus[1]}<Dots />
+                        {loadingStatus[1]}
+                        <Dots />
                       </ProgressTextContainer>
                     </CircularProgressbarWithChildren>
                   </ProgressWrapper>

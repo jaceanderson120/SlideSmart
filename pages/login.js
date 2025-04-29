@@ -50,12 +50,12 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>SlideSmart - Login</title>
+        <title>SolaSlides - Login</title>
         <meta
           name="description"
-          content="Login to SlideSmart to access your study guides and resources."
+          content="Login to SolaSlides to access your study guides and resources."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/login" />
+        <link rel="canonical" href="https://www.solaslides.com/login" />
       </Head>
       <body>
         <main>
@@ -64,7 +64,7 @@ export default function Login() {
               <CredentialsForm>
                 <Image
                   src={logo}
-                  alt="SlideSmart Logo"
+                  alt="SolaSlides Logo"
                   width={48}
                   height={48}
                 />

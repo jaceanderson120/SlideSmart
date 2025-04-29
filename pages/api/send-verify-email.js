@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const sender = process.env.MAIL_USER;
   const recipients = recipient;
-  const subject = `SlideSmart - Your Verification Code`;
+  const subject = `SolaSlides - Your Verification Code`;
   const code = Math.floor(100000 + Math.random() * 900000);
   const message = `Your verification code is: ${code}. If you did not request this code, please ignore this email.`;
 

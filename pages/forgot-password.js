@@ -52,14 +52,14 @@ export default function ForgotPassword() {
   return (
     <>
       <Head>
-        <title>SlideSmart - Forgot Password</title>
+        <title>SolaSlides - Forgot Password</title>
         <meta
           name="description"
           content="Forgot your password? Reset it here."
         />
         <link
           rel="canonical"
-          href="https://www.slidesmartai.com/forgot-password"
+          href="https://www.solaslides.com/forgot-password"
         />
       </Head>
       <body>
@@ -69,7 +69,7 @@ export default function ForgotPassword() {
               <CredentialsForm>
                 <Image
                   src={logo}
-                  alt="SlideSmart Logo"
+                  alt="SolaSlides Logo"
                   width={48}
                   height={48}
                 />

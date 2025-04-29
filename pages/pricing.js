@@ -62,12 +62,12 @@ const Pricing = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Pricing</title>
+        <title>SolaSlides - Pricing</title>
         <meta
           name="description"
-          content="Get better grades with SlideSmart. Compare our Basic and Spark plans to see which one is right for you."
+          content="Get better grades with SolaSlides. Compare our Basic and Spark plans to see which one is right for you."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/pricing" />
+        <link rel="canonical" href="https://www.solaslides.com/pricing" />
       </Head>
       <body>
         <main>
@@ -76,7 +76,7 @@ const Pricing = () => {
               <TopSection>
                 <PageTitle>PRICING</PageTitle>
                 <Subtitle>
-                  Get <SubtitleSpan>better grades</SubtitleSpan> with SlideSmart
+                  Get <SubtitleSpan>better grades</SubtitleSpan> with SolaSlides
                 </Subtitle>
               </TopSection>
               <BottomSection>

@@ -34,15 +34,12 @@ const HowItWorks = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - How It Works</title>
+        <title>SolaSlides - How It Works</title>
         <meta
           name="description"
-          content="Learn how to create and navigate your study guides on SlideSmart!"
+          content="Learn how to create and navigate your study guides on SolaSlides!"
         />
-        <link
-          rel="canonical"
-          href="https://www.slidesmartai.com/how-it-works"
-        />
+        <link rel="canonical" href="https://www.solaslides.com/how-it-works" />
       </Head>
       <body>
         <main>

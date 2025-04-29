@@ -101,7 +101,7 @@ const CreateFlashcardModal = ({
           {icon}
           <ModalTitle>Create Flashcards</ModalTitle>
           <ModalText>
-            SlideSmart generates flashcards for you based on the content of your
+            SolaSlides generates flashcards for you based on the content of your
             study guide.
           </ModalText>
           {isLoading && <Dots color={theme.primary} size={32} speed={1} />}

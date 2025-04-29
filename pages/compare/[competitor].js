@@ -15,49 +15,49 @@ const Competitor = () => {
     Quizlet: {
       comparativeStatement: "Flashcards alone don’t make for deep learning.",
       competitiveSlogan:
-        "Quizlet is the definition of repetitive memorization without real context or engagement. At SlideSmart, we transform slides into interactive study guides with highly-rated YouTube videos, helping you truly understand the material, not just recall it.",
+        "Quizlet is the definition of repetitive memorization without real context or engagement. At SolaSlides, we transform slides into interactive study guides with highly-rated YouTube videos, helping you truly understand the material, not just recall it.",
     },
     ChatGPT: {
       comparativeStatement:
         "ChatGPT is great for conversation, but not for learning.",
       competitiveSlogan:
-        "ChatGPT is the definition of generic, text-heavy learning without interactive focus. SlideSmart’s philosophy is to turn slides into interactive study guides with highly-rated YouTube videos. We’re here to show you why that’s the smarter approach.",
+        "ChatGPT is the definition of generic, text-heavy learning without interactive focus. SolaSlides’s philosophy is to turn slides into interactive study guides with highly-rated YouTube videos. We’re here to show you why that’s the smarter approach.",
     },
     Chegg: {
       comparativeStatement:
         "Copying answers isn’t the same as actually learning.",
       competitiveSlogan:
-        "Chegg is the definition of quick fixes without true understanding. The key to SlideSmart is to make learning engaging and helping students truly grasp concepts instead of just memorizing answers.",
+        "Chegg is the definition of quick fixes without true understanding. The key to SolaSlides is to make learning engaging and helping students truly grasp concepts instead of just memorizing answers.",
     },
     "AI Tutor": {
       comparativeStatement:
         "Long, drawn-out lessons don’t keep students engaged.",
       competitiveSlogan:
-        "AI-Tutor.ai is the definition of overwhelming, time-consuming sessions that lose your focus. SlideSmart’s philosophy is to break down content into bite-sized study guides with highly-rated YouTube videos, making learning efficient and engaging.",
+        "AI-Tutor.ai is the definition of overwhelming, time-consuming sessions that lose your focus. SolaSlides’s philosophy is to break down content into bite-sized study guides with highly-rated YouTube videos, making learning efficient and engaging.",
     },
     NoteGPT: {
       comparativeStatement:
         "Taking notes is just the first step, not the whole journey.",
       competitiveSlogan:
-        "NoteGPT turns plain text into even more overwhelming plain text. With SlideSmart, we elevate your study materials by transforming slides into dynamic study guides enriched with highly-rated YouTube videos, so you don’t just review notes—you actually learn.",
+        "NoteGPT turns plain text into even more overwhelming plain text. With SolaSlides, we elevate your study materials by transforming slides into dynamic study guides enriched with highly-rated YouTube videos, so you don’t just review notes—you actually learn.",
     },
     Studocu: {
       comparativeStatement:
         "Summarizing a topic doesn’t make studying effective.",
       competitiveSlogan:
-        "Studocu is packed with unorganized notes that lack structure and depth. SlideSmart turns slides into focused study guides, enriched with highly-rated YouTube videos, so you get clear, concise, and meaningful learning every time.",
+        "Studocu is packed with unorganized notes that lack structure and depth. SolaSlides turns slides into focused study guides, enriched with highly-rated YouTube videos, so you get clear, concise, and meaningful learning every time.",
     },
     Knowt: {
       comparativeStatement:
         "Simply generating notes isn’t the same as actively engaging with the material.",
       competitiveSlogan:
-        "Knowt automates notes but leaves the real learning up to you. SlideSmart transforms passive notes into study guides enriched with top-rated YouTube videos, ensuring you don’t just take notes—you truly understand.",
+        "Knowt automates notes but leaves the real learning up to you. SolaSlides transforms passive notes into study guides enriched with top-rated YouTube videos, ensuring you don’t just take notes—you truly understand.",
     },
     SlideSpeak: {
       comparativeStatement:
         "Turning slides into text doesn’t mean turning them into effective study tools.",
       competitiveSlogan:
-        "SlideSpeak extracts words, but it doesn’t enhance understanding. SlideSmart goes beyond text extraction by transforming slides into dynamic study guides with highly-rated YouTube videos, making learning clearer, deeper, and more engaging.",
+        "SlideSpeak extracts words, but it doesn’t enhance understanding. SolaSlides goes beyond text extraction by transforming slides into dynamic study guides with highly-rated YouTube videos, making learning clearer, deeper, and more engaging.",
     },
   };
 
@@ -92,16 +92,15 @@ const Competitor = () => {
         <PageContainer>
           <Section>
             <TitleContainer>
-              <PageTitle>SlideSmart vs. {competitor}</PageTitle>
+              <PageTitle>SolaSlides vs. {competitor}</PageTitle>
               <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
               <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
-              <Subtext>{competitorInfo?.slidesmartSlogan}</Subtext>
             </TitleContainer>
             <ComparisonTable>
               <thead>
                 <tr>
                   <TableCompareHeader>Compare Features</TableCompareHeader>
-                  <TableHeader>SlideSmart</TableHeader>
+                  <TableHeader>SolaSlides</TableHeader>
                   <TableHeader>{competitor}</TableHeader>
                 </tr>
               </thead>

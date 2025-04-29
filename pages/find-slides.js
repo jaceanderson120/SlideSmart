@@ -100,12 +100,12 @@ const FindSlides = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Find Public Slides</title>
+        <title>SolaSlides - Find Public Slides</title>
         <meta
           name="description"
-          content="Search for public study guides on SlideSmart."
+          content="Search for public study guides on SolaSlides."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/find-slides" />
+        <link rel="canonical" href="https://www.solaslides.com/find-slides" />
       </Head>
       <body>
         <main>

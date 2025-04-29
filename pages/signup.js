@@ -87,12 +87,12 @@ const Signup = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Register</title>
+        <title>SolaSlides - Register</title>
         <meta
           name="description"
-          content="Register to SlideSmart to access your study guides and resources."
+          content="Register to SolaSlides to access your study guides and resources."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/signup" />
+        <link rel="canonical" href="https://www.solaslides.com/signup" />
       </Head>
       <body>
         <main>
@@ -101,7 +101,7 @@ const Signup = () => {
               <CredentialsForm>
                 <Image
                   src={logo}
-                  alt="SlideSmart Logo"
+                  alt="SolaSlides Logo"
                   width={48}
                   height={48}
                 />

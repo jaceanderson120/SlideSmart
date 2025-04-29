@@ -125,8 +125,8 @@ function Navbar() {
     <NavbarSection>
       <LeftButtonSection>
         <LogoContainer onClick={() => router.push("/")}>
-          <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
-          <LogoText>SlideSmart</LogoText>
+          <Image src={logo} alt="SolaSlides Logo" width={32} height="auto" />
+          <LogoText>SolaSlides</LogoText>
         </LogoContainer>
         {deviceWidth > 768 && (
           <LinksContainer>
