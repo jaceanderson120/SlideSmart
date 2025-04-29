@@ -10,7 +10,7 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import CredentialsForm from "@/components/auth/CredentialsForm";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import GoogleButton from "@/components/auth/GoogleButton";
 import OrLine from "@/components/auth/OrLine";
 import Agreement from "@/components/auth/Agreement";

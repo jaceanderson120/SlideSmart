@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:

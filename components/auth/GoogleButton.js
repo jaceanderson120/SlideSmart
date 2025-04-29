@@ -56,7 +56,7 @@ const Button = styled.button`
   align-items: center;
   padding: 10px 20px;
   background-color: ${({ theme }) => theme.lightGray};
-  color: ${({ theme }) => theme.gray};
+  color: ${({ theme }) => theme.black};
   font-weight: bold;
   border: 1px solid ${({ theme }) => theme.gray};
   border-radius: 5px;

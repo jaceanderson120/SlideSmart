@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import Link from "next/link";
 
 const Footer = () => {
@@ -25,7 +25,7 @@ const Footer = () => {
       </HorizontalSection>
       <Line />
       <SolaSlidesCopyRight>
-        Copyright @ 2024 SolaSlides. All Rights Reserved
+        Copyright @ 2025 SolaSlides. All Rights Reserved
       </SolaSlidesCopyRight>
     </FooterSection>
   );

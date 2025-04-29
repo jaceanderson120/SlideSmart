@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import StudyGuideTopics from "./StudyGuideTopics";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import IconButton from "../IconButton";
 import {
   ArrowLeft,

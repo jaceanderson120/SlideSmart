@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
