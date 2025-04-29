@@ -67,12 +67,12 @@ const Contact = () => {
   return (
     <>
       <Head>
-        <title>SlideSmart - Contact Us</title>
+        <title>SolaSlides - Contact Us</title>
         <meta
           name="description"
-          content="Contact SlideSmart for any inquiries or support."
+          content="Contact SolaSlides for any inquiries or support."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/contact" />
+        <link rel="canonical" href="https://www.solaslides.com/contact" />
       </Head>
       <body>
         <main>
@@ -81,7 +81,7 @@ const Contact = () => {
               <LeftSection>
                 <PageTitle>CONTACT US</PageTitle>
                 <Subtitle>
-                  SlideSmart is here <br></br>{" "}
+                  SolaSlides is here <br></br>{" "}
                   <SubtitleSpan>to help you</SubtitleSpan>
                 </Subtitle>
                 <Subtext>

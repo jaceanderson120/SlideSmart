@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -52,14 +52,14 @@ export default function ForgotPassword() {
   return (
     <>
       <Head>
-        <title>SlideSmart - Forgot Password</title>
+        <title>SolaSlides - Forgot Password</title>
         <meta
           name="description"
           content="Forgot your password? Reset it here."
         />
         <link
           rel="canonical"
-          href="https://www.slidesmartai.com/forgot-password"
+          href="https://www.solaslides.com/forgot-password"
         />
       </Head>
       <body>
@@ -69,7 +69,7 @@ export default function ForgotPassword() {
               <CredentialsForm>
                 <Image
                   src={logo}
-                  alt="SlideSmart Logo"
+                  alt="SolaSlides Logo"
                   width={48}
                   height={48}
                 />

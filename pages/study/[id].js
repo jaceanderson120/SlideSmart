@@ -1091,7 +1091,7 @@ const Study = () => {
           setIsNewYoutubeVideoDialogOpen(false);
         }}
         title="Find More Videos"
-        text={`SlideSmart uses AI and complex algorithms to analyze your topic explanation and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your explanation.\n\nPlease confirm that your topic explanation reflects what you wish to learn.`}
+        text={`SolaSlides uses AI and complex algorithms to analyze your topic explanation and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your explanation.\n\nPlease confirm that your topic explanation reflects what you wish to learn.`}
         onConfirm={() => {
           if (!hasSpark) {
             toast.error(

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -50,12 +50,12 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>SlideSmart - Login</title>
+        <title>SolaSlides - Login</title>
         <meta
           name="description"
-          content="Login to SlideSmart to access your study guides and resources."
+          content="Login to SolaSlides to access your study guides and resources."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/login" />
+        <link rel="canonical" href="https://www.solaslides.com/login" />
       </Head>
       <body>
         <main>
@@ -64,7 +64,7 @@ export default function Login() {
               <CredentialsForm>
                 <Image
                   src={logo}
-                  alt="SlideSmart Logo"
+                  alt="SolaSlides Logo"
                   width={48}
                   height={48}
                 />

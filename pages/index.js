@@ -32,12 +32,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SlideSmart - The AI Application to Make Slides Make Sense</title>
+        <title>SolaSlides - The AI Application to Make Slides Make Sense</title>
         <meta
           name="description"
-          content="SlideSmart turns your course slides into comprehensive + interactive study guides with plenty of useful resources to help you succeed in the classroom."
+          content="SolaSlides turns your course slides into comprehensive + interactive study guides with plenty of useful resources to help you succeed in the classroom."
         />
-        <link rel="canonical" href="https://www.slidesmartai.com/" />
+        <link rel="canonical" href="https://www.solaslides.com/" />
       </Head>
       <body>
         <main>
@@ -57,7 +57,7 @@ export default function Home() {
                   </span>
                 </Slogan>
                 <SubSlogan>
-                  SlideSmart AI turns your course slides into comprehensive +
+                  SolaSlides AI turns your course slides into comprehensive +
                   interactive study guides <br></br>with plenty of useful
                   resources to help you succeed in the classroom
                 </SubSlogan>
@@ -94,7 +94,7 @@ export default function Home() {
                   hoverBackgroundColor={theme.primary}
                   onClick={() => router.push("/how-it-works")}
                 >
-                  Confused? Learn more about how to use SlideSmart!
+                  Confused? Learn more about how to use SolaSlides!
                   <FontAwesomeIcon
                     icon={faArrowRight}
                     style={{ marginLeft: "10px" }}

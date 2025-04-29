@@ -1,21 +1,21 @@
 export const lightTheme = {
-  primary: "#f04a37",
-  primary70: "#f04a3770",
-  primary33: "#f04a3733",
-  black: "#333333", // Called "black" but it's actually a dark gray for readability
-  white: "#ffffff",
-  shadow: "#35343429",
-  lightGray: "#fff5f6",
-  gray: "#5c5c5c",
+  primary: "#4A86E8",
+  primary70: "#4A86E870",
+  primary33: "#4A86E833",
+  black: "#2C3E50", // Dark slate blue-gray instead of pure black
+  white: "#F7FBFF", // Very slight blue tint to white for eye comfort
+  shadow: "#3D4F6029", // Soft blue shadow
+  lightGray: "#B8C9E0", // Light blue-gray
+  gray: "#748CAB", // Medium blue-gray
 };
 
 export const darkTheme = {
-  primary: "#f04a37",
-  primary70: "#f04a3770",
-  primary33: "#f04a3733",
-  black: "#ffffff",
-  white: "#1a1a1a",
-  shadow: "#dcd6d629",
-  lightGray: "#3a3a3a",
-  gray: "#a9a9a9",
+  primary: "#4A86E8",
+  primary70: "#4A86E870",
+  primary33: "#4A86E833",
+  black: "#F7FBFF",
+  white: "#172A45",
+  shadow: "#E0E8F529",
+  lightGray: "#3A506B", // Darker blue-gray
+  gray: "#A4B8D3", // Lighter blue-gray
 };

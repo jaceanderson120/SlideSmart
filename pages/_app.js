@@ -22,7 +22,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color:#f04a3770;
+    background-color:#4A86E870;
     border-radius: 10px;
     border: 3px solid transparent;
   }
@@ -33,10 +33,10 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>SlideSmart</title>
+        <title>SolaSlides</title>
         <meta
           name="description"
-          content="Slidesmart - The Smart Way to Study Slides."
+          content="SolaSlides - The Smart Way to Study Slides."
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

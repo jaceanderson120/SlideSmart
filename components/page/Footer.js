@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import Link from "next/link";
 
 const Footer = () => {
   return (
     <FooterSection>
       <HorizontalSection>
-        <SlideSmart>
-          <Image src={logo} alt="SlideSmart Logo" width={48} height={48} />
-          <Link href="/">SlideSmart</Link>
-        </SlideSmart>
+        <SolaSlides>
+          <Image src={logo} alt="SolaSlides Logo" width={48} height={48} />
+          <Link href="/">SolaSlides</Link>
+        </SolaSlides>
 
         <Resources>
           <ResourceItem>Resources</ResourceItem>
@@ -24,9 +24,9 @@ const Footer = () => {
         </Resources>
       </HorizontalSection>
       <Line />
-      <SlideSmartCopyRight>
-        Copyright @ 2024 SlideSmart. All Rights Reserved
-      </SlideSmartCopyRight>
+      <SolaSlidesCopyRight>
+        Copyright @ 2025 SolaSlides. All Rights Reserved
+      </SolaSlidesCopyRight>
     </FooterSection>
   );
 };
@@ -53,7 +53,7 @@ const HorizontalSection = styled.div`
   padding: 16px;
 `;
 
-const SlideSmart = styled.div`
+const SolaSlides = styled.div`
   display: flex;
   align-items: center;
 
@@ -89,7 +89,7 @@ const ResourceItem = styled.div`
   }
 `;
 
-const SlideSmartCopyRight = styled.div`
+const SolaSlidesCopyRight = styled.div`
   font-size: ${({ theme }) => theme.fontSize.secondary};
   color: ${({ theme }) => theme.gray};
   padding: 16px;

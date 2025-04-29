@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import logo from "@/images/logo.png";
+import logo from "@/images/logo.svg";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { useStateContext } from "@/context/StateContext";
@@ -125,8 +125,8 @@ function Navbar() {
     <NavbarSection>
       <LeftButtonSection>
         <LogoContainer onClick={() => router.push("/")}>
-          <Image src={logo} alt="SlideSmart Logo" width={32} height="auto" />
-          <LogoText>SlideSmart</LogoText>
+          <Image src={logo} alt="SolaSlides Logo" width={32} height="auto" />
+          <LogoText>SolaSlides</LogoText>
         </LogoContainer>
         {deviceWidth > 768 && (
           <LinksContainer>
