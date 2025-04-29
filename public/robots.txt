@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.slidesmartai.com/
+Host: https://www.solaslides.com/
 
 # Sitemaps
-Sitemap: https://www.slidesmartai.com/sitemap.xml
+Sitemap: https://www.solaslides.com/sitemap.xml

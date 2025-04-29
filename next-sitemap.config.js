@@ -1,6 +1,6 @@
 // next-sitemap.config.js
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://www.slidesmartai.com/",
+  siteUrl: "https://www.solaslides.com/",
   generateRobotsTxt: true,
 };
