@@ -67,10 +67,6 @@ function Navbar() {
       onClick: () => router.push("/dashboard"),
     },
     {
-      name: "Find Study Guides",
-      onClick: () => router.push("/find-slides"),
-    },
-    {
       name: "How it Works",
       onClick: () => router.push("/how-it-works"),
     },
@@ -130,18 +126,6 @@ function Navbar() {
         </LogoContainer>
         {deviceWidth > 768 && (
           <LinksContainer>
-            {isLoggedIn && (
-              <Button
-                onClick={() => router.push("/find-slides")}
-                padding="8px"
-                backgroundColor="transparent"
-                hoverBackgroundColor="transparent"
-                textColor={({ theme }) => theme.black}
-                hoverTextColor={({ theme }) => theme.primary}
-              >
-                Find Study Guides
-              </Button>
-            )}
             <Button
               onClick={() => router.push("/how-it-works")}
               padding="8px"
