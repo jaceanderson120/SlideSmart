@@ -30,7 +30,7 @@ To start, there are *two* different environments that we deal with. One is the *
 You can pull environment variables from Vercel using the following command:
 
 ```bash
-vercel env pull .env --environment=preview --git-branch dev
+vercel env pull .env --environment=preview
 ```
 
 The above command will pull the necessary environment variables into a file in the root directory of the project called `.env`.
