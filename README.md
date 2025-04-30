@@ -2,7 +2,7 @@
 
 First, make sure you have Node installed [https://nodejs.org/en/download](https://nodejs.org/en/download). Once installed, run `npm install` to install all necessary dependencies to run this project.
 
-Next, run the development server with the command `npm run dev`.
+Then, run the development server with the command `npm run dev`.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
