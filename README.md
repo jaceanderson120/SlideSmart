@@ -41,7 +41,7 @@ The above command will pull the necessary environment variables into a file in t
 
 When you run the command `vercel`, it will create a preview build with the development environment variables, regardless of the branch you are on, but it will not appear on production.
 
-When you run the command `vercel --prod`, it will automatically create and push a build to production, regardless of the branch you are on, so **be careful**.
+When you run the command `vercel --prod`, it will automatically create and push a build to production regardless of the branch you are on, meaning that the current branch will become what is seen on the production website, so **be careful**.
 
 The table below summarizes that:
 
