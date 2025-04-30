@@ -203,6 +203,15 @@ const Dashboard = () => {
     }
   };
 
+  // Function to handle when the find slides button is clicked
+  const handleFindSlidesClick = () => {
+    if (isLoggedIn) {
+      router.push("/find-slides");
+    } else {
+      router.push("/login");
+    }
+  };
+
   // Callback function for handleFileUpload to update loading progress
   const updateLoadingProgress = (progress) => {
     setloadingStatus(progress);
@@ -339,6 +348,12 @@ const Dashboard = () => {
                     >
                       Create New
                     </Button>
+                    <Button
+                      onClick={handleFindSlidesClick}
+                      padding="16px"
+                      bold
+                      fontSize={({ theme }) => theme.fontSize.subheading}
+                      >Find Slides</Button>
                   </ButtonContainer>
                 )}
                 <CreateModal
@@ -600,6 +615,13 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   flex: 1;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
 `;
 
 const TableContainer = styled.div`
