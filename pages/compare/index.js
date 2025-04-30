@@ -30,35 +30,34 @@ const Compare = () => {
         />
         <link rel="canonical" href="https://www.solaslides.com/compare" />
       </Head>
-      <body>
-        <main>
-          <PageContainer>
-            <TopSection>
-              <PageTitle>COMPARE</PageTitle>
-              <Subtitle>
-                Discover why <SubtitleSpan>SolaSlides</SubtitleSpan> beats the
-                competition
-              </Subtitle>
-            </TopSection>
-            <BottomSection>
-              {competitors.map((competitor) => (
-                <Competitor key={competitor}>
-                  <Button
-                    style={{ width: "100%", height: "100%" }}
-                    padding="16px"
-                    bold
-                    fontSize={({ theme }) => theme.fontSize.subheading}
-                    onClick={() => router.push(`/compare/${competitor}`)}
-                  >
-                    vs. {competitor}
-                  </Button>
-                </Competitor>
-              ))}
-            </BottomSection>
-          </PageContainer>
-          <Footer />
-        </main>
-      </body>
+
+      <main>
+        <PageContainer>
+          <TopSection>
+            <PageTitle>COMPARE</PageTitle>
+            <Subtitle>
+              Discover why <SubtitleSpan>SolaSlides</SubtitleSpan> beats the
+              competition
+            </Subtitle>
+          </TopSection>
+          <BottomSection>
+            {competitors.map((competitor) => (
+              <Competitor key={competitor}>
+                <Button
+                  style={{ width: "100%", height: "100%" }}
+                  padding="16px"
+                  bold
+                  fontSize={({ theme }) => theme.fontSize.subheading}
+                  onClick={() => router.push(`/compare/${competitor}`)}
+                >
+                  vs. {competitor}
+                </Button>
+              </Competitor>
+            ))}
+          </BottomSection>
+        </PageContainer>
+        <Footer />
+      </main>
     </>
   );
 };

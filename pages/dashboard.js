@@ -297,228 +297,226 @@ const Dashboard = () => {
         />
         <link rel="canonical" href="https://www.solaslides.com/dashboard" />
       </Head>
-      <body>
-        <main>
-          {!checkingAuth && (
-            <Container>
-              <Navbar />
-              {isLoading ? (
-                <Overlay>
-                  <ProgressWrapper>
-                    <CircularProgressbarWithChildren
-                      value={loadingStatus[0]}
-                      styles={buildStyles({
-                        pathColor: theme.primary,
-                        textColor: theme.black,
-                        trailColor: theme.lightGray,
-                        backgroundColor: theme.white,
-                        pathTransitionDuration: 35,
-                      })}
-                      background={true}
+
+      <main>
+        {!checkingAuth && (
+          <Container>
+            <Navbar />
+            {isLoading ? (
+              <Overlay>
+                <ProgressWrapper>
+                  <CircularProgressbarWithChildren
+                    value={loadingStatus[0]}
+                    styles={buildStyles({
+                      pathColor: theme.primary,
+                      textColor: theme.black,
+                      trailColor: theme.lightGray,
+                      backgroundColor: theme.white,
+                      pathTransitionDuration: 35,
+                    })}
+                    background={true}
+                  >
+                    <ProgressTextContainer>
+                      {loadingStatus[1]}
+                      <Dots />
+                    </ProgressTextContainer>
+                  </CircularProgressbarWithChildren>
+                </ProgressWrapper>
+              </Overlay>
+            ) : (
+              <></>
+            )}
+            <Section>
+              <TopContainer>
+                <PageTitle>DASHBOARD</PageTitle>
+                {isLoggedIn && (
+                  <ButtonContainer>
+                    <Button
+                      onClick={handleCreateNewClick}
+                      padding="16px"
+                      bold
+                      fontSize={({ theme }) => theme.fontSize.subheading}
                     >
-                      <ProgressTextContainer>
-                        {loadingStatus[1]}
-                        <Dots />
-                      </ProgressTextContainer>
-                    </CircularProgressbarWithChildren>
-                  </ProgressWrapper>
-                </Overlay>
-              ) : (
-                <></>
-              )}
-              <Section>
-                <TopContainer>
-                  <PageTitle>DASHBOARD</PageTitle>
-                  {isLoggedIn && (
-                    <ButtonContainer>
-                      <Button
-                        onClick={handleCreateNewClick}
-                        padding="16px"
-                        bold
-                        fontSize={({ theme }) => theme.fontSize.subheading}
-                      >
-                        Create New
-                      </Button>
-                    </ButtonContainer>
-                  )}
-                  <CreateModal
-                    isOpen={isModalOpen}
-                    onRequestClose={() => setIsModalOpen(false)}
-                    onUpload={handleUploadSubmit}
-                  ></CreateModal>
-                </TopContainer>
-                <FilterSortContainer>
-                  <FilterContainer>
-                    <FilterLabel>Filter:</FilterLabel>
-                    <CustomMenu
-                      triggerElement={
-                        <MenuTrigger>
-                          {filter === "all"
-                            ? "All"
-                            : filter === "owned"
-                            ? "Owned by Me"
-                            : filter === "shared"
-                            ? "Shared with Me"
-                            : "Downloaded Publically"}
-                        </MenuTrigger>
-                      }
-                      menuItems={[
-                        { name: "All", onClick: setFilterAll },
-                        { name: "Owned by Me", onClick: setFilterOwned },
-                        { name: "Shared with Me", onClick: setFilterShared },
-                        {
-                          name: "Downloaded Publically",
-                          onClick: setFilterPublic,
-                        },
-                      ]}
-                      arrow={true}
-                    />
-                  </FilterContainer>
-                  <FilterContainer>
-                    <FilterLabel>Sort:</FilterLabel>
-                    <CustomMenu
-                      triggerElement={
-                        <MenuTrigger>
-                          {sorting === "A-Z"
-                            ? "A-Z"
-                            : sorting === "Z-A"
-                            ? "Z-A"
-                            : sorting === "Date Created"
-                            ? "Date Created"
-                            : "Last Modified"}
-                        </MenuTrigger>
-                      }
-                      menuItems={[
-                        { name: "A-Z", onClick: setSortAtoZ },
-                        { name: "Z-A", onClick: setSortZtoA },
-                        { name: "Date Created", onClick: setSortDateCreated },
-                        {
-                          name: "Last Modified",
-                          onClick: setSortDateModified,
-                        },
-                      ]}
-                      arrow={true}
-                    />
-                  </FilterContainer>
-                </FilterSortContainer>
-                <TableContainer>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <Th>Name</Th>
-                        <Th>Created</Th>
-                        <Th>Permission</Th>
-                        <Th>Contributors</Th>
-                        <Th>Visibility</Th>
-                        <Th>Options</Th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
-                        filteredStudyGuides.map((guide) => (
-                          <tr key={guide.id}>
-                            <Td>
-                              <StudyGuideLink
-                                onClick={() => handleView(guide.id)}
-                              >
-                                {guide.fileName}
-                              </StudyGuideLink>
-                            </Td>
-                            <Td>{guide.createdAt}</Td>
-                            <Td>
-                              {guide.createdBy === currentUser?.uid
-                                ? "Owner"
-                                : guide.editors.includes(currentUser?.uid)
-                                ? "Editor"
-                                : "Viewer"}
-                            </Td>
-                            <Td>
-                              <ContributorContainer>
-                                {guide.contributors.map((contributor) => (
-                                  <Contributor key={contributor}>
-                                    <UserIcon
-                                      initials={
-                                        displayNames[contributor]
-                                          ? displayNames[contributor]
-                                              .split(" ")
-                                              .map((name) => name[0])
-                                              .join("")
-                                          : "?"
-                                      }
-                                      data-tooltip-id={`contributor-tooltip-${contributor}`}
-                                      data-tooltip-content={
-                                        displayNames[contributor] ||
-                                        "Loading..."
-                                      }
-                                      data-tooltip-place="left"
-                                    />
-                                    <Tooltip
-                                      id={`contributor-tooltip-${contributor}`}
-                                      // Doesn't work with styled-components
-                                      style={{
-                                        backgroundColor: theme.primary,
-                                        fontSize: theme.fontSize.secondary,
-                                        padding: "8px",
-                                      }}
-                                    />
-                                  </Contributor>
-                                ))}
-                              </ContributorContainer>
-                            </Td>
-                            <Td>{guide.isPublic ? "Public" : "Private"}</Td>
-                            <Td>
-                              {guide.createdBy === currentUser?.uid && (
-                                <IconButton
-                                  onClick={() => {
-                                    setIsDeleteDialogOpen(true);
-                                    setGuideToDelete(guide);
-                                  }}
-                                  icon={<Trash2 />}
-                                  title="Delete Study Guide"
-                                />
-                              )}
-                            </Td>
-                          </tr>
-                        ))
-                      ) : !studyGuidesLoaded ? (
-                        <tr>
-                          <Td colSpan="6">Finding your study guides...</Td>
-                        </tr>
-                      ) : displayNamesLoaded ? (
-                        <tr>
-                          <Td colSpan="6">No study guides found.</Td>
-                        </tr>
-                      ) : (
-                        <tr>
-                          <Td colSpan="6">Loading contributors...</Td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </Table>
-                </TableContainer>
-              </Section>
-              <ConfirmationModal
-                isOpen={isDeleteDialogOpen}
-                onClose={() => setIsDeleteDialogOpen(false)}
-                title="Are you sure you want to delete this study guide?"
-                text={`"${guideToDelete?.fileName}"\nwill be permanently deleted.`}
-                onConfirm={() => {
-                  setIsDeleteDialogOpen(false);
-                  handleDelete(guideToDelete);
-                  toast.success("Study guide deleted successfully.");
-                }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    size="3x"
-                    color={theme.primary}
+                      Create New
+                    </Button>
+                  </ButtonContainer>
+                )}
+                <CreateModal
+                  isOpen={isModalOpen}
+                  onRequestClose={() => setIsModalOpen(false)}
+                  onUpload={handleUploadSubmit}
+                ></CreateModal>
+              </TopContainer>
+              <FilterSortContainer>
+                <FilterContainer>
+                  <FilterLabel>Filter:</FilterLabel>
+                  <CustomMenu
+                    triggerElement={
+                      <MenuTrigger>
+                        {filter === "all"
+                          ? "All"
+                          : filter === "owned"
+                          ? "Owned by Me"
+                          : filter === "shared"
+                          ? "Shared with Me"
+                          : "Downloaded Publically"}
+                      </MenuTrigger>
+                    }
+                    menuItems={[
+                      { name: "All", onClick: setFilterAll },
+                      { name: "Owned by Me", onClick: setFilterOwned },
+                      { name: "Shared with Me", onClick: setFilterShared },
+                      {
+                        name: "Downloaded Publically",
+                        onClick: setFilterPublic,
+                      },
+                    ]}
+                    arrow={true}
                   />
-                }
-              />
-            </Container>
-          )}
-        </main>
-      </body>
+                </FilterContainer>
+                <FilterContainer>
+                  <FilterLabel>Sort:</FilterLabel>
+                  <CustomMenu
+                    triggerElement={
+                      <MenuTrigger>
+                        {sorting === "A-Z"
+                          ? "A-Z"
+                          : sorting === "Z-A"
+                          ? "Z-A"
+                          : sorting === "Date Created"
+                          ? "Date Created"
+                          : "Last Modified"}
+                      </MenuTrigger>
+                    }
+                    menuItems={[
+                      { name: "A-Z", onClick: setSortAtoZ },
+                      { name: "Z-A", onClick: setSortZtoA },
+                      { name: "Date Created", onClick: setSortDateCreated },
+                      {
+                        name: "Last Modified",
+                        onClick: setSortDateModified,
+                      },
+                    ]}
+                    arrow={true}
+                  />
+                </FilterContainer>
+              </FilterSortContainer>
+              <TableContainer>
+                <Table>
+                  <thead>
+                    <tr>
+                      <Th>Name</Th>
+                      <Th>Created</Th>
+                      <Th>Permission</Th>
+                      <Th>Contributors</Th>
+                      <Th>Visibility</Th>
+                      <Th>Options</Th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredStudyGuides?.length > 0 && displayNamesLoaded ? (
+                      filteredStudyGuides.map((guide) => (
+                        <tr key={guide.id}>
+                          <Td>
+                            <StudyGuideLink
+                              onClick={() => handleView(guide.id)}
+                            >
+                              {guide.fileName}
+                            </StudyGuideLink>
+                          </Td>
+                          <Td>{guide.createdAt}</Td>
+                          <Td>
+                            {guide.createdBy === currentUser?.uid
+                              ? "Owner"
+                              : guide.editors.includes(currentUser?.uid)
+                              ? "Editor"
+                              : "Viewer"}
+                          </Td>
+                          <Td>
+                            <ContributorContainer>
+                              {guide.contributors.map((contributor) => (
+                                <Contributor key={contributor}>
+                                  <UserIcon
+                                    initials={
+                                      displayNames[contributor]
+                                        ? displayNames[contributor]
+                                            .split(" ")
+                                            .map((name) => name[0])
+                                            .join("")
+                                        : "?"
+                                    }
+                                    data-tooltip-id={`contributor-tooltip-${contributor}`}
+                                    data-tooltip-content={
+                                      displayNames[contributor] || "Loading..."
+                                    }
+                                    data-tooltip-place="left"
+                                  />
+                                  <Tooltip
+                                    id={`contributor-tooltip-${contributor}`}
+                                    // Doesn't work with styled-components
+                                    style={{
+                                      backgroundColor: theme.primary,
+                                      fontSize: theme.fontSize.secondary,
+                                      padding: "8px",
+                                    }}
+                                  />
+                                </Contributor>
+                              ))}
+                            </ContributorContainer>
+                          </Td>
+                          <Td>{guide.isPublic ? "Public" : "Private"}</Td>
+                          <Td>
+                            {guide.createdBy === currentUser?.uid && (
+                              <IconButton
+                                onClick={() => {
+                                  setIsDeleteDialogOpen(true);
+                                  setGuideToDelete(guide);
+                                }}
+                                icon={<Trash2 />}
+                                title="Delete Study Guide"
+                              />
+                            )}
+                          </Td>
+                        </tr>
+                      ))
+                    ) : !studyGuidesLoaded ? (
+                      <tr>
+                        <Td colSpan="6">Finding your study guides...</Td>
+                      </tr>
+                    ) : displayNamesLoaded ? (
+                      <tr>
+                        <Td colSpan="6">No study guides found.</Td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <Td colSpan="6">Loading contributors...</Td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+              </TableContainer>
+            </Section>
+            <ConfirmationModal
+              isOpen={isDeleteDialogOpen}
+              onClose={() => setIsDeleteDialogOpen(false)}
+              title="Are you sure you want to delete this study guide?"
+              text={`"${guideToDelete?.fileName}"\nwill be permanently deleted.`}
+              onConfirm={() => {
+                setIsDeleteDialogOpen(false);
+                handleDelete(guideToDelete);
+                toast.success("Study guide deleted successfully.");
+              }}
+              icon={
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  size="3x"
+                  color={theme.primary}
+                />
+              }
+            />
+          </Container>
+        )}
+      </main>
     </>
   );
 };

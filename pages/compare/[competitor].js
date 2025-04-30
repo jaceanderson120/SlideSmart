@@ -87,49 +87,47 @@ const Competitor = () => {
   const competitorData = criteriaData[competitor];
 
   return (
-    <body>
-      <main>
-        <PageContainer>
-          <Section>
-            <TitleContainer>
-              <PageTitle>SolaSlides vs. {competitor}</PageTitle>
-              <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
-              <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
-            </TitleContainer>
-            <ComparisonTable>
-              <thead>
-                <tr>
-                  <TableCompareHeader>Compare Features</TableCompareHeader>
-                  <TableHeader>SolaSlides</TableHeader>
-                  <TableHeader>{competitor}</TableHeader>
+    <main>
+      <PageContainer>
+        <Section>
+          <TitleContainer>
+            <PageTitle>SolaSlides vs. {competitor}</PageTitle>
+            <Subtitle>{competitorInfo?.comparativeStatement}</Subtitle>
+            <Subtext>{competitorInfo?.competitiveSlogan}</Subtext>
+          </TitleContainer>
+          <ComparisonTable>
+            <thead>
+              <tr>
+                <TableCompareHeader>Compare Features</TableCompareHeader>
+                <TableHeader>SolaSlides</TableHeader>
+                <TableHeader>{competitor}</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {compareCriteria.map((criteria, index) => (
+                <tr key={index}>
+                  <CriteriaTd>{criteria}</CriteriaTd>
+                  <CheckmarkTd>
+                    <FontAwesomeIcon icon={faCheck} />
+                  </CheckmarkTd>
+                  {competitorData &&
+                    (competitorData[index] ? (
+                      <CheckmarkTd>
+                        <FontAwesomeIcon icon={faCheck} />
+                      </CheckmarkTd>
+                    ) : (
+                      <XTd>
+                        <FontAwesomeIcon icon={faX} />
+                      </XTd>
+                    ))}
                 </tr>
-              </thead>
-              <tbody>
-                {compareCriteria.map((criteria, index) => (
-                  <tr key={index}>
-                    <CriteriaTd>{criteria}</CriteriaTd>
-                    <CheckmarkTd>
-                      <FontAwesomeIcon icon={faCheck} />
-                    </CheckmarkTd>
-                    {competitorData &&
-                      (competitorData[index] ? (
-                        <CheckmarkTd>
-                          <FontAwesomeIcon icon={faCheck} />
-                        </CheckmarkTd>
-                      ) : (
-                        <XTd>
-                          <FontAwesomeIcon icon={faX} />
-                        </XTd>
-                      ))}
-                  </tr>
-                ))}
-              </tbody>
-            </ComparisonTable>
-          </Section>
-        </PageContainer>
-        <Footer />
-      </main>
-    </body>
+              ))}
+            </tbody>
+          </ComparisonTable>
+        </Section>
+      </PageContainer>
+      <Footer />
+    </main>
   );
 };
 

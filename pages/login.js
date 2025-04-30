@@ -57,54 +57,48 @@ export default function Login() {
         />
         <link rel="canonical" href="https://www.solaslides.com/login" />
       </Head>
-      <body>
-        <main>
-          <PageContainer>
-            <Section>
-              <CredentialsForm>
-                <Image
-                  src={logo}
-                  alt="SolaSlides Logo"
-                  width={48}
-                  height={48}
-                />
-                <Title>Welcome back</Title>
-                <GoogleButton />
-                <OrLine />
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <Button
-                  onClick={login}
-                  marginTop="10px"
-                  style={{ fontWeight: "bold" }}
-                >
-                  Login with email <FontAwesomeIcon icon={faArrowRight} />
-                </Button>
-                <Agreement type="login" />
-                <StyledText>
-                  Don't have an account?{" "}
-                  <TextLink href="/signup">Register</TextLink>
-                </StyledText>
-                <StyledText>
-                  Forgot your password?{" "}
-                  <TextLink href="/forgot-password">Reset it here</TextLink>
-                </StyledText>
-              </CredentialsForm>
-            </Section>
-          </PageContainer>
-          <Footer />
-        </main>
-      </body>
+
+      <main>
+        <PageContainer>
+          <Section>
+            <CredentialsForm>
+              <Image src={logo} alt="SolaSlides Logo" width={48} height={48} />
+              <Title>Welcome back</Title>
+              <GoogleButton />
+              <OrLine />
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button
+                onClick={login}
+                marginTop="10px"
+                style={{ fontWeight: "bold" }}
+              >
+                Login with email <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+              <Agreement type="login" />
+              <StyledText>
+                Don't have an account?{" "}
+                <TextLink href="/signup">Register</TextLink>
+              </StyledText>
+              <StyledText>
+                Forgot your password?{" "}
+                <TextLink href="/forgot-password">Reset it here</TextLink>
+              </StyledText>
+            </CredentialsForm>
+          </Section>
+        </PageContainer>
+        <Footer />
+      </main>
     </>
   );
 }

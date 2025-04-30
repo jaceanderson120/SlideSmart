@@ -39,73 +39,71 @@ export default function Home() {
         />
         <link rel="canonical" href="https://www.solaslides.com/" />
       </Head>
-      <body>
-        <main>
-          <PageContainer>
-            <Section>
-              <SloganContainer>
-                <Slogan>
-                  <span style={{ color: theme.primary, fontWeight: "bold" }}>
-                    Slide
-                  </span>{" "}
-                  Into Success,
-                  <br />
-                  Stay Sharp & Study
-                  <span style={{ color: theme.primary, fontWeight: "bold" }}>
-                    {" "}
-                    Smart
-                  </span>
-                </Slogan>
-                <SubSlogan>
-                  SolaSlides AI turns your course slides into comprehensive +
-                  interactive study guides <br></br>with plenty of useful
-                  resources to help you succeed in the classroom
-                </SubSlogan>
-                <Button
-                  onClick={handleMainButtonClick}
-                  padding="16px"
-                  bold
-                  fontSize={({ theme }) => theme.fontSize.subheading}
-                  marginTop="10px"
-                >
-                  {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </Button>
-              </SloganContainer>
-              {!isLoggedIn ? (
-                <InstructionContainer>
-                  <Instruction>1. Register/Login</Instruction>
-                  <Instruction>2. Navigate to Your Dashboard</Instruction>
-                  <Instruction>3. Upload Your Course Slides/Notes </Instruction>
-                  <Instruction>4. Watch the Magic Happen!</Instruction>
-                </InstructionContainer>
-              ) : (
-                <InstructionContainer>
-                  <Instruction>1. Navigate to Your Dashboard</Instruction>
-                  <Instruction>2. Upload Your Course Slides/Notes </Instruction>
-                  <Instruction>3. Watch the Magic Happen!</Instruction>
-                </InstructionContainer>
-              )}
-              <MoreContainer>
-                <Button
-                  textColor={theme.black}
-                  hoverTextColor={theme.white}
-                  backgroundColor="transparent"
-                  hoverBackgroundColor={theme.primary}
-                  onClick={() => router.push("/how-it-works")}
-                >
-                  Confused? Learn more about how to use SolaSlides!
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    style={{ marginLeft: "10px" }}
-                  />
-                </Button>
-              </MoreContainer>
-            </Section>
-          </PageContainer>
-          <Footer />
-        </main>
-      </body>
+      <main>
+        <PageContainer>
+          <Section>
+            <SloganContainer>
+              <Slogan>
+                <span style={{ color: theme.primary, fontWeight: "bold" }}>
+                  Slide
+                </span>{" "}
+                Into Success,
+                <br />
+                Stay Sharp & Study
+                <span style={{ color: theme.primary, fontWeight: "bold" }}>
+                  {" "}
+                  Smart
+                </span>
+              </Slogan>
+              <SubSlogan>
+                SolaSlides AI turns your course slides into comprehensive +
+                interactive study guides <br></br>with plenty of useful
+                resources to help you succeed in the classroom
+              </SubSlogan>
+              <Button
+                onClick={handleMainButtonClick}
+                padding="16px"
+                bold
+                fontSize={({ theme }) => theme.fontSize.subheading}
+                marginTop="10px"
+              >
+                {isLoggedIn ? "Go to Dashboard" : "Get Started"}{" "}
+                <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+            </SloganContainer>
+            {!isLoggedIn ? (
+              <InstructionContainer>
+                <Instruction>1. Register/Login</Instruction>
+                <Instruction>2. Navigate to Your Dashboard</Instruction>
+                <Instruction>3. Upload Your Course Slides/Notes </Instruction>
+                <Instruction>4. Watch the Magic Happen!</Instruction>
+              </InstructionContainer>
+            ) : (
+              <InstructionContainer>
+                <Instruction>1. Navigate to Your Dashboard</Instruction>
+                <Instruction>2. Upload Your Course Slides/Notes </Instruction>
+                <Instruction>3. Watch the Magic Happen!</Instruction>
+              </InstructionContainer>
+            )}
+            <MoreContainer>
+              <Button
+                textColor={theme.black}
+                hoverTextColor={theme.white}
+                backgroundColor="transparent"
+                hoverBackgroundColor={theme.primary}
+                onClick={() => router.push("/how-it-works")}
+              >
+                Confused? Learn more about how to use SolaSlides!
+                <FontAwesomeIcon
+                  icon={faArrowRight}
+                  style={{ marginLeft: "10px" }}
+                />
+              </Button>
+            </MoreContainer>
+          </Section>
+        </PageContainer>
+        <Footer />
+      </main>
     </>
   );
 }
