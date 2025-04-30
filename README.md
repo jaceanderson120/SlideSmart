@@ -21,19 +21,19 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Managing Environments & Env Vars
 
-### Getting Environment Variables
+### Getting Env Vars
 
 *Note: Please contact Brayden Pettigrew for assistance with the information below.*
 
 To start, there are *two* different environments that we deal with. One is the **production** environment. This is basically the website that users actually visit and it has its own database. There is also the **development/preview** environment. This is where we do local development and testing to ensure everything works properly before moving it to production.
 
-To set up environment variables locally, create a `.env` file in the root directory and add the required variables. You can pull environment variables from Vercel using the following command:
+You can pull environment variables from Vercel using the following command:
 
 ```bash
 vercel env pull .env --environment=preview --git-branch dev
 ```
 
-The above command will pull the necessary environment variables to run the development server properly.
+The above command will pull the necessary environment variables into a file in the root directory of the project called `.env`.
 
 *Note: The `npm run dev` command will use the environment variables from the `.env` file. Anything done here is separate from the production website.*
 
