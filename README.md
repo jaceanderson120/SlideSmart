@@ -21,7 +21,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Managing Environments & Env Vars
 
-### Getting Environment Variables
+### Getting Env Vars
 
 *Note: Please contact Brayden Pettigrew for assistance with the information below.*
 
