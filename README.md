@@ -30,7 +30,7 @@ To start, there are *two* different environments that we deal with. One is the *
 To set up environment variables locally, create a `.env` file in the root directory and add the required variables. You can pull environment variables from Vercel using the following command:
 
 ```bash
-vercel env pull --environment=preview --git-branch dev --env .env
+vercel env pull .env --environment=preview --git-branch dev
 ```
 
 The above command will pull the necessary environment variables to run the development server properly.
