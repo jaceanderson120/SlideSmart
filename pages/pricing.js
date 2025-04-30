@@ -69,99 +69,98 @@ const Pricing = () => {
         />
         <link rel="canonical" href="https://www.solaslides.com/pricing" />
       </Head>
-      <body>
-        <main>
-          <PageContainer>
-            <PricingContainer>
-              <TopSection>
-                <PageTitle>PRICING</PageTitle>
-                <Subtitle>
-                  Get <SubtitleSpan>better grades</SubtitleSpan> with SolaSlides
-                </Subtitle>
-              </TopSection>
-              <BottomSection>
-                <PricingCard>
-                  <PricingCardTitle>Basic Plan</PricingCardTitle>
-                  <PricingCardPrice>FREE</PricingCardPrice>
-                  {isLoggedIn && !hasSpark ? (
-                    <PricingCardInfo>
-                      * This is your current plan. Upgrade to the Spark Plan for
-                      more!
-                    </PricingCardInfo>
-                  ) : isLoggedIn ? (
-                    <PricingCardInfo>
-                      * Cancel your Spark subscription if you are content with
-                      using the Basic Plan.
-                    </PricingCardInfo>
-                  ) : (
-                    <Button onClick={() => router.push("/signup")}>
-                      Get Started <FontAwesomeIcon icon={faArrowRight} />
-                    </Button>
-                  )}
-                  <PricingCardLabel>Included with Basic:</PricingCardLabel>
-                  <Underline />
-                  {basicPlanDesc.map((desc, index) => (
-                    <PricingCardDescription key={index}>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        color={theme.primary}
-                        size="2x"
-                      />
-                      {desc}
-                    </PricingCardDescription>
-                  ))}
-                </PricingCard>
-                <PricingCard>
-                  <PricingCardTitle>Spark Plan</PricingCardTitle>
-                  <PricingCardPrice>$9.99/month</PricingCardPrice>
-                  {isLoggedIn && !hasSpark ? (
-                    <Button
-                      onClick={handleUpgradeClick}
-                      disabled={redirectLoading}
-                      loading={redirectLoading}
-                    >
-                      {redirectLoading ? (
-                        <Dots color={theme.white} />
-                      ) : (
-                        "Upgrade Now!"
-                      )}
-                    </Button>
-                  ) : isLoggedIn ? (
-                    <Button
-                      onClick={handleManageClick}
-                      disabled={redirectLoading}
-                      loading={redirectLoading}
-                    >
-                      {redirectLoading ? (
-                        <Dots color={theme.white} />
-                      ) : (
-                        "Manage Subscription"
-                      )}
-                    </Button>
-                  ) : (
-                    <Button onClick={() => router.push("/signup")}>
-                      Get Started <FontAwesomeIcon icon={faArrowRight} />
-                    </Button>
-                  )}
-                  <PricingCardLabel>Included with Spark:</PricingCardLabel>
-                  <Underline />
-                  {sparkPlanDesc.map((desc, index) => (
-                    <PricingCardDescription key={index}>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        color={theme.primary}
-                        size="2x"
-                      />
-                      {desc}
-                    </PricingCardDescription>
-                  ))}
-                </PricingCard>
-              </BottomSection>
-            </PricingContainer>
-          </PageContainer>
-          <Footer />
-        </main>
-      </body>
+
+      <main>
+        <PageContainer>
+          <PricingContainer>
+            <TopSection>
+              <PageTitle>PRICING</PageTitle>
+              <Subtitle>
+                Get <SubtitleSpan>better grades</SubtitleSpan> with SolaSlides
+              </Subtitle>
+            </TopSection>
+            <BottomSection>
+              <PricingCard>
+                <PricingCardTitle>Basic Plan</PricingCardTitle>
+                <PricingCardPrice>FREE</PricingCardPrice>
+                {isLoggedIn && !hasSpark ? (
+                  <PricingCardInfo>
+                    * This is your current plan. Upgrade to the Spark Plan for
+                    more!
+                  </PricingCardInfo>
+                ) : isLoggedIn ? (
+                  <PricingCardInfo>
+                    * Cancel your Spark subscription if you are content with
+                    using the Basic Plan.
+                  </PricingCardInfo>
+                ) : (
+                  <Button onClick={() => router.push("/signup")}>
+                    Get Started <FontAwesomeIcon icon={faArrowRight} />
+                  </Button>
+                )}
+                <PricingCardLabel>Included with Basic:</PricingCardLabel>
+                <Underline />
+                {basicPlanDesc.map((desc, index) => (
+                  <PricingCardDescription key={index}>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      color={theme.primary}
+                      size="2x"
+                    />
+                    {desc}
+                  </PricingCardDescription>
+                ))}
+              </PricingCard>
+              <PricingCard>
+                <PricingCardTitle>Spark Plan</PricingCardTitle>
+                <PricingCardPrice>$9.99/month</PricingCardPrice>
+                {isLoggedIn && !hasSpark ? (
+                  <Button
+                    onClick={handleUpgradeClick}
+                    disabled={redirectLoading}
+                    loading={redirectLoading}
+                  >
+                    {redirectLoading ? (
+                      <Dots color={theme.white} />
+                    ) : (
+                      "Upgrade Now!"
+                    )}
+                  </Button>
+                ) : isLoggedIn ? (
+                  <Button
+                    onClick={handleManageClick}
+                    disabled={redirectLoading}
+                    loading={redirectLoading}
+                  >
+                    {redirectLoading ? (
+                      <Dots color={theme.white} />
+                    ) : (
+                      "Manage Subscription"
+                    )}
+                  </Button>
+                ) : (
+                  <Button onClick={() => router.push("/signup")}>
+                    Get Started <FontAwesomeIcon icon={faArrowRight} />
+                  </Button>
+                )}
+                <PricingCardLabel>Included with Spark:</PricingCardLabel>
+                <Underline />
+                {sparkPlanDesc.map((desc, index) => (
+                  <PricingCardDescription key={index}>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      color={theme.primary}
+                      size="2x"
+                    />
+                    {desc}
+                  </PricingCardDescription>
+                ))}
+              </PricingCard>
+            </BottomSection>
+          </PricingContainer>
+        </PageContainer>
+        <Footer />
+      </main>
     </>
   );
 };

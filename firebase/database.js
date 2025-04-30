@@ -409,12 +409,18 @@ const deleteStudyGuideFlashcards = async (studyGuideId) => {
 // Input: user uid, display name, and email
 // Output: None
 const storeUserInfo = async (uid, name, email) => {
-  const userDocRef = doc(db, "users", uid);
-  await setDoc(userDocRef, {
-    displayName: name,
-    email: email,
-    darkMode: false,
-  });
+  try {
+    const userDocRef = doc(db, "users", uid);
+    await setDoc(userDocRef, {
+      displayName: name,
+      email: email,
+      darkMode: false,
+      createdAt: new Date(),
+    });
+    console.log("User info stored successfully");
+  } catch (error) {
+    console.error("Error storing user info:", error);
+  }
 };
 
 // Update the user's dark mode preference
