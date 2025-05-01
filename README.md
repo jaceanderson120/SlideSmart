@@ -1,4 +1,4 @@
-## Getting Started
+## Getting Started!
 
 First, make sure you have Node installed [https://nodejs.org/en/download](https://nodejs.org/en/download). Once installed, run `npm install` to install all necessary dependencies to run this project.
 
