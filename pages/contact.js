@@ -86,7 +86,7 @@ const Contact = () => {
               </Subtitle>
               <Subtext>
                 Feel free to contact our support team if you have any inquiries
-                relating to the application.
+                or feedback relating to the application.
               </Subtext>
               <Subtext>
                 Your form sends us an email. Once we receive your email, we will
