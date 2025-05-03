@@ -20,7 +20,6 @@ export default function Home() {
   const router = useRouter();
   const { isLoggedIn } = useStateContext();
   const theme = useTheme();
-  console.log(process.env.NEXT_PUBLIC_ENVIRONMENT);
 
   const handleMainButtonClick = () => {
     if (isLoggedIn) {
@@ -46,8 +45,17 @@ export default function Home() {
             <script
               dangerouslySetInnerHTML={{
                 __html: `
-                  window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
-                  window.amplitude.init('e2694e7ba4e957bf42b27d04a32303ff', {"autocapture":{"elementInteractions":true}});
+                  (function() {
+                    function initAmplitude() {
+                      if (window.amplitude && window.sessionReplay) {
+                        window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
+                        window.amplitude.init('e2694e7ba4e957bf42b27d04a32303ff', {"autocapture":{"elementInteractions":true}});
+                      } else {
+                        setTimeout(initAmplitude, 100);
+                      }
+                    }
+                    initAmplitude();
+                  })();
                 `,
               }}
             />
