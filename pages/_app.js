@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Head from "next/head";
+import Script from "next/script";
 import { StateContext } from "@/context/StateContext";
 import { ToastContainer } from "react-toastify";
 
@@ -40,6 +41,37 @@ export default function App({ Component, pageProps }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {process.env.NEXT_PUBLIC_ENVIRONMENT === "prod" && (
+        <>
+          <Script
+            src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"
+            strategy="beforeInteractive"
+          />
+          <Script
+            src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.8.0-min.js.gz"
+            strategy="beforeInteractive"
+          />
+          <Script
+            id="amplitude-init"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  function initAmplitude() {
+                    if (window.amplitude && window.sessionReplay) {
+                      window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
+                      window.amplitude.init('e2694e7ba4e957bf42b27d04a32303ff', {"autocapture":{"elementInteractions":true}});
+                    } else {
+                      setTimeout(initAmplitude, 100);
+                    }
+                  }
+                  initAmplitude();
+                })();
+              `,
+            }}
+          />
+        </>
+      )}
       <GlobalStyles />
       <StateContext>
         <ThemeProvider>

@@ -38,29 +38,6 @@ export default function Home() {
           content="SolaSlides turns your course slides into comprehensive + interactive study guides with plenty of useful resources to help you succeed in the classroom."
         />
         <link rel="canonical" href="https://www.solaslides.com/" />
-        {process.env.NEXT_PUBLIC_ENVIRONMENT === "prod" && (
-          <>
-            <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz" />
-            <script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.8.0-min.js.gz" />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  (function() {
-                    function initAmplitude() {
-                      if (window.amplitude && window.sessionReplay) {
-                        window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
-                        window.amplitude.init('e2694e7ba4e957bf42b27d04a32303ff', {"autocapture":{"elementInteractions":true}});
-                      } else {
-                        setTimeout(initAmplitude, 100);
-                      }
-                    }
-                    initAmplitude();
-                  })();
-                `,
-              }}
-            />
-          </>
-        )}
       </Head>
       <main>
         <PageContainer>
