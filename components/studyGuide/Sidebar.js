@@ -259,7 +259,12 @@ const Sidebar = ({
         </ToolContainer>
       )}
       <ToolContainer
-        onClick={handleChatbotToggle}
+        onClick={() => {
+          if (!isChatbotShown) {
+            setSidebarCollapsed(true);
+          }
+          handleChatbotToggle();
+        }}
         $sidebarCollapsed={sidebarCollapsed}
       >
         <MessageSquare />
@@ -267,7 +272,12 @@ const Sidebar = ({
       </ToolContainer>
       {creator === currentUser.uid && hasFirebaseUrl && (
         <ToolContainer
-          onClick={handleFileToggle}
+          onClick={() => {
+            if (!isFileShown) {
+              setSidebarCollapsed(true);
+            }
+            handleFileToggle();
+          }}
           $sidebarCollapsed={sidebarCollapsed}
         >
           <File />

@@ -139,6 +139,11 @@ const Section = styled.div`
   align-items: center;
   padding: 32px;
   gap: 32px;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.primary70},
+    ${({ theme }) => theme.primary33}
+  );
 `;
 
 const TitleContainer = styled.div`
@@ -163,7 +168,7 @@ const Subtitle = styled.h1`
 
 const Subtext = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.default};
-  color: ${({ theme }) => theme.gray};
+  color: ${({ theme }) => theme.black};
   line-height: 1.3;
 `;
 
