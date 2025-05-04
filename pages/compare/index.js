@@ -33,28 +33,30 @@ const Compare = () => {
 
       <main>
         <PageContainer>
-          <TopSection>
-            <PageTitle>COMPARE</PageTitle>
-            <Subtitle>
-              Discover why <SubtitleSpan>SolaSlides</SubtitleSpan> beats the
-              competition
-            </Subtitle>
-          </TopSection>
-          <BottomSection>
-            {competitors.map((competitor) => (
-              <Competitor key={competitor}>
-                <Button
-                  style={{ width: "100%", height: "100%" }}
-                  padding="16px"
-                  bold
-                  fontSize={({ theme }) => theme.fontSize.subheading}
-                  onClick={() => router.push(`/compare/${competitor}`)}
-                >
-                  vs. {competitor}
-                </Button>
-              </Competitor>
-            ))}
-          </BottomSection>
+          <Section>
+            <TopSection>
+              <PageTitle>COMPARE</PageTitle>
+              <Subtitle>
+                Discover why <SubtitleSpan>SolaSlides</SubtitleSpan> beats the
+                competition
+              </Subtitle>
+            </TopSection>
+            <BottomSection>
+              {competitors.map((competitor) => (
+                <Competitor key={competitor}>
+                  <Button
+                    style={{ width: "100%", height: "100%" }}
+                    padding="16px"
+                    bold
+                    fontSize={({ theme }) => theme.fontSize.subheading}
+                    onClick={() => router.push(`/compare/${competitor}`)}
+                  >
+                    vs. {competitor}
+                  </Button>
+                </Competitor>
+              ))}
+            </BottomSection>
+          </Section>
         </PageContainer>
         <Footer />
       </main>
@@ -63,6 +65,15 @@ const Compare = () => {
 };
 
 export default Compare;
+
+const Section = styled.div`
+  flex-grow: 1;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.primary70},
+    ${({ theme }) => theme.primary33}
+  );
+`;
 
 const TopSection = styled.div`
   display: flex;

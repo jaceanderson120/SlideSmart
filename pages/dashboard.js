@@ -560,6 +560,7 @@ const Td = styled.td`
   border: 1px solid ${({ theme }) => theme.gray};
   color: ${({ theme }) => theme.black};
   text-align: left;
+  background-color: ${({ theme }) => theme.white};
 `;
 
 const Container = styled.div`

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "@/constants/colors";
 import { updateUserDarkMode, getUserDarkMode } from "@/firebase/database";
 import { useStateContext } from "./StateContext";
 
@@ -22,6 +21,28 @@ const fontSizeMobile = {
   label: "16px",
   default: "14px",
   secondary: "14px", // used for info, details, captions
+};
+
+const lightTheme = {
+  primary: "#4A86E8",
+  primary70: "#4A86E870",
+  primary33: "#4A86E833",
+  black: "#2C3E50",
+  white: "#F7FBFF",
+  shadow: "#3D4F6029",
+  lightGray: "#B8C9E0",
+  gray: "#4A5B6A",
+};
+
+const darkTheme = {
+  primary: "#4A86E8",
+  primary70: "#4A86E870",
+  primary33: "#4A86E833",
+  black: "#F7FBFF",
+  white: "#172A45",
+  shadow: "#E0E8F529",
+  lightGray: "#3A506B",
+  gray: "#B8C9E0",
 };
 
 export const ThemeProvider = ({ children }) => {

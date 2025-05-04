@@ -1297,9 +1297,10 @@ const ChatbotContainer = styled.div`
   flex: ${({ $isChatbotShown }) => ($isChatbotShown ? "2.5" : "0")};
   overflow: hidden;
   overscroll-behavior: contain;
-  height: 100%;
   position: relative;
   margin-right: 16px;
+  margin-top: 16px;
+  margin-bottom: 12px;
 `;
 
 const IframeContainer = styled.div`
