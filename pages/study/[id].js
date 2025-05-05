@@ -22,15 +22,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import {
-  faX,
-  faRotateLeft,
-  faArrowRight,
-  faArrowLeft,
   faMagicWandSparkles,
   faTrashCan,
   faNoteSticky,
 } from "@fortawesome/free-solid-svg-icons";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+import { X } from "lucide-react";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/studyGuide/Chatbot";
 import AutoResizeTextArea from "@/components/studyGuide/AutoResizeTextArea";
@@ -39,8 +36,6 @@ import Button from "@/components/Button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import AddSectionsContainer from "@/components/studyGuide/AddSectionsContainer";
 import AddTopicModal from "@/components/modals/AddTopicModal";
-import { Dots } from "react-activity";
-import "react-activity/dist/library.css";
 import {
   generateExample,
   generateExplanation,
@@ -49,6 +44,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/studyGuide/Sidebar";
 import Video from "@/components/studyGuide/Video";
+import IconButton from "@/components/IconButton";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -78,11 +74,6 @@ const Study = () => {
     useState(false);
   const [subSectionToDelete, setSubSectionToDelete] = useState(null);
   const [isAddTopicModalOpen, setIsAddTopicModalOpen] = useState(false);
-  const [isNewYoutubeVideoDialogOpen, setIsNewYoutubeVideoDialogOpen] =
-    useState(false);
-  const [topicForNewYoutubeVideo, setTopicForNewYoutubeVideo] = useState(null);
-  const [findingNewYoutubeVideo, setfindingNewYoutubeVideo] = useState(false);
-  const [videoIndices, setVideoIndices] = useState([]);
   const topicRefs = useRef({});
   const { currentUser, loadingUser, hasSpark } = useStateContext();
   const [hasFirebaseUrl, setHasFirebaseUrl] = useState(false);
@@ -165,13 +156,6 @@ const Study = () => {
         } else {
           setHasFirebaseUrl(false);
         }
-
-        // Set the youtube indices to zeros for each topic
-        const indices = {};
-        Object.keys(fetchedStudyGuide.extractedData).forEach((key) => {
-          indices[key] = 0;
-        });
-        setVideoIndices(indices);
       }
     };
 
@@ -476,107 +460,6 @@ const Study = () => {
     setIsFileShown(!isFileShown);
   };
 
-  // Get a new YouTube video
-  const getNewYoutubeVideo = async (topic, data) => {
-    setfindingNewYoutubeVideo(true);
-
-    // Filter the data to only be the topic name and explanation
-    const filteredData = {
-      topic: topic,
-      explanation: data?.explanation,
-    };
-
-    const res = await fetch("/api/create-youtube-query", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(filteredData), // Sending the topic as JSON
-    });
-    const query = await res.json();
-
-    const res2 = await fetch("/api/get-youtube-video", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query,
-        topic: topic,
-        explanation: data?.explanation,
-      }), // Sending the topic as JSON
-    });
-    let videoIds = (await res2.json()) || [];
-
-    // There may be dupicate video IDs somewhere in the study guide, so we need to check if the video ID is already in the array
-    // Get all the video IDs from the study guide
-    if (videoIds.length > 0) {
-      let allVideoIds = [];
-      Object.keys(studyGuide.extractedData).forEach((key) => {
-        allVideoIds = allVideoIds.concat(
-          studyGuide.extractedData[key]["youtubeIds"]
-        );
-      });
-
-      // Check if the video ID is already in the array
-      let filteredVideoIds = [];
-      for (const video of videoIds) {
-        if (!allVideoIds.includes(video)) {
-          filteredVideoIds.push(video);
-        }
-      }
-
-      videoIds = filteredVideoIds;
-
-      // Update video indices
-      setVideoIndices((prev) => ({
-        ...prev,
-        [topic]: 0,
-      }));
-    } else {
-      toast.error(
-        "Sorry, couldn't find a new YouTube video for you. Please try again."
-      );
-    }
-
-    // Update the study guide object with the new YouTube video ID
-    updateStudyGuideObject(topic, "youtubeIds", videoIds);
-    setfindingNewYoutubeVideo(false);
-  };
-
-  // Function to go to previous video
-  const goToPreviousVideo = (topic) => {
-    if (videoIndices[topic] > 0) {
-      setVideoIndices((prev) => ({
-        ...prev,
-        [topic]: prev[topic] - 1,
-      }));
-    } else {
-      setVideoIndices((prev) => ({
-        ...prev,
-        [topic]: studyGuide.extractedData[topic]["youtubeIds"].length - 1,
-      }));
-    }
-  };
-
-  // Function to go to next video
-  const goToNextVideo = (topic) => {
-    if (
-      videoIndices[topic] <
-      studyGuide.extractedData[topic]["youtubeIds"].length - 1
-    ) {
-      setVideoIndices((prev) => ({
-        ...prev,
-        [topic]: prev[topic] + 1,
-      }));
-    } else {
-      setVideoIndices((prev) => ({
-        ...prev,
-        [topic]: 0,
-      }));
-    }
-  };
-
   // Handle user saving the study guide
   const saveStudyGuide = async () => {
     if (!hasSpark) {
@@ -679,14 +562,13 @@ const Study = () => {
                 >
                   <TopicHeaderTitle>{key.toUpperCase()}</TopicHeaderTitle>
                   {editMode && (
-                    <StyledFontAwesomeIcon
-                      icon={faTrashCan}
-                      size="lg"
-                      title="Delete Topic"
+                    <IconButton
+                      icon={<X size={20} />}
                       onClick={() => {
                         setTopicToDelete(key);
                         setIsDeleteTopicDialogOpen(true);
                       }}
+                      title="Delete Topic"
                     />
                   )}
                 </TopicHeaderContainer>
@@ -696,7 +578,7 @@ const Study = () => {
                     <TopicSubsectionHeader>
                       Explanation:
                       {editMode && (
-                        <div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
                           <StyledFontAwesomeIcon
                             icon={faMagicWandSparkles}
                             onClick={() => {
@@ -706,8 +588,8 @@ const Study = () => {
                             }}
                             title="Generate Explanation"
                           />
-                          <StyledFontAwesomeIcon
-                            icon={faX}
+                          <IconButton
+                            icon={<X size={20} />}
                             onClick={() => {
                               setTopicToDelete(key);
                               setSubSectionToDelete("explanation");
@@ -734,7 +616,7 @@ const Study = () => {
                     <TopicSubsectionHeader>
                       Example:
                       {editMode && (
-                        <div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
                           <StyledFontAwesomeIcon
                             icon={faMagicWandSparkles}
                             onClick={() => {
@@ -744,8 +626,8 @@ const Study = () => {
                             }}
                             title="Generate Example"
                           />
-                          <StyledFontAwesomeIcon
-                            icon={faX}
+                          <IconButton
+                            icon={<X size={20} />}
                             onClick={() => {
                               setTopicToDelete(key);
                               setSubSectionToDelete("example");
@@ -785,7 +667,7 @@ const Study = () => {
                     <TopicSubsectionHeader>
                       Question:
                       {editMode && (
-                        <div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
                           <StyledFontAwesomeIcon
                             icon={faMagicWandSparkles}
                             onClick={() => {
@@ -795,8 +677,8 @@ const Study = () => {
                             }}
                             title="Generate Question/Answer"
                           />
-                          <StyledFontAwesomeIcon
-                            icon={faX}
+                          <IconButton
+                            icon={<X size={20} />}
                             onClick={() => {
                               setTopicToDelete(key);
                               setSubSectionToDelete("Q/A");

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ArrowLeft, ArrowRight, RotateCcw, X } from "lucide-react";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
@@ -75,6 +74,8 @@ const useVideoManagement = (studyGuide, topic, hasSpark) => {
             studyGuide.extractedData[key]["youtubeIds"]
           );
         });
+
+        console.log(allVideoIds);
 
         let filteredVideoIds = [];
         for (const video of videoIds) {
