@@ -48,6 +48,7 @@ import {
 } from "@/utils/generateStudyGuideSections";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/studyGuide/Sidebar";
+import Video from "@/components/studyGuide/Video";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -766,109 +767,17 @@ const Study = () => {
                   </TopicSubContainer>
                 )}
                 {studyGuide.extractedData[key]["youtubeIds"] && (
-                  <TopicSubVideoContainer>
-                    {topicForNewYoutubeVideo === key &&
-                    findingNewYoutubeVideo ? (
-                      <Dots />
-                    ) : studyGuide.extractedData[key]["youtubeIds"].length >
-                      0 ? (
-                      <VideoContainer>
-                        <IframeContainer>
-                          <iframe
-                            src={`https://www.youtube.com/embed/${
-                              studyGuide.extractedData[key]["youtubeIds"][
-                                isNaN(videoIndices[key]) ||
-                                videoIndices[key] >=
-                                  studyGuide.extractedData[key]["youtubeIds"]
-                                    .length
-                                  ? 1
-                                  : videoIndices[key]
-                              ]
-                            }`}
-                            title="YouTube Video Player"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          ></iframe>
-                        </IframeContainer>
-                        <SwitchVideoContainer>
-                          <StyledFontAwesomeIcon
-                            icon={faArrowLeft}
-                            onClick={() => {
-                              goToPreviousVideo(key);
-                            }}
-                            title="Previous Video"
-                          />
-                          <span>
-                            {isNaN(videoIndices[key])
-                              ? 1
-                              : videoIndices[key] + 1}{" "}
-                            of{" "}
-                            {studyGuide.extractedData[key]["youtubeIds"].length}
-                          </span>
-                          <StyledFontAwesomeIcon
-                            icon={faArrowRight}
-                            onClick={() => {
-                              goToNextVideo(key);
-                            }}
-                            title="Next Video"
-                          />
-                          <div>
-                            {editMode && (
-                              <>
-                                <StyledFontAwesomeIcon
-                                  icon={faRotateLeft}
-                                  onClick={() => {
-                                    setTopicForNewYoutubeVideo(key);
-                                    setIsNewYoutubeVideoDialogOpen(true);
-                                  }}
-                                  title="Find New Videos"
-                                />
-                                <StyledFontAwesomeIcon
-                                  icon={faX}
-                                  onClick={() => {
-                                    setTopicToDelete(key);
-                                    setSubSectionToDelete("youtubeIds");
-                                    setIsDeleteSubSectionDialogOpen(true);
-                                  }}
-                                  title="Delete Video"
-                                />
-                              </>
-                            )}
-                          </div>
-                        </SwitchVideoContainer>
-                      </VideoContainer>
-                    ) : (
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <NoVideoText>
-                          We found the best videos for you, but they are already
-                          in this study guide. If you believe there are better
-                          videos, feel free to try to generate new ones. If not,
-                          you can delete this section in edit mode!
-                        </NoVideoText>
-                        {editMode && (
-                          <>
-                            <StyledFontAwesomeIcon
-                              icon={faRotateLeft}
-                              onClick={() => {
-                                setTopicForNewYoutubeVideo(key);
-                                setIsNewYoutubeVideoDialogOpen(true);
-                              }}
-                              title="Find New Videos"
-                            />
-                            <StyledFontAwesomeIcon
-                              icon={faX}
-                              onClick={() => {
-                                setTopicToDelete(key);
-                                setSubSectionToDelete("youtubeIds");
-                                setIsDeleteSubSectionDialogOpen(true);
-                              }}
-                              title="Delete Video"
-                            />
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </TopicSubVideoContainer>
+                  <Video
+                    topic={key}
+                    studyGuide={studyGuide}
+                    editMode={editMode}
+                    hasSpark={hasSpark}
+                    setTopicToDelete={setTopicToDelete}
+                    setSubSectionToDelete={setSubSectionToDelete}
+                    setIsDeleteSubSectionDialogOpen={
+                      setIsDeleteSubSectionDialogOpen
+                    }
+                  />
                 )}
                 {(studyGuide.extractedData[key]["question"] ||
                   studyGuide.extractedData[key]["question"] === "") && (
@@ -1074,8 +983,8 @@ const Study = () => {
         }`}
         text={`Are you sure you want to delete this ${
           subSectionToDelete === "youtubeIds"
-            ? "video? This will delete all videos that are currently available by clicking the next button."
-            : subSectionToDelete + "?"
+            ? "video section? This will delete all videos that are currently available by clicking the next button."
+            : subSectionToDelete + "section?"
         }\n\nYou cannot undo this action unless you discard your edits.`}
         onConfirm={() => {
           setIsDeleteSubSectionDialogOpen(false);
@@ -1084,27 +993,6 @@ const Study = () => {
         icon={
           <FontAwesomeIcon icon={faTrashCan} size="3x" color={theme.primary} />
         }
-      />
-      <ConfirmationModal
-        isOpen={isNewYoutubeVideoDialogOpen}
-        onClose={() => {
-          setIsNewYoutubeVideoDialogOpen(false);
-        }}
-        title="Find More Videos"
-        text={`SolaSlides uses AI and complex algorithms to analyze your topic explanation and find the best YouTube videos to help you learn.\n\nIf the same videos appear after regenerating videos, it is because they are the best videos for your explanation.\n\nPlease confirm that your topic explanation reflects what you wish to learn.`}
-        onConfirm={() => {
-          if (!hasSpark) {
-            toast.error(
-              "You need to have a Spark subscription to use this feature."
-            );
-            return;
-          }
-          setIsNewYoutubeVideoDialogOpen(false);
-          getNewYoutubeVideo(
-            topicForNewYoutubeVideo,
-            studyGuide.extractedData[topicForNewYoutubeVideo]
-          );
-        }}
       />
       <ConfirmationModal
         isOpen={isAutoGenerateDialogOpen}
@@ -1256,42 +1144,6 @@ const TopicSubContainer = styled.div`
   width: 100%;
 `;
 
-const TopicSubVideoContainer = styled.div`
-  display: flex;
-  font-size: ${({ theme }) => theme.fontSize.label};
-  text-align: left;
-  margin-bottom: 16px;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 12px;
-  padding: 16px;
-  width: 100%;
-`;
-
-const NoVideoText = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.default};
-  font-style: italic;
-  color: ${({ theme }) => theme.black};
-  padding: 8px;
-`;
-
-const VideoContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-`;
-
-const SwitchVideoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-size: ${({ theme }) => theme.fontSize.label};
-`;
-
 const ChatbotContainer = styled.div`
   display: flex;
   flex: ${({ $isChatbotShown }) => ($isChatbotShown ? "2.5" : "0")};
@@ -1301,17 +1153,4 @@ const ChatbotContainer = styled.div`
   margin-right: 16px;
   margin-top: 16px;
   margin-bottom: 12px;
-`;
-
-const IframeContainer = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-  aspect-ratio: 16 / 9;
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
 `;
