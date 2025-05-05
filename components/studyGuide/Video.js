@@ -1,75 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faArrowRight,
-  faRotateLeft,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
+import { ArrowLeft, ArrowRight, RotateCcw, X } from "lucide-react";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { toast } from "react-toastify";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-
-const VideoContainer = styled.div`
-  display: flex;
-  font-size: ${({ theme }) => theme.fontSize.label};
-  text-align: left;
-  margin-bottom: 16px;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 12px;
-  padding: 16px;
-  width: 100%;
-`;
-
-const VideoContentContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-`;
-
-const SwitchVideoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-size: ${({ theme }) => theme.fontSize.label};
-`;
-
-const IframeContainer = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-  aspect-ratio: 16 / 9;
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-`;
-
-const NoVideoText = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.default};
-  font-style: italic;
-  color: ${({ theme }) => theme.black};
-  padding: 8px;
-`;
-
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  padding-left: 10px;
-  padding-right: 10px;
-  &:hover {
-    transition: color 0.3s;
-    color: ${({ theme }) => theme.primary};
-    cursor: pointer;
-  }
-`;
+import IconButton from "@/components/IconButton";
 
 const useVideoManagement = (studyGuide, topic, hasSpark) => {
   const [videoIndex, setVideoIndex] = useState(0);
@@ -229,8 +166,8 @@ const Video = ({
               ></iframe>
             </IframeContainer>
             <SwitchVideoContainer>
-              <StyledFontAwesomeIcon
-                icon={faArrowLeft}
+              <IconButton
+                icon={<ArrowLeft size={20} />}
                 onClick={goToPreviousVideo}
                 title="Previous Video"
               />
@@ -238,21 +175,21 @@ const Video = ({
                 {isNaN(videoIndex) ? 1 : videoIndex + 1} of{" "}
                 {studyGuide.extractedData[topic]["youtubeIds"].length}
               </span>
-              <StyledFontAwesomeIcon
-                icon={faArrowRight}
+              <IconButton
+                icon={<ArrowRight size={20} />}
                 onClick={goToNextVideo}
                 title="Next Video"
               />
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 {editMode && (
                   <>
-                    <StyledFontAwesomeIcon
-                      icon={faRotateLeft}
+                    <IconButton
+                      icon={<RotateCcw size={20} />}
                       onClick={() => setIsNewYoutubeVideoDialogOpen(true)}
                       title="Find New Videos"
                     />
-                    <StyledFontAwesomeIcon
-                      icon={faX}
+                    <IconButton
+                      icon={<X size={20} />}
                       onClick={handleDeleteVideo}
                       title="Delete Video"
                     />
@@ -271,13 +208,13 @@ const Video = ({
             </NoVideoText>
             {editMode && (
               <>
-                <StyledFontAwesomeIcon
-                  icon={faRotateLeft}
+                <IconButton
+                  icon={<RotateCcw size={20} />}
                   onClick={() => setIsNewYoutubeVideoDialogOpen(true)}
                   title="Find New Videos"
                 />
-                <StyledFontAwesomeIcon
-                  icon={faX}
+                <IconButton
+                  icon={<X size={20} />}
                   onClick={handleDeleteVideo}
                   title="Delete Video"
                 />
@@ -301,3 +238,52 @@ const Video = ({
 };
 
 export default Video;
+
+const VideoContainer = styled.div`
+  display: flex;
+  font-size: ${({ theme }) => theme.fontSize.label};
+  text-align: left;
+  margin-bottom: 16px;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+`;
+
+const VideoContentContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+`;
+
+const SwitchVideoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: ${({ theme }) => theme.fontSize.label};
+`;
+
+const IframeContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+`;
+
+const NoVideoText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.default};
+  font-style: italic;
+  color: ${({ theme }) => theme.black};
+  padding: 8px;
+`;
