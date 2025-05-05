@@ -75,8 +75,6 @@ const useVideoManagement = (studyGuide, topic, hasSpark) => {
           );
         });
 
-        console.log(allVideoIds);
-
         let filteredVideoIds = [];
         for (const video of videoIds) {
           if (!allVideoIds.includes(video)) {
