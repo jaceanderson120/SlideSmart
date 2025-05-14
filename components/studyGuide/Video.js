@@ -121,8 +121,8 @@ const Video = ({
   editMode,
   hasSpark,
   setTopicToDelete,
-  setSubSectionToDelete,
-  setIsDeleteSubSectionDialogOpen,
+  setSectionToDelete,
+  setIsDeleteSectionDialogOpen,
 }) => {
   const {
     videoIndex,
@@ -137,8 +137,8 @@ const Video = ({
 
   const handleDeleteVideo = () => {
     setTopicToDelete(topic);
-    setSubSectionToDelete("youtubeIds");
-    setIsDeleteSubSectionDialogOpen(true);
+    setSectionToDelete("youtubeIds");
+    setIsDeleteSectionDialogOpen(true);
   };
 
   return (
