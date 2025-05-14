@@ -6,9 +6,7 @@ import ShareModal from "@/components/modals/ShareModal";
 import CreateFlashcardModal from "@/components/modals/CreateFlashcardModal";
 import FlashcardViewer from "@/components/studyGuide/FlashcardViewer";
 import {
-  fetchStudyGuide,
   updateStudyGuideExtractedData,
-  hasAccessToStudyGuide,
   uploadStudyGuideToFirebase,
   updateStudyGuideHiddenExplanations,
   fetchFlashcards,
@@ -34,6 +32,7 @@ import TopicSection from "@/components/studyGuide/TopicSection";
 import InfoContainer from "@/components/studyGuide/InfoContainer";
 import TopicWrapper from "@/components/studyGuide/TopicWrapper";
 import useFetchStudyGuide from "@/hooks/useFetchStudyGuide";
+import useDeviceWidth from "@/hooks/useDeviceWidth";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -68,7 +67,6 @@ const Study = () => {
   const [autoGenerateSection, setAutoGenerateSection] = useState(null);
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
   const theme = useTheme();
-  const [deviceWidth, setDeviceWidth] = useState(0);
   const [flashcards, setFlashcards] = useState(null);
   const [showFlashcards, setShowFlashcards] = useState(false);
 
@@ -111,20 +109,7 @@ const Study = () => {
   } = useFetchStudyGuide(id, currentUser, loadingUser);
 
   // Get the device width
-  useEffect(() => {
-    const handleResize = () => {
-      setDeviceWidth(window.innerWidth);
-    };
-
-    // Set the initial device width
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const deviceWidth = useDeviceWidth();
 
   // Function to handle opening the share modal
   const handleShareClick = () => {
