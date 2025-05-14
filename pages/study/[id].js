@@ -9,8 +9,6 @@ import {
   updateStudyGuideExtractedData,
   uploadStudyGuideToFirebase,
   updateStudyGuideHiddenExplanations,
-  fetchFlashcards,
-  updateStudyGuideHasFlashcards,
 } from "@/firebase/database";
 import { Forward, Sparkles, Trash2, X, Zap } from "lucide-react";
 import { useStateContext } from "@/context/StateContext";
@@ -35,6 +33,7 @@ import useFetchStudyGuide from "@/hooks/useFetchStudyGuide";
 import useDeviceWidth from "@/hooks/useDeviceWidth";
 import useDragAndDrop from "@/hooks/useDragAndDrop";
 import useActiveTopic from "@/hooks/useActiveTopic";
+import useFlashcards from "@/hooks/useFlashcards";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -51,7 +50,6 @@ const Study = () => {
   const [collapsedAnswers, setCollapsedAnswers] = useState({});
   const [isFileShown, setIsFileShown] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isFlashcardModalOpen, setIsFlashcardModalOpen] = useState(false);
   const [isChatbotShown, setIsChatbotShown] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [isDiscardEditsDialogOpen, setIsDiscardEditsDialogOpen] =
@@ -69,8 +67,6 @@ const Study = () => {
   const [autoGenerateSection, setAutoGenerateSection] = useState(null);
   const [topicForAutoGenerate, setTopicForAutoGenerate] = useState(null);
   const theme = useTheme();
-  const [flashcards, setFlashcards] = useState(null);
-  const [showFlashcards, setShowFlashcards] = useState(false);
 
   // Check URL to see if the user came from the find study guides page
   const searchParams = useSearchParams();
@@ -113,6 +109,19 @@ const Study = () => {
   // Use the custom hook for Intersection Observer logic
   useActiveTopic(topicRefs, setActiveTopic, [studyGuide]);
 
+  // Handle the flashcard modal and viewer
+  const {
+    isFlashcardModalOpen,
+    flashcards,
+    showFlashcards,
+    handleFlashcardClick,
+    closeFlashcardModal,
+    closeFlashcards,
+    swapFlashcardViews,
+    handleFlashcardChange,
+    handleFlashcardsCreated,
+  } = useFlashcards(id, hasSpark, hasFlashCards, setHasFlashCards);
+
   // Get the device width
   const deviceWidth = useDeviceWidth();
 
@@ -127,41 +136,6 @@ const Study = () => {
   // Function to close the share modal
   const closeShareModal = () => {
     setIsShareModalOpen(false);
-  };
-
-  // Function to handle flashcards click
-  const handleFlashcardClick = async () => {
-    if (!hasSpark) {
-      toast.error(
-        "You need to upgrade to the Spark Plan to create flashcards."
-      );
-      return;
-    }
-    if (!hasFlashCards) {
-      setIsFlashcardModalOpen(true);
-    } else {
-      // get flash cards and set the modal to open
-      let flashcards = await fetchFlashcards(id);
-      setFlashcards(flashcards);
-      setShowFlashcards(true);
-    }
-  };
-
-  // Function to handle closing flashcard modal
-  const closeFlashcardModal = () => {
-    setIsFlashcardModalOpen(false);
-  };
-
-  // Function to handle closing flashcards
-  const closeFlashcards = () => {
-    setShowFlashcards(false);
-  };
-
-  const swapFlashcardViews = async () => {
-    setShowFlashcards(false);
-    setIsFlashcardModalOpen(true);
-    setHasFlashCards(false);
-    await updateStudyGuideHasFlashcards(id);
   };
 
   // Save the extracted data to Firestore when the user changes it
@@ -267,11 +241,6 @@ const Study = () => {
     delete updatedData.hiddenExplanations[topic];
 
     setStudyGuide(updatedData);
-  };
-
-  const handleFlashcardChange = async (flashcardId) => {
-    let newFlashcards = await fetchFlashcards(flashcardId);
-    setFlashcards(newFlashcards);
   };
 
   // Function to delete a sub section of a topic in the study guide
@@ -568,11 +537,7 @@ const Study = () => {
         studyGuide={studyGuide.extractedData}
         isOpen={isFlashcardModalOpen}
         onRequestClose={closeFlashcardModal}
-        onFlashcardsCreated={(cards) => {
-          setFlashcards(cards);
-          setShowFlashcards(true);
-          setHasFlashCards(true);
-        }}
+        onFlashcardsCreated={handleFlashcardsCreated}
         icon={<Zap color={theme.primary} size={48} />}
       />
       {showFlashcards && flashcards && (
