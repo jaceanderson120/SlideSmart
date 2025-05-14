@@ -33,6 +33,7 @@ import Video from "@/components/studyGuide/Video";
 import IconButton from "@/components/IconButton";
 import SectionHeader from "@/components/studyGuide/SectionHeader";
 import InfoContainer from "@/components/studyGuide/InfoContainer";
+import TopicWrapper from "@/components/studyGuide/TopicWrapper";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -543,7 +544,7 @@ const Study = () => {
         <InfoContainer>
           {studyGuide.extractedData &&
             Object.keys(studyGuide.extractedData).map((key) => (
-              <InfoSubContainer key={key} id={key}>
+              <TopicWrapper key={key} id={key}>
                 <TopicHeaderContainer
                   id={key}
                   ref={(el) => (topicRefs.current[key] = el)}
@@ -704,10 +705,10 @@ const Study = () => {
                     }}
                   />
                 )}
-              </InfoSubContainer>
+              </TopicWrapper>
             ))}
           {studyGuide.googleSearchResults.length > 0 && (
-            <InfoSubContainer>
+            <TopicWrapper>
               <TopicHeaderContainer>
                 <TopicHeaderTitle>Extra Resources</TopicHeaderTitle>
               </TopicHeaderContainer>
@@ -724,7 +725,7 @@ const Study = () => {
                   })}
                 </SectionContainer>
               </>
-            </InfoSubContainer>
+            </TopicWrapper>
           )}
         </InfoContainer>
         {isFileShown && <FileContainer>{content}</FileContainer>}
@@ -872,22 +873,6 @@ const FileContainer = styled.div`
   justify-content: center;
   align-items: center;
   overflow: auto;
-`;
-
-const InfoSubContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-right: 16px;
-  padding-left: 16px;
-  padding-bottom: 16px;
-  gap: 16px;
-  width: 100%;
-  background-color: ${({ theme }) => theme.white};
-  border-radius: 12px;
-  box-shadow: 10px 10px 10px ${({ theme }) => theme.shadow};
-  border-left: 4px solid ${({ theme }) => theme.primary33};
-  border-top: 4px solid ${({ theme }) => theme.primary33};
 `;
 
 const TopicHeaderContainer = styled.div`
