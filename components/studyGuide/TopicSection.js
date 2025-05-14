@@ -62,7 +62,7 @@ const TopicSection = ({
           </Button>
         )}
       </HeaderContainer>
-      {sectionText && sectionName !== "Answer" && (
+      {typeof sectionText === "string" && sectionName !== "Answer" && (
         <AutoResizeTextArea
           key={editMode} // Trigger re-render when edit mode changes
           onChange={(text) => {
@@ -72,7 +72,7 @@ const TopicSection = ({
           editMode={editMode}
         />
       )}
-      {sectionText &&
+      {typeof sectionText === "string" &&
         sectionName === "Answer" &&
         (editMode ? (
           // In edit mode, always show the text area
