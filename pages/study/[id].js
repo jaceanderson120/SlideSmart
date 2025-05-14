@@ -33,6 +33,7 @@ import InfoContainer from "@/components/studyGuide/InfoContainer";
 import TopicWrapper from "@/components/studyGuide/TopicWrapper";
 import useFetchStudyGuide from "@/hooks/useFetchStudyGuide";
 import useDeviceWidth from "@/hooks/useDeviceWidth";
+import useDragAndDrop from "@/hooks/useDragAndDrop";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -110,6 +111,9 @@ const Study = () => {
 
   // Get the device width
   const deviceWidth = useDeviceWidth();
+
+  // Handle the drag and drop functionality
+  const handleDragEnd = useDragAndDrop(studyGuide, setStudyGuide);
 
   // Function to handle opening the share modal
   const handleShareClick = () => {
@@ -354,35 +358,6 @@ const Study = () => {
       handleGenerateExample(topicName, hiddenExplanations);
       handleGenerateQuestionAnswer(topicName, hiddenExplanations);
     }
-  };
-
-  // Function to reorder the keys of studyGuide.extractedData
-  const reorderExtractedData = (order) => {
-    setStudyGuide((prev) => {
-      const reorderedData = {};
-      order.forEach((key) => {
-        if (prev.extractedData[key]) {
-          reorderedData[key] = prev.extractedData[key];
-        }
-      });
-      return {
-        ...prev,
-        extractedData: reorderedData,
-      };
-    });
-  };
-
-  // Handle drag end
-  const handleDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const items = Array.from(Object.keys(studyGuide.extractedData));
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    reorderExtractedData(items);
   };
 
   const handleChatbotToggle = () => {
