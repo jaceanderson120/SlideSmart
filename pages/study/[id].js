@@ -5,9 +5,7 @@ import Link from "next/link";
 import ShareModal from "@/components/modals/ShareModal";
 import CreateFlashcardModal from "@/components/modals/CreateFlashcardModal";
 import FlashcardViewer from "@/components/studyGuide/FlashcardViewer";
-import {
-  uploadStudyGuideToFirebase,
-} from "@/firebase/database";
+import { uploadStudyGuideToFirebase } from "@/firebase/database";
 import { Forward, Sparkles, Trash2, X, Zap } from "lucide-react";
 import { useStateContext } from "@/context/StateContext";
 import Chatbot from "@/components/studyGuide/Chatbot";
@@ -361,11 +359,13 @@ const Study = () => {
               <>
                 {studyGuide.googleSearchResults.map((search) => {
                   return (
-                    <div key={search.title}>
-                      <Link href={search.link} target="_blank">
-                        {search.title}
-                      </Link>
-                    </div>
+                    <StyledLink
+                      key={search.title}
+                      href={search.link}
+                      target="_blank"
+                    >
+                      {search.title}
+                    </StyledLink>
                   );
                 })}
               </>
@@ -540,4 +540,8 @@ const ChatbotContainer = styled.div`
   margin-right: 16px;
   margin-top: 16px;
   margin-bottom: 12px;
+`;
+
+const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.black};
 `;
