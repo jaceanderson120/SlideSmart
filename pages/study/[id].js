@@ -34,6 +34,7 @@ import TopicWrapper from "@/components/studyGuide/TopicWrapper";
 import useFetchStudyGuide from "@/hooks/useFetchStudyGuide";
 import useDeviceWidth from "@/hooks/useDeviceWidth";
 import useDragAndDrop from "@/hooks/useDragAndDrop";
+import useActiveTopic from "@/hooks/useActiveTopic";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -109,6 +110,9 @@ const Study = () => {
     setHasFirebaseUrl,
   } = useFetchStudyGuide(id, currentUser, loadingUser);
 
+  // Use the custom hook for Intersection Observer logic
+  useActiveTopic(topicRefs, setActiveTopic, [studyGuide]);
+
   // Get the device width
   const deviceWidth = useDeviceWidth();
 
@@ -172,37 +176,6 @@ const Study = () => {
       updateStudyGuideHiddenExplanations(studyGuide.id, hiddenExplanations);
     }
   };
-
-  useEffect(() => {
-    // When 100% of a topic title is in view, set it as the active topic by calling the callback function
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveTopic(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 1,
-        rootMargin: "0px",
-      }
-    );
-
-    Object.keys(topicRefs.current).forEach((key) => {
-      if (topicRefs.current[key]) {
-        observer.observe(topicRefs.current[key]);
-      }
-    });
-
-    return () => {
-      Object.keys(topicRefs.current).forEach((key) => {
-        if (topicRefs.current[key]) {
-          observer.unobserve(topicRefs.current[key]);
-        }
-      });
-    };
-  }, [studyGuide]);
 
   if (!studyGuide) {
     return <></>;
