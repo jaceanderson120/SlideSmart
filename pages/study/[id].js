@@ -32,6 +32,7 @@ import Sidebar from "@/components/studyGuide/Sidebar";
 import Video from "@/components/studyGuide/Video";
 import IconButton from "@/components/IconButton";
 import SectionHeader from "@/components/studyGuide/SectionHeader";
+import InfoContainer from "@/components/studyGuide/InfoContainer";
 
 function getViewerUrl(url) {
   const viewerUrl = `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
@@ -539,7 +540,7 @@ const Study = () => {
             editors={studyGuide.editors}
           />
         )}
-        <InfoContainer id="infoContainer">
+        <InfoContainer>
           {studyGuide.extractedData &&
             Object.keys(studyGuide.extractedData).map((key) => (
               <InfoSubContainer key={key} id={key}>
@@ -862,17 +863,6 @@ const OutputSection = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-`;
-
-const InfoContainer = styled.div`
-  display: flex;
-  flex: 2.5;
-  flex-direction: column;
-  width: 100%;
-  gap: 32px;
-  overflow: scroll;
-  scrollbar-color: ${({ theme }) => theme.primary70} transparent;
-  padding: 16px;
 `;
 
 const FileContainer = styled.div`
