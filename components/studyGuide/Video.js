@@ -90,7 +90,7 @@ const useVideoManagement = (studyGuide, topic, hasSpark) => {
         studyGuide.extractedData[topic]["youtubeIds"] = videoIds;
       } else {
         toast.error(
-          "Sorry, couldn't find a new YouTube video for you. Please try again."
+          "Sorry, we couldn't find a new YouTube video for you. Please try again."
         );
       }
     } catch (error) {
