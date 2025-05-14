@@ -30,7 +30,7 @@ import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/studyGuide/Sidebar";
 import Video from "@/components/studyGuide/Video";
 import IconButton from "@/components/IconButton";
-import SectionHeader from "@/components/studyGuide/TopicSection";
+import TopicSection from "@/components/studyGuide/TopicSection";
 import InfoContainer from "@/components/studyGuide/InfoContainer";
 import TopicWrapper from "@/components/studyGuide/TopicWrapper";
 
@@ -562,7 +562,7 @@ const Study = () => {
                 </TopicHeaderContainer>
                 {(studyGuide.extractedData[key]["explanation"] ||
                   studyGuide.extractedData[key]["explanation"] === "") && (
-                  <SectionHeader
+                  <TopicSection
                     sectionName={"Explanation"}
                     topic={key}
                     editMode={editMode}
@@ -578,7 +578,7 @@ const Study = () => {
                 )}
                 {(studyGuide.extractedData[key]["example"] ||
                   studyGuide.extractedData[key]["example"] === "") && (
-                  <SectionHeader
+                  <TopicSection
                     sectionName={"Example"}
                     topic={key}
                     editMode={editMode}
@@ -605,7 +605,7 @@ const Study = () => {
                 )}
                 {(studyGuide.extractedData[key]["question"] ||
                   studyGuide.extractedData[key]["question"] === "") && (
-                  <SectionHeader
+                  <TopicSection
                     sectionName={"Question"}
                     topic={key}
                     editMode={editMode}
@@ -621,7 +621,7 @@ const Study = () => {
                 )}
                 {(studyGuide.extractedData[key]["answer"] ||
                   studyGuide.extractedData[key]["answer"] === "") && (
-                  <SectionHeader
+                  <TopicSection
                     sectionName={"Answer"}
                     topic={key}
                     editMode={editMode}
