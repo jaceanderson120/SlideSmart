@@ -417,7 +417,6 @@ const storeUserInfo = async (uid, name, email) => {
       darkMode: false,
       createdAt: new Date(),
     });
-    console.log("User info stored successfully");
   } catch (error) {
     console.error("Error storing user info:", error);
   }

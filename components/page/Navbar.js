@@ -18,12 +18,13 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import ColorModeButton from "./ColorModeButton";
+import useDeviceWidth from "@/hooks/useDeviceWidth";
 
 function Navbar() {
   const { isLoggedIn, hasSpark } = useStateContext();
   const router = useRouter();
   const [initials, setInitials] = useState("");
-  const [deviceWidth, setDeviceWidth] = useState(0);
+  const deviceWidth = useDeviceWidth();
 
   const handleLogout = () => {
     signOut(auth);
@@ -83,22 +84,6 @@ function Navbar() {
       onClick: () => router.push("/compare"),
     },
   ];
-
-  // Get the device width
-  useEffect(() => {
-    const handleResize = () => {
-      setDeviceWidth(window.innerWidth);
-    };
-
-    // Set the initial device width
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   // Get the current user's initials
   useEffect(() => {
